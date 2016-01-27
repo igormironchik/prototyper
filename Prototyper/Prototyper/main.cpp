@@ -25,5 +25,14 @@
 
 int main( int, char ** )
 {
+//	QIcon appIcon( ":/img/Prototyper_256x256.png" );
+//	appIcon.addFile( ":/img/Prototyper_128x128.png" );
+//	appIcon.addFile( ":/img/Prototyper_64x64.png" );
+//	appIcon.addFile( ":/img/Prototyper_48x48.png" );
+//	appIcon.addFile( ":/img/Prototyper_32x32.png" );
+//	appIcon.addFile( ":/img/Prototyper_22x22.png" );
+//	appIcon.addFile( ":/img/Prototyper_16x16.png" );
+//	app.setWindowIcon( appIcon );
+	
 	return 0;
 }
