@@ -21,13 +21,7 @@
 */
 
 // Prototyper include.
-#include "props_window.hpp"
-#include "props_widget.hpp"
-#include "top_gui.hpp"
-#include "project_window.hpp"
-
-// Qt include.
-#include <QCloseEvent>
+#include "project_widget.hpp"
 
 
 namespace Prototyper {
@@ -35,57 +29,33 @@ namespace Prototyper {
 namespace Core {
 
 //
-// PropsWindowPrivate
+// ProjectWidgetPrivate
 //
 
-class PropsWindowPrivate {
+class ProjectWidgetPrivate {
 public:
-	PropsWindowPrivate( PropsWindow * parent )
+	ProjectWidgetPrivate( ProjectWidget * parent )
 		:	q( parent )
-		,	m_widget( 0 )
 	{
 	}
 
-	//! Init.
-	void init();
-
 	//! Parent.
-	PropsWindow * q;
-	//! Central widget.
-	PropsWidget * m_widget;
-}; // class PropsWindowPrivate
-
-void PropsWindowPrivate::init()
-{
-	m_widget = new PropsWidget( q );
-
-	q->setCentralWidget( m_widget );
-
-	q->setWindowTitle( PropsWindow::tr( "Properties" ) );
-}
+	ProjectWidget * q;
+}; // class ProjectWidgetPrivate
 
 
 //
-// PropsWindow
+// ProjectWidget
 //
 
-PropsWindow::PropsWindow( QWidget * parent, Qt::WindowFlags f )
+ProjectWidget::ProjectWidget( QWidget * parent, Qt::WindowFlags f )
 	:	QMainWindow( parent, f )
-	,	d( new PropsWindowPrivate( this ) )
-{
-	d->init();
-}
-
-PropsWindow::~PropsWindow()
+	,	d( new ProjectWidgetPrivate( this ) )
 {
 }
 
-void
-PropsWindow::closeEvent( QCloseEvent * e )
+ProjectWidget::~ProjectWidget()
 {
-	e->ignore();
-
-	TopGui::instance()->projectWindow()->hidePropsWindow();
 }
 
 } /* namespace Core */

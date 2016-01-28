@@ -1,0 +1,5 @@
+<RCC>
+	<qresource prefix="/Core">
+		<file>img/application-exit.png</file>
+	</qresource>
+</RCC>

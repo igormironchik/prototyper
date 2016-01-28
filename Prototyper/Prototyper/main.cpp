@@ -20,19 +20,36 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
+// Qt include.
 #include <QApplication>
+#include <QIcon>
+
+// Prototyper include.
+#include <Prototyper/Core/top_gui.hpp>
+#include <Prototyper/Core/project_window.hpp>
+#include <Prototyper/Core/props_window.hpp>
+#include <Prototyper/Core/tools_window.hpp>
 
 
-int main( int, char ** )
+using namespace Prototyper::Core;
+
+
+int main( int argc, char ** argv )
 {
-//	QIcon appIcon( ":/img/Prototyper_256x256.png" );
-//	appIcon.addFile( ":/img/Prototyper_128x128.png" );
-//	appIcon.addFile( ":/img/Prototyper_64x64.png" );
-//	appIcon.addFile( ":/img/Prototyper_48x48.png" );
-//	appIcon.addFile( ":/img/Prototyper_32x32.png" );
-//	appIcon.addFile( ":/img/Prototyper_22x22.png" );
-//	appIcon.addFile( ":/img/Prototyper_16x16.png" );
-//	app.setWindowIcon( appIcon );
+	QApplication app( argc, argv );
+
+	QIcon appIcon( ":/img/Prototyper_256x256.png" );
+	appIcon.addFile( ":/img/Prototyper_128x128.png" );
+	appIcon.addFile( ":/img/Prototyper_64x64.png" );
+	appIcon.addFile( ":/img/Prototyper_48x48.png" );
+	appIcon.addFile( ":/img/Prototyper_32x32.png" );
+	appIcon.addFile( ":/img/Prototyper_22x22.png" );
+	appIcon.addFile( ":/img/Prototyper_16x16.png" );
+	app.setWindowIcon( appIcon );
+
+	TopGui::instance()->toolsWindow()->show();
+	TopGui::instance()->projectWindow()->show();
+	TopGui::instance()->propsWindow()->show();
 	
-	return 0;
+	return app.exec();
 }

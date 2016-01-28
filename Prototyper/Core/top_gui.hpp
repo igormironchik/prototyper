@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PROJECT_WINDOW_HPP__INCLUDED
-#define PROTOTYPER__CORE__PROJECT_WINDOW_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__TOP_GUI_HPP__INCLUDED
+#define PROTOTYPER__CORE__TOP_GUI_HPP__INCLUDED
 
 // Qt include.
-#include <QMainWindow>
+#include <QObject>
 #include <QScopedPointer>
 
 
@@ -32,49 +32,47 @@ namespace Prototyper {
 
 namespace Core {
 
+class ProjectWindow;
+class PropsWindow;
+class ToolsWindow;
+
 //
-// ProjectWindow
+// TopGui
 //
 
-class ProjectWindowPrivate;
+class TopGuiPrivate;
 
-//! Main window with project.
-class ProjectWindow
-	:	public QMainWindow
+//! Singleton for top GUI components.
+class TopGui
+	:	public QObject
 {
 	Q_OBJECT
 
+private:
+	TopGui();
+	~TopGui();
+
+	static void cleanup();
+
 public:
-	ProjectWindow( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ProjectWindow();
+	//! \return Instance of top GUI.
+	static TopGui * instance();
 
-public slots:
-	//! Hide properties window;
-	void hidePropsWindow();
-	//! Hide tools window.
-	void hideToolsWindow();
-
-protected:
-	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
-
-private slots:
-	//! Show/hide properties window.
-	void showHidePropertiesWindow( bool show );
-	//! Show/hide tools window.
-	void showHideToolsWindow( bool show );
-	//! Quit.
-	void quit();
+	//! \return Project window.
+	ProjectWindow * projectWindow();
+	//! \return Tools window.
+	ToolsWindow * toolsWindow();
+	//! \return Properties window.
+	PropsWindow * propsWindow();
 
 private:
-	friend class ProjectWindowPrivate;
+	Q_DISABLE_COPY( TopGui )
 
-	Q_DISABLE_COPY( ProjectWindow )
-
-	QScopedPointer< ProjectWindowPrivate > d;
-}; // class ProjectWindow
+	QScopedPointer< TopGuiPrivate > d;
+}; // class TopGui
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__PROJECT_WINDOW_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__TOP_GUI_HPP__INCLUDED

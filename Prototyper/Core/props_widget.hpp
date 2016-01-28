@@ -20,8 +20,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PROJECT_WINDOW_HPP__INCLUDED
-#define PROTOTYPER__CORE__PROJECT_WINDOW_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__PROPS_WIDGET_HPP__INCLUDED
+#define PROTOTYPER__CORE__PROPS_WIDGET_HPP__INCLUDED
 
 // Qt include.
 #include <QMainWindow>
@@ -33,48 +33,29 @@ namespace Prototyper {
 namespace Core {
 
 //
-// ProjectWindow
+// PropsWidget
 //
 
-class ProjectWindowPrivate;
+class PropsWidgetPrivate;
 
 //! Main window with project.
-class ProjectWindow
+class PropsWidget
 	:	public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	ProjectWindow( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ProjectWindow();
-
-public slots:
-	//! Hide properties window;
-	void hidePropsWindow();
-	//! Hide tools window.
-	void hideToolsWindow();
-
-protected:
-	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
-
-private slots:
-	//! Show/hide properties window.
-	void showHidePropertiesWindow( bool show );
-	//! Show/hide tools window.
-	void showHideToolsWindow( bool show );
-	//! Quit.
-	void quit();
+	PropsWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	~PropsWidget();
 
 private:
-	friend class ProjectWindowPrivate;
+	Q_DISABLE_COPY( PropsWidget )
 
-	Q_DISABLE_COPY( ProjectWindow )
-
-	QScopedPointer< ProjectWindowPrivate > d;
-}; // class ProjectWindow
+	QScopedPointer< PropsWidgetPrivate > d;
+}; // class PropsWidget
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__PROJECT_WINDOW_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__PROPS_WIDGET_HPP__INCLUDED
