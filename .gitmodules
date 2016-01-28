@@ -1,0 +1,3 @@
+[submodule "3rdparty/QtConfFile"]
+	path = 3rdparty/QtConfFile
+	url = https://github.com/igormironchik/qt-conf-file.git
