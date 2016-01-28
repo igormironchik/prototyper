@@ -75,14 +75,14 @@ ProjectWindowPrivate::init()
 
 	q->setWindowTitle( QLatin1String( "Prototyper" ) );
 
-	QMenu * file = q->menuBar()->addMenu( ProjectWindow::tr( "File" ) );
+	QMenu * file = q->menuBar()->addMenu( ProjectWindow::tr( "&File" ) );
 	QAction * quitAction = file->addAction(
 		QIcon( ":/Core/img/application-exit.png" ),
 		ProjectWindow::tr( "Quit" ) );
 	quitAction->setShortcutContext( Qt::ApplicationShortcut );
 	quitAction->setShortcut( ProjectWindow::tr( "Ctrl+Q" ) );
 
-	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "View" ) );
+	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "&View" ) );
 
 	m_propsAction = view->addAction( ProjectWindow::tr( "Properties" ) );
 	m_propsAction->setCheckable( true );
@@ -137,7 +137,7 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 {
 	e->accept();
 
-	QApplication::quit();
+	quit();
 }
 
 void
