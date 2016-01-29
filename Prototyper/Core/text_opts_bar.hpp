@@ -61,6 +61,8 @@ signals:
 	void underline( bool on );
 	//! Text color.
 	void textColor();
+	//! Clear format.
+	void clearFormat();
 
 public:
 	TextOptsBar( QWidget * parent = 0 );

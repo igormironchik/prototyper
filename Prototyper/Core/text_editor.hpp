@@ -65,6 +65,8 @@ public slots:
 	void underline( bool on );
 	//! Change text color.
 	void changeTextColor();
+	//! Clear format.
+	void clearFormat();
 
 private slots:
 	//! Cursor changed.

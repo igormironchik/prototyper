@@ -82,6 +82,8 @@ ProjectDescTabPrivate::init()
 		m_editor, &TextEditor::underline );
 	ProjectDescTab::connect( m_bar, &TextOptsBar::textColor,
 		m_editor, &TextEditor::changeTextColor );
+	ProjectDescTab::connect( m_bar, &TextOptsBar::clearFormat,
+		m_editor, &TextEditor::clearFormat );
 }
 
 

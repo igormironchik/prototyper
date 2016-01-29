@@ -117,6 +117,15 @@ TextOptsBarPrivate::init()
 	fontColor->setToolTip( fontColorTip );
 	fontColor->setStatusTip( fontColorTip );
 
+	q->addSeparator();
+
+	const QString clearFormatTip = TextOptsBar::tr( "Clear Format" );
+	QAction * clearFormat = q->addAction(
+		QIcon( ":/Core/img/edit-clear.png" ),
+		clearFormatTip );
+	clearFormat->setToolTip( clearFormatTip );
+	clearFormat->setStatusTip( clearFormatTip );
+
 	TextOptsBar::connect( fontLess, &QAction::triggered,
 		q, &TextOptsBar::lessFontSize );
 	TextOptsBar::connect( fontMore, &QAction::triggered,
@@ -129,6 +138,8 @@ TextOptsBarPrivate::init()
 		q, &TextOptsBar::underline );
 	TextOptsBar::connect( fontColor, &QAction::triggered,
 		q, &TextOptsBar::textColor );
+	TextOptsBar::connect( clearFormat, &QAction::triggered,
+		q, &TextOptsBar::clearFormat );
 }
 
 

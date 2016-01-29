@@ -7,5 +7,6 @@
 		<file>img/format-text-color.png</file>
 		<file>img/format-text-italic.png</file>
 		<file>img/format-text-underline.png</file>
+		<file>img/edit-clear.png</file>
 	</qresource>
 </RCC>

@@ -210,6 +210,31 @@ TextEditor::slotCursorChanged()
 	emit cursorChanged( textCursor() );
 }
 
+void
+TextEditor::clearFormat()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		QTextCharFormat fmt = c.charFormat();
+
+		fmt.setFontUnderline( false );
+		fmt.setFontItalic( false );
+		fmt.setFontWeight( QFont::Normal );
+		fmt.setFontPointSize( 10 );
+
+		textCursor().setCharFormat( fmt );
+	}
+	else
+	{
+		setFontUnderline( false );
+		setFontItalic( false );
+		setFontWeight( QFont::Normal );
+		setFontPointSize( 10 );
+	}
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */
