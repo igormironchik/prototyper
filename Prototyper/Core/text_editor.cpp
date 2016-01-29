@@ -85,22 +85,10 @@ TextEditor::lessFontSize()
 
 	if( c.hasSelection() )
 	{
-		bool changed = false;
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
 
-		if( c.position() == c.selectionStart() )
-		{
-			const int end = c.selectionEnd();
-
-			c.clearSelection();
-
-			c.setPosition( end, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-
-			changed = true;
-		}
-
-		QTextCharFormat fmt = textCursor().charFormat();
+		QTextCharFormat fmt = c.charFormat();
 
 		qreal s = fmt.fontPointSize();
 		s -= 1.0;
@@ -111,17 +99,6 @@ TextEditor::lessFontSize()
 		fmt.setFontPointSize( s );
 
 		textCursor().setCharFormat( fmt );
-
-		if( changed )
-		{
-			const int start = c.selectionStart();
-
-			c.clearSelection();
-
-			c.setPosition( start, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-		}
 	}
 	else
 	{
@@ -142,41 +119,16 @@ TextEditor::moreFontSize()
 
 	if( c.hasSelection() )
 	{
-		bool changed = false;
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
 
-		if( c.position() == c.selectionStart() )
-		{
-			const int end = c.selectionEnd();
-
-			c.clearSelection();
-
-			c.setPosition( end, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-
-			changed = true;
-		}
-
-		QTextCharFormat fmt = textCursor().charFormat();
+		QTextCharFormat fmt = c.charFormat();
 
 		qreal s = fmt.fontPointSize();
 		s += 1.0;
 		fmt.setFontPointSize( s );
 
 		textCursor().setCharFormat( fmt );
-
-		if( changed )
-		{
-			c = textCursor();
-
-			const int start = c.selectionStart();
-
-			c.clearSelection();
-
-			c.setPosition( start, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-		}
 	}
 	else
 	{
@@ -193,38 +145,14 @@ TextEditor::bold( bool on )
 
 	if( c.hasSelection() )
 	{
-		bool changed = false;
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
 
-		if( c.position() == c.selectionStart() )
-		{
-			const int end = c.selectionEnd();
+		QTextCharFormat fmt = c.charFormat();
 
-			c.clearSelection();
-
-			c.setPosition( end, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-
-			changed = true;
-		}
-
-		QTextCharFormat fmt = textCursor().charFormat();
 		fmt.setFontWeight( on ? QFont::Bold : QFont::Normal );
 
 		textCursor().setCharFormat( fmt );
-
-		if( changed )
-		{
-			c = textCursor();
-
-			const int start = c.selectionStart();
-
-			c.clearSelection();
-
-			c.setPosition( start, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-		}
 	}
 	else
 		setFontWeight( on ? QFont::Bold : QFont::Normal );
@@ -237,38 +165,14 @@ TextEditor::italic( bool on )
 
 	if( c.hasSelection() )
 	{
-		bool changed = false;
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
 
-		if( c.position() == c.selectionStart() )
-		{
-			const int end = c.selectionEnd();
+		QTextCharFormat fmt = c.charFormat();
 
-			c.clearSelection();
-
-			c.setPosition( end, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-
-			changed = true;
-		}
-
-		QTextCharFormat fmt = textCursor().charFormat();
 		fmt.setFontItalic( on );
 
 		textCursor().setCharFormat( fmt );
-
-		if( changed )
-		{
-			c = textCursor();
-
-			const int start = c.selectionStart();
-
-			c.clearSelection();
-
-			c.setPosition( start, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-		}
 	}
 	else
 		setFontItalic( on );
@@ -281,38 +185,14 @@ TextEditor::underline( bool on )
 
 	if( c.hasSelection() )
 	{
-		bool changed = false;
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
 
-		if( c.position() == c.selectionStart() )
-		{
-			const int end = c.selectionEnd();
+		QTextCharFormat fmt = c.charFormat();
 
-			c.clearSelection();
-
-			c.setPosition( end, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-
-			changed = true;
-		}
-
-		QTextCharFormat fmt = textCursor().charFormat();
 		fmt.setFontUnderline( on );
 
 		textCursor().setCharFormat( fmt );
-
-		if( changed )
-		{
-			c = textCursor();
-
-			const int start = c.selectionStart();
-
-			c.clearSelection();
-
-			c.setPosition( start, QTextCursor::KeepAnchor );
-
-			setTextCursor( c );
-		}
 	}
 	else
 		setFontUnderline( on );
