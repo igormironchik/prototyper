@@ -20,8 +20,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
-#define PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
+#define PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
 
 // Qt include.
 #include <QWidget>
@@ -33,29 +33,29 @@ namespace Prototyper {
 namespace Core {
 
 //
-// ToolsWidget
+// ProjectDescTab
 //
 
-class ToolsWidgetPrivate;
+class ProjectDescTabPrivate;
 
 //! Main window with project.
-class ToolsWidget
+class ProjectDescTab
 	:	public QWidget
 {
 	Q_OBJECT
 
 public:
-	ToolsWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ToolsWidget();
+	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	~ProjectDescTab();
 
 private:
-	Q_DISABLE_COPY( ToolsWidget )
+	Q_DISABLE_COPY( ProjectDescTab )
 
-	QScopedPointer< ToolsWidgetPrivate > d;
-}; // class ToolsWidget
+	QScopedPointer< ProjectDescTabPrivate > d;
+}; // class ProjectDescTab
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED

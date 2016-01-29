@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
-#define PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
+#define PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
 
 // Qt include.
-#include <QWidget>
+#include <QTextEdit>
 #include <QScopedPointer>
 
 
@@ -33,29 +33,53 @@ namespace Prototyper {
 namespace Core {
 
 //
-// ToolsWidget
+// TextEditor
 //
 
-class ToolsWidgetPrivate;
+class TextEditorPrivate;
 
-//! Main window with project.
-class ToolsWidget
-	:	public QWidget
+//! Text editor.
+class TextEditor
+	:	public QTextEdit
 {
 	Q_OBJECT
 
+signals:
+	//! Cursor changed.
+	void cursorChanged( const QTextCursor & );
+
 public:
-	ToolsWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ToolsWidget();
+	TextEditor( QWidget * parent = 0 );
+	~TextEditor();
+
+public slots:
+	//! Less font size.
+	void lessFontSize();
+	//! More font size.
+	void moreFontSize();
+	//! Bold.
+	void bold( bool on );
+	//! Italic.
+	void italic( bool on );
+	//! Underline.
+	void underline( bool on );
+	//! Change text color.
+	void changeTextColor();
+
+private slots:
+	//! Cursor changed.
+	void slotCursorChanged();
 
 private:
-	Q_DISABLE_COPY( ToolsWidget )
+	friend class TextEditorPrivate;
 
-	QScopedPointer< ToolsWidgetPrivate > d;
-}; // class ToolsWidget
+	Q_DISABLE_COPY( TextEditor )
+
+	QScopedPointer< TextEditorPrivate > d;
+}; // class TextEditor
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED

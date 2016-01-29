@@ -25,19 +25,25 @@ generate_cfg.commands = ../../3rdparty/QtConfFile/qtconffile.generator -i ${QMAK
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
-HEADERS += project_widget.hpp \
+HEADERS += project_description_tab.hpp \
+           project_widget.hpp \
 		   project_window.hpp \
 		   props_widget.hpp \
 		   props_window.hpp \
+		   text_editor.hpp \
+		   text_opts_bar.hpp \
 		   tools_widget.hpp \
 		   tools_window.hpp \
 		   top_gui.hpp \
 		   $$GENERATED
 
-SOURCES += project_widget.cpp \
+SOURCES += project_description_tab.cpp \
+           project_widget.cpp \
 		   project_window.cpp \
 		   props_widget.cpp \
 		   props_window.cpp \
+		   text_editor.cpp \
+		   text_opts_bar.cpp \
 		   tools_widget.cpp \
 		   tools_window.cpp \
 		   top_gui.cpp

@@ -1,5 +1,11 @@
 <RCC>
 	<qresource prefix="/Core">
 		<file>img/application-exit.png</file>
+		<file>img/format-font-size-less.png</file>
+		<file>img/format-font-size-more.png</file>
+		<file>img/format-text-bold.png</file>
+		<file>img/format-text-color.png</file>
+		<file>img/format-text-italic.png</file>
+		<file>img/format-text-underline.png</file>
 	</qresource>
 </RCC>

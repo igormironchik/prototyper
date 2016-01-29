@@ -24,7 +24,7 @@
 #define PROTOTYPER__CORE__PROPS_WIDGET_HPP__INCLUDED
 
 // Qt include.
-#include <QMainWindow>
+#include <QWidget>
 #include <QScopedPointer>
 
 
@@ -40,7 +40,7 @@ class PropsWidgetPrivate;
 
 //! Main window with project.
 class PropsWidget
-	:	public QMainWindow
+	:	public QWidget
 {
 	Q_OBJECT
 

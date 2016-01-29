@@ -49,7 +49,7 @@ public:
 //
 
 ToolsWidget::ToolsWidget( QWidget * parent, Qt::WindowFlags f )
-	:	QMainWindow( parent, f )
+	:	QWidget( parent, f )
 	,	d( new ToolsWidgetPrivate( this ) )
 {
 }

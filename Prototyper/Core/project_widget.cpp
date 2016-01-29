@@ -22,6 +22,11 @@
 
 // Prototyper include.
 #include "project_widget.hpp"
+#include "project_description_tab.hpp"
+
+// Qt include.
+#include <QTabWidget>
+#include <QVBoxLayout>
 
 
 namespace Prototyper {
@@ -36,12 +41,35 @@ class ProjectWidgetPrivate {
 public:
 	ProjectWidgetPrivate( ProjectWidget * parent )
 		:	q( parent )
+		,	m_tabs( 0 )
+		,	m_desc( 0 )
 	{
 	}
 
+	//! Init.
+	void init();
+
 	//! Parent.
 	ProjectWidget * q;
+	//! Tabs.
+	QTabWidget * m_tabs;
+	//! Desc tab.
+	ProjectDescTab * m_desc;
 }; // class ProjectWidgetPrivate
+
+void
+ProjectWidgetPrivate::init()
+{
+	QVBoxLayout * layout = new QVBoxLayout( q );
+
+	m_tabs = new QTabWidget( q );
+	m_tabs->setTabPosition( QTabWidget::South );
+
+	layout->addWidget( m_tabs );
+
+	m_desc = new ProjectDescTab( m_tabs );
+	m_tabs->addTab( m_desc, ProjectWidget::tr( "Project" ) );
+}
 
 
 //
@@ -49,9 +77,10 @@ public:
 //
 
 ProjectWidget::ProjectWidget( QWidget * parent, Qt::WindowFlags f )
-	:	QMainWindow( parent, f )
+	:	QWidget( parent, f )
 	,	d( new ProjectWidgetPrivate( this ) )
 {
+	d->init();
 }
 
 ProjectWidget::~ProjectWidget()

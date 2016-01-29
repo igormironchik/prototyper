@@ -49,7 +49,7 @@ public:
 //
 
 PropsWidget::PropsWidget( QWidget * parent, Qt::WindowFlags f )
-	:	QMainWindow( parent, f )
+	:	QWidget( parent, f )
 	,	d( new PropsWidgetPrivate( this ) )
 {
 }
