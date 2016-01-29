@@ -36,6 +36,7 @@ class ProjectWindow;
 class PropsWindow;
 class ToolsWindow;
 
+
 //
 // TopGui
 //
@@ -64,6 +65,9 @@ public:
 	ToolsWindow * toolsWindow();
 	//! \return Properties window.
 	PropsWindow * propsWindow();
+
+	//! Save cfg.
+	void saveCfg( QWidget * parent = 0 );
 
 private:
 	Q_DISABLE_COPY( TopGui )

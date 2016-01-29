@@ -161,6 +161,8 @@ ProjectWindow::showHideToolsWindow( bool show )
 void
 ProjectWindow::quit()
 {
+	TopGui::instance()->saveCfg( this );
+
 	QApplication::quit();
 }
 

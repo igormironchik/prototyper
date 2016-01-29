@@ -47,9 +47,7 @@ int main( int argc, char ** argv )
 	appIcon.addFile( ":/img/Prototyper_16x16.png" );
 	app.setWindowIcon( appIcon );
 
-	TopGui::instance()->toolsWindow()->show();
 	TopGui::instance()->projectWindow()->show();
-	TopGui::instance()->propsWindow()->show();
 	
 	return app.exec();
 }

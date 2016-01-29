@@ -25,15 +25,22 @@
 #include "project_window.hpp"
 #include "props_window.hpp"
 #include "tools_window.hpp"
+#include "windows_cfg.hpp"
 
 // Qt include.
 #include <QApplication>
 #include <QDesktopWidget>
+#include <QStandardPaths>
+#include <QFileInfo>
+#include <QMessageBox>
+#include <QDir>
 
 
 namespace Prototyper {
 
 namespace Core {
+
+static const QString c_appCfgFileName = QLatin1String( "/Prototyper.cfg" );
 
 //
 // TopGuiPrivate
@@ -69,6 +76,8 @@ public:
 	PropsWindow * m_propsWindow;
 	//! Tools window.
 	ToolsWindow * m_toolsWindow;
+	//! App's cfg folder.
+	QString m_appCfgFileName;
 }; // class TopGuiPrivate
 
 void
@@ -78,7 +87,51 @@ TopGuiPrivate::init()
 	m_propsWindow = new PropsWindow;
 	m_toolsWindow = new ToolsWindow;
 
-	placeByDefault();
+	m_appCfgFileName =
+		QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation ) +
+		c_appCfgFileName;
+
+	if( !QFileInfo::exists( m_appCfgFileName ) )
+		placeByDefault();
+	else
+	{
+		try {
+			Cfg::TagWindowsCfg tag;
+
+			QtConfFile::readQtConfFile( tag, m_appCfgFileName,
+				QTextCodec::codecForName( "UTF-8" ) );
+
+			Cfg::WindowsCfg cfg = tag.getCfg();
+
+			m_toolsWindow->move( cfg.toolsWindow().x(), cfg.toolsWindow().y() );
+			m_toolsWindow->resize( cfg.toolsWindow().width(),
+				cfg.toolsWindow().height() );
+
+			if( !cfg.toolsWindow().isShown() )
+				m_projectWindow->hideToolsWindow();
+			else
+				m_toolsWindow->show();
+
+			m_projectWindow->move( cfg.projectWindow().x(),
+				cfg.projectWindow().y() );
+			m_projectWindow->resize( cfg.projectWindow().width(),
+				cfg.projectWindow().height() );
+
+			m_propsWindow->move( cfg.propsWindow().x(),
+				cfg.propsWindow().y() );
+			m_propsWindow->resize( cfg.propsWindow().width(),
+				cfg.propsWindow().height() );
+
+			if( !cfg.propsWindow().isShown() )
+				m_projectWindow->hidePropsWindow();
+			else
+				m_propsWindow->show();
+		}
+		catch( const QtConfFile::Exception & )
+		{
+			placeByDefault();
+		}
+	}
 }
 
 void
@@ -98,12 +151,14 @@ TopGuiPrivate::placeByDefault()
 
 	m_toolsWindow->move( r.x() + offset, r.y() + offset );
 	m_toolsWindow->resize( tw, h );
+	m_toolsWindow->show();
 
 	m_projectWindow->move( r.x() + w25 + offset, r.y() + offset );
 	m_projectWindow->resize( tw + w25, h );
 
 	m_propsWindow->move( r.x() + w25 * 3 + offset, r.y() + offset );
 	m_propsWindow->resize( tw, h );
+	m_propsWindow->show();
 }
 
 
@@ -114,14 +169,13 @@ TopGuiPrivate::placeByDefault()
 TopGui::TopGui()
 	:	d( new TopGuiPrivate( this ) )
 {
-	d->init();
 }
 
 TopGui::~TopGui()
 {
 }
 
-static TopGui * topGuiInstance;
+static TopGui * topGuiInstance = 0;
 
 void
 TopGui::cleanup()
@@ -141,7 +195,9 @@ TopGui::instance()
 	{
 		topGuiInstance = new TopGui;
 
-		qAddPostRoutine( TopGui::cleanup );
+		topGuiInstance->d->init();
+
+		qAddPostRoutine( &TopGui::cleanup );
 	}
 
 	return topGuiInstance;
@@ -163,6 +219,70 @@ PropsWindow *
 TopGui::propsWindow()
 {
 	return d->m_propsWindow;
+}
+
+void
+TopGui::saveCfg( QWidget * parent )
+{
+	QFileInfo info( d->m_appCfgFileName );
+
+	QDir dir( info.path() );
+
+	if( !dir.exists() )
+	{
+		if( !dir.mkpath( info.path() ) )
+		{
+			QMessageBox::warning( parent,
+				tr( "Unable to create folder..." ),
+				tr( "Unable to create folder for the configuration files. "
+					"Path: \"%1\"." ).arg( info.path() ) );
+
+			return;
+		}
+	}
+
+	try {
+		Cfg::WindowsCfg cfg;
+
+		Cfg::Window tools;
+		tools.setX( d->m_toolsWindow->x() );
+		tools.setY( d->m_toolsWindow->y() );
+		tools.setWidth( d->m_toolsWindow->width() );
+		tools.setHeight( d->m_toolsWindow->height() );
+		tools.setIsShown( d->m_toolsWindow->isVisible() );
+
+		cfg.setToolsWindow( tools );
+
+		Cfg::Window props;
+		props.setX( d->m_propsWindow->x() );
+		props.setY( d->m_propsWindow->y() );
+		props.setWidth( d->m_propsWindow->width() );
+		props.setHeight( d->m_propsWindow->height() );
+		props.setIsShown( d->m_propsWindow->isVisible() );
+
+		cfg.setPropsWindow( props );
+
+		Cfg::Window proj;
+		proj.setX( d->m_projectWindow->x() );
+		proj.setY( d->m_projectWindow->y() );
+		proj.setWidth( d->m_projectWindow->width() );
+		proj.setHeight( d->m_projectWindow->height() );
+		proj.setIsShown( true );
+
+		cfg.setProjectWindow( proj );
+
+		Cfg::TagWindowsCfg tag( cfg );
+
+		QtConfFile::writeQtConfFile( tag, d->m_appCfgFileName,
+			QTextCodec::codecForName( "UTF-8" ) );
+	}
+	catch( const QtConfFile::Exception & x )
+	{
+		QMessageBox::warning( parent,
+			tr( "Unable to save configuration..." ),
+			tr( "Unable to save configuration.\n"
+				"%1" ).arg( x.whatAsQString() ) );
+	}
 }
 
 } /* namespace Core */
