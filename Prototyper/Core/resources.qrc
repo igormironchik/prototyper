@@ -8,5 +8,12 @@
 		<file>img/format-text-italic.png</file>
 		<file>img/format-text-underline.png</file>
 		<file>img/edit-clear.png</file>
+		<file>img/format-font-size-less-small.png</file>
+		<file>img/format-font-size-more-small.png</file>
+		<file>img/format-text-bold-small.png</file>
+		<file>img/format-text-color-small.png</file>
+		<file>img/format-text-italic-small.png</file>
+		<file>img/format-text-underline-small.png</file>
+		<file>img/edit-clear-small.png</file>
 	</qresource>
 </RCC>

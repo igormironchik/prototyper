@@ -65,7 +65,15 @@ signals:
 	void clearFormat();
 
 public:
-	TextOptsBar( QWidget * parent = 0 );
+	//! Icon size.
+	enum IconSize {
+		//! Small.
+		Small,
+		//! Large.
+		Large
+	}; // enum IconSize
+
+	TextOptsBar( IconSize s = Large, QWidget * parent = 0 );
 	~TextOptsBar();
 
 public slots:

@@ -62,7 +62,7 @@ ProjectDescTabPrivate::init()
 {
 	QVBoxLayout * layout = new QVBoxLayout( q );
 
-	m_bar = new TextOptsBar( q );
+	m_bar = new TextOptsBar( TextOptsBar::Large, q );
 	layout->addWidget( m_bar );
 
 	m_editor = new TextEditor( q );
