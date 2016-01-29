@@ -29,6 +29,9 @@ defineTest(minQtVersion) {
 
 TEMPLATE = subdirs
 
-SUBDIRS = Prototyper
+SUBDIRS = Prototyper \
+		  3rdparty
+
+Prototyper.depends = 3rdparty
 
 OTHER_FILES = LICENSE
