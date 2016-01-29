@@ -25,7 +25,9 @@ SOURCES += project_widget.cpp \
            tools_window.cpp \
            top_gui.cpp
 
-TO_GENERATE =
+TO_GENERATE = windows_cfg.qtconf
+
+OTHER_FILES += windows_cfg.qtconf
 
 QMAKE_EXTRA_COMPILERS += generate_cfg
 generate_cfg.name = CONF_GEN

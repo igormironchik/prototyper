@@ -1,0 +1,70 @@
+
+{forGeneration PROTOTYPER__CORE__WINDOWS_CFG_HPP
+
+	{namespace Prototyper
+
+		{namespace Core
+
+			{namespace Cfg
+
+				|#
+					Window state.
+				#|
+				{class Window
+					{tagScalar
+						{valueType int}
+						{name x}
+						{required}
+					}
+					{tagScalar
+						{valueType int}
+						{name y}
+						{required}
+					}
+					{tagScalar
+						{valueType int}
+						{name width}
+						{required}
+					}
+					{tagScalar
+						{valueType int}
+						{name height}
+						{required}
+					}
+					{tagScalar
+						{valueType bool}
+						{name isShown}
+						{required}
+					}
+				}
+
+				|#
+					Windows configuration in the app.
+				#|
+				{class WindowsCfg
+					{tag
+						{valueType Window}
+						{name toolsWindow}
+						{required}
+					}
+
+					{tag
+						{valueType Window}
+						{name projectWindow}
+						{required}
+					}
+
+					{tag
+						{valueType Window}
+						{name propsWindow}
+						{required}
+					}
+				}
+
+			} || namespace Cfg
+
+		} || namespace Core
+
+	} || namespace Prototyper
+
+}
