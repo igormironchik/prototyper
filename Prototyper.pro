@@ -34,4 +34,4 @@ SUBDIRS = Prototyper \
 
 Prototyper.depends = 3rdparty
 
-OTHER_FILES = LICENSE
+OTHER_FILES = LICENSE README.md
