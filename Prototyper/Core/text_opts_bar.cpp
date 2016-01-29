@@ -139,7 +139,7 @@ TextOptsBarPrivate::init()
 	TextOptsBar::connect( fontColor, &QAction::triggered,
 		q, &TextOptsBar::textColor );
 	TextOptsBar::connect( clearFormat, &QAction::triggered,
-		q, &TextOptsBar::clearFormat );
+		q, &TextOptsBar::slotClearFormat );
 }
 
 
@@ -176,6 +176,16 @@ TextOptsBar::updateState( const QTextCursor & cursor )
 	d->m_fontBold->setChecked( fmt.fontWeight() == QFont::Bold );
 	d->m_fontItalic->setChecked( fmt.fontItalic() );
 	d->m_fontUnderline->setChecked( fmt.fontUnderline() );
+}
+
+void
+TextOptsBar::slotClearFormat()
+{
+	d->m_fontBold->setChecked( false );
+	d->m_fontItalic->setChecked( false );
+	d->m_fontUnderline->setChecked( false );
+
+	emit clearFormat();
 }
 
 } /* namespace Core */

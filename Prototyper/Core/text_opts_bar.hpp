@@ -71,8 +71,12 @@ public:
 public slots:
 	//! Update state of the buttons.
 	void updateState( const QTextCursor & cursor );
+	//! Clear format.
+	void slotClearFormat();
 
 private:
+	friend class TextOptsBarPrivate;
+
 	Q_DISABLE_COPY( TextOptsBar )
 
 	QScopedPointer< TextOptsBarPrivate > d;
