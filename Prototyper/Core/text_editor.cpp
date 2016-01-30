@@ -235,6 +235,14 @@ TextEditor::clearFormat()
 	}
 }
 
+void
+TextEditor::reset()
+{
+	clear();
+
+	clearFormat();
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

@@ -102,6 +102,12 @@ ProjectDescTab::~ProjectDescTab()
 {
 }
 
+TextEditor *
+ProjectDescTab::editor() const
+{
+	return d->m_editor;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

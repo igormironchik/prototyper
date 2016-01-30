@@ -15,5 +15,8 @@
 		<file>img/format-text-italic-small.png</file>
 		<file>img/format-text-underline-small.png</file>
 		<file>img/edit-clear-small.png</file>
+		<file>img/edit-delete.png</file>
+		<file>img/list-add.png</file>
+		<file>img/edit-rename.png</file>
 	</qresource>
 </RCC>

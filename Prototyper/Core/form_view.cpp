@@ -20,47 +20,53 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
-#define PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
-
-// Qt include.
-#include <QWidget>
-#include <QScopedPointer>
+// Prototyper include.
+#include "form_view.hpp"
 
 
 namespace Prototyper {
 
 namespace Core {
 
-class TextEditor;
-
 //
-// ProjectDescTab
+// FormViewPrivate
 //
 
-class ProjectDescTabPrivate;
-
-//! Main window with project.
-class ProjectDescTab
-	:	public QWidget
-{
-	Q_OBJECT
-
+class FormViewPrivate {
 public:
-	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ProjectDescTab();
+	FormViewPrivate( FormView * parent )
+		:	q( parent )
+	{
+	}
 
-	//! \return Text editor.
-	TextEditor * editor() const;
+	//! Init.
+	void init();
 
-private:
-	Q_DISABLE_COPY( ProjectDescTab )
+	//! Parent.
+	FormView * q;
+}; // class FormViewPrivate
 
-	QScopedPointer< ProjectDescTabPrivate > d;
-}; // class ProjectDescTab
+void
+FormViewPrivate::init()
+{
+}
+
+
+//
+// FormView
+//
+
+FormView::FormView( QWidget * parent )
+	:	QGraphicsView( parent )
+	,	d( new FormViewPrivate( this ) )
+{
+	d->init();
+}
+
+FormView::~FormView()
+{
+}
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
-
-#endif // PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED

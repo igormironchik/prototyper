@@ -48,6 +48,14 @@ public:
 	ProjectWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~ProjectWidget();
 
+public slots:
+	//! Add form.
+	void addForm();
+	//! Rename tab.
+	void renameTab( const QString & oldName );
+	//! Delete form.
+	void deleteForm( const QString & name );
+
 private:
 	Q_DISABLE_COPY( ProjectWidget )
 

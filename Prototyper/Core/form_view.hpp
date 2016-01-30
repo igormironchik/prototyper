@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
-#define PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_VIEW_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_VIEW_HPP__INCLUDED
 
 // Qt include.
-#include <QWidget>
+#include <QGraphicsView>
 #include <QScopedPointer>
 
 
@@ -32,35 +32,30 @@ namespace Prototyper {
 
 namespace Core {
 
-class TextEditor;
-
 //
-// ProjectDescTab
+// FormView
 //
 
-class ProjectDescTabPrivate;
+class FormViewPrivate;
 
-//! Main window with project.
-class ProjectDescTab
-	:	public QWidget
+//! Form view.
+class FormView
+	:	public QGraphicsView
 {
 	Q_OBJECT
 
 public:
-	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ProjectDescTab();
-
-	//! \return Text editor.
-	TextEditor * editor() const;
+	FormView( QWidget * parent = 0 );
+	~FormView();
 
 private:
-	Q_DISABLE_COPY( ProjectDescTab )
+	Q_DISABLE_COPY( FormView )
 
-	QScopedPointer< ProjectDescTabPrivate > d;
-}; // class ProjectDescTab
+	QScopedPointer< FormViewPrivate > d;
+}; // class FormView
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_VIEW_HPP__INCLUDED

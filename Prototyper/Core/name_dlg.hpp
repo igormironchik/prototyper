@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
-#define PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__NAME_DLG_HPP__INCLUDED
+#define PROTOTYPER__CORE__NAME_DLG_HPP__INCLUDED
 
 // Qt include.
-#include <QTextEdit>
+#include <QDialog>
 #include <QScopedPointer>
 
 
@@ -33,57 +33,43 @@ namespace Prototyper {
 namespace Core {
 
 //
-// TextEditor
+// NameDlg
 //
 
-class TextEditorPrivate;
+class NameDlgPrivate;
 
-//! Text editor.
-class TextEditor
-	:	public QTextEdit
+//! Name dialog.
+class NameDlg
+	:	public QDialog
 {
 	Q_OBJECT
 
-signals:
-	//! Cursor changed.
-	void cursorChanged( const QTextCursor & );
-
 public:
-	TextEditor( QWidget * parent = 0 );
-	~TextEditor();
+	explicit NameDlg( const QStringList & names,
+		QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	~NameDlg();
 
-public slots:
-	//! Less font size.
-	void lessFontSize();
-	//! More font size.
-	void moreFontSize();
-	//! Bold.
-	void bold( bool on );
-	//! Italic.
-	void italic( bool on );
-	//! Underline.
-	void underline( bool on );
-	//! Change text color.
-	void changeTextColor();
-	//! Clear format.
-	void clearFormat();
-	//! Reset state.
-	void reset();
+	//! \return Intered name.
+	QString name() const;
 
 private slots:
-	//! Cursor changed.
-	void slotCursorChanged();
+	//! Ok.
+	void okPressed();
+	//! Cancel.
+	void cancelPressed();
+	//! Text changed.
+	void textChanged( const QString & text );
 
 private:
-	friend class TextEditorPrivate;
+	friend class NameDlgPrivate;
 
-	Q_DISABLE_COPY( TextEditor )
+	Q_DISABLE_COPY( NameDlg )
 
-	QScopedPointer< TextEditorPrivate > d;
-}; // class TextEditor
+	QScopedPointer< NameDlgPrivate > d;
+}; // class NameDlg
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__NAME_DLG_HPP__INCLUDED

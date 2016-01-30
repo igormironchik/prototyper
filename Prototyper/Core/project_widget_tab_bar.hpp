@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
-#define PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__PROJECT_WIDGET_TAB_BAR_HPP__INCLUDED
+#define PROTOTYPER__CORE__PROJECT_WIDGET_TAB_BAR_HPP__INCLUDED
 
 // Qt include.
-#include <QTextEdit>
+#include <QTabBar>
 #include <QScopedPointer>
 
 
@@ -33,57 +33,48 @@ namespace Prototyper {
 namespace Core {
 
 //
-// TextEditor
+// ProjectTabBar
 //
 
-class TextEditorPrivate;
+class ProjectTabBarPrivate;
 
-//! Text editor.
-class TextEditor
-	:	public QTextEdit
+//! Form view.
+class ProjectTabBar
+	:	public QTabBar
 {
 	Q_OBJECT
 
 signals:
-	//! Cursor changed.
-	void cursorChanged( const QTextCursor & );
+	//! Form rename request.
+	void formRenameRequest( const QString & name );
+	//! Form delete request.
+	void formDeleteRequest( const QString & name );
+	//! Add form request.
+	void formAddRequest();
 
 public:
-	TextEditor( QWidget * parent = 0 );
-	~TextEditor();
-
-public slots:
-	//! Less font size.
-	void lessFontSize();
-	//! More font size.
-	void moreFontSize();
-	//! Bold.
-	void bold( bool on );
-	//! Italic.
-	void italic( bool on );
-	//! Underline.
-	void underline( bool on );
-	//! Change text color.
-	void changeTextColor();
-	//! Clear format.
-	void clearFormat();
-	//! Reset state.
-	void reset();
+	ProjectTabBar( QWidget * parent = 0 );
+	~ProjectTabBar();
 
 private slots:
-	//! Cursor changed.
-	void slotCursorChanged();
+	//! Rename tab.
+	void renameTab();
+	//! Add form.
+	void addForm();
+	//! Delete form.
+	void deleteForm();
+
+protected:
+	void contextMenuEvent( QContextMenuEvent * event ) Q_DECL_OVERRIDE;
 
 private:
-	friend class TextEditorPrivate;
+	Q_DISABLE_COPY( ProjectTabBar )
 
-	Q_DISABLE_COPY( TextEditor )
-
-	QScopedPointer< TextEditorPrivate > d;
-}; // class TextEditor
+	QScopedPointer< ProjectTabBarPrivate > d;
+}; // class ProjectTabBar
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__TEXT_EDITOR_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__PROJECT_WIDGET_TAB_BAR_HPP__INCLUDED
