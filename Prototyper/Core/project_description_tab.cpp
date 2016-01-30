@@ -61,6 +61,8 @@ void
 ProjectDescTabPrivate::init()
 {
 	QVBoxLayout * layout = new QVBoxLayout( q );
+	layout->setMargin( 0 );
+	layout->setSpacing( 0 );
 
 	m_bar = new TextOptsBar( TextOptsBar::Large, q );
 	layout->addWidget( m_bar );

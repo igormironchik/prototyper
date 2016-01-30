@@ -49,6 +49,7 @@ public:
 void
 FormViewPrivate::init()
 {
+	q->setFrameStyle( QFrame::NoFrame );
 }
 
 
