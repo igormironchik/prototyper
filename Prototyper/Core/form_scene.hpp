@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PROJECT_WIDGET_HPP__INCLUDED
-#define PROTOTYPER__CORE__PROJECT_WIDGET_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_SCENE_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_SCENE_HPP__INCLUDED
 
 // Qt include.
-#include <QWidget>
+#include <QGraphicsScene>
 #include <QScopedPointer>
 
 
@@ -32,43 +32,30 @@ namespace Prototyper {
 
 namespace Core {
 
-class FormView;
-
 //
-// ProjectWidget
+// FormScene
 //
 
-class ProjectWidgetPrivate;
+class FormScenePrivate;
 
-//! Main window with project.
-class ProjectWidget
-	:	public QWidget
+//! Form scene.
+class FormScene
+	:	public QGraphicsScene
 {
 	Q_OBJECT
 
 public:
-	ProjectWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ProjectWidget();
-
-	//! \return Forms.
-	const QList< FormView* > & forms() const;
-
-public slots:
-	//! Add form.
-	void addForm();
-	//! Rename tab.
-	void renameTab( const QString & oldName );
-	//! Delete form.
-	void deleteForm( const QString & name );
+	FormScene( QObject * parent = 0 );
+	~FormScene();
 
 private:
-	Q_DISABLE_COPY( ProjectWidget )
+	Q_DISABLE_COPY( FormScene )
 
-	QScopedPointer< ProjectWidgetPrivate > d;
-}; // class ProjectWidget
+	QScopedPointer< FormScenePrivate > d;
+}; // class FormScene
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__PROJECT_WIDGET_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_SCENE_HPP__INCLUDED

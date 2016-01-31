@@ -32,6 +32,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class FormScene;
+class Form;
+
 //
 // FormView
 //
@@ -47,6 +50,12 @@ class FormView
 public:
 	FormView( QWidget * parent = 0 );
 	~FormView();
+
+	//! \return Form scene.
+	FormScene * formScene() const;
+
+	//! \return Form.
+	Form * form() const;
 
 private:
 	Q_DISABLE_COPY( FormView )

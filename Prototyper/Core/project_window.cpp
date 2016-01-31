@@ -26,6 +26,9 @@
 #include "top_gui.hpp"
 #include "props_window.hpp"
 #include "tools_window.hpp"
+#include "form.hpp"
+#include "form_view.hpp"
+#include "form_scene.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -96,12 +99,36 @@ ProjectWindowPrivate::init()
 	m_toolsAction->setShortcutContext( Qt::ApplicationShortcut );
 	m_toolsAction->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
+	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
+	QAction * grid = form->addAction(
+		QIcon( ":/Core/img/view-grid.png" ),
+		ProjectWindow::tr( "Show Grid" ) );
+	grid->setShortcutContext( Qt::ApplicationShortcut );
+	grid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
+	grid->setCheckable( true );
+	grid->setChecked( true );
+
+	QAction * gridStep = form->addAction(
+		QIcon( ":/Core/img/measure.png" ),
+		ProjectWindow::tr( "Grid Step" ) );
+
+	QAction * newForm = new QAction( q );
+	newForm->setShortcutContext( Qt::ApplicationShortcut );
+	newForm->setShortcut( ProjectWindow::tr( "Ctrl+T" ) );
+	q->addAction( newForm );
+
 	ProjectWindow::connect( m_propsAction, &QAction::toggled,
 		q, &ProjectWindow::showHidePropertiesWindow );
 	ProjectWindow::connect( m_toolsAction, &QAction::toggled,
 		q, &ProjectWindow::showHideToolsWindow );
 	ProjectWindow::connect( quitAction, &QAction::triggered,
 		q, &ProjectWindow::quit );
+	ProjectWindow::connect( grid, &QAction::toggled,
+		q, &ProjectWindow::showHideGrid );
+	ProjectWindow::connect( gridStep, &QAction::triggered,
+		q, &ProjectWindow::setGridStep );
+	ProjectWindow::connect( newForm, &QAction::triggered,
+		m_widget, &ProjectWidget::addForm );
 }
 
 
@@ -164,6 +191,21 @@ ProjectWindow::quit()
 	TopGui::instance()->saveCfg( this );
 
 	QApplication::quit();
+}
+
+void
+ProjectWindow::showHideGrid( bool show )
+{
+	Form::GridMode mode = ( show ? Form::ShowGrid : Form::NoGrid );
+
+	foreach( FormView * view, d->m_widget->forms() )
+		view->form()->setGridMode( mode );
+}
+
+void
+ProjectWindow::setGridStep()
+{
+
 }
 
 } /* namespace Core */

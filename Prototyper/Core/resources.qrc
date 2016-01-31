@@ -18,5 +18,7 @@
 		<file>img/edit-delete.png</file>
 		<file>img/list-add.png</file>
 		<file>img/edit-rename.png</file>
+		<file>img/measure.png</file>
+		<file>img/view-grid.png</file>
 	</qresource>
 </RCC>

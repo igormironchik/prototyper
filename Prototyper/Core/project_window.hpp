@@ -64,6 +64,10 @@ private slots:
 	void showHideToolsWindow( bool show );
 	//! Quit.
 	void quit();
+	//! Show/hide grid.
+	void showHideGrid( bool show );
+	//! Set grid step.
+	void setGridStep();
 
 private:
 	friend class ProjectWindowPrivate;

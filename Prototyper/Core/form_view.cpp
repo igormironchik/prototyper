@@ -22,6 +22,8 @@
 
 // Prototyper include.
 #include "form_view.hpp"
+#include "form_scene.hpp"
+#include "form.hpp"
 
 
 namespace Prototyper {
@@ -36,6 +38,8 @@ class FormViewPrivate {
 public:
 	FormViewPrivate( FormView * parent )
 		:	q( parent )
+		,	m_scene( 0 )
+		,	m_form( 0 )
 	{
 	}
 
@@ -44,12 +48,24 @@ public:
 
 	//! Parent.
 	FormView * q;
+	//! Scene.
+	FormScene * m_scene;
+	//! Form.
+	Form * m_form;
 }; // class FormViewPrivate
 
 void
 FormViewPrivate::init()
 {
 	q->setFrameStyle( QFrame::NoFrame );
+
+	m_scene = new FormScene( q );
+
+	q->setScene( m_scene );
+
+	m_form = new Form;
+
+	m_scene->addItem( m_form );
 }
 
 
@@ -66,6 +82,18 @@ FormView::FormView( QWidget * parent )
 
 FormView::~FormView()
 {
+}
+
+FormScene *
+FormView::formScene() const
+{
+	return d->m_scene;
+}
+
+Form *
+FormView::form() const
+{
+	return d->m_form;
 }
 
 } /* namespace Core */

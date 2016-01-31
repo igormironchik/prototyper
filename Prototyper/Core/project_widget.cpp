@@ -88,6 +88,8 @@ public:
 	ProjectTabBar * m_tabBar;
 	//! Tab's names.
 	QStringList m_tabNames;
+	//! Forms.
+	QList< FormView* > m_forms;
 }; // class ProjectWidgetPrivate
 
 void
@@ -131,6 +133,8 @@ ProjectWidgetPrivate::newProject()
 		tab->deleteLater();
 	}
 
+	m_forms.clear();
+
 	static const QString projectDescTabName =
 		ProjectWidget::tr( "Project" );
 
@@ -157,6 +161,12 @@ ProjectWidget::~ProjectWidget()
 {
 }
 
+const QList< FormView* > &
+ProjectWidget::forms() const
+{
+	return d->m_forms;
+}
+
 void
 ProjectWidget::addForm()
 {
@@ -171,6 +181,8 @@ ProjectWidget::addForm()
 		d->m_tabs->addTab( form, dlg.name() );
 
 		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
+
+		d->m_forms.append( form );
 	}
 }
 
@@ -211,6 +223,8 @@ ProjectWidget::deleteForm( const QString & name )
 			d->m_tabs->removeTab( index );
 
 			d->m_tabNames.removeAt( index );
+
+			d->m_forms.removeAt( index );
 
 			tab->deleteLater();
 		}
