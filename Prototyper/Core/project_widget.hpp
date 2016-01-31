@@ -43,6 +43,7 @@ class Project;
 } /* namespace Cfg */
 
 class FormView;
+class ProjectDescTab;
 
 //
 // ProjectWidget
@@ -56,6 +57,10 @@ class ProjectWidget
 {
 	Q_OBJECT
 
+signals:
+	//! Project has been modified.
+	void changed();
+
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,
 		QWidget * parent = 0, Qt::WindowFlags f = 0 );
@@ -67,6 +72,9 @@ public:
 	//! \return Tab widget.
 	QTabWidget * tabs() const;
 
+	//! \return Project's description tab.
+	ProjectDescTab * descriptionTab() const;
+
 	//! Set project.
 	void setProject( const Cfg::Project & cfg );
 
@@ -77,6 +85,9 @@ public slots:
 	void renameTab( const QString & oldName );
 	//! Delete form.
 	void deleteForm( const QString & name );
+	//! New project.
+	void newProject();
+
 
 private:
 	Q_DISABLE_COPY( ProjectWidget )

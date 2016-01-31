@@ -28,6 +28,7 @@
 #include "text_editor.hpp"
 #include "form_view.hpp"
 #include "project_cfg.hpp"
+#include "form_scene.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -121,6 +122,8 @@ ProjectWidgetPrivate::init()
 		q, &ProjectWidget::addForm );
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formDeleteRequest,
 		q, &ProjectWidget::deleteForm );
+	ProjectWidget::connect( m_desc->editor(), &TextEditor::changed,
+		q, &ProjectWidget::changed );
 }
 
 void
@@ -133,6 +136,8 @@ ProjectWidgetPrivate::newProject()
 		m_tabs->removeTab( i );
 
 		m_tabNames.removeAt( i );
+
+		ProjectWidget::disconnect( tab, 0, 0, 0 );
 
 		tab->deleteLater();
 	}
@@ -180,6 +185,12 @@ ProjectWidget::tabs() const
 	return d->m_tabs;
 }
 
+ProjectDescTab *
+ProjectWidget::descriptionTab() const
+{
+	return d->m_desc;
+}
+
 void
 ProjectWidget::setProject( const Cfg::Project & cfg )
 {
@@ -206,6 +217,11 @@ ProjectWidget::addForm()
 		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
 
 		d->m_forms.append( form );
+
+		connect( form->formScene(), &FormScene::changed,
+			this, &ProjectWidget::changed );
+
+		emit changed();
 	}
 }
 
@@ -223,6 +239,8 @@ ProjectWidget::renameTab( const QString & oldName )
 			d->m_tabs->setTabText( index, dlg.name() );
 
 			d->m_tabNames[ index ] = dlg.name();
+
+			emit changed();
 		}
 	}
 }
@@ -249,9 +267,19 @@ ProjectWidget::deleteForm( const QString & name )
 
 			d->m_forms.removeAt( index );
 
+			disconnect( tab, 0, 0, 0 );
+
 			tab->deleteLater();
+
+			emit changed();
 		}
 	}
+}
+
+void
+ProjectWidget::newProject()
+{
+	d->newProject();
 }
 
 } /* namespace Core */

@@ -50,6 +50,8 @@ class TextEditor
 signals:
 	//! Cursor changed.
 	void cursorChanged( const QTextCursor & );
+	//! Project has been modified.
+	void changed();
 
 public:
 	TextEditor( QWidget * parent = 0 );

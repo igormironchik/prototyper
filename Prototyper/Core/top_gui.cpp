@@ -27,7 +27,6 @@
 #include "tools_window.hpp"
 #include "windows_cfg.hpp"
 #include "session_cfg.hpp"
-#include "project_cfg.hpp"
 #include "project_widget.hpp"
 
 // Qt include.
@@ -158,19 +157,7 @@ TopGuiPrivate::init()
 
 	if( !projectFileName.isEmpty() &&
 		QFileInfo::exists( projectFileName ) )
-	{
-		try {
-			Cfg::TagProject tag;
-
-			QtConfFile::readQtConfFile( tag, projectFileName,
-				QTextCodec::codecForName( "UTF-8" ) );
-
-			m_projectWindow->projectWidget()->setProject( tag.getCfg() );
-		}
-		catch( const QtConfFile::Exception & )
-		{
-		}
-	}
+			m_projectWindow->readProject( projectFileName );
 }
 
 void
@@ -317,10 +304,29 @@ TopGui::saveCfg( QWidget * parent )
 	}
 	catch( const QtConfFile::Exception & x )
 	{
-		QMessageBox::warning( parent,
-			tr( "Unable to save configuration..." ),
-			tr( "Unable to save configuration.\n"
-				"%1" ).arg( x.whatAsQString() ) );
+		if( parent )
+			QMessageBox::warning( parent,
+				tr( "Unable to Save Configuration..." ),
+				tr( "Unable to save configuration.\n"
+					"%1" ).arg( x.whatAsQString() ) );
+	}
+
+	try {
+		Cfg::Session s;
+		s.setProject( d->m_projectWindow->projectFileName() );
+
+		Cfg::TagSession tag( s );
+
+		QtConfFile::writeQtConfFile( tag, d->m_appSessionCfgFileName,
+			QTextCodec::codecForName( "UTF-8" ) );
+	}
+	catch( const QtConfFile::Exception & x )
+	{
+		if( parent )
+			QMessageBox::warning( parent,
+				tr( "Unable to Save Session..." ),
+				tr( "Unable to save session.\n"
+					"%1" ).arg( x.whatAsQString() ) );
 	}
 }
 

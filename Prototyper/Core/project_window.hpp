@@ -54,11 +54,16 @@ public:
 	//! \return Project widget.
 	ProjectWidget * projectWidget() const;
 
+	//! \return Project's file name.
+	const QString & projectFileName() const;
+
 public slots:
 	//! Hide properties window;
 	void hidePropsWindow();
 	//! Hide tools window.
 	void hideToolsWindow();
+	//! Read project.
+	void readProject( const QString & fileName );
 
 protected:
 	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
@@ -74,6 +79,18 @@ private slots:
 	void showHideGrid( bool show );
 	//! Set grid step.
 	void setGridStep();
+	//! Open project.
+	void openProject();
+	//! New project.
+	void newProject();
+	//! Save project.
+	void saveProjectImpl( const QString & fileName = QString() );
+	//! Save project.
+	void saveProject();
+	//! Save project as.
+	void saveProjectAs();
+	//! Project changed.
+	void projectChanged();
 
 private:
 	friend class ProjectWindowPrivate;

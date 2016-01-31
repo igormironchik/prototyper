@@ -31,6 +31,9 @@
 #include "form_scene.hpp"
 #include "grid_step_dlg.hpp"
 #include "project_cfg.hpp"
+#include "session_cfg.hpp"
+#include "project_description_tab.hpp"
+#include "text_editor.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -38,6 +41,8 @@
 #include <QAction>
 #include <QCloseEvent>
 #include <QApplication>
+#include <QMessageBox>
+#include <QFileDialog>
 
 
 namespace Prototyper {
@@ -55,6 +60,7 @@ public:
 		,	m_widget( 0 )
 		,	m_propsAction( 0 )
 		,	m_toolsAction( 0 )
+		,	m_saveProject( 0 )
 	{
 	}
 
@@ -69,8 +75,12 @@ public:
 	QAction * m_propsAction;
 	//! Tools action.
 	QAction * m_toolsAction;
+	//! Save project action.
+	QAction * m_saveProject;
 	//! Cfg.
 	Cfg::Project m_cfg;
+	//! File name.
+	QString m_fileName;
 }; // class ProjectWindowPrivate
 
 void
@@ -80,9 +90,36 @@ ProjectWindowPrivate::init()
 
 	q->setCentralWidget( m_widget );
 
-	q->setWindowTitle( QLatin1String( "Prototyper" ) );
+	q->setWindowTitle( ProjectWindow::tr( "Prototyper - Unsaved[*]" ) );
 
 	QMenu * file = q->menuBar()->addMenu( ProjectWindow::tr( "&File" ) );
+
+	QAction * newProject = file->addAction(
+		QIcon( ":/Core/img/document-new.png" ),
+		ProjectWindow::tr( "New Project" ) );
+	newProject->setShortcutContext( Qt::ApplicationShortcut );
+	newProject->setShortcut( ProjectWindow::tr( "Ctrl+N" ) );
+
+	QAction * openProject = file->addAction(
+		QIcon( ":/Core/img/document-open.png" ),
+		ProjectWindow::tr( "Open Project" ) );
+	openProject->setShortcutContext( Qt::ApplicationShortcut );
+	openProject->setShortcut( ProjectWindow::tr( "Ctrl+O" ) );
+
+	file->addSeparator();
+
+	m_saveProject = file->addAction(
+		QIcon( ":/Core/img/document-save.png" ),
+		ProjectWindow::tr( "Save Project" ) );
+	m_saveProject->setShortcutContext( Qt::ApplicationShortcut );
+	m_saveProject->setShortcut( ProjectWindow::tr( "Ctrl+S" ) );
+
+	QAction * saveProjectAs = file->addAction(
+		QIcon( ":/Core/img/document-save-as.png" ),
+		ProjectWindow::tr( "Save Project As" ) );
+
+	file->addSeparator();
+
 	QAction * quitAction = file->addAction(
 		QIcon( ":/Core/img/application-exit.png" ),
 		ProjectWindow::tr( "Quit" ) );
@@ -133,6 +170,16 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::setGridStep );
 	ProjectWindow::connect( newForm, &QAction::triggered,
 		m_widget, &ProjectWidget::addForm );
+	ProjectWindow::connect( newProject, &QAction::triggered,
+		q, &ProjectWindow::newProject );
+	ProjectWindow::connect( openProject, &QAction::triggered,
+		q, &ProjectWindow::openProject );
+	ProjectWindow::connect( m_saveProject, &QAction::triggered,
+		q, &ProjectWindow::saveProject );
+	ProjectWindow::connect( saveProjectAs, &QAction::triggered,
+		q, &ProjectWindow::saveProjectAs );
+	ProjectWindow::connect( m_widget, &ProjectWidget::changed,
+		q, &ProjectWindow::projectChanged );
 }
 
 
@@ -157,6 +204,12 @@ ProjectWindow::projectWidget() const
 	return d->m_widget;
 }
 
+const QString &
+ProjectWindow::projectFileName() const
+{
+	return d->m_fileName;
+}
+
 void
 ProjectWindow::hidePropsWindow()
 {
@@ -167,6 +220,33 @@ void
 ProjectWindow::hideToolsWindow()
 {
 	d->m_toolsAction->setChecked( false );
+}
+
+void
+ProjectWindow::readProject( const QString & fileName )
+{
+	try {
+		Cfg::TagProject tag;
+
+		QtConfFile::readQtConfFile( tag, fileName,
+			QTextCodec::codecForName( "UTF-8" ) );
+
+		newProject();
+
+		d->m_fileName = fileName;
+
+		d->m_widget->setProject( tag.getCfg() );
+
+		setWindowModified( false );
+
+		setWindowTitle( tr( "Prototyper - %1[*]" )
+			.arg( QFileInfo( fileName ).baseName() ) );
+	}
+	catch( const QtConfFile::Exception & x )
+	{
+		QMessageBox::warning( this, tr( "Unable to Read Project..." ),
+			tr( "Unable to read project.\n%1" ).arg( x.whatAsQString() ) );
+	}
 }
 
 void
@@ -198,7 +278,18 @@ ProjectWindow::showHideToolsWindow( bool show )
 void
 ProjectWindow::quit()
 {
-	TopGui::instance()->saveCfg( this );
+	if( isWindowModified() )
+	{
+		QMessageBox::StandardButton btn =
+			QMessageBox::question( this, tr( "Do You Want to Save Project..." ),
+				tr( "Do you want to save project?" ),
+				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+
+		if( btn == QMessageBox::Yes )
+			saveProjectImpl();
+	}
+
+	TopGui::instance()->saveCfg( 0 );
 
 	QApplication::quit();
 }
@@ -207,6 +298,8 @@ void
 ProjectWindow::showHideGrid( bool show )
 {
 	Form::GridMode mode = ( show ? Form::ShowGrid : Form::NoGrid );
+
+	d->m_cfg.setShowGrid( show );
 
 	foreach( FormView * view, d->m_widget->forms() )
 		view->form()->setGridMode( mode );
@@ -217,7 +310,7 @@ ProjectWindow::setGridStep()
 {
 	const int index = d->m_widget->tabs()->currentIndex();
 
-	int step = 20;
+	int step = d->m_cfg.defaultGridStep();
 	bool forAll = true;
 
 	if( index > 0 )
@@ -229,6 +322,8 @@ ProjectWindow::setGridStep()
 	{
 		if( dlg.applyForAllForms() )
 		{
+			d->m_cfg.setDefaultGridStep( dlg.gridStep() );
+
 			foreach( FormView * view, d->m_widget->forms() )
 				view->form()->setGridStep( dlg.gridStep() );
 		}
@@ -236,6 +331,104 @@ ProjectWindow::setGridStep()
 			d->m_widget->forms()[ index - 1 ]->form()->setGridStep(
 				dlg.gridStep() );
 	}
+}
+
+void
+ProjectWindow::openProject()
+{
+	const QString fileName =
+		QFileDialog::getOpenFileName( this, tr( "Select Project to Open..." ),
+			QString(), tr( "Prototyper Project (*.prototyper)" ) );
+
+	if( !fileName.isEmpty() )
+		readProject( fileName );
+}
+
+void
+ProjectWindow::newProject()
+{
+	if( isWindowModified() )
+	{
+		QMessageBox::StandardButton btn =
+			QMessageBox::question( this, tr( "Project Modified..." ),
+				tr( "Project modified.\nDo you want to save it?" ),
+				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+
+		if( btn == QMessageBox::Yes )
+			saveProjectImpl();
+	}
+
+	d->m_widget->newProject();
+
+	setWindowTitle( tr( "Prototyper - Unsaved[*]" ) );
+
+	setWindowModified( false );
+
+	d->m_saveProject->setEnabled( true );
+}
+
+void
+ProjectWindow::saveProjectImpl( const QString & fileName )
+{
+	if( !fileName.isEmpty() )
+		d->m_fileName = fileName;
+
+	if( !d->m_fileName.isEmpty() )
+	{
+		d->m_cfg.setDescription(
+			d->m_widget->descriptionTab()->editor()->text() );
+
+		try {
+			Cfg::TagProject tag( d->m_cfg );
+
+			QtConfFile::writeQtConfFile( tag, d->m_fileName,
+				QTextCodec::codecForName( "UTF-8" ) );
+		}
+		catch( const QtConfFile::Exception & x )
+		{
+			QMessageBox::warning( this, tr( "Unable to Save Project..." ),
+				tr( "Unable to save project.\n%1" ).arg( x.whatAsQString() ) );
+
+			return;
+		}
+
+		d->m_saveProject->setEnabled( false );
+
+		setWindowModified( false );
+	}
+	else
+		saveProjectAs();
+}
+
+void
+ProjectWindow::saveProject()
+{
+	saveProjectImpl();
+}
+
+void
+ProjectWindow::saveProjectAs()
+{
+	const QString fileName = QFileDialog::getSaveFileName( this,
+		tr( "Select File to Save Project..." ),
+		QString(),
+		tr( "Prototyper Project (*.prototyper)" ) );
+
+	if( !fileName.isEmpty() )
+	{
+		setWindowTitle( tr( "Prototyper - %1[*]" )
+			.arg( QFileInfo( fileName ).baseName() ) );
+
+		saveProjectImpl( fileName );
+	}
+}
+
+void
+ProjectWindow::projectChanged()
+{
+	d->m_saveProject->setEnabled( true );
+
+	setWindowModified( true );
 }
 
 } /* namespace Core */

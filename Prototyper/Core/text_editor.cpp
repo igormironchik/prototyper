@@ -60,6 +60,8 @@ TextEditorPrivate::init()
 
 	TextEditor::connect( q, &QTextEdit::cursorPositionChanged,
 		q, &TextEditor::slotCursorChanged );
+	TextEditor::connect( q, &QTextEdit::textChanged,
+		q, &TextEditor::changed );
 }
 
 
@@ -237,6 +239,8 @@ TextEditor::lessFontSize()
 
 		setFontPointSize( s );
 	}
+
+	emit changed();
 }
 
 void
@@ -263,6 +267,8 @@ TextEditor::moreFontSize()
 		s += 1.0;
 		setFontPointSize( s );
 	}
+
+	emit changed();
 }
 
 void
@@ -283,6 +289,8 @@ TextEditor::bold( bool on )
 	}
 	else
 		setFontWeight( on ? QFont::Bold : QFont::Normal );
+
+	emit changed();
 }
 
 void
@@ -303,6 +311,8 @@ TextEditor::italic( bool on )
 	}
 	else
 		setFontItalic( on );
+
+	emit changed();
 }
 
 void
@@ -323,12 +333,14 @@ TextEditor::underline( bool on )
 	}
 	else
 		setFontUnderline( on );
+
+	emit changed();
 }
 
 void
 TextEditor::changeTextColor()
 {
-
+	emit changed();
 }
 
 void
@@ -360,6 +372,8 @@ TextEditor::clearFormat()
 		setFontWeight( QFont::Normal );
 		setFontPointSize( 10 );
 	}
+
+	emit changed();
 }
 
 void

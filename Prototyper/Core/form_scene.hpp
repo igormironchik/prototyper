@@ -44,6 +44,10 @@ class FormScene
 {
 	Q_OBJECT
 
+signals:
+	//! Scene changed.
+	void changed();
+
 public:
 	FormScene( QObject * parent = 0 );
 	~FormScene();
