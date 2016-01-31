@@ -20,62 +20,49 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PROJECT_WIDGET_HPP__INCLUDED
-#define PROTOTYPER__CORE__PROJECT_WIDGET_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__GRID_STEP_DLG_HPP__INCLUDED
+#define PROTOTYPER__CORE__GRID_STEP_DLG_HPP__INCLUDED
 
 // Qt include.
-#include <QWidget>
+#include <QDialog>
 #include <QScopedPointer>
-
-QT_BEGIN_NAMESPACE
-class QTabWidget;
-QT_END_NAMESPACE
 
 
 namespace Prototyper {
 
 namespace Core {
 
-class FormView;
-
 //
-// ProjectWidget
+// GridStepDlg
 //
 
-class ProjectWidgetPrivate;
+class GridStepDlgPrivate;
 
-//! Main window with project.
-class ProjectWidget
-	:	public QWidget
+//! Grid step dialog.
+class GridStepDlg
+	:	public QDialog
 {
 	Q_OBJECT
 
 public:
-	ProjectWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ProjectWidget();
+	GridStepDlg( int step, bool forAll,
+		QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	~GridStepDlg();
 
-	//! \return Forms.
-	const QList< FormView* > & forms() const;
+	//! \return Grid step.
+	int gridStep() const;
 
-	//! \return Tab widget.
-	QTabWidget * tabs() const;
-
-public slots:
-	//! Add form.
-	void addForm();
-	//! Rename tab.
-	void renameTab( const QString & oldName );
-	//! Delete form.
-	void deleteForm( const QString & name );
+	//! \return Apply for all forms?
+	bool applyForAllForms() const;
 
 private:
-	Q_DISABLE_COPY( ProjectWidget )
+	Q_DISABLE_COPY( GridStepDlg )
 
-	QScopedPointer< ProjectWidgetPrivate > d;
-}; // class ProjectWidget
+	QScopedPointer< GridStepDlgPrivate > d;
+}; // class GridStepDlg
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__PROJECT_WIDGET_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__GRID_STEP_DLG_HPP__INCLUDED

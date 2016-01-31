@@ -167,6 +167,12 @@ ProjectWidget::forms() const
 	return d->m_forms;
 }
 
+QTabWidget *
+ProjectWidget::tabs() const
+{
+	return d->m_tabs;
+}
+
 void
 ProjectWidget::addForm()
 {

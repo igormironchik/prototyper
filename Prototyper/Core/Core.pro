@@ -25,41 +25,43 @@ generate_cfg.commands = ../../3rdparty/QtConfFile/qtconffile.generator -i ${QMAK
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
-HEADERS += form.hpp \
-           form_scene.hpp \
-           form_view.hpp \
-           name_dlg.hpp \
-           project_description_tab.hpp \
-           project_widget.hpp \
-           project_widget_tab_bar.hpp \
-		   project_window.hpp \
-		   props_widget.hpp \
-		   props_window.hpp \
-		   text_editor.hpp \
-		   text_opts_bar.hpp \
-		   tools_widget.hpp \
-		   tools_window.hpp \
-		   top_gui.hpp \
-		   $$GENERATED
+HEADERS +=	form.hpp \
+			form_scene.hpp \
+			form_view.hpp \
+			grid_step_dlg.hpp \
+			name_dlg.hpp \
+			project_description_tab.hpp \
+			project_widget.hpp \
+			project_widget_tab_bar.hpp \
+			project_window.hpp \
+			props_widget.hpp \
+			props_window.hpp \
+			text_editor.hpp \
+			text_opts_bar.hpp \
+			tools_widget.hpp \
+			tools_window.hpp \
+			top_gui.hpp \
+			$$GENERATED
 
-SOURCES += form.cpp \
-           form_scene.cpp \
-           form_view.cpp \
-           name_dlg.cpp \
-           project_description_tab.cpp \
-           project_widget.cpp \
-           project_widget_tab_bar.cpp \
-		   project_window.cpp \
-		   props_widget.cpp \
-		   props_window.cpp \
-		   text_editor.cpp \
-		   text_opts_bar.cpp \
-		   tools_widget.cpp \
-		   tools_window.cpp \
-		   top_gui.cpp
+SOURCES +=	form.cpp \
+			form_scene.cpp \
+			form_view.cpp \
+			grid_step_dlg.cpp \
+			name_dlg.cpp \
+			project_description_tab.cpp \
+			project_widget.cpp \
+			project_widget_tab_bar.cpp \
+			project_window.cpp \
+			props_widget.cpp \
+			props_window.cpp \
+			text_editor.cpp \
+			text_opts_bar.cpp \
+			tools_widget.cpp \
+			tools_window.cpp \
+			top_gui.cpp
 
-FORMS += grid_step_dlg.ui \
-		 name_dlg.ui
+FORMS +=	grid_step_dlg.ui \
+			name_dlg.ui
 
 unix|win32: LIBS += -L$$OUT_PWD/../../3rdparty/QtConfFile/lib/ -lQtConfFile
 

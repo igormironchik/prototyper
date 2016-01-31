@@ -29,6 +29,7 @@
 #include "form.hpp"
 #include "form_view.hpp"
 #include "form_scene.hpp"
+#include "grid_step_dlg.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -205,7 +206,27 @@ ProjectWindow::showHideGrid( bool show )
 void
 ProjectWindow::setGridStep()
 {
+	const int index = d->m_widget->tabs()->currentIndex();
 
+	int step = 20;
+	bool forAll = true;
+
+	if( index > 0 )
+		step = d->m_widget->forms().at( index - 1 )->form()->gridStep();
+
+	GridStepDlg dlg( step, forAll, this );
+
+	if( dlg.exec() == QDialog::Accepted )
+	{
+		if( dlg.applyForAllForms() )
+		{
+			foreach( FormView * view, d->m_widget->forms() )
+				view->form()->setGridStep( dlg.gridStep() );
+		}
+		else if( index > 0 )
+			d->m_widget->forms()[ index - 1 ]->form()->setGridStep(
+				dlg.gridStep() );
+	}
 }
 
 } /* namespace Core */
