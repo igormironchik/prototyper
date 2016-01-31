@@ -78,6 +78,133 @@ TextEditor::~TextEditor()
 {
 }
 
+bool operator != ( const QTextCharFormat & f1, const QTextCharFormat & f2 )
+{
+	return ( f1.fontPointSize() != f2.fontPointSize() ||
+		f1.fontWeight() != f2.fontWeight() ||
+		f1.fontItalic() != f2.fontItalic() ||
+		f1.fontUnderline() != f2.fontUnderline() );
+}
+
+static const QString c_boldStyle = QLatin1String( "bold" );
+static const QString c_italicStyle = QLatin1String( "italic" );
+static const QString c_underlineStyle = QLatin1String( "underline" );
+static const QString c_normalStyle = QLatin1String( "normal" );
+
+static inline QList< QString > textStyle( const QTextCharFormat & f )
+{
+	QList< QString > res;
+
+	if( f.fontWeight() == QFont::Bold )
+		res.append( c_boldStyle );
+
+	if( f.fontItalic() )
+		res.append( c_italicStyle );
+
+	if( f.fontUnderline() )
+		res.append( c_underlineStyle );
+
+	if( res.isEmpty() )
+		res.append( c_normalStyle );
+
+	return res;
+}
+
+Cfg::ProjectDesc
+TextEditor::text() const
+{
+	QList< Cfg::TextStyle > blocks;
+
+	Cfg::ProjectDesc desc;
+	desc.setText( blocks );
+
+	QTextCursor c = textCursor();
+
+	int pos = 0;
+
+	c.setPosition( pos );
+
+	QTextCharFormat f = c.charFormat();
+
+	QString t;
+
+	const QString data = toPlainText();
+
+	while( c.movePosition( QTextCursor::NextCharacter ) )
+	{
+		if( f != c.charFormat() )
+		{
+			Cfg::TextStyle style;
+			style.setStyle( textStyle( f ) );
+			style.setFontSize( f.fontPointSize() );
+			style.setText( t );
+
+			blocks.append( style );
+
+			f = c.charFormat();
+
+			t = data.at( pos );
+		}
+		else
+			t.append( data.at( pos ) );
+
+		++pos;
+	};
+
+	if( !t.isEmpty() )
+	{
+		Cfg::TextStyle style;
+		style.setStyle( textStyle( f ) );
+		style.setFontSize( f.fontPointSize() );
+		style.setText( t );
+
+		blocks.append( style );
+	}
+
+	return desc;
+}
+
+void
+TextEditor::setText( const Cfg::ProjectDesc & c )
+{
+	reset();
+
+	foreach( const Cfg::TextStyle & s, c.text() )
+	{
+		if( s.style().contains( c_normalStyle ) )
+		{
+			setFontWeight( QFont::Normal );
+			setFontItalic( false );
+			setFontUnderline( false );
+		}
+		else
+		{
+			if( s.style().contains( c_boldStyle ) )
+				setFontWeight( QFont::Bold );
+			else
+				setFontWeight( QFont::Normal );
+
+			if( s.style().contains( c_italicStyle ) )
+				setFontItalic( true );
+			else
+				setFontItalic( false );
+
+			if( s.style().contains( c_underlineStyle ) )
+				setFontUnderline( true );
+			else
+				setFontUnderline( false );
+		}
+
+		setFontPointSize( s.fontSize() );
+
+		insertPlainText( s.text() );
+
+		QTextCursor cursor = textCursor();
+		cursor.movePosition( QTextCursor::End );
+		setTextCursor( cursor );
+	}
+}
+
 void
 TextEditor::lessFontSize()
 {

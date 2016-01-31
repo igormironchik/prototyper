@@ -1,0 +1,27 @@
+
+{forGeneration PROTOTYPER__CORE__SESSION_CFG_HPP
+
+	{namespace Prototyper
+
+		{namespace Core
+
+			{namespace Cfg
+
+				|#
+					Session.
+				#|
+				{class Session
+					{tagScalar
+						{valueType QString}
+						{name project}
+						{required}
+					}
+				}
+
+			} || namespace Cfg
+
+		} || namespace Core
+
+	} || namespace Prototyper
+
+}

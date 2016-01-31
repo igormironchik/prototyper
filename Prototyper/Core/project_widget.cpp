@@ -27,6 +27,7 @@
 #include "name_dlg.hpp"
 #include "text_editor.hpp"
 #include "form_view.hpp"
+#include "project_cfg.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -65,8 +66,9 @@ public:
 
 class ProjectWidgetPrivate {
 public:
-	ProjectWidgetPrivate( ProjectWidget * parent )
+	ProjectWidgetPrivate( Cfg::Project & cfg, ProjectWidget * parent )
 		:	q( parent )
+		,	m_cfg( cfg )
 		,	m_tabs( 0 )
 		,	m_desc( 0 )
 		,	m_tabBar( 0 )
@@ -80,6 +82,8 @@ public:
 
 	//! Parent.
 	ProjectWidget * q;
+	//! Cfg.
+	Cfg::Project & m_cfg;
 	//! Tabs.
 	TabWidget * m_tabs;
 	//! Desc tab.
@@ -143,6 +147,8 @@ ProjectWidgetPrivate::newProject()
 	m_tabNames[ 0 ] = projectDescTabName;
 
 	m_desc->editor()->reset();
+
+	m_cfg = Cfg::Project();
 }
 
 
@@ -150,9 +156,10 @@ ProjectWidgetPrivate::newProject()
 // ProjectWidget
 //
 
-ProjectWidget::ProjectWidget( QWidget * parent, Qt::WindowFlags f )
+ProjectWidget::ProjectWidget( Cfg::Project & cfg,
+	QWidget * parent, Qt::WindowFlags f )
 	:	QWidget( parent, f )
-	,	d( new ProjectWidgetPrivate( this ) )
+	,	d( new ProjectWidgetPrivate( cfg, this ) )
 {
 	d->init();
 }
@@ -171,6 +178,16 @@ QTabWidget *
 ProjectWidget::tabs() const
 {
 	return d->m_tabs;
+}
+
+void
+ProjectWidget::setProject( const Cfg::Project & cfg )
+{
+	d->newProject();
+
+	d->m_cfg = cfg;
+
+	d->m_desc->editor()->setText( d->m_cfg.description() );
 }
 
 void

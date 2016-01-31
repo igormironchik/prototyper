@@ -20,5 +20,9 @@
 		<file>img/edit-rename.png</file>
 		<file>img/measure.png</file>
 		<file>img/view-grid.png</file>
+		<file>img/document-new.png</file>
+		<file>img/document-open.png</file>
+		<file>img/document-save-as.png</file>
+		<file>img/document-save.png</file>
 	</qresource>
 </RCC>

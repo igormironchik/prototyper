@@ -30,6 +30,7 @@
 #include "form_view.hpp"
 #include "form_scene.hpp"
 #include "grid_step_dlg.hpp"
+#include "project_cfg.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -68,12 +69,14 @@ public:
 	QAction * m_propsAction;
 	//! Tools action.
 	QAction * m_toolsAction;
+	//! Cfg.
+	Cfg::Project m_cfg;
 }; // class ProjectWindowPrivate
 
 void
 ProjectWindowPrivate::init()
 {
-	m_widget = new ProjectWidget( q );
+	m_widget = new ProjectWidget( m_cfg, q );
 
 	q->setCentralWidget( m_widget );
 
@@ -146,6 +149,12 @@ ProjectWindow::ProjectWindow( QWidget * parent, Qt::WindowFlags f )
 
 ProjectWindow::~ProjectWindow()
 {
+}
+
+ProjectWidget *
+ProjectWindow::projectWidget() const
+{
+	return d->m_widget;
 }
 
 void

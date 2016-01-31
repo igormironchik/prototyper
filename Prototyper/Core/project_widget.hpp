@@ -36,6 +36,12 @@ namespace Prototyper {
 
 namespace Core {
 
+namespace Cfg {
+
+class Project;
+
+} /* namespace Cfg */
+
 class FormView;
 
 //
@@ -51,7 +57,8 @@ class ProjectWidget
 	Q_OBJECT
 
 public:
-	ProjectWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	explicit ProjectWidget( Cfg::Project & cfg,
+		QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~ProjectWidget();
 
 	//! \return Forms.
@@ -59,6 +66,9 @@ public:
 
 	//! \return Tab widget.
 	QTabWidget * tabs() const;
+
+	//! Set project.
+	void setProject( const Cfg::Project & cfg );
 
 public slots:
 	//! Add form.

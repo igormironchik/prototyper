@@ -32,6 +32,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class ProjectWidget;
+
+
 //
 // ProjectWindow
 //
@@ -47,6 +50,9 @@ class ProjectWindow
 public:
 	ProjectWindow( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~ProjectWindow();
+
+	//! \return Project widget.
+	ProjectWidget * projectWidget() const;
 
 public slots:
 	//! Hide properties window;

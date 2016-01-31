@@ -26,6 +26,9 @@
 #include "props_window.hpp"
 #include "tools_window.hpp"
 #include "windows_cfg.hpp"
+#include "session_cfg.hpp"
+#include "project_cfg.hpp"
+#include "project_widget.hpp"
 
 // Qt include.
 #include <QApplication>
@@ -41,6 +44,8 @@ namespace Prototyper {
 namespace Core {
 
 static const QString c_appCfgFileName = QLatin1String( "/Prototyper.cfg" );
+static const QString c_appSessionCfgFileName =
+	QLatin1String( "/Session.cfg" );
 
 //
 // TopGuiPrivate
@@ -76,8 +81,10 @@ public:
 	PropsWindow * m_propsWindow;
 	//! Tools window.
 	ToolsWindow * m_toolsWindow;
-	//! App's cfg folder.
+	//! App's windows cfg.
 	QString m_appCfgFileName;
+	//! App's session cfg.
+	QString m_appSessionCfgFileName;
 }; // class TopGuiPrivate
 
 void
@@ -87,9 +94,11 @@ TopGuiPrivate::init()
 	m_propsWindow = new PropsWindow;
 	m_toolsWindow = new ToolsWindow;
 
-	m_appCfgFileName =
-		QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation ) +
-		c_appCfgFileName;
+	static const QString cfgFolder =
+		QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation );
+
+	m_appCfgFileName = cfgFolder + c_appCfgFileName;
+	m_appSessionCfgFileName = cfgFolder + c_appSessionCfgFileName;
 
 	if( !QFileInfo::exists( m_appCfgFileName ) )
 		placeByDefault();
@@ -130,6 +139,36 @@ TopGuiPrivate::init()
 		catch( const QtConfFile::Exception & )
 		{
 			placeByDefault();
+		}
+	}
+
+	QString projectFileName;
+
+	try {
+		Cfg::TagSession tag;
+
+		QtConfFile::readQtConfFile( tag, m_appSessionCfgFileName,
+			QTextCodec::codecForName( "UTF-8" ) );
+
+		projectFileName = tag.getCfg().project();
+	}
+	catch( const QtConfFile::Exception & )
+	{
+	}
+
+	if( !projectFileName.isEmpty() &&
+		QFileInfo::exists( projectFileName ) )
+	{
+		try {
+			Cfg::TagProject tag;
+
+			QtConfFile::readQtConfFile( tag, projectFileName,
+				QTextCodec::codecForName( "UTF-8" ) );
+
+			m_projectWindow->projectWidget()->setProject( tag.getCfg() );
+		}
+		catch( const QtConfFile::Exception & )
+		{
 		}
 	}
 }

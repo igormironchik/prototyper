@@ -27,6 +27,9 @@
 #include <QTextEdit>
 #include <QScopedPointer>
 
+// Prototyper include.
+#include "project_cfg.hpp"
+
 
 namespace Prototyper {
 
@@ -51,6 +54,11 @@ signals:
 public:
 	TextEditor( QWidget * parent = 0 );
 	~TextEditor();
+
+	//! \return Text.
+	Cfg::ProjectDesc text() const;
+	//! Set text.
+	void setText( const Cfg::ProjectDesc & c );
 
 public slots:
 	//! Less font size.
