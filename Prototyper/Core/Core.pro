@@ -9,7 +9,8 @@ RESOURCES = resources.qrc
 
 DESTDIR = ../..
 
-TO_GENERATE = windows_cfg.qtconf
+TO_GENERATE =	windows_cfg.qtconf \
+				project_cfg.qtconf
 
 GENERATED =
 

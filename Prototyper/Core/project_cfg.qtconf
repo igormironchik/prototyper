@@ -1,0 +1,118 @@
+
+{forGeneration PROTOTYPER__CORE__PROJECT_CFG_HPP
+
+	{namespace Prototyper
+
+		{namespace Core
+
+			{namespace Cfg
+
+				|#
+					Text's style.
+				#|
+				{class TextStyle
+					{base tagScalarVector
+						{oneOfConstraint "QLatin1String( \"bold\" )"
+							"QLatin1String( \"italic\" )"
+							"QLatin1String( \"underline\" )"
+							"QLatin1String( \"normal\" )"
+						}
+						{valueType QString}
+						{name style}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name fontSize}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name text}
+						{required}
+					}
+				} || class TextStyle
+
+
+				|#
+					Project's description.
+				#|
+				{class ProjectDesc
+					{tagVectorOfTags
+						{valueType TextStyle}
+						{name text}
+					}
+				} || class ProjectDesc
+
+
+				|#
+					Size
+				#|
+				{class Size
+					{tagScalar
+						{valueType int}
+						{name width}
+						{required}
+					}
+
+					{tagScalar
+						{valueType int}
+						{name height}
+						{required}
+					}
+				} || class Size
+
+
+				|#
+					Form.
+				#|
+				{class Form
+					{tag
+						{valueType Size}
+						{name size}
+						{required}
+					}
+
+					{tagScalar
+						{valueType int}
+						{name gridStep}
+						{required}
+					}
+				} || class Form
+
+
+				|#
+					Project.
+				#|
+				{class Project
+					{tag
+						{valueType ProjectDesc}
+						{name description}
+						{required}
+					}
+
+					{tagVectorOfTags
+						{valueType Form}
+						{name form}
+					}
+
+					{tagScalar
+						{valueType int}
+						{name defaultGridStep}
+						{required}
+					}
+
+					{tagScalar
+						{valueType bool}
+						{name showGrid}
+						{required}
+					}
+				} || class Project
+
+			} || namespace Cfg
+
+		} || namespace Core
+
+	} || namespace Prototyper
+
+}
