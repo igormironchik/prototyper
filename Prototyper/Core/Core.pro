@@ -58,6 +58,9 @@ SOURCES += form.cpp \
 		   tools_window.cpp \
 		   top_gui.cpp
 
+FORMS += grid_step_dlg.ui \
+		 name_dlg.ui
+
 unix|win32: LIBS += -L$$OUT_PWD/../../3rdparty/QtConfFile/lib/ -lQtConfFile
 
 INCLUDEPATH += $$PWD/../../3rdparty/QtConfFile

@@ -53,10 +53,6 @@ public:
 	QString name() const;
 
 private slots:
-	//! Ok.
-	void okPressed();
-	//! Cancel.
-	void cancelPressed();
 	//! Text changed.
 	void textChanged( const QString & text );
 

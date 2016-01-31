@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "name_dlg.hpp"
+#include "ui_name_dlg.h"
 
 // Qt include.
 #include <QLineEdit>
@@ -30,6 +31,7 @@
 #include <QVBoxLayout>
 #include <QSpacerItem>
 #include <QPalette>
+#include <QDialogButtonBox>
 
 
 namespace Prototyper {
@@ -45,8 +47,6 @@ public:
 	NameDlgPrivate( const QStringList & names, NameDlg * parent )
 		:	q( parent )
 		,	m_names( names )
-		,	m_edit( 0 )
-		,	m_ok( 0 )
 	{
 	}
 
@@ -55,12 +55,10 @@ public:
 
 	//! Parent.
 	NameDlg * q;
+	//! Ui.
+	Ui::NameDlg m_ui;
 	//! Names.
 	const QStringList & m_names;
-	//! Line edit.
-	QLineEdit * m_edit;
-	//! Ok button.
-	QPushButton * m_ok;
 	//! Normal text color.
 	QColor m_color;
 }; // class NameDlgPrivate
@@ -68,36 +66,14 @@ public:
 void
 NameDlgPrivate::init()
 {
-	q->setWindowTitle( NameDlg::tr( "Enter Name..." ) );
+	m_ui.setupUi( q );
 
-	QVBoxLayout * layout = new QVBoxLayout( q );
+	m_color = m_ui.m_edit->palette().color( QPalette::Text );
 
-	m_edit = new QLineEdit( q );
-	m_edit->setPlaceholderText( NameDlg::tr( "Enter Name" ) );
-	m_color = m_edit->palette().color( QPalette::Text );
-	layout->addWidget( m_edit );
+	m_ui.m_btns->button( QDialogButtonBox::Ok )->setEnabled( false );
 
-	QHBoxLayout * hbox = new QHBoxLayout;
-
-	QSpacerItem * s = new QSpacerItem( 0, 0,
-		QSizePolicy::Expanding, QSizePolicy::Fixed );
-	hbox->addItem( s );
-
-	m_ok = new QPushButton( NameDlg::tr( "OK" ) );
-	m_ok->setEnabled( false );
-	hbox->addWidget( m_ok );
-
-	QPushButton * cancel = new QPushButton( NameDlg::tr( "Cancel" ) );
-	hbox->addWidget( cancel );
-
-	layout->addLayout( hbox );
-
-	NameDlg::connect( m_edit, &QLineEdit::textChanged,
+	NameDlg::connect( m_ui.m_edit, &QLineEdit::textChanged,
 		q, &NameDlg::textChanged );
-	NameDlg::connect( m_ok, &QPushButton::clicked,
-		q, &NameDlg::okPressed );
-	NameDlg::connect( cancel, &QPushButton::clicked,
-		q, &NameDlg::cancelPressed );
 }
 
 
@@ -120,19 +96,7 @@ NameDlg::~NameDlg()
 QString
 NameDlg::name() const
 {
-	return d->m_edit->text();
-}
-
-void
-NameDlg::okPressed()
-{
-	accept();
-}
-
-void
-NameDlg::cancelPressed()
-{
-	reject();
+	return d->m_ui.m_edit->text();
 }
 
 void
@@ -140,19 +104,28 @@ NameDlg::textChanged( const QString & text )
 {
 	if( !text.isEmpty() && !d->m_names.contains( text ) )
 	{
-		QPalette p = d->m_edit->palette();
+		QPalette p = d->m_ui.m_edit->palette();
 		p.setColor( QPalette::Text, d->m_color );
-		d->m_edit->setPalette( p );
+		d->m_ui.m_edit->setPalette( p );
 
-		d->m_ok->setEnabled( true );
+		d->m_ui.m_btns->button( QDialogButtonBox::Ok )->setEnabled( true );
 	}
 	else
 	{
-		QPalette p = d->m_edit->palette();
-		p.setColor( QPalette::Text, Qt::red );
-		d->m_edit->setPalette( p );
+		if( text.isEmpty() )
+		{
+			QPalette p = d->m_ui.m_edit->palette();
+			p.setColor( QPalette::Text, d->m_color );
+			d->m_ui.m_edit->setPalette( p );
+		}
+		else
+		{
+			QPalette p = d->m_ui.m_edit->palette();
+			p.setColor( QPalette::Text, Qt::red );
+			d->m_ui.m_edit->setPalette( p );
+		}
 
-		d->m_ok->setEnabled( false );
+		d->m_ui.m_btns->button( QDialogButtonBox::Ok )->setEnabled( false );
 	}
 }
 
