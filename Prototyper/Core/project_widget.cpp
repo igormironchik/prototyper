@@ -81,6 +81,9 @@ public:
 	void init();
 	//! New project.
 	void newProject();
+	//! Add form.
+	void addForm( const QString & tabName, int gridStep, bool showGrid,
+		const QSize & size = QSize( 800, 600 ) );
 
 	//! Parent.
 	ProjectWidget * q;
@@ -157,6 +160,26 @@ ProjectWidgetPrivate::newProject()
 	m_cfg = Cfg::Project();
 }
 
+void
+ProjectWidgetPrivate::addForm( const QString & tabName,
+	int gridStep, bool showGrid, const QSize & size )
+{
+	FormView * form = new FormView( m_tabs );
+	form->form()->setGridStep( gridStep );
+	form->form()->setGridMode( showGrid ?
+		Form::ShowGrid : Form::NoGrid );
+	form->form()->setSize( size );
+
+	m_tabNames.append( tabName );
+
+	m_tabs->addTab( form, tabName );
+
+	m_forms.append( form );
+
+	ProjectWidget::connect( form->formScene(), &FormScene::changed,
+		q, &ProjectWidget::changed );
+}
+
 
 //
 // ProjectWidget
@@ -202,6 +225,10 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 	d->m_desc->editor()->setText( d->m_cfg.description().text() );
 
 	d->m_tabs->setTabText( 0, d->m_cfg.description().tabName() );
+
+	foreach( const Cfg::Form & f, d->m_cfg.form() )
+		d->addForm( f.tabName(), f.gridStep(), d->m_cfg.showGrid(),
+			QSize( f.size().width(), f.size().height() ) );
 }
 
 void
@@ -211,21 +238,10 @@ ProjectWidget::addForm()
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
-		FormView * form = new FormView( d->m_tabs );
-		form->form()->setGridStep( d->m_cfg.defaultGridStep() );
-		form->form()->setGridMode( d->m_cfg.showGrid() ?
-			Form::ShowGrid : Form::NoGrid );
-
-		d->m_tabNames.append( dlg.name() );
-
-		d->m_tabs->addTab( form, dlg.name() );
+		d->addForm( dlg.name(), d->m_cfg.defaultGridStep(),
+			d->m_cfg.showGrid() );
 
 		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
-
-		d->m_forms.append( form );
-
-		connect( form->formScene(), &FormScene::changed,
-			this, &ProjectWidget::changed );
 
 		emit changed();
 	}
