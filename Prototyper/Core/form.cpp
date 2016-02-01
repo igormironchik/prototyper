@@ -22,9 +22,14 @@
 
 // Prototyper include.
 #include "form.hpp"
+#include "top_gui.hpp"
+#include "project_window.hpp"
 
 // Qt include.
 #include <QPainter>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QAction>
 
 
 namespace Prototyper {
@@ -42,6 +47,7 @@ public:
 		,	m_gridMode( Form::ShowGrid )
 		,	m_size( 800, 600 )
 		,	m_gridStep( 20 )
+		,	m_gridStepAction( 0 )
 	{
 	}
 
@@ -56,12 +62,18 @@ public:
 	QSize m_size;
 	//! Grid step.
 	int m_gridStep;
+	//! Grid step action.
+	QAction * m_gridStepAction;
 }; // class FormPrivate
 
 void
 FormPrivate::init()
 {
+	m_gridStepAction = new QAction( QIcon( ":/Core/img/measure.png" ),
+		ProjectWindow::tr( "Grid Step" ), q );
 
+	Form::connect( m_gridStepAction, &QAction::triggered,
+		q, &Form::slotSetGridStep );
 }
 
 
@@ -70,7 +82,7 @@ FormPrivate::init()
 //
 
 Form::Form( QGraphicsItem * parent )
-	:	QGraphicsItem( parent )
+	:	QGraphicsObject( parent )
 	,	d( new FormPrivate( this ) )
 {
 	d->init();
@@ -155,6 +167,24 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		for( int y = d->m_gridStep; y < h; y += d->m_gridStep )
 			painter->drawLine( 0, y, w, y );
 	}
+}
+
+void
+Form::slotSetGridStep()
+{
+	TopGui::instance()->projectWindow()->setGridStep( d->m_gridStep, false );
+}
+
+void
+Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+{
+	QMenu menu;
+	menu.addAction( TopGui::instance()->projectWindow()->showHideGridAction() );
+	menu.addAction( d->m_gridStepAction );
+
+	menu.exec( event->screenPos() );
+
+	event->accept();
 }
 
 } /* namespace Core */

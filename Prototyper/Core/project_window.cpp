@@ -62,6 +62,8 @@ public:
 		,	m_propsAction( 0 )
 		,	m_toolsAction( 0 )
 		,	m_saveProject( 0 )
+		,	m_grid( 0 )
+		,	m_gridStep( 0 )
 	{
 	}
 
@@ -78,6 +80,10 @@ public:
 	QAction * m_toolsAction;
 	//! Save project action.
 	QAction * m_saveProject;
+	//! Show/hide grid action.
+	QAction * m_grid;
+	//! Grid step action.
+	QAction * m_gridStep;
 	//! Cfg.
 	Cfg::Project m_cfg;
 	//! File name.
@@ -142,15 +148,15 @@ ProjectWindowPrivate::init()
 	m_toolsAction->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
 	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
-	QAction * grid = form->addAction(
+	m_grid = form->addAction(
 		QIcon( ":/Core/img/view-grid.png" ),
 		ProjectWindow::tr( "Show Grid" ) );
-	grid->setShortcutContext( Qt::ApplicationShortcut );
-	grid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
-	grid->setCheckable( true );
-	grid->setChecked( true );
+	m_grid->setShortcutContext( Qt::ApplicationShortcut );
+	m_grid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
+	m_grid->setCheckable( true );
+	m_grid->setChecked( true );
 
-	QAction * gridStep = form->addAction(
+	m_gridStep = form->addAction(
 		QIcon( ":/Core/img/measure.png" ),
 		ProjectWindow::tr( "Grid Step" ) );
 
@@ -165,10 +171,10 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::showHideToolsWindow );
 	ProjectWindow::connect( quitAction, &QAction::triggered,
 		q, &ProjectWindow::quit );
-	ProjectWindow::connect( grid, &QAction::toggled,
+	ProjectWindow::connect( m_grid, &QAction::toggled,
 		q, &ProjectWindow::showHideGrid );
-	ProjectWindow::connect( gridStep, &QAction::triggered,
-		q, &ProjectWindow::setGridStep );
+	ProjectWindow::connect( m_gridStep, &QAction::triggered,
+		q, &ProjectWindow::slotSetGridStep );
 	ProjectWindow::connect( newForm, &QAction::triggered,
 		m_widget, &ProjectWidget::addForm );
 	ProjectWindow::connect( newProject, &QAction::triggered,
@@ -209,6 +215,18 @@ const QString &
 ProjectWindow::projectFileName() const
 {
 	return d->m_fileName;
+}
+
+QAction *
+ProjectWindow::showHideGridAction() const
+{
+	return d->m_grid;
+}
+
+QAction *
+ProjectWindow::gridStepAction() const
+{
+	return d->m_gridStep;
 }
 
 void
@@ -307,15 +325,9 @@ ProjectWindow::showHideGrid( bool show )
 }
 
 void
-ProjectWindow::setGridStep()
+ProjectWindow::setGridStep( int step, bool forAll )
 {
 	const int index = d->m_widget->tabs()->currentIndex();
-
-	int step = d->m_cfg.defaultGridStep();
-	bool forAll = true;
-
-	if( index > 0 )
-		step = d->m_widget->forms().at( index - 1 )->form()->gridStep();
 
 	GridStepDlg dlg( step, forAll, this );
 
@@ -332,6 +344,22 @@ ProjectWindow::setGridStep()
 			d->m_widget->forms()[ index - 1 ]->form()->setGridStep(
 				dlg.gridStep() );
 	}
+}
+
+void
+ProjectWindow::slotSetGridStep()
+{
+	const int index = d->m_widget->tabs()->currentIndex();
+
+	int step = d->m_cfg.defaultGridStep();
+	bool forAll = true;
+
+	if( index > 0 )
+		step = d->m_widget->forms().at( index - 1 )->form()->gridStep();
+
+	GridStepDlg dlg( step, forAll, this );
+
+	setGridStep( step, forAll );
 }
 
 void

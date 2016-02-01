@@ -57,6 +57,11 @@ public:
 	//! \return Project's file name.
 	const QString & projectFileName() const;
 
+	//! \return Show/hide grid action.
+	QAction * showHideGridAction() const;
+	//! \return Grid step action.
+	QAction * gridStepAction() const;
+
 public slots:
 	//! Hide properties window;
 	void hidePropsWindow();
@@ -64,6 +69,8 @@ public slots:
 	void hideToolsWindow();
 	//! Read project.
 	void readProject( const QString & fileName );
+	//! Set grid step.
+	void setGridStep( int step, bool forAll );
 
 protected:
 	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
@@ -78,7 +85,7 @@ private slots:
 	//! Show/hide grid.
 	void showHideGrid( bool show );
 	//! Set grid step.
-	void setGridStep();
+	void slotSetGridStep();
 	//! Open project.
 	void openProject();
 	//! New project.

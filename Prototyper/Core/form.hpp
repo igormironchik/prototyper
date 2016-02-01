@@ -24,7 +24,7 @@
 #define PROTOTYPER__CORE__FORM_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsItem>
+#include <QGraphicsObject>
 #include <QScopedPointer>
 
 
@@ -40,8 +40,10 @@ class FormPrivate;
 
 //! Form.
 class Form
-	:	public QGraphicsItem
+	:	public QGraphicsObject
 {
+	Q_OBJECT
+
 public:
 	Form( QGraphicsItem * parent = 0 );
 	~Form();
@@ -74,7 +76,17 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget ) Q_DECL_OVERRIDE;
 
+private slots:
+	//! Set grid step.
+	void slotSetGridStep();
+
+protected:
+	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+		Q_DECL_OVERRIDE;
+
 private:
+	friend class FormPrivate;
+
 	Q_DISABLE_COPY( Form )
 
 	QScopedPointer< FormPrivate > d;
