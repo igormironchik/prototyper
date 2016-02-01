@@ -24,6 +24,7 @@
 					{tagScalar
 						{valueType qreal}
 						{name fontSize}
+						{defaultValue 10.0}
 					}
 
 					{tagScalar
@@ -59,12 +60,14 @@
 						{valueType int}
 						{name width}
 						{required}
+						{defaultValue 0}
 					}
 
 					{tagScalar
 						{valueType int}
 						{name height}
 						{required}
+						{defaultValue 0}
 					}
 				} || class Size
 
@@ -83,6 +86,7 @@
 						{valueType int}
 						{name gridStep}
 						{required}
+						{defaultValue 20}
 					}
 				} || class Form
 
@@ -106,12 +110,14 @@
 						{valueType int}
 						{name defaultGridStep}
 						{required}
+						{defaultValue 20}
 					}
 
 					{tagScalar
 						{valueType bool}
 						{name showGrid}
 						{required}
+						{defaultValue true}
 					}
 				} || class Project
 

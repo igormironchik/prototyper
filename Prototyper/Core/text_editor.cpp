@@ -112,13 +112,10 @@ static inline QList< QString > textStyle( const QTextCharFormat & f )
 	return res;
 }
 
-Cfg::ProjectDesc
+QList< Cfg::TextStyle >
 TextEditor::text() const
 {
 	QList< Cfg::TextStyle > blocks;
-
-	Cfg::ProjectDesc desc;
-	desc.setText( blocks );
 
 	QTextCursor c = textCursor();
 
@@ -163,15 +160,15 @@ TextEditor::text() const
 		blocks.append( style );
 	}
 
-	return desc;
+	return blocks;
 }
 
 void
-TextEditor::setText( const Cfg::ProjectDesc & c )
+TextEditor::setText( const QList< Cfg::TextStyle > & blocks )
 {
 	reset();
 
-	foreach( const Cfg::TextStyle & s, c.text() )
+	foreach( const Cfg::TextStyle & s, blocks )
 	{
 		if( s.style().contains( c_normalStyle ) )
 		{

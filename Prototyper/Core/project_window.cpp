@@ -43,6 +43,7 @@
 #include <QApplication>
 #include <QMessageBox>
 #include <QFileDialog>
+#include <QStandardPaths>
 
 
 namespace Prototyper {
@@ -338,7 +339,9 @@ ProjectWindow::openProject()
 {
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Project to Open..." ),
-			QString(), tr( "Prototyper Project (*.prototyper)" ) );
+			QStandardPaths::standardLocations(
+				QStandardPaths::DocumentsLocation ).first(),
+			tr( "Prototyper Project (*.prototyper)" ) );
 
 	if( !fileName.isEmpty() )
 		readProject( fileName );
@@ -370,13 +373,21 @@ ProjectWindow::newProject()
 void
 ProjectWindow::saveProjectImpl( const QString & fileName )
 {
+	static const QString ext = QLatin1String( ".prototyper" );
+
 	if( !fileName.isEmpty() )
 		d->m_fileName = fileName;
 
 	if( !d->m_fileName.isEmpty() )
 	{
-		d->m_cfg.setDescription(
-			d->m_widget->descriptionTab()->editor()->text() );
+		Cfg::ProjectDesc desc;
+		desc.setText( d->m_widget->descriptionTab()->editor()->text() );
+		desc.setTabName( d->m_widget->tabs()->tabText( 0 ) );
+
+		d->m_cfg.setDescription( desc );
+
+		if( !d->m_fileName.endsWith( ext ) )
+			d->m_fileName.append( ext );
 
 		try {
 			Cfg::TagProject tag( d->m_cfg );
@@ -411,7 +422,8 @@ ProjectWindow::saveProjectAs()
 {
 	const QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select File to Save Project..." ),
-		QString(),
+		QStandardPaths::standardLocations(
+			QStandardPaths::DocumentsLocation ).first(),
 		tr( "Prototyper Project (*.prototyper)" ) );
 
 	if( !fileName.isEmpty() )

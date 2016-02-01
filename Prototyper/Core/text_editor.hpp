@@ -58,9 +58,9 @@ public:
 	~TextEditor();
 
 	//! \return Text.
-	Cfg::ProjectDesc text() const;
+	QList< Cfg::TextStyle > text() const;
 	//! Set text.
-	void setText( const Cfg::ProjectDesc & c );
+	void setText( const QList< Cfg::TextStyle > & blocks );
 
 public slots:
 	//! Less font size.

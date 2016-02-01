@@ -29,6 +29,7 @@
 #include "form_view.hpp"
 #include "project_cfg.hpp"
 #include "form_scene.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -198,7 +199,9 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 
 	d->m_cfg = cfg;
 
-	d->m_desc->editor()->setText( d->m_cfg.description() );
+	d->m_desc->editor()->setText( d->m_cfg.description().text() );
+
+	d->m_tabs->setTabText( 0, d->m_cfg.description().tabName() );
 }
 
 void
@@ -209,6 +212,9 @@ ProjectWidget::addForm()
 	if( dlg.exec() == QDialog::Accepted )
 	{
 		FormView * form = new FormView( d->m_tabs );
+		form->form()->setGridStep( d->m_cfg.defaultGridStep() );
+		form->form()->setGridMode( d->m_cfg.showGrid() ?
+			Form::ShowGrid : Form::NoGrid );
 
 		d->m_tabNames.append( dlg.name() );
 
