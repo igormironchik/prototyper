@@ -77,27 +77,27 @@ protected:
 
 private slots:
 	//! Show/hide properties window.
-	void showHidePropertiesWindow( bool show );
+	void p_showHidePropertiesWindow( bool show );
 	//! Show/hide tools window.
-	void showHideToolsWindow( bool show );
+	void p_showHideToolsWindow( bool show );
 	//! Quit.
-	void quit();
+	void p_quit();
 	//! Show/hide grid.
-	void showHideGrid( bool show );
+	void p_showHideGrid( bool show );
 	//! Set grid step.
-	void slotSetGridStep();
+	void p_setGridStep();
 	//! Open project.
-	void openProject();
+	void p_openProject();
 	//! New project.
-	void newProject();
+	void p_newProject();
 	//! Save project.
-	void saveProjectImpl( const QString & fileName = QString() );
+	void p_saveProjectImpl( const QString & fileName = QString() );
 	//! Save project.
-	void saveProject();
+	void p_saveProject();
 	//! Save project as.
-	void saveProjectAs();
+	void p_saveProjectAs();
 	//! Project changed.
-	void projectChanged();
+	void p_projectChanged();
 
 private:
 	friend class ProjectWindowPrivate;

@@ -166,27 +166,27 @@ ProjectWindowPrivate::init()
 	q->addAction( newForm );
 
 	ProjectWindow::connect( m_propsAction, &QAction::toggled,
-		q, &ProjectWindow::showHidePropertiesWindow );
+		q, &ProjectWindow::p_showHidePropertiesWindow );
 	ProjectWindow::connect( m_toolsAction, &QAction::toggled,
-		q, &ProjectWindow::showHideToolsWindow );
+		q, &ProjectWindow::p_showHideToolsWindow );
 	ProjectWindow::connect( quitAction, &QAction::triggered,
-		q, &ProjectWindow::quit );
+		q, &ProjectWindow::p_quit );
 	ProjectWindow::connect( m_grid, &QAction::toggled,
-		q, &ProjectWindow::showHideGrid );
+		q, &ProjectWindow::p_showHideGrid );
 	ProjectWindow::connect( m_gridStep, &QAction::triggered,
-		q, &ProjectWindow::slotSetGridStep );
+		q, &ProjectWindow::p_setGridStep );
 	ProjectWindow::connect( newForm, &QAction::triggered,
 		m_widget, &ProjectWidget::addForm );
 	ProjectWindow::connect( newProject, &QAction::triggered,
-		q, &ProjectWindow::newProject );
+		q, &ProjectWindow::p_newProject );
 	ProjectWindow::connect( openProject, &QAction::triggered,
-		q, &ProjectWindow::openProject );
+		q, &ProjectWindow::p_openProject );
 	ProjectWindow::connect( m_saveProject, &QAction::triggered,
-		q, &ProjectWindow::saveProject );
+		q, &ProjectWindow::p_saveProject );
 	ProjectWindow::connect( saveProjectAs, &QAction::triggered,
-		q, &ProjectWindow::saveProjectAs );
+		q, &ProjectWindow::p_saveProjectAs );
 	ProjectWindow::connect( m_widget, &ProjectWidget::changed,
-		q, &ProjectWindow::projectChanged );
+		q, &ProjectWindow::p_projectChanged );
 }
 
 
@@ -250,7 +250,7 @@ ProjectWindow::readProject( const QString & fileName )
 		QtConfFile::readQtConfFile( tag, fileName,
 			QTextCodec::codecForName( "UTF-8" ) );
 
-		newProject();
+		p_newProject();
 
 		d->m_fileName = fileName;
 
@@ -273,11 +273,11 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 {
 	e->accept();
 
-	quit();
+	p_quit();
 }
 
 void
-ProjectWindow::showHidePropertiesWindow( bool show )
+ProjectWindow::p_showHidePropertiesWindow( bool show )
 {
 	if( show )
 		TopGui::instance()->propsWindow()->show();
@@ -286,7 +286,7 @@ ProjectWindow::showHidePropertiesWindow( bool show )
 }
 
 void
-ProjectWindow::showHideToolsWindow( bool show )
+ProjectWindow::p_showHideToolsWindow( bool show )
 {
 	if( show )
 		TopGui::instance()->toolsWindow()->show();
@@ -295,7 +295,7 @@ ProjectWindow::showHideToolsWindow( bool show )
 }
 
 void
-ProjectWindow::quit()
+ProjectWindow::p_quit()
 {
 	if( isWindowModified() )
 	{
@@ -305,7 +305,7 @@ ProjectWindow::quit()
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
 		if( btn == QMessageBox::Yes )
-			saveProjectImpl();
+			p_saveProjectImpl();
 	}
 
 	TopGui::instance()->saveCfg( 0 );
@@ -314,7 +314,7 @@ ProjectWindow::quit()
 }
 
 void
-ProjectWindow::showHideGrid( bool show )
+ProjectWindow::p_showHideGrid( bool show )
 {
 	Form::GridMode mode = ( show ? Form::ShowGrid : Form::NoGrid );
 
@@ -347,7 +347,7 @@ ProjectWindow::setGridStep( int step, bool forAll )
 }
 
 void
-ProjectWindow::slotSetGridStep()
+ProjectWindow::p_setGridStep()
 {
 	const int index = d->m_widget->tabs()->currentIndex();
 
@@ -363,7 +363,7 @@ ProjectWindow::slotSetGridStep()
 }
 
 void
-ProjectWindow::openProject()
+ProjectWindow::p_openProject()
 {
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Project to Open..." ),
@@ -376,7 +376,7 @@ ProjectWindow::openProject()
 }
 
 void
-ProjectWindow::newProject()
+ProjectWindow::p_newProject()
 {
 	if( isWindowModified() )
 	{
@@ -386,7 +386,7 @@ ProjectWindow::newProject()
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
 		if( btn == QMessageBox::Yes )
-			saveProjectImpl();
+			p_saveProjectImpl();
 	}
 
 	d->m_widget->newProject();
@@ -399,7 +399,7 @@ ProjectWindow::newProject()
 }
 
 void
-ProjectWindow::saveProjectImpl( const QString & fileName )
+ProjectWindow::p_saveProjectImpl( const QString & fileName )
 {
 	static const QString ext = QLatin1String( ".prototyper" );
 
@@ -455,17 +455,17 @@ ProjectWindow::saveProjectImpl( const QString & fileName )
 		setWindowModified( false );
 	}
 	else
-		saveProjectAs();
+		p_saveProjectAs();
 }
 
 void
-ProjectWindow::saveProject()
+ProjectWindow::p_saveProject()
 {
-	saveProjectImpl();
+	p_saveProjectImpl();
 }
 
 void
-ProjectWindow::saveProjectAs()
+ProjectWindow::p_saveProjectAs()
 {
 	const QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select File to Save Project..." ),
@@ -478,12 +478,12 @@ ProjectWindow::saveProjectAs()
 		setWindowTitle( tr( "Prototyper - %1[*]" )
 			.arg( QFileInfo( fileName ).baseName() ) );
 
-		saveProjectImpl( fileName );
+		p_saveProjectImpl( fileName );
 	}
 }
 
 void
-ProjectWindow::projectChanged()
+ProjectWindow::p_projectChanged()
 {
 	d->m_saveProject->setEnabled( true );
 
