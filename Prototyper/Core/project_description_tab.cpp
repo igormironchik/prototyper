@@ -65,9 +65,9 @@ ProjectDescTabPrivate::init()
 	layout->setSpacing( 0 );
 
 	m_bar = new TextOptsBar( TextOptsBar::Large, q );
-	layout->addWidget( m_bar );
 
 	m_editor = new TextEditor( q );
+	m_editor->setFrameStyle( QFrame::NoFrame );
 	layout->addWidget( m_editor );
 
 	ProjectDescTab::connect( m_editor, &TextEditor::cursorChanged,
@@ -102,6 +102,12 @@ ProjectDescTab::ProjectDescTab( QWidget * parent, Qt::WindowFlags f )
 
 ProjectDescTab::~ProjectDescTab()
 {
+}
+
+QToolBar *
+ProjectDescTab::toolBar() const
+{
+	return d->m_bar;
 }
 
 TextEditor *

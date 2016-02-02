@@ -27,6 +27,10 @@
 #include <QWidget>
 #include <QScopedPointer>
 
+QT_BEGIN_NAMESPACE
+class QToolBar;
+QT_END_NAMESPACE
+
 
 namespace Prototyper {
 
@@ -49,6 +53,9 @@ class ProjectDescTab
 public:
 	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~ProjectDescTab();
+
+	//! \return Tool bar.
+	QToolBar * toolBar() const;
 
 	//! \return Text editor.
 	TextEditor * editor() const;

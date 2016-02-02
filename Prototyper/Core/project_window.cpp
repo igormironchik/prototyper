@@ -103,6 +103,8 @@ ProjectWindowPrivate::init()
 {
 	m_widget = new ProjectWidget( m_cfg, q );
 
+	q->addToolBar( Qt::TopToolBarArea, m_widget->descriptionTab()->toolBar() );
+
 	q->setCentralWidget( m_widget );
 
 	q->setWindowTitle( ProjectWindow::tr( "Prototyper - Unsaved[*]" ) );
@@ -634,9 +636,15 @@ void
 ProjectWindow::p_tabChanged( int index )
 {
 	if( index > 0 )
+	{
 		d->m_formToolBar->show();
+		d->m_widget->descriptionTab()->toolBar()->hide();
+	}
 	else
+	{
 		d->m_formToolBar->hide();
+		d->m_widget->descriptionTab()->toolBar()->show();
+	}
 }
 
 } /* namespace Core */
