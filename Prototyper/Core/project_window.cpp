@@ -141,11 +141,11 @@ ProjectWindowPrivate::init()
 	m_propsAction->setShortcutContext( Qt::ApplicationShortcut );
 	m_propsAction->setShortcut( ProjectWindow::tr( "Alt+P" ) );
 
-	m_toolsAction = view->addAction( ProjectWindow::tr( "Tools" ) );
-	m_toolsAction->setCheckable( true );
-	m_toolsAction->setChecked( true );
-	m_toolsAction->setShortcutContext( Qt::ApplicationShortcut );
-	m_toolsAction->setShortcut( ProjectWindow::tr( "Alt+T" ) );
+//	m_toolsAction = view->addAction( ProjectWindow::tr( "Tools" ) );
+//	m_toolsAction->setCheckable( true );
+//	m_toolsAction->setChecked( true );
+//	m_toolsAction->setShortcutContext( Qt::ApplicationShortcut );
+//	m_toolsAction->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
 	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
 	m_grid = form->addAction(
@@ -167,8 +167,8 @@ ProjectWindowPrivate::init()
 
 	ProjectWindow::connect( m_propsAction, &QAction::toggled,
 		q, &ProjectWindow::p_showHidePropertiesWindow );
-	ProjectWindow::connect( m_toolsAction, &QAction::toggled,
-		q, &ProjectWindow::p_showHideToolsWindow );
+//	ProjectWindow::connect( m_toolsAction, &QAction::toggled,
+//		q, &ProjectWindow::p_showHideToolsWindow );
 	ProjectWindow::connect( quitAction, &QAction::triggered,
 		q, &ProjectWindow::p_quit );
 	ProjectWindow::connect( m_grid, &QAction::toggled,
@@ -238,7 +238,7 @@ ProjectWindow::hidePropsWindow()
 void
 ProjectWindow::hideToolsWindow()
 {
-	d->m_toolsAction->setChecked( false );
+//	d->m_toolsAction->setChecked( false );
 }
 
 void

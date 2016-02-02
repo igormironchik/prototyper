@@ -91,7 +91,7 @@ TopGuiPrivate::init()
 {
 	m_projectWindow = new ProjectWindow;
 	m_propsWindow = new PropsWindow;
-	m_toolsWindow = new ToolsWindow;
+//	m_toolsWindow = new ToolsWindow;
 
 	static const QString cfgFolder =
 		QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation );
@@ -111,14 +111,14 @@ TopGuiPrivate::init()
 
 			Cfg::WindowsCfg cfg = tag.getCfg();
 
-			m_toolsWindow->move( cfg.toolsWindow().x(), cfg.toolsWindow().y() );
-			m_toolsWindow->resize( cfg.toolsWindow().width(),
-				cfg.toolsWindow().height() );
+//			m_toolsWindow->move( cfg.toolsWindow().x(), cfg.toolsWindow().y() );
+//			m_toolsWindow->resize( cfg.toolsWindow().width(),
+//				cfg.toolsWindow().height() );
 
-			if( !cfg.toolsWindow().isShown() )
-				m_projectWindow->hideToolsWindow();
-			else
-				m_toolsWindow->show();
+//			if( !cfg.toolsWindow().isShown() )
+//				m_projectWindow->hideToolsWindow();
+//			else
+//				m_toolsWindow->show();
 
 			m_projectWindow->move( cfg.projectWindow().x(),
 				cfg.projectWindow().y() );
@@ -165,25 +165,42 @@ TopGuiPrivate::placeByDefault()
 {
 	const QRect r = QApplication::desktop()->availableGeometry();
 
-	const int fw = m_toolsWindow->geometry().x() - m_toolsWindow->x();
-	int hh = m_toolsWindow->geometry().y() - m_toolsWindow->y();
+	int fw = m_projectWindow->geometry().x() - m_projectWindow->x();
+	int hh = m_projectWindow->geometry().y() - m_projectWindow->y();
 	const int offset = 10;
-	const int w25 = r.width() / 4;
+
+//	const int w25 = r.width() / 4;
 
 	if( !hh ) hh = offset * 4;
 
-	const int tw = w25 - offset * 2 - fw * 2;
+//	const int tw = w25 - offset * 2 - fw * 2;
 	const int h = r.height() - offset * 2 - hh - fw;
 
-	m_toolsWindow->move( r.x() + offset, r.y() + offset );
-	m_toolsWindow->resize( tw, h );
-	m_toolsWindow->show();
+//	m_toolsWindow->move( r.x() + offset, r.y() + offset );
+//	m_toolsWindow->resize( tw, h );
+//	m_toolsWindow->show();
 
-	m_projectWindow->move( r.x() + w25 + offset, r.y() + offset );
-	m_projectWindow->resize( tw + w25, h );
+//	m_projectWindow->move( r.x() + w25 + offset, r.y() + offset );
+//	m_projectWindow->resize( tw + w25, h );
 
-	m_propsWindow->move( r.x() + w25 * 3 + offset, r.y() + offset );
-	m_propsWindow->resize( tw, h );
+//	m_propsWindow->move( r.x() + w25 * 3 + offset, r.y() + offset );
+//	m_propsWindow->resize( tw, h );
+//	m_propsWindow->show();
+
+#ifdef Q_OS_LINUX
+	fw = offset / 2;
+#endif
+
+	const int propsTotalW = r.width() / 3;
+	const int projTotalW = r.width() - propsTotalW;
+	int propsW = propsTotalW - offset - fw * 2;
+	int projW = projTotalW - offset * 2 - fw * 2;
+
+	m_projectWindow->move( r.x() + offset, r.y() + offset );
+	m_projectWindow->resize( projW, h );
+
+	m_propsWindow->move( r.x() + projTotalW, r.y() + offset );
+	m_propsWindow->resize( propsW, h );
 	m_propsWindow->show();
 }
 
@@ -270,14 +287,14 @@ TopGui::saveCfg( QWidget * parent )
 	try {
 		Cfg::WindowsCfg cfg;
 
-		Cfg::Window tools;
-		tools.setX( d->m_toolsWindow->x() );
-		tools.setY( d->m_toolsWindow->y() );
-		tools.setWidth( d->m_toolsWindow->width() );
-		tools.setHeight( d->m_toolsWindow->height() );
-		tools.setIsShown( d->m_toolsWindow->isVisible() );
+//		Cfg::Window tools;
+//		tools.setX( d->m_toolsWindow->x() );
+//		tools.setY( d->m_toolsWindow->y() );
+//		tools.setWidth( d->m_toolsWindow->width() );
+//		tools.setHeight( d->m_toolsWindow->height() );
+//		tools.setIsShown( d->m_toolsWindow->isVisible() );
 
-		cfg.setToolsWindow( tools );
+//		cfg.setToolsWindow( tools );
 
 		Cfg::Window props;
 		props.setX( d->m_propsWindow->x() );

@@ -44,12 +44,6 @@
 				{class WindowsCfg
 					{tag
 						{valueType Window}
-						{name toolsWindow}
-						{required}
-					}
-
-					{tag
-						{valueType Window}
 						{name projectWindow}
 						{required}
 					}
