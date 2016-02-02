@@ -98,6 +98,26 @@ private slots:
 	void p_saveProjectAs();
 	//! Project changed.
 	void p_projectChanged();
+	//! Draw polyline.
+	void p_drawPolyline();
+	//! Insert text.
+	void p_insertText();
+	//! Insert image.
+	void p_insertImage();
+	//! Group.
+	void p_group();
+	//! Ungroup.
+	void p_ungroup();
+	//! Select.
+	void p_select();
+	//! Move.
+	void p_move();
+	//! Fill color.
+	void p_fillColor();
+	//! Stroke color.
+	void p_strokeColor();
+	//! Tab changed.
+	void p_tabChanged( int index );
 
 private:
 	friend class ProjectWindowPrivate;

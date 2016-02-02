@@ -24,5 +24,14 @@
 		<file>img/document-open.png</file>
 		<file>img/document-save-as.png</file>
 		<file>img/document-save.png</file>
+		<file>img/draw-polyline.png</file>
+		<file>img/insert-text.png</file>
+		<file>img/insert-image.png</file>
+		<file>img/merge.png</file>
+		<file>img/split.png</file>
+		<file>img/edit-select.png</file>
+		<file>img/fill-color.png</file>
+		<file>img/format-stroke-color.png</file>
+		<file>img/transform-move.png</file>
 	</qresource>
 </RCC>

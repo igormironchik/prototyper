@@ -44,6 +44,8 @@
 #include <QMessageBox>
 #include <QFileDialog>
 #include <QStandardPaths>
+#include <QToolBar>
+#include <QActionGroup>
 
 
 namespace Prototyper {
@@ -64,6 +66,8 @@ public:
 		,	m_saveProject( 0 )
 		,	m_grid( 0 )
 		,	m_gridStep( 0 )
+		,	m_formToolBar( 0 )
+		,	m_formToolBarGroup( 0 )
 	{
 	}
 
@@ -88,6 +92,10 @@ public:
 	Cfg::Project m_cfg;
 	//! File name.
 	QString m_fileName;
+	//! Form toolbar.
+	QToolBar * m_formToolBar;
+	//! Form toolbar group.
+	QActionGroup * m_formToolBarGroup;
 }; // class ProjectWindowPrivate
 
 void
@@ -165,6 +173,64 @@ ProjectWindowPrivate::init()
 	newForm->setShortcut( ProjectWindow::tr( "Ctrl+T" ) );
 	q->addAction( newForm );
 
+	m_formToolBar = new QToolBar( ProjectWindow::tr( "Form Tools" ), q );
+	m_formToolBarGroup = new QActionGroup( q );
+	m_formToolBarGroup->setExclusive( true );
+
+	QAction * select = m_formToolBar->addAction(
+		QIcon( ":/Core/img/edit-select.png" ),
+		ProjectWindow::tr( "Select" ) );
+	select->setCheckable( true );
+	m_formToolBarGroup->addAction( select );
+
+	QAction * move = m_formToolBar->addAction(
+		QIcon( ":/Core/img/transform-move.png" ),
+		ProjectWindow::tr( "Move" ) );
+	move->setCheckable( true );
+	m_formToolBarGroup->addAction( move );
+
+	QAction * drawPolyline = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-polyline.png" ),
+		ProjectWindow::tr( "Draw Polyline" ) );
+	drawPolyline->setCheckable( true );
+	m_formToolBarGroup->addAction( drawPolyline );
+
+	QAction * insertText = m_formToolBar->addAction(
+		QIcon( ":/Core/img/insert-text.png" ),
+		ProjectWindow::tr( "Insert Text" ) );
+	insertText->setCheckable( true );
+	m_formToolBarGroup->addAction( insertText );
+
+	select->setChecked( true );
+
+	QAction * insertImage = m_formToolBar->addAction(
+		QIcon( ":/Core/img/insert-image.png" ),
+		ProjectWindow::tr( "Insert Image" ) );
+
+	m_formToolBar->addSeparator();
+
+	QAction * group = m_formToolBar->addAction(
+		QIcon( ":/Core/img/merge.png" ),
+		ProjectWindow::tr( "Group" ) );
+
+	QAction * ungroup = m_formToolBar->addAction(
+		QIcon( ":/Core/img/split.png" ),
+		ProjectWindow::tr( "Ungroup" ) );
+
+	m_formToolBar->addSeparator();
+
+	QAction * strokeColor = m_formToolBar->addAction(
+		QIcon( ":/Core/img/format-stroke-color.png" ),
+		ProjectWindow::tr( "Line Color" ) );
+
+	QAction * fillColor = m_formToolBar->addAction(
+		QIcon( ":/Core/img/fill-color.png" ),
+		ProjectWindow::tr( "Fill Color" ) );
+
+	q->addToolBar( Qt::LeftToolBarArea, m_formToolBar );
+
+	m_formToolBar->hide();
+
 	ProjectWindow::connect( m_propsAction, &QAction::toggled,
 		q, &ProjectWindow::p_showHidePropertiesWindow );
 //	ProjectWindow::connect( m_toolsAction, &QAction::toggled,
@@ -187,6 +253,26 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_saveProjectAs );
 	ProjectWindow::connect( m_widget, &ProjectWidget::changed,
 		q, &ProjectWindow::p_projectChanged );
+	ProjectWindow::connect( select, &QAction::triggered,
+		q, &ProjectWindow::p_select );
+	ProjectWindow::connect( move, &QAction::triggered,
+		q, &ProjectWindow::p_move );
+	ProjectWindow::connect( drawPolyline, &QAction::triggered,
+		q, &ProjectWindow::p_drawPolyline );
+	ProjectWindow::connect( insertText, &QAction::triggered,
+		q, &ProjectWindow::p_insertText );
+	ProjectWindow::connect( insertImage, &QAction::triggered,
+		q, &ProjectWindow::p_insertImage );
+	ProjectWindow::connect( group, &QAction::triggered,
+		q, &ProjectWindow::p_group );
+	ProjectWindow::connect( ungroup, &QAction::triggered,
+		q, &ProjectWindow::p_ungroup );
+	ProjectWindow::connect( strokeColor, &QAction::triggered,
+		q, &ProjectWindow::p_strokeColor );
+	ProjectWindow::connect( fillColor, &QAction::triggered,
+		q, &ProjectWindow::p_fillColor );
+	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
+		q, &ProjectWindow::p_tabChanged );
 }
 
 
@@ -488,6 +574,69 @@ ProjectWindow::p_projectChanged()
 	d->m_saveProject->setEnabled( true );
 
 	setWindowModified( true );
+}
+
+void
+ProjectWindow::p_drawPolyline()
+{
+
+}
+
+void
+ProjectWindow::p_insertText()
+{
+
+}
+
+void
+ProjectWindow::p_insertImage()
+{
+
+}
+
+void
+ProjectWindow::p_group()
+{
+
+}
+
+void
+ProjectWindow::p_ungroup()
+{
+
+}
+
+void
+ProjectWindow::p_select()
+{
+
+}
+
+void
+ProjectWindow::p_move()
+{
+
+}
+
+void
+ProjectWindow::p_fillColor()
+{
+
+}
+
+void
+ProjectWindow::p_strokeColor()
+{
+
+}
+
+void
+ProjectWindow::p_tabChanged( int index )
+{
+	if( index > 0 )
+		d->m_formToolBar->show();
+	else
+		d->m_formToolBar->hide();
 }
 
 } /* namespace Core */
