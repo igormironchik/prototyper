@@ -27,7 +27,8 @@ generate_cfg.commands = ../../3rdparty/QtConfFile/qtconffile.generator -i ${QMAK
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
-HEADERS +=	form.hpp \
+HEADERS +=	form_actions.hpp \
+			form.hpp \
 			form_scene.hpp \
 			form_view.hpp \
 			grid_step_dlg.hpp \
@@ -45,7 +46,8 @@ HEADERS +=	form.hpp \
 			top_gui.hpp \
 			$$GENERATED
 
-SOURCES +=	form.cpp \
+SOURCES +=	form_actions.cpp \
+			form.cpp \
 			form_scene.cpp \
 			form_view.cpp \
 			grid_step_dlg.cpp \

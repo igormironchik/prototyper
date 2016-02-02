@@ -34,6 +34,7 @@
 #include "session_cfg.hpp"
 #include "project_description_tab.hpp"
 #include "text_editor.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -46,6 +47,7 @@
 #include <QStandardPaths>
 #include <QToolBar>
 #include <QActionGroup>
+#include <QImage>
 
 
 namespace Prototyper {
@@ -581,19 +583,36 @@ ProjectWindow::p_projectChanged()
 void
 ProjectWindow::p_drawPolyline()
 {
-
+	FormAction::instance()->setMode( FormAction::DrawPolyLine );
 }
 
 void
 ProjectWindow::p_insertText()
 {
-
+	FormAction::instance()->setMode( FormAction::InsertText );
 }
 
 void
 ProjectWindow::p_insertImage()
 {
+	const QString fileName =
+		QFileDialog::getOpenFileName( this, tr( "Select Image" ),
+			QStandardPaths::standardLocations(
+				QStandardPaths::PicturesLocation ).first(),
+			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ) );
 
+	if( !fileName.isEmpty() )
+	{
+		QImage image( fileName );
+
+		if( !image.isNull() )
+		{
+
+		}
+		else
+			QMessageBox::warning( this, tr( "Wrong Image..." ),
+				tr( "Failed to load image from \"%1\"." ).arg( fileName ) );
+	}
 }
 
 void
@@ -611,13 +630,13 @@ ProjectWindow::p_ungroup()
 void
 ProjectWindow::p_select()
 {
-
+	FormAction::instance()->setMode( FormAction::Select );
 }
 
 void
 ProjectWindow::p_move()
 {
-
+	FormAction::instance()->setMode( FormAction::Move );
 }
 
 void
@@ -639,11 +658,16 @@ ProjectWindow::p_tabChanged( int index )
 	{
 		d->m_formToolBar->show();
 		d->m_widget->descriptionTab()->toolBar()->hide();
+
+		FormAction::instance()->setForm(
+			d->m_widget->forms().at( index - 1 )->form() );
 	}
 	else
 	{
 		d->m_formToolBar->hide();
 		d->m_widget->descriptionTab()->toolBar()->show();
+
+		FormAction::instance()->setForm( 0 );
 	}
 }
 
