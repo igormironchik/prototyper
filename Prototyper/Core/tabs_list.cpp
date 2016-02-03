@@ -133,23 +133,53 @@ TabsView::contextMenuEvent( QContextMenuEvent * event )
 {
 	d->m_index = indexAt( event->pos() );
 
+	QMenu menu;
+
 	if( d->m_index.isValid() )
 	{
-		QMenu menu;
 		menu.addAction( d->m_activate );
 
-		menu.exec( event->globalPos() );
+		if( d->m_index.row() >= 0 )
+			menu.addAction( QIcon( ":/Core/img/edit-rename.png" ),
+				tr( "Rename" ), this, SLOT( p_renameTab() ) );
 
-		event->accept();
+		if( d->m_index.row() != 0 )
+			menu.addAction( QIcon( ":/Core/img/edit-delete.png" ),
+				tr( "Delete Form" ), this, SLOT( p_deleteForm() ) );
 	}
 
-	event->ignore();
+	menu.addAction( QIcon( ":/Core/img/list-add.png" ),
+		tr( "Add Form" ), this, SLOT( p_addForm() ) );
+
+	menu.exec( event->globalPos() );
+
+	event->accept();
 }
 
 void
 TabsView::p_activateTab()
 {
 	emit activateTab( d->m_index );
+}
+
+void
+TabsView::p_renameTab()
+{
+	TopGui::instance()->projectWindow()->projectWidget()->renameTab(
+		d->m_index.data().toString() );
+}
+
+void
+TabsView::p_addForm()
+{
+	TopGui::instance()->projectWindow()->projectWidget()->addForm();
+}
+
+void
+TabsView::p_deleteForm()
+{
+	TopGui::instance()->projectWindow()->projectWidget()->deleteForm(
+		d->m_index.data().toString() );
 }
 
 

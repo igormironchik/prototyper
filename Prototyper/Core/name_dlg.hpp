@@ -45,7 +45,8 @@ class NameDlg
 	Q_OBJECT
 
 public:
-	explicit NameDlg( const QStringList & names,
+	NameDlg( const QStringList & names,
+		const QString & title,
 		QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~NameDlg();
 

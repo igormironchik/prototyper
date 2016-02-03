@@ -44,9 +44,11 @@ namespace Core {
 
 class NameDlgPrivate {
 public:
-	NameDlgPrivate( const QStringList & names, NameDlg * parent )
+	NameDlgPrivate( const QStringList & names, const QString & title,
+		NameDlg * parent )
 		:	q( parent )
 		,	m_names( names )
+		,	m_title( title )
 	{
 	}
 
@@ -61,12 +63,16 @@ public:
 	const QStringList & m_names;
 	//! Normal text color.
 	QColor m_color;
+	//! Title.
+	QString m_title;
 }; // class NameDlgPrivate
 
 void
 NameDlgPrivate::init()
 {
 	m_ui.setupUi( q );
+
+	q->setWindowTitle( m_title );
 
 	m_color = m_ui.m_edit->palette().color( QPalette::Text );
 
@@ -82,9 +88,9 @@ NameDlgPrivate::init()
 //
 
 NameDlg::NameDlg( const QStringList & names,
-	QWidget * parent, Qt::WindowFlags f )
+	const QString & title, QWidget * parent, Qt::WindowFlags f )
 	:	QDialog( parent, f )
-	,	d( new NameDlgPrivate( names, this ) )
+	,	d( new NameDlgPrivate( names, title, this ) )
 {
 	d->init();
 }

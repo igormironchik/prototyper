@@ -66,6 +66,12 @@ protected:
 private slots:
 	 //! Activate tab.
 	 void p_activateTab();
+	 //! Rename tab.
+	 void p_renameTab();
+	 //! Add form.
+	 void p_addForm();
+	 //! Delete form.
+	 void p_deleteForm();
 
 private:
 	 friend class TabsViewPrivate;

@@ -243,7 +243,7 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 void
 ProjectWidget::addForm()
 {
-	NameDlg dlg( d->m_tabNames, this );
+	NameDlg dlg( d->m_tabNames, tr( "Inter New Form Name..." ), this );
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
@@ -271,7 +271,7 @@ ProjectWidget::renameTab( const QString & oldName )
 {
 	if( d->m_tabNames.contains( oldName ) )
 	{
-		NameDlg dlg( d->m_tabNames, this );
+		NameDlg dlg( d->m_tabNames, tr( "Enter New Tab Name..." ), this );
 
 		if( dlg.exec() == QDialog::Accepted )
 		{
