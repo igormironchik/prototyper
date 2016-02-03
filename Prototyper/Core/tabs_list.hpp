@@ -27,6 +27,10 @@
 #include <QDockWidget>
 #include <QScopedPointer>
 
+QT_BEGIN_NAMESPACE
+class QStringListModel;
+QT_END_NAMESPACE
+
 
 namespace Prototyper {
 
@@ -48,7 +52,15 @@ public:
 	TabsList( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~TabsList();
 
+	//! \return Model.
+	QStringListModel * model() const;
+
+private slots:
+	void p_doubleClicked( const QModelIndex & index );
+
 private:
+	friend class TabsListPrivate;
+
 	Q_DISABLE_COPY( TabsList )
 
 	QScopedPointer< TabsListPrivate > d;

@@ -106,7 +106,7 @@ ProjectWindowPrivate::init()
 {
 	m_widget = new ProjectWidget( m_cfg, q );
 
-	q->addToolBar( Qt::TopToolBarArea, m_widget->descriptionTab()->toolBar() );
+	q->addToolBar( Qt::LeftToolBarArea, m_widget->descriptionTab()->toolBar() );
 
 	q->setCentralWidget( m_widget );
 
@@ -349,6 +349,18 @@ QAction *
 ProjectWindow::gridStepAction() const
 {
 	return d->m_gridStep;
+}
+
+FormHierarchyWidget *
+ProjectWindow::fowmHierarchy() const
+{
+	return d->m_formHierarchy;
+}
+
+TabsList *
+ProjectWindow::tabsList() const
+{
+	return d->m_tabsList;
 }
 
 void

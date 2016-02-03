@@ -87,6 +87,8 @@ public slots:
 	void deleteForm( const QString & name );
 	//! New project.
 	void newProject();
+	//! Activate tabe.
+	void activateTab( const QString & tabName );
 
 
 private:

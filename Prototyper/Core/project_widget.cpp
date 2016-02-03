@@ -30,11 +30,15 @@
 #include "project_cfg.hpp"
 #include "form_scene.hpp"
 #include "form.hpp"
+#include "top_gui.hpp"
+#include "project_window.hpp"
+#include "tabs_list.hpp"
 
 // Qt include.
 #include <QTabWidget>
 #include <QVBoxLayout>
 #include <QMessageBox>
+#include <QStringListModel>
 
 
 namespace Prototyper {
@@ -224,11 +228,16 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 
 	d->m_tabs->setTabText( 0, d->m_cfg.description().tabName() );
 
+	d->m_tabNames[ 0 ] = d->m_cfg.description().tabName();
+
 	QList< Cfg::Form >::Iterator it = d->m_cfg.form().begin();
 	QList< Cfg::Form >::Iterator last = d->m_cfg.form().end();
 
 	for( ; it != last; ++it )
 		d->addForm( *it, d->m_cfg.showGrid() );
+
+	TopGui::instance()->projectWindow()->tabsList()->model()->
+		setStringList( d->m_tabNames );
 }
 
 void
@@ -249,6 +258,9 @@ ProjectWidget::addForm()
 		d->addForm( d->m_cfg.form().last(), d->m_cfg.showGrid() );
 
 		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
+
+		TopGui::instance()->projectWindow()->tabsList()->model()->
+			setStringList( d->m_tabNames );
 
 		emit changed();
 	}
@@ -273,6 +285,9 @@ ProjectWidget::renameTab( const QString & oldName )
 				d->m_cfg.form()[ index - 1 ].setTabName( dlg.name() );
 			else
 				d->m_cfg.description().setTabName( dlg.name() );
+
+			TopGui::instance()->projectWindow()->tabsList()->model()->
+				setStringList( d->m_tabNames );
 
 			emit changed();
 		}
@@ -305,6 +320,9 @@ ProjectWidget::deleteForm( const QString & name )
 
 			tab->deleteLater();
 
+			TopGui::instance()->projectWindow()->tabsList()->model()->
+				setStringList( d->m_tabNames );
+
 			emit changed();
 		}
 	}
@@ -314,6 +332,13 @@ void
 ProjectWidget::newProject()
 {
 	d->newProject();
+}
+
+void
+ProjectWidget::activateTab( const QString & tabName )
+{
+	if( d->m_tabNames.contains( tabName ) )
+		d->m_tabs->setCurrentIndex( d->m_tabNames.indexOf( tabName ) );
 }
 
 } /* namespace Core */

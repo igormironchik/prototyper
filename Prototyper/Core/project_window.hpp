@@ -33,6 +33,8 @@ namespace Prototyper {
 namespace Core {
 
 class ProjectWidget;
+class TabsList;
+class FormHierarchyWidget;
 
 
 //
@@ -61,6 +63,12 @@ public:
 	QAction * showHideGridAction() const;
 	//! \return Grid step action.
 	QAction * gridStepAction() const;
+
+	//! \return Form hierarchy widget.
+	FormHierarchyWidget * fowmHierarchy() const;
+
+	//! \return Tabs list widget.
+	TabsList * tabsList() const;
 
 public slots:
 	//! Read project.
