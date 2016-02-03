@@ -27,6 +27,10 @@
 #include <QObject>
 #include <QScopedPointer>
 
+QT_BEGIN_NAMESPACE
+class QColor;
+QT_END_NAMESPACE
+
 
 namespace Prototyper {
 
@@ -76,6 +80,16 @@ public:
 	Form * form() const;
 	//! Set current form.
 	void setForm( Form * f );
+
+	//! \return Fill color.
+	const QColor & fillColor() const;
+	//! Set fill color.
+	void setFillColor( const QColor & c );
+
+	//! \return Stroke color.
+	const QColor & strokeColor() const;
+	//! Set stroke color.
+	void setStrokeColor( const QColor & c );
 
 private:
 	Q_DISABLE_COPY( FormAction )

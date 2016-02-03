@@ -24,8 +24,6 @@
 #include "project_window.hpp"
 #include "project_widget.hpp"
 #include "top_gui.hpp"
-#include "props_window.hpp"
-#include "tools_window.hpp"
 #include "form.hpp"
 #include "form_view.hpp"
 #include "form_scene.hpp"
@@ -35,6 +33,8 @@
 #include "project_description_tab.hpp"
 #include "text_editor.hpp"
 #include "form_actions.hpp"
+#include "form_hierarchy_widget.hpp"
+#include "tabs_list.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -48,6 +48,7 @@
 #include <QToolBar>
 #include <QActionGroup>
 #include <QImage>
+#include <QColorDialog>
 
 
 namespace Prototyper {
@@ -63,13 +64,13 @@ public:
 	ProjectWindowPrivate( ProjectWindow * parent )
 		:	q( parent )
 		,	m_widget( 0 )
-		,	m_propsAction( 0 )
-		,	m_toolsAction( 0 )
 		,	m_saveProject( 0 )
 		,	m_grid( 0 )
 		,	m_gridStep( 0 )
 		,	m_formToolBar( 0 )
 		,	m_formToolBarGroup( 0 )
+		,	m_formHierarchy( 0 )
+		,	m_tabsList( 0 )
 	{
 	}
 
@@ -80,10 +81,6 @@ public:
 	ProjectWindow * q;
 	//! Central widget.
 	ProjectWidget * m_widget;
-	//! Properties action.
-	QAction * m_propsAction;
-	//! Tools action.
-	QAction * m_toolsAction;
 	//! Save project action.
 	QAction * m_saveProject;
 	//! Show/hide grid action.
@@ -98,6 +95,10 @@ public:
 	QToolBar * m_formToolBar;
 	//! Form toolbar group.
 	QActionGroup * m_formToolBarGroup;
+	//! Form's hierarchy.
+	FormHierarchyWidget * m_formHierarchy;
+	//! Tabs list.
+	TabsList * m_tabsList;
 }; // class ProjectWindowPrivate
 
 void
@@ -147,30 +148,25 @@ ProjectWindowPrivate::init()
 
 	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "&View" ) );
 
-	m_propsAction = view->addAction( ProjectWindow::tr( "Properties" ) );
-	m_propsAction->setCheckable( true );
-	m_propsAction->setChecked( true );
-	m_propsAction->setShortcutContext( Qt::ApplicationShortcut );
-	m_propsAction->setShortcut( ProjectWindow::tr( "Alt+P" ) );
+	m_formHierarchy = new FormHierarchyWidget( q );
 
-//	m_toolsAction = view->addAction( ProjectWindow::tr( "Tools" ) );
-//	m_toolsAction->setCheckable( true );
-//	m_toolsAction->setChecked( true );
-//	m_toolsAction->setShortcutContext( Qt::ApplicationShortcut );
-//	m_toolsAction->setShortcut( ProjectWindow::tr( "Alt+T" ) );
+	q->addDockWidget( Qt::RightDockWidgetArea, m_formHierarchy );
 
-	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
-	m_grid = form->addAction(
-		QIcon( ":/Core/img/view-grid.png" ),
-		ProjectWindow::tr( "Show Grid" ) );
-	m_grid->setShortcutContext( Qt::ApplicationShortcut );
-	m_grid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
-	m_grid->setCheckable( true );
-	m_grid->setChecked( true );
+	view->addAction( m_formHierarchy->toggleViewAction() );
+	m_formHierarchy->toggleViewAction()->setShortcutContext(
+		Qt::ApplicationShortcut );
+	m_formHierarchy->toggleViewAction()->setShortcut(
+		ProjectWindow::tr( "Ctrl+Alt+H" ) );
 
-	m_gridStep = form->addAction(
-		QIcon( ":/Core/img/measure.png" ),
-		ProjectWindow::tr( "Grid Step" ) );
+	m_tabsList = new TabsList( q );
+
+	q->addDockWidget( Qt::RightDockWidgetArea, m_tabsList );
+
+	view->addAction( m_tabsList->toggleViewAction() );
+	m_tabsList->toggleViewAction()->setShortcutContext(
+		Qt::ApplicationShortcut );
+	m_tabsList->toggleViewAction()->setShortcut(
+		ProjectWindow::tr( "Ctrl+Alt+T" ) );
 
 	QAction * newForm = new QAction( q );
 	newForm->setShortcutContext( Qt::ApplicationShortcut );
@@ -186,40 +182,54 @@ ProjectWindowPrivate::init()
 		ProjectWindow::tr( "Select" ) );
 	select->setCheckable( true );
 	m_formToolBarGroup->addAction( select );
+	select->setShortcutContext( Qt::ApplicationShortcut );
+	select->setShortcut( ProjectWindow::tr( "Alt+S" ) );
 
 	QAction * move = m_formToolBar->addAction(
 		QIcon( ":/Core/img/transform-move.png" ),
 		ProjectWindow::tr( "Move" ) );
 	move->setCheckable( true );
 	m_formToolBarGroup->addAction( move );
+	move->setShortcutContext( Qt::ApplicationShortcut );
+	move->setShortcut( ProjectWindow::tr( "Alt+M" ) );
 
 	QAction * drawPolyline = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-polyline.png" ),
 		ProjectWindow::tr( "Draw Polyline" ) );
 	drawPolyline->setCheckable( true );
 	m_formToolBarGroup->addAction( drawPolyline );
+	drawPolyline->setShortcutContext( Qt::ApplicationShortcut );
+	drawPolyline->setShortcut( ProjectWindow::tr( "Alt+L" ) );
 
 	QAction * insertText = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-text.png" ),
 		ProjectWindow::tr( "Insert Text" ) );
 	insertText->setCheckable( true );
 	m_formToolBarGroup->addAction( insertText );
+	insertText->setShortcutContext( Qt::ApplicationShortcut );
+	insertText->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
 	select->setChecked( true );
 
 	QAction * insertImage = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-image.png" ),
 		ProjectWindow::tr( "Insert Image" ) );
+	insertImage->setShortcutContext( Qt::ApplicationShortcut );
+	insertImage->setShortcut( ProjectWindow::tr( "Alt+I" ) );
 
 	m_formToolBar->addSeparator();
 
 	QAction * group = m_formToolBar->addAction(
 		QIcon( ":/Core/img/merge.png" ),
 		ProjectWindow::tr( "Group" ) );
+	group->setShortcutContext( Qt::ApplicationShortcut );
+	group->setShortcut( ProjectWindow::tr( "Ctrl+G" ) );
 
 	QAction * ungroup = m_formToolBar->addAction(
 		QIcon( ":/Core/img/split.png" ),
 		ProjectWindow::tr( "Ungroup" ) );
+	ungroup->setShortcutContext( Qt::ApplicationShortcut );
+	ungroup->setShortcut( ProjectWindow::tr( "Ctrl+U" ) );
 
 	m_formToolBar->addSeparator();
 
@@ -235,10 +245,32 @@ ProjectWindowPrivate::init()
 
 	m_formToolBar->hide();
 
-	ProjectWindow::connect( m_propsAction, &QAction::toggled,
-		q, &ProjectWindow::p_showHidePropertiesWindow );
-//	ProjectWindow::connect( m_toolsAction, &QAction::toggled,
-//		q, &ProjectWindow::p_showHideToolsWindow );
+	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
+	m_grid = form->addAction(
+		QIcon( ":/Core/img/view-grid.png" ),
+		ProjectWindow::tr( "Show Grid" ) );
+	m_grid->setShortcutContext( Qt::ApplicationShortcut );
+	m_grid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
+	m_grid->setCheckable( true );
+	m_grid->setChecked( true );
+
+	m_gridStep = form->addAction(
+		QIcon( ":/Core/img/measure.png" ),
+		ProjectWindow::tr( "Grid Step" ) );
+
+	form->addSeparator();
+
+	form->addAction( select );
+	form->addAction( move );
+	form->addAction( drawPolyline );
+	form->addAction( insertText );
+	form->addAction( insertImage );
+
+	form->addSeparator();
+
+	form->addAction( group );
+	form->addAction( ungroup );
+
 	ProjectWindow::connect( quitAction, &QAction::triggered,
 		q, &ProjectWindow::p_quit );
 	ProjectWindow::connect( m_grid, &QAction::toggled,
@@ -320,18 +352,6 @@ ProjectWindow::gridStepAction() const
 }
 
 void
-ProjectWindow::hidePropsWindow()
-{
-	d->m_propsAction->setChecked( false );
-}
-
-void
-ProjectWindow::hideToolsWindow()
-{
-//	d->m_toolsAction->setChecked( false );
-}
-
-void
 ProjectWindow::readProject( const QString & fileName )
 {
 	try {
@@ -364,24 +384,6 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 	e->accept();
 
 	p_quit();
-}
-
-void
-ProjectWindow::p_showHidePropertiesWindow( bool show )
-{
-	if( show )
-		TopGui::instance()->propsWindow()->show();
-	else
-		TopGui::instance()->propsWindow()->hide();
-}
-
-void
-ProjectWindow::p_showHideToolsWindow( bool show )
-{
-	if( show )
-		TopGui::instance()->toolsWindow()->show();
-	else
-		TopGui::instance()->toolsWindow()->hide();
 }
 
 void
@@ -642,13 +644,23 @@ ProjectWindow::p_move()
 void
 ProjectWindow::p_fillColor()
 {
+	const QColor c = QColorDialog::getColor(
+		FormAction::instance()->fillColor(),
+		this, tr( "Select Fill Color..." ),
+		QColorDialog::ShowAlphaChannel );
 
+	FormAction::instance()->setFillColor( c );
 }
 
 void
 ProjectWindow::p_strokeColor()
 {
+	const QColor c = QColorDialog::getColor(
+		FormAction::instance()->strokeColor(),
+		this, tr( "Select Stroke Color..." ),
+		QColorDialog::ShowAlphaChannel );
 
+	FormAction::instance()->setStrokeColor( c );
 }
 
 void

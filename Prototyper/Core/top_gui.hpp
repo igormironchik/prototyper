@@ -33,8 +33,6 @@ namespace Prototyper {
 namespace Core {
 
 class ProjectWindow;
-class PropsWindow;
-class ToolsWindow;
 
 
 //
@@ -61,10 +59,6 @@ public:
 
 	//! \return Project window.
 	ProjectWindow * projectWindow();
-	//! \return Tools window.
-	ToolsWindow * toolsWindow();
-	//! \return Properties window.
-	PropsWindow * propsWindow();
 
 	//! Save cfg.
 	void saveCfg( QWidget * parent = 0 );

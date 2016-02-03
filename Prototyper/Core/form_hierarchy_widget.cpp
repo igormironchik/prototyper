@@ -21,13 +21,10 @@
 */
 
 // Prototyper include.
-#include "props_window.hpp"
-#include "props_widget.hpp"
-#include "top_gui.hpp"
-#include "project_window.hpp"
+#include "form_hierarchy_widget.hpp"
 
 // Qt include.
-#include <QCloseEvent>
+#include <QTreeView>
 
 
 namespace Prototyper {
@@ -35,14 +32,14 @@ namespace Prototyper {
 namespace Core {
 
 //
-// PropsWindowPrivate
+// FormHierarchyWidgetPrivate
 //
 
-class PropsWindowPrivate {
+class FormHierarchyWidgetPrivate {
 public:
-	PropsWindowPrivate( PropsWindow * parent )
+	FormHierarchyWidgetPrivate( FormHierarchyWidget * parent )
 		:	q( parent )
-		,	m_widget( 0 )
+		,	m_view( 0 )
 	{
 	}
 
@@ -50,42 +47,35 @@ public:
 	void init();
 
 	//! Parent.
-	PropsWindow * q;
-	//! Central widget.
-	PropsWidget * m_widget;
-}; // class PropsWindowPrivate
+	FormHierarchyWidget * q;
+	//! Tree.
+	QTreeView * m_view;
+}; // class FormHierarchyWidgetPrivate
 
-void PropsWindowPrivate::init()
+void
+FormHierarchyWidgetPrivate::init()
 {
-	m_widget = new PropsWidget( q );
+	m_view = new QTreeView( q );
 
-	q->setCentralWidget( m_widget );
+	q->setWindowTitle( FormHierarchyWidget::tr( "Form's Hierarchy" ) );
 
-	q->setWindowTitle( PropsWindow::tr( "Properties" ) );
+	q->setWidget( m_view );
 }
 
 
 //
-// PropsWindow
+// FormHierarchyWidget
 //
 
-PropsWindow::PropsWindow( QWidget * parent, Qt::WindowFlags f )
-	:	QMainWindow( parent, f )
-	,	d( new PropsWindowPrivate( this ) )
+FormHierarchyWidget::FormHierarchyWidget( QWidget * parent, Qt::WindowFlags f )
+	:	QDockWidget( parent, f )
+	,	d( new FormHierarchyWidgetPrivate( this ) )
 {
 	d->init();
 }
 
-PropsWindow::~PropsWindow()
+FormHierarchyWidget::~FormHierarchyWidget()
 {
-}
-
-void
-PropsWindow::closeEvent( QCloseEvent * e )
-{
-	e->ignore();
-
-	TopGui::instance()->projectWindow()->hidePropsWindow();
 }
 
 } /* namespace Core */

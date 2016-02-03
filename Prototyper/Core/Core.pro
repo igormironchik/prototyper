@@ -29,6 +29,7 @@ PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
 HEADERS +=	form_actions.hpp \
 			form.hpp \
+			form_hierarchy_widget.hpp \
 			form_scene.hpp \
 			form_view.hpp \
 			grid_step_dlg.hpp \
@@ -37,17 +38,15 @@ HEADERS +=	form_actions.hpp \
 			project_widget.hpp \
 			project_widget_tab_bar.hpp \
 			project_window.hpp \
-			props_widget.hpp \
-			props_window.hpp \
+			tabs_list.hpp \
 			text_editor.hpp \
 			text_opts_bar.hpp \
-			tools_widget.hpp \
-			tools_window.hpp \
 			top_gui.hpp \
 			$$GENERATED
 
 SOURCES +=	form_actions.cpp \
 			form.cpp \
+			form_hierarchy_widget.cpp \
 			form_scene.cpp \
 			form_view.cpp \
 			grid_step_dlg.cpp \
@@ -56,12 +55,9 @@ SOURCES +=	form_actions.cpp \
 			project_widget.cpp \
 			project_widget_tab_bar.cpp \
 			project_window.cpp \
-			props_widget.cpp \
-			props_window.cpp \
+			tabs_list.cpp \
 			text_editor.cpp \
 			text_opts_bar.cpp \
-			tools_widget.cpp \
-			tools_window.cpp \
 			top_gui.cpp
 
 FORMS +=	grid_step_dlg.ui \

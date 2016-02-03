@@ -23,8 +23,6 @@
 // Prototyper include.
 #include "top_gui.hpp"
 #include "project_window.hpp"
-#include "props_window.hpp"
-#include "tools_window.hpp"
 #include "windows_cfg.hpp"
 #include "session_cfg.hpp"
 #include "project_widget.hpp"
@@ -55,16 +53,12 @@ public:
 	TopGuiPrivate( TopGui * parent )
 		:	q( parent )
 		,	m_projectWindow( 0 )
-		,	m_propsWindow( 0 )
-		,	m_toolsWindow( 0 )
 	{
 	}
 
 	~TopGuiPrivate()
 	{
 		delete m_projectWindow;
-		delete m_propsWindow;
-		delete m_toolsWindow;
 	}
 
 	//! Init.
@@ -76,10 +70,6 @@ public:
 	TopGui * q;
 	//! Project window.
 	ProjectWindow * m_projectWindow;
-	//! Properties window.
-	PropsWindow * m_propsWindow;
-	//! Tools window.
-	ToolsWindow * m_toolsWindow;
 	//! App's windows cfg.
 	QString m_appCfgFileName;
 	//! App's session cfg.
@@ -90,8 +80,6 @@ void
 TopGuiPrivate::init()
 {
 	m_projectWindow = new ProjectWindow;
-	m_propsWindow = new PropsWindow;
-//	m_toolsWindow = new ToolsWindow;
 
 	static const QString cfgFolder =
 		QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation );
@@ -111,29 +99,10 @@ TopGuiPrivate::init()
 
 			Cfg::WindowsCfg cfg = tag.getCfg();
 
-//			m_toolsWindow->move( cfg.toolsWindow().x(), cfg.toolsWindow().y() );
-//			m_toolsWindow->resize( cfg.toolsWindow().width(),
-//				cfg.toolsWindow().height() );
-
-//			if( !cfg.toolsWindow().isShown() )
-//				m_projectWindow->hideToolsWindow();
-//			else
-//				m_toolsWindow->show();
-
 			m_projectWindow->move( cfg.projectWindow().x(),
 				cfg.projectWindow().y() );
 			m_projectWindow->resize( cfg.projectWindow().width(),
 				cfg.projectWindow().height() );
-
-			m_propsWindow->move( cfg.propsWindow().x(),
-				cfg.propsWindow().y() );
-			m_propsWindow->resize( cfg.propsWindow().width(),
-				cfg.propsWindow().height() );
-
-			if( !cfg.propsWindow().isShown() )
-				m_projectWindow->hidePropsWindow();
-			else
-				m_propsWindow->show();
 		}
 		catch( const QtConfFile::Exception & )
 		{
@@ -165,43 +134,10 @@ TopGuiPrivate::placeByDefault()
 {
 	const QRect r = QApplication::desktop()->availableGeometry();
 
-	int fw = m_projectWindow->geometry().x() - m_projectWindow->x();
-	int hh = m_projectWindow->geometry().y() - m_projectWindow->y();
-	const int offset = 10;
-
-//	const int w25 = r.width() / 4;
-
-	if( !hh ) hh = offset * 4;
-
-//	const int tw = w25 - offset * 2 - fw * 2;
-	const int h = r.height() - offset * 2 - hh - fw;
-
-//	m_toolsWindow->move( r.x() + offset, r.y() + offset );
-//	m_toolsWindow->resize( tw, h );
-//	m_toolsWindow->show();
-
-//	m_projectWindow->move( r.x() + w25 + offset, r.y() + offset );
-//	m_projectWindow->resize( tw + w25, h );
-
-//	m_propsWindow->move( r.x() + w25 * 3 + offset, r.y() + offset );
-//	m_propsWindow->resize( tw, h );
-//	m_propsWindow->show();
-
-#ifdef Q_OS_LINUX
-	fw = offset / 2;
-#endif
-
-	const int propsTotalW = r.width() / 3;
-	const int projTotalW = r.width() - propsTotalW;
-	int propsW = propsTotalW - offset - fw * 2;
-	int projW = projTotalW - offset * 2 - fw * 2;
+	const int offset = 15;
 
 	m_projectWindow->move( r.x() + offset, r.y() + offset );
-	m_projectWindow->resize( projW, h );
-
-	m_propsWindow->move( r.x() + projTotalW, r.y() + offset );
-	m_propsWindow->resize( propsW, h );
-	m_propsWindow->show();
+	m_projectWindow->resize( r.width() - offset * 2, r.height() - offset * 2 );
 }
 
 
@@ -252,18 +188,6 @@ TopGui::projectWindow()
 	return d->m_projectWindow;
 }
 
-ToolsWindow *
-TopGui::toolsWindow()
-{
-	return d->m_toolsWindow;
-}
-
-PropsWindow *
-TopGui::propsWindow()
-{
-	return d->m_propsWindow;
-}
-
 void
 TopGui::saveCfg( QWidget * parent )
 {
@@ -286,24 +210,6 @@ TopGui::saveCfg( QWidget * parent )
 
 	try {
 		Cfg::WindowsCfg cfg;
-
-//		Cfg::Window tools;
-//		tools.setX( d->m_toolsWindow->x() );
-//		tools.setY( d->m_toolsWindow->y() );
-//		tools.setWidth( d->m_toolsWindow->width() );
-//		tools.setHeight( d->m_toolsWindow->height() );
-//		tools.setIsShown( d->m_toolsWindow->isVisible() );
-
-//		cfg.setToolsWindow( tools );
-
-		Cfg::Window props;
-		props.setX( d->m_propsWindow->x() );
-		props.setY( d->m_propsWindow->y() );
-		props.setWidth( d->m_propsWindow->width() );
-		props.setHeight( d->m_propsWindow->height() );
-		props.setIsShown( d->m_propsWindow->isVisible() );
-
-		cfg.setPropsWindow( props );
 
 		Cfg::Window proj;
 		proj.setX( d->m_projectWindow->x() );

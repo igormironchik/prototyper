@@ -20,8 +20,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-// Prototyper include.
-#include "props_widget.hpp"
+#ifndef PROTOTYPER__CORE__TABS_LIST_HPP__INCLUDED
+#define PROTOTYPER__CORE__TABS_LIST_HPP__INCLUDED
+
+// Qt include.
+#include <QDockWidget>
+#include <QScopedPointer>
 
 
 namespace Prototyper {
@@ -29,35 +33,29 @@ namespace Prototyper {
 namespace Core {
 
 //
-// PropsWidgetPrivate
+// TabsList
 //
 
-class PropsWidgetPrivate {
+class TabsListPrivate;
+
+//! Form hierarchy.
+class TabsList
+	:	public QDockWidget
+{
+	Q_OBJECT
+
 public:
-	PropsWidgetPrivate( PropsWidget * parent )
-		:	q( parent )
-	{
-	}
+	TabsList( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	~TabsList();
 
-	//! Parent.
-	PropsWidget * q;
-}; // class PropsWidgetPrivate
+private:
+	Q_DISABLE_COPY( TabsList )
 
-
-//
-// PropsWidget
-//
-
-PropsWidget::PropsWidget( QWidget * parent, Qt::WindowFlags f )
-	:	QWidget( parent, f )
-	,	d( new PropsWidgetPrivate( this ) )
-{
-}
-
-PropsWidget::~PropsWidget()
-{
-}
+	QScopedPointer< TabsListPrivate > d;
+}; // class TabsList
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
+
+#endif // PROTOTYPER__CORE__TABS_LIST_HPP__INCLUDED

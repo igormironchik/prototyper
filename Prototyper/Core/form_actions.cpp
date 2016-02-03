@@ -26,6 +26,7 @@
 
 // Qt include.
 #include <QApplication>
+#include <QColor>
 
 
 namespace Prototyper {
@@ -42,6 +43,8 @@ public:
 		:	q( parent )
 		,	m_mode( FormAction::Select )
 		,	m_form( 0 )
+		,	m_fillColor( Qt::transparent )
+		,	m_strokeColor( Qt::black )
 	{
 	}
 
@@ -51,6 +54,10 @@ public:
 	FormAction::Mode m_mode;
 	//! Form.
 	Form * m_form;
+	//! Fill color.
+	QColor m_fillColor;
+	//! Stroke color.
+	QColor m_strokeColor;
 }; // class FormActionPrivate
 
 
@@ -112,6 +119,30 @@ void
 FormAction::setForm( Form * f )
 {
 	d->m_form = f;
+}
+
+const QColor &
+FormAction::fillColor() const
+{
+	return d->m_fillColor;
+}
+
+void
+FormAction::setFillColor( const QColor & c )
+{
+	d->m_fillColor = c;
+}
+
+const QColor &
+FormAction::strokeColor() const
+{
+	return d->m_strokeColor;
+}
+
+void
+FormAction::setStrokeColor( const QColor & c )
+{
+	d->m_strokeColor = c;
 }
 
 } /* namespace Core */

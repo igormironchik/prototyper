@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PROPS_WINDOW_HPP__INCLUDED
-#define PROTOTYPER__CORE__PROPS_WINDOW_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_HIERARCHY_WIDGET_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_HIERARCHY_WIDGET_HPP__INCLUDED
 
 // Qt include.
-#include <QMainWindow>
+#include <QDockWidget>
 #include <QScopedPointer>
 
 
@@ -33,32 +33,29 @@ namespace Prototyper {
 namespace Core {
 
 //
-// PropsWindow
+// FormHierarchyWidget
 //
 
-class PropsWindowPrivate;
+class FormHierarchyWidgetPrivate;
 
-//! Main window with properties.
-class PropsWindow
-	:	public QMainWindow
+//! Form hierarchy.
+class FormHierarchyWidget
+	:	public QDockWidget
 {
 	Q_OBJECT
 
 public:
-	PropsWindow( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~PropsWindow();
-
-protected:
-	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
+	FormHierarchyWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	~FormHierarchyWidget();
 
 private:
-	Q_DISABLE_COPY( PropsWindow )
+	Q_DISABLE_COPY( FormHierarchyWidget )
 
-	QScopedPointer< PropsWindowPrivate > d;
-}; // class PropsWindow
+	QScopedPointer< FormHierarchyWidgetPrivate > d;
+}; // class FormHierarchyWidget
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__PROPS_WINDOW_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_HIERARCHY_WIDGET_HPP__INCLUDED

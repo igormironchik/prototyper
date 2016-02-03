@@ -47,12 +47,6 @@
 						{name projectWindow}
 						{required}
 					}
-
-					{tag
-						{valueType Window}
-						{name propsWindow}
-						{required}
-					}
 				}
 
 			} || namespace Cfg

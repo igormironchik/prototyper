@@ -20,12 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
-#define PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED
+// Prototyper include.
+#include "tabs_list.hpp"
 
 // Qt include.
-#include <QWidget>
-#include <QScopedPointer>
+#include <QListView>
 
 
 namespace Prototyper {
@@ -33,29 +32,52 @@ namespace Prototyper {
 namespace Core {
 
 //
-// ToolsWidget
+// TabsListPrivate
 //
 
-class ToolsWidgetPrivate;
-
-//! Main window with project.
-class ToolsWidget
-	:	public QWidget
-{
-	Q_OBJECT
-
+class TabsListPrivate {
 public:
-	ToolsWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~ToolsWidget();
+	TabsListPrivate( TabsList * parent )
+		:	q( parent )
+		,	m_view( 0 )
+	{
+	}
 
-private:
-	Q_DISABLE_COPY( ToolsWidget )
+	//! Init.
+	void init();
 
-	QScopedPointer< ToolsWidgetPrivate > d;
-}; // class ToolsWidget
+	//! Parent.
+	TabsList * q;
+	//! View.
+	QListView * m_view;
+}; // class TabsListPrivate
+
+void
+TabsListPrivate::init()
+{
+	m_view = new QListView( q );
+
+	q->setWindowTitle( TabsList::tr( "Tabs" ) );
+
+	q->setWidget( m_view );
+}
+
+
+//
+// TabsList
+//
+
+TabsList::TabsList( QWidget * parent, Qt::WindowFlags f )
+	:	QDockWidget( parent, f )
+	,	d( new TabsListPrivate( this ) )
+{
+	d->init();
+}
+
+TabsList::~TabsList()
+{
+}
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
-
-#endif // PROTOTYPER__CORE__TOOLS_WIDGET_HPP__INCLUDED

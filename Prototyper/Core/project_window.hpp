@@ -63,10 +63,6 @@ public:
 	QAction * gridStepAction() const;
 
 public slots:
-	//! Hide properties window;
-	void hidePropsWindow();
-	//! Hide tools window.
-	void hideToolsWindow();
 	//! Read project.
 	void readProject( const QString & fileName );
 	//! Set grid step.
@@ -76,10 +72,6 @@ protected:
 	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
 
 private slots:
-	//! Show/hide properties window.
-	void p_showHidePropertiesWindow( bool show );
-	//! Show/hide tools window.
-	void p_showHideToolsWindow( bool show );
 	//! Quit.
 	void p_quit();
 	//! Show/hide grid.
