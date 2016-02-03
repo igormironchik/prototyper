@@ -32,6 +32,12 @@ namespace Prototyper {
 
 namespace Core {
 
+namespace Cfg {
+
+class Form;
+
+} /* namespace Cfg */
+
 class FormScene;
 class Form;
 
@@ -48,7 +54,7 @@ class FormView
 	Q_OBJECT
 
 public:
-	FormView( QWidget * parent = 0 );
+	FormView( Cfg::Form & cfg, QWidget * parent = 0 );
 	~FormView();
 
 	//! \return Form scene.

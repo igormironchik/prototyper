@@ -82,8 +82,7 @@ public:
 	//! New project.
 	void newProject();
 	//! Add form.
-	void addForm( const QString & tabName, int gridStep, bool showGrid,
-		const QSize & size = QSize( 800, 600 ) );
+	void addForm( Cfg::Form & cfg, bool showGrid );
 
 	//! Parent.
 	ProjectWidget * q;
@@ -161,18 +160,17 @@ ProjectWidgetPrivate::newProject()
 }
 
 void
-ProjectWidgetPrivate::addForm( const QString & tabName,
-	int gridStep, bool showGrid, const QSize & size )
+ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
+	bool showGrid )
 {
-	FormView * form = new FormView( m_tabs );
-	form->form()->setGridStep( gridStep );
+	FormView * form = new FormView( cfg, m_tabs );
+
 	form->form()->setGridMode( showGrid ?
 		Form::ShowGrid : Form::NoGrid );
-	form->form()->setSize( size );
 
-	m_tabNames.append( tabName );
+	m_tabNames.append( cfg.tabName() );
 
-	m_tabs->addTab( form, tabName );
+	m_tabs->addTab( form, cfg.tabName() );
 
 	m_forms.append( form );
 
@@ -226,9 +224,11 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 
 	d->m_tabs->setTabText( 0, d->m_cfg.description().tabName() );
 
-	foreach( const Cfg::Form & f, d->m_cfg.form() )
-		d->addForm( f.tabName(), f.gridStep(), d->m_cfg.showGrid(),
-			QSize( f.size().width(), f.size().height() ) );
+	QList< Cfg::Form >::Iterator it = d->m_cfg.form().begin();
+	QList< Cfg::Form >::Iterator last = d->m_cfg.form().end();
+
+	for( ; it != last; ++it )
+		d->addForm( *it, d->m_cfg.showGrid() );
 }
 
 void
@@ -238,8 +238,15 @@ ProjectWidget::addForm()
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
-		d->addForm( dlg.name(), d->m_cfg.defaultGridStep(),
-			d->m_cfg.showGrid() );
+		Cfg::Form cfg;
+		cfg.setGridStep( d->m_cfg.defaultGridStep() );
+		cfg.size().setWidth( 800 );
+		cfg.size().setHeight( 600 );
+		cfg.setTabName( dlg.name() );
+
+		d->m_cfg.form().append( cfg );
+
+		d->addForm( d->m_cfg.form().last(), d->m_cfg.showGrid() );
 
 		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
 
@@ -261,6 +268,11 @@ ProjectWidget::renameTab( const QString & oldName )
 			d->m_tabs->setTabText( index, dlg.name() );
 
 			d->m_tabNames[ index ] = dlg.name();
+
+			if( index > 0 )
+				d->m_cfg.form()[ index - 1 ].setTabName( dlg.name() );
+			else
+				d->m_cfg.description().setTabName( dlg.name() );
 
 			emit changed();
 		}

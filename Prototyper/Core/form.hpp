@@ -32,6 +32,12 @@ namespace Prototyper {
 
 namespace Core {
 
+namespace Cfg {
+
+class Form;
+
+} /* namespace Cfg */
+
 //
 // Form
 //
@@ -45,7 +51,7 @@ class Form
 	Q_OBJECT
 
 public:
-	Form( QGraphicsItem * parent = 0 );
+	explicit Form( Cfg::Form & c, QGraphicsItem * parent = 0 );
 	~Form();
 
 	//! Grid mode.
@@ -70,6 +76,9 @@ public:
 	int gridStep() const;
 	//! Set grid step.
 	void setGridStep( int s );
+
+	//! \return Configuration.
+	const Cfg::Form & cfg() const;
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

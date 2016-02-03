@@ -36,10 +36,11 @@ namespace Core {
 
 class FormViewPrivate {
 public:
-	FormViewPrivate( FormView * parent )
+	FormViewPrivate( Cfg::Form & cfg, FormView * parent )
 		:	q( parent )
 		,	m_scene( 0 )
 		,	m_form( 0 )
+		,	m_cfg( cfg )
 	{
 	}
 
@@ -52,6 +53,8 @@ public:
 	FormScene * m_scene;
 	//! Form.
 	Form * m_form;
+	//! Cfg.
+	Cfg::Form & m_cfg;
 }; // class FormViewPrivate
 
 void
@@ -63,7 +66,7 @@ FormViewPrivate::init()
 
 	q->setScene( m_scene );
 
-	m_form = new Form;
+	m_form = new Form( m_cfg );
 
 	m_scene->addItem( m_form );
 }
@@ -73,9 +76,9 @@ FormViewPrivate::init()
 // FormView
 //
 
-FormView::FormView( QWidget * parent )
+FormView::FormView( Cfg::Form & cfg, QWidget * parent )
 	:	QGraphicsView( parent )
-	,	d( new FormViewPrivate( this ) )
+	,	d( new FormViewPrivate( cfg, this ) )
 {
 	d->init();
 }

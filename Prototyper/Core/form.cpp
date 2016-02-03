@@ -24,6 +24,7 @@
 #include "form.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
+#include "project_cfg.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -42,12 +43,13 @@ namespace Core {
 
 class FormPrivate {
 public:
-	FormPrivate( Form * parent )
+	FormPrivate( Cfg::Form & cfg, Form * parent )
 		:	q( parent )
 		,	m_gridMode( Form::ShowGrid )
 		,	m_size( 800, 600 )
 		,	m_gridStep( 20 )
 		,	m_gridStepAction( 0 )
+		,	m_cfg( cfg )
 	{
 	}
 
@@ -64,6 +66,8 @@ public:
 	int m_gridStep;
 	//! Grid step action.
 	QAction * m_gridStepAction;
+	//! Cfg.
+	Cfg::Form & m_cfg;
 }; // class FormPrivate
 
 void
@@ -71,6 +75,10 @@ FormPrivate::init()
 {
 	m_gridStepAction = new QAction( QIcon( ":/Core/img/measure.png" ),
 		ProjectWindow::tr( "Grid Step" ), q );
+
+	q->setGridStep( m_cfg.gridStep() );
+
+	q->setSize( QSize( m_cfg.size().width(), m_cfg.size().height() ) );
 
 	Form::connect( m_gridStepAction, &QAction::triggered,
 		q, &Form::slotSetGridStep );
@@ -81,9 +89,9 @@ FormPrivate::init()
 // Form
 //
 
-Form::Form( QGraphicsItem * parent )
+Form::Form( Cfg::Form & c, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	d( new FormPrivate( this ) )
+	,	d( new FormPrivate( c, this ) )
 {
 	d->init();
 }
@@ -132,6 +140,12 @@ Form::setGridStep( int s )
 	d->m_gridStep = s;
 
 	update();
+}
+
+const Cfg::Form &
+Form::cfg() const
+{
+	return d->m_cfg;
 }
 
 QRectF

@@ -500,33 +500,11 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 
 	if( !d->m_fileName.isEmpty() )
 	{
-		Cfg::ProjectDesc desc;
-		desc.setText( d->m_widget->descriptionTab()->editor()->text() );
-		desc.setTabName( d->m_widget->tabs()->tabText( 0 ) );
-
-		d->m_cfg.setDescription( desc );
+		d->m_cfg.description().setText(
+			d->m_widget->descriptionTab()->editor()->text() );
 
 		if( !d->m_fileName.endsWith( ext ) )
 			d->m_fileName.append( ext );
-
-		QList< Cfg::Form > forms;
-
-		for( int i = 0; i < d->m_widget->forms().size(); ++i )
-		{
-			const FormView * view = d->m_widget->forms().at( i );
-
-			Cfg::Form f;
-			f.setGridStep( view->form()->gridStep() );
-			Cfg::Size s;
-			s.setWidth( view->form()->size().width() );
-			s.setHeight( view->form()->size().height() );
-			f.setSize( s );
-			f.setTabName( d->m_widget->tabs()->tabText( i + 1 ) );
-
-			forms.append( f );
-		}
-
-		d->m_cfg.setForm( forms );
 
 		try {
 			Cfg::TagProject tag( d->m_cfg );
