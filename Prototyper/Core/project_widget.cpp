@@ -287,7 +287,7 @@ ProjectWidget::deleteForm( const QString & name )
 
 			d->m_tabNames.removeAt( index );
 
-			d->m_forms.removeAt( index );
+			d->m_forms.removeAt( index - 1 );
 
 			disconnect( tab, 0, 0, 0 );
 
