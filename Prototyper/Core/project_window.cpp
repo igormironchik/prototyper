@@ -414,6 +414,8 @@ ProjectWindow::p_showHideGrid( bool show )
 
 	foreach( FormView * view, d->m_widget->forms() )
 		view->form()->setGridMode( mode );
+
+	setWindowModified( true );
 }
 
 void
@@ -431,10 +433,16 @@ ProjectWindow::setGridStep( int step, bool forAll )
 
 			foreach( FormView * view, d->m_widget->forms() )
 				view->form()->setGridStep( dlg.gridStep() );
+
+			setWindowModified( true );
 		}
 		else if( index > 0 )
+		{
 			d->m_widget->forms()[ index - 1 ]->form()->setGridStep(
 				dlg.gridStep() );
+
+			setWindowModified( true );
+		}
 	}
 }
 

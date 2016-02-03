@@ -35,6 +35,7 @@ namespace Core {
 namespace Cfg {
 
 class Form;
+class Size;
 
 } /* namespace Cfg */
 
@@ -63,9 +64,9 @@ public:
 	}; // enum GridMode
 
 	//! \return Size.
-	const QSize & size() const;
+	const Cfg::Size & size() const;
 	//! Set size.
-	void setSize( const QSize & s );
+	void setSize( const Cfg::Size & s );
 
 	//! \return Grid mode.
 	GridMode gridMode() const;

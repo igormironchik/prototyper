@@ -46,8 +46,6 @@ public:
 	FormPrivate( Cfg::Form & cfg, Form * parent )
 		:	q( parent )
 		,	m_gridMode( Form::ShowGrid )
-		,	m_size( 800, 600 )
-		,	m_gridStep( 20 )
 		,	m_gridStepAction( 0 )
 		,	m_cfg( cfg )
 	{
@@ -60,10 +58,6 @@ public:
 	Form * q;
 	//! Grid mode.
 	Form::GridMode m_gridMode;
-	//! Size.
-	QSize m_size;
-	//! Grid step.
-	int m_gridStep;
 	//! Grid step action.
 	QAction * m_gridStepAction;
 	//! Cfg.
@@ -75,10 +69,6 @@ FormPrivate::init()
 {
 	m_gridStepAction = new QAction( QIcon( ":/Core/img/measure.png" ),
 		ProjectWindow::tr( "Grid Step" ), q );
-
-	q->setGridStep( m_cfg.gridStep() );
-
-	q->setSize( QSize( m_cfg.size().width(), m_cfg.size().height() ) );
 
 	Form::connect( m_gridStepAction, &QAction::triggered,
 		q, &Form::slotSetGridStep );
@@ -100,16 +90,16 @@ Form::~Form()
 {
 }
 
-const QSize &
+const Cfg::Size &
 Form::size() const
 {
-	return d->m_size;
+	return d->m_cfg.size();
 }
 
 void
-Form::setSize( const QSize & s )
+Form::setSize( const Cfg::Size & s )
 {
-	d->m_size = s;
+	d->m_cfg.setSize( s );
 
 	update();
 }
@@ -131,13 +121,13 @@ Form::setGridMode( GridMode m )
 int
 Form::gridStep() const
 {
-	return d->m_gridStep;
+	return d->m_cfg.gridStep();
 }
 
 void
 Form::setGridStep( int s )
 {
-	d->m_gridStep = s;
+	d->m_cfg.setGridStep( s );
 
 	update();
 }
@@ -151,7 +141,8 @@ Form::cfg() const
 QRectF
 Form::boundingRect() const
 {
-	return QRectF( 0, 0, d->m_size.width(), d->m_size.height() );
+	return QRectF( 0, 0, d->m_cfg.size().width(),
+		d->m_cfg.size().height() );
 }
 
 void
@@ -161,12 +152,12 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	Q_UNUSED( option )
 	Q_UNUSED( widget )
 
-	const int w = d->m_size.width();
-	const int h = d->m_size.height();
+	const int w = d->m_cfg.size().width();
+	const int h = d->m_cfg.size().height();
 
 	QRect r( 0, 0, w, h );
 
-	static const QColor gridColor = Qt::darkGray;
+	static const QColor gridColor = Qt::gray;
 
 	painter->setPen( gridColor );
 	painter->setBrush( Qt::white );
@@ -175,10 +166,10 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 
 	if( d->m_gridMode == ShowGrid )
 	{
-		for( int x = d->m_gridStep; x < w; x += d->m_gridStep )
+		for( int x = d->m_cfg.gridStep(); x < w; x += d->m_cfg.gridStep() )
 			painter->drawLine( x, 0, x, h );
 
-		for( int y = d->m_gridStep; y < h; y += d->m_gridStep )
+		for( int y = d->m_cfg.gridStep(); y < h; y += d->m_cfg.gridStep() )
 			painter->drawLine( 0, y, w, y );
 	}
 }
@@ -186,7 +177,8 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 void
 Form::slotSetGridStep()
 {
-	TopGui::instance()->projectWindow()->setGridStep( d->m_gridStep, false );
+	TopGui::instance()->projectWindow()->setGridStep(
+		d->m_cfg.gridStep(), false );
 }
 
 void
