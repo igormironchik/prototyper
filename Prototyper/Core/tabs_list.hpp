@@ -26,6 +26,7 @@
 // Qt include.
 #include <QDockWidget>
 #include <QScopedPointer>
+#include <QListView>
 
 QT_BEGIN_NAMESPACE
 class QStringListModel;
@@ -35,6 +36,45 @@ QT_END_NAMESPACE
 namespace Prototyper {
 
 namespace Core {
+
+//
+// TabsView
+//
+
+class TabsViewPrivate;
+
+//! Tabs list view.
+class TabsView
+	:	public QListView
+{
+	Q_OBJECT
+
+signals:
+	//! Enter button pressed.
+	void enterPressed( const QModelIndex & );
+	//! Activate tab.
+	void activateTab( const QModelIndex & );
+
+public:
+	TabsView( QWidget * parent );
+	~TabsView();
+
+protected:
+	 void keyPressEvent( QKeyEvent * event ) Q_DECL_OVERRIDE;
+	 void contextMenuEvent( QContextMenuEvent * event ) Q_DECL_OVERRIDE;
+
+private slots:
+	 //! Activate tab.
+	 void p_activateTab();
+
+private:
+	 friend class TabsViewPrivate;
+
+	 Q_DISABLE_COPY( TabsView )
+
+	 QScopedPointer< TabsViewPrivate > d;
+}; // class TabsView
+
 
 //
 // TabsList

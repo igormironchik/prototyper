@@ -27,9 +27,11 @@
 #include "project_widget.hpp"
 
 // Qt include.
-#include <QListView>
 #include <QStringListModel>
 #include <QModelIndex>
+#include <QKeyEvent>
+#include <QAction>
+#include <QMenu>
 
 
 namespace Prototyper {
@@ -62,7 +64,93 @@ public:
 		else
 			return Qt::NoItemFlags;
 	}
+
+private:
+	Q_DISABLE_COPY( TabsModel )
 }; // class TabsModel
+
+
+//
+// TabsViewPrivate
+//
+
+class TabsViewPrivate {
+public:
+	TabsViewPrivate( TabsView * parent )
+		:	q( parent )
+		,	m_activate( 0 )
+	{
+	}
+
+	//! Init.
+	void init();
+
+	//! Parent.
+	TabsView * q;
+	//! Activate tab action.
+	QAction * m_activate;
+	//! Index under cursor.
+	QModelIndex m_index;
+}; // class TabsViewPrivate
+
+void
+TabsViewPrivate::init()
+{
+	m_activate = new QAction( TabsView::tr( "Activate Tab" ), q );
+
+	TabsView::connect( m_activate, &QAction::triggered,
+		q, &TabsView::p_activateTab );
+}
+
+
+//
+// TabsView
+//
+
+TabsView::TabsView( QWidget * parent )
+	:	QListView( parent )
+	,	d( new TabsViewPrivate( this ) )
+{
+	d->init();
+}
+
+TabsView::~TabsView()
+{
+}
+
+void
+TabsView::keyPressEvent( QKeyEvent * event )
+{
+	if( event->key() == Qt::Key_Return ||
+		event->key() == Qt::Key_Enter )
+			emit enterPressed( currentIndex() );
+
+	QListView::keyPressEvent( event );
+}
+
+void
+TabsView::contextMenuEvent( QContextMenuEvent * event )
+{
+	d->m_index = indexAt( event->pos() );
+
+	if( d->m_index.isValid() )
+	{
+		QMenu menu;
+		menu.addAction( d->m_activate );
+
+		menu.exec( event->globalPos() );
+
+		event->accept();
+	}
+
+	event->ignore();
+}
+
+void
+TabsView::p_activateTab()
+{
+	emit activateTab( d->m_index );
+}
 
 
 //
@@ -84,7 +172,7 @@ public:
 	//! Parent.
 	TabsList * q;
 	//! View.
-	QListView * m_view;
+	TabsView * m_view;
 	//! Model.
 	TabsModel * m_model;
 }; // class TabsListPrivate
@@ -92,7 +180,7 @@ public:
 void
 TabsListPrivate::init()
 {
-	m_view = new QListView( q );
+	m_view = new TabsView( q );
 
 	m_model = new TabsModel( q );
 
@@ -103,6 +191,10 @@ TabsListPrivate::init()
 	q->setWidget( m_view );
 
 	TabsList::connect( m_view, &QListView::doubleClicked,
+		q, &TabsList::p_doubleClicked );
+	TabsList::connect( m_view, &TabsView::enterPressed,
+		q, &TabsList::p_doubleClicked );
+	TabsList::connect( m_view, &TabsView::activateTab,
 		q, &TabsList::p_doubleClicked );
 }
 
