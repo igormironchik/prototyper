@@ -143,13 +143,16 @@ TabsView::contextMenuEvent( QContextMenuEvent * event )
 			menu.addAction( QIcon( ":/Core/img/edit-rename.png" ),
 				tr( "Rename" ), this, SLOT( p_renameTab() ) );
 
+		menu.addAction( QIcon( ":/Core/img/list-add.png" ),
+			tr( "Add Form" ), this, SLOT( p_addForm() ) );
+
 		if( d->m_index.row() != 0 )
 			menu.addAction( QIcon( ":/Core/img/edit-delete.png" ),
 				tr( "Delete Form" ), this, SLOT( p_deleteForm() ) );
 	}
-
-	menu.addAction( QIcon( ":/Core/img/list-add.png" ),
-		tr( "Add Form" ), this, SLOT( p_addForm() ) );
+	else
+		menu.addAction( QIcon( ":/Core/img/list-add.png" ),
+			tr( "Add Form" ), this, SLOT( p_addForm() ) );
 
 	menu.exec( event->globalPos() );
 
@@ -221,11 +224,11 @@ TabsListPrivate::init()
 	q->setWidget( m_view );
 
 	TabsList::connect( m_view, &QListView::doubleClicked,
-		q, &TabsList::p_doubleClicked );
+		q, &TabsList::p_activateTab );
 	TabsList::connect( m_view, &TabsView::enterPressed,
-		q, &TabsList::p_doubleClicked );
+		q, &TabsList::p_activateTab );
 	TabsList::connect( m_view, &TabsView::activateTab,
-		q, &TabsList::p_doubleClicked );
+		q, &TabsList::p_activateTab );
 }
 
 
@@ -251,7 +254,7 @@ TabsList::model() const
 }
 
 void
-TabsList::p_doubleClicked( const QModelIndex & index )
+TabsList::p_activateTab( const QModelIndex & index )
 {
 	if( index.isValid() )
 	{

@@ -102,7 +102,7 @@ public:
 	QStringListModel * model() const;
 
 private slots:
-	void p_doubleClicked( const QModelIndex & index );
+	void p_activateTab( const QModelIndex & index );
 
 private:
 	friend class TabsListPrivate;
