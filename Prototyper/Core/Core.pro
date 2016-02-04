@@ -4,7 +4,7 @@ CONFIG += shared
 TARGET = Prototyper.Core
 QT += core gui widgets
 VERSION = 1.0.0
-CONFIG += c++11
+CONFIG += c++14
 
 RESOURCES = resources.qrc
 
