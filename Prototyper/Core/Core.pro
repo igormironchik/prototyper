@@ -4,6 +4,7 @@ CONFIG += shared
 TARGET = Prototyper.Core
 QT += core gui widgets
 VERSION = 1.0.0
+CONFIG += c++11
 
 RESOURCES = resources.qrc
 
@@ -29,8 +30,13 @@ PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
 HEADERS +=	form_actions.hpp \
 			form.hpp \
+			form_group.hpp \
 			form_hierarchy_widget.hpp \
+			form_image.hpp \
+			form_line.hpp \
+			form_object.hpp \
 			form_scene.hpp \
+			form_text.hpp \
 			form_view.hpp \
 			grid_step_dlg.hpp \
 			name_dlg.hpp \
@@ -46,8 +52,13 @@ HEADERS +=	form_actions.hpp \
 
 SOURCES +=	form_actions.cpp \
 			form.cpp \
+			form_group.cpp \
 			form_hierarchy_widget.cpp \
+			form_image.cpp \
+			form_line.cpp \
+			form_object.cpp \
 			form_scene.cpp \
+			form_text.cpp \
 			form_view.cpp \
 			grid_step_dlg.cpp \
 			name_dlg.cpp \
