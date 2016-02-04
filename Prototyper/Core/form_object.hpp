@@ -56,6 +56,11 @@ public:
 		Selected
 	}; // enum Mode
 
+	//! \return ID of the object.
+	quint64 id()const;
+	//! Set ID.
+	void setId( quint64 i );
+
 	//! \return Mode.
 	virtual Mode mode() const;
 	//! Set mode.
@@ -77,6 +82,8 @@ private:
 	Mode m_mode;
 	//! Z-order.
 	quint64 m_z;
+	//! ID.
+	quint64 m_id;
 }; // class FormObject
 
 } /* namespace Core */

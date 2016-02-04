@@ -35,6 +35,7 @@ namespace Core {
 FormObject::FormObject()
 	:	m_mode( Normal )
 	,	m_z( 0 )
+	,	m_id( 0 )
 {
 }
 
@@ -45,6 +46,7 @@ FormObject::~FormObject()
 FormObject::FormObject( const FormObject & other )
 	:	m_mode( other.mode() )
 	,	m_z( other.zValue() )
+	,	m_id( other.id() )
 {
 }
 
@@ -55,9 +57,22 @@ FormObject::operator = ( const FormObject & other )
 	{
 		m_mode = other.mode();
 		m_z = other.zValue();
+		m_id = other.id();
 	}
 
 	return *this;
+}
+
+quint64
+FormObject::id()const
+{
+	return m_id;
+}
+
+void
+FormObject::setId( quint64 i )
+{
+	m_id = i;
 }
 
 FormObject::Mode
