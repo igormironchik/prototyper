@@ -24,11 +24,7 @@
 #define PROTOTYPER__CORE__FORM_OBJECT_HPP__INCLUDED
 
 // Qt include.
-#include <QRect>
-
-QT_BEGIN_NAMESPACE
-class QPainter;
-QT_END_NAMESPACE
+#include <QtGlobal>
 
 
 namespace Prototyper {
@@ -45,43 +41,14 @@ public:
 	FormObject();
 	virtual ~FormObject();
 
-	FormObject( const FormObject & other );
-	FormObject & operator = ( const FormObject & other );
-
-	//! Mode.
-	enum Mode {
-		//! Normal.
-		Normal,
-		//! Selected.
-		Selected
-	}; // enum Mode
-
-	//! \return ID of the object.
-	quint64 id()const;
+	//! \return ID.
+	quint64 id() const;
 	//! Set ID.
 	void setId( quint64 i );
 
-	//! \return Mode.
-	virtual Mode mode() const;
-	//! Set mode.
-	virtual void setMode( Mode m );
-
-	//! \return Z-order.
-	virtual quint64 zValue() const;
-	//! Set Z-order.
-	virtual void setZValue( quint64 z );
-
-	//! \return Bounding rect.
-	virtual QRect boundingRect() const = 0;
-
-	//! Paint object.
-	virtual void paint( QPainter * p ) const = 0;
-
 private:
-	//! Mode.
-	Mode m_mode;
-	//! Z-order.
-	quint64 m_z;
+	Q_DISABLE_COPY( FormObject )
+
 	//! ID.
 	quint64 m_id;
 }; // class FormObject

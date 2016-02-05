@@ -23,12 +23,12 @@
 #ifndef PROTOTYPER__CORE__FORM_GROUP_HPP__INCLUDED
 #define PROTOTYPER__CORE__FORM_GROUP_HPP__INCLUDED
 
+// Qt include.
+#include <QGraphicsItemGroup>
+#include <QScopedPointer>
+
 // Prototyper include.
 #include "form_object.hpp"
-
-// Qt include.
-#include <QList>
-#include <QSharedPointer>
 
 
 namespace Prototyper {
@@ -39,38 +39,20 @@ namespace Core {
 // FormGroup
 //
 
-//! Group of objects on the form.
+class FormGroupPrivate;
+
 class FormGroup
-	:	public FormObject
+	:	public QGraphicsItemGroup
+	,	public FormObject
 {
 public:
-	FormGroup();
+	FormGroup( QGraphicsItem * parent = 0 );
 	~FormGroup();
 
-	FormGroup( const FormGroup & other );
-	FormGroup & operator = ( const FormGroup & other );
-
-	//! \return List of all objects in the group.
-	const QList< QSharedPointer< FormObject > > & objects() const;
-	//! \return List of all objects in the group.
-	QList< QSharedPointer< FormObject > > & objects();
-
-	//! Set mode.
-	void setMode( Mode m ) Q_DECL_OVERRIDE;
-
-	//! \return Z-order.
-	quint64 zValue() const Q_DECL_OVERRIDE;
-	//! Set Z-order.
-	void setZValue( quint64 z ) Q_DECL_OVERRIDE;
-
-	//! \return Bounding rect.
-	QRect boundingRect() const Q_DECL_OVERRIDE;
-
-	//! Paint object.
-	void paint( QPainter * p ) const Q_DECL_OVERRIDE;
-
 private:
-	QList< QSharedPointer< FormObject > > m_objects;
+	Q_DISABLE_COPY( FormGroup )
+
+	QScopedPointer< FormGroupPrivate > d;
 }; // class FormGroup
 
 } /* namespace Core */

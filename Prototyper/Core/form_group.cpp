@@ -23,108 +23,48 @@
 // Prototyper include.
 #include "form_group.hpp"
 
-// C++ include.
-#include <algorithm>
-
 
 namespace Prototyper {
 
 namespace Core {
 
 //
+// FormGroupPrivate
+//
+
+class FormGroupPrivate {
+public:
+	FormGroupPrivate( FormGroup * parent )
+		:	q( parent )
+	{
+	}
+
+	//! Init.
+	void init();
+
+	//! Parent.
+	FormGroup * q;
+}; // class FormGroupPrivate
+
+void
+FormGroupPrivate::init()
+{
+}
+
+
+//
 // FormGroup
 //
 
-FormGroup::FormGroup()
+FormGroup::FormGroup( QGraphicsItem * parent )
+	:	QGraphicsItemGroup( parent )
+	,	d( new FormGroupPrivate( this ) )
 {
+	d->init();
 }
 
 FormGroup::~FormGroup()
 {
-}
-
-FormGroup::FormGroup( const FormGroup & other )
-	:	FormObject( other )
-	,	m_objects( other.objects() )
-{
-}
-
-FormGroup &
-FormGroup::operator = ( const FormGroup & other )
-{
-	if( this != &other )
-	{
-		FormObject::operator = ( other );
-
-		m_objects = other.objects();
-	}
-
-	return *this;
-}
-
-const QList< QSharedPointer< FormObject > > &
-FormGroup::objects() const
-{
-	return m_objects;
-}
-
-QList< QSharedPointer< FormObject > > &
-FormGroup::objects()
-{
-	return m_objects;
-}
-
-void
-FormGroup::setMode( Mode m )
-{
-	FormObject::setMode( m );
-
-	std::for_each( m_objects.begin(), m_objects.end(),
-		[m] ( QSharedPointer< FormObject > & p ) { p->setMode( m ); } );
-}
-
-quint64
-FormGroup::zValue() const
-{
-	auto it = std::min_element( m_objects.constBegin(), m_objects.constEnd(),
-		[] ( const QSharedPointer< FormObject > & p1,
-			const QSharedPointer< FormObject > & p2 )
-				{ return p1->zValue() < p2->zValue(); } );
-
-	if( it != m_objects.constEnd() && (*it)->zValue() < FormObject::zValue() )
-		return (*it)->zValue();
-	else
-		return FormObject::zValue();
-}
-
-void
-FormGroup::setZValue( quint64 z )
-{
-	const quint64 delta = z - zValue();
-
-	std::for_each( m_objects.begin(), m_objects.end(),
-		[delta] ( QSharedPointer< FormObject > & p )
-			{ p->setZValue( p->zValue() + delta ); } );
-}
-
-QRect
-FormGroup::boundingRect() const
-{
-	QRect res;
-
-	std::for_each( m_objects.constBegin(), m_objects.constEnd(),
-		[&res] ( const QSharedPointer< FormObject > & p )
-			{ res = res.united( p->boundingRect() ); } );
-
-	return res;
-}
-
-void
-FormGroup::paint( QPainter * p ) const
-{
-	std::for_each( m_objects.constBegin(), m_objects.constEnd(),
-		[&p] ( const QSharedPointer< FormObject > & ptr )
-			{ ptr->paint( p ); } );
 }
 
 } /* namespace Core */

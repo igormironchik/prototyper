@@ -33,9 +33,7 @@ namespace Core {
 //
 
 FormObject::FormObject()
-	:	m_mode( Normal )
-	,	m_z( 0 )
-	,	m_id( 0 )
+	:	m_id( 0 )
 {
 }
 
@@ -43,28 +41,8 @@ FormObject::~FormObject()
 {
 }
 
-FormObject::FormObject( const FormObject & other )
-	:	m_mode( other.mode() )
-	,	m_z( other.zValue() )
-	,	m_id( other.id() )
-{
-}
-
-FormObject &
-FormObject::operator = ( const FormObject & other )
-{
-	if( this != &other )
-	{
-		m_mode = other.mode();
-		m_z = other.zValue();
-		m_id = other.id();
-	}
-
-	return *this;
-}
-
 quint64
-FormObject::id()const
+FormObject::id() const
 {
 	return m_id;
 }
@@ -73,30 +51,6 @@ void
 FormObject::setId( quint64 i )
 {
 	m_id = i;
-}
-
-FormObject::Mode
-FormObject::mode() const
-{
-	return m_mode;
-}
-
-void
-FormObject::setMode( Mode m )
-{
-	m_mode = m;
-}
-
-quint64
-FormObject::zValue() const
-{
-	return m_z;
-}
-
-void
-FormObject::setZValue( quint64 z )
-{
-	m_z = z;
 }
 
 } /* namespace Core */
