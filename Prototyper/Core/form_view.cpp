@@ -69,6 +69,10 @@ FormViewPrivate::init()
 	m_form = new Form( m_cfg );
 
 	m_scene->addItem( m_form );
+
+	q->setRubberBandSelectionMode( Qt::ContainsItemShape );
+
+	q->setDragMode( QGraphicsView::RubberBandDrag );
 }
 
 

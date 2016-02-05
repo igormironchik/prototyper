@@ -263,7 +263,11 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			default :
 				break;
 		}
+
+		mouseEvent->accept();
 	}
+	else
+		mouseEvent->ignore();
 }
 
 void
@@ -271,24 +275,29 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 {
 	if( mouseEvent->button() == Qt::LeftButton )
 	{
-		d->m_pressed = true;
-
 		d->m_pos = mouseEvent->pos();
 
 		switch( FormAction::instance()->mode() )
 		{
 			case FormAction::DrawPolyLine :
 			{
+				d->m_pressed = true;
+
 				FormLine * line = new FormLine( this );
 
 				line->setLine( mouseEvent->pos().x(), mouseEvent->pos().y(),
 					mouseEvent->pos().x(), mouseEvent->pos().y() );
 
 				d->m_current = line;
+
+				mouseEvent->accept();
 			}
 				break;
 
 			default :
+			{
+				mouseEvent->ignore();
+			}
 				break;
 		}
 	}
@@ -297,12 +306,16 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 void
 Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 {
-	if( mouseEvent->button() == Qt::LeftButton )
+	if( mouseEvent->button() == Qt::LeftButton && d->m_pressed )
 	{
 		d->m_pressed = false;
 
 		d->m_current = 0;
+
+		mouseEvent->accept();
 	}
+	else
+		mouseEvent->ignore();
 }
 
 } /* namespace Core */
