@@ -191,14 +191,6 @@ ProjectWindowPrivate::init()
 	select->setShortcutContext( Qt::ApplicationShortcut );
 	select->setShortcut( ProjectWindow::tr( "Alt+S" ) );
 
-	QAction * move = m_formToolBar->addAction(
-		QIcon( ":/Core/img/transform-move.png" ),
-		ProjectWindow::tr( "Move" ) );
-	move->setCheckable( true );
-	m_formToolBarGroup->addAction( move );
-	move->setShortcutContext( Qt::ApplicationShortcut );
-	move->setShortcut( ProjectWindow::tr( "Alt+M" ) );
-
 	QAction * drawPolyline = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-polyline.png" ),
 		ProjectWindow::tr( "Draw Polyline" ) );
@@ -267,7 +259,6 @@ ProjectWindowPrivate::init()
 	form->addSeparator();
 
 	form->addAction( select );
-	form->addAction( move );
 	form->addAction( drawPolyline );
 	form->addAction( insertText );
 	form->addAction( insertImage );
@@ -297,8 +288,6 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_projectChanged );
 	ProjectWindow::connect( select, &QAction::triggered,
 		q, &ProjectWindow::p_select );
-	ProjectWindow::connect( move, &QAction::triggered,
-		q, &ProjectWindow::p_move );
 	ProjectWindow::connect( drawPolyline, &QAction::triggered,
 		q, &ProjectWindow::p_drawPolyline );
 	ProjectWindow::connect( insertText, &QAction::triggered,
@@ -678,12 +667,6 @@ ProjectWindow::p_select()
 
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, true );
 	}
-}
-
-void
-ProjectWindow::p_move()
-{
-	FormAction::instance()->setMode( FormAction::Move );
 }
 
 void

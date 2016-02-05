@@ -45,6 +45,7 @@ public:
 		:	q( parent )
 		,	m_h1( 0 )
 		,	m_h2( 0 )
+		,	m_move( 0 )
 	{
 	}
 
@@ -57,6 +58,8 @@ public:
 	FormLineMoveHandle * m_h1;
 	//! Second handle.
 	FormLineMoveHandle * m_h2;
+	//! Move handler.
+	FormLineMoveHandle * m_move;
 }; // class FormLinePrivate
 
 void
@@ -67,6 +70,9 @@ FormLinePrivate::init()
 
 	m_h2 = new FormLineMoveHandle( q, q );
 	m_h2->hide();
+
+	m_move = new FormLineMoveHandle( q, q );
+	m_move->hide();
 
 	q->setPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
 }
@@ -101,7 +107,7 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 {
 	Q_UNUSED( widget )
 
-	if( isSelected() )
+	if( isSelected() && !group() )
 	{
 		const QLineF l = line();
 
@@ -112,11 +118,17 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		d->m_h2->setPos( l.p2().x() - d->m_h2->halfOfSize(),
 			l.p2().y() - d->m_h2->halfOfSize() );
 		d->m_h2->show();
+
+		d->m_move->setPos(
+			( l.p1().x() + l.p2().x() ) / 2.0 - d->m_move->halfOfSize(),
+			( l.p1().y() + l.p2().y() ) / 2.0 - d->m_move->halfOfSize() );
+		d->m_move->show();
 	}
 	else
 	{
 		d->m_h1->hide();
 		d->m_h2->hide();
+		d->m_move->hide();
 	}
 
 	QGraphicsLineItem::paint( painter, option, widget );
@@ -131,6 +143,8 @@ FormLine::handleMoved( const QPointF & delta, FormLineMoveHandle * handle )
 		setLine( QLineF( l.p1() + delta, l.p2() ) );
 	else if( handle == d->m_h2 )
 		setLine( QLineF( l.p1(), l.p2() + delta ) );
+	else if( handle == d->m_move )
+		moveBy( delta.x(), delta.y() );
 }
 
 void

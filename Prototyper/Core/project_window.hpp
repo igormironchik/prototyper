@@ -110,8 +110,6 @@ private slots:
 	void p_ungroup();
 	//! Select.
 	void p_select();
-	//! Move.
-	void p_move();
 	//! Fill color.
 	void p_fillColor();
 	//! Stroke color.
