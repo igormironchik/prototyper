@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "form_line.hpp"
 #include "form_line_move_handle.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QGraphicsSceneMouseEvent>
@@ -66,6 +67,8 @@ FormLinePrivate::init()
 
 	m_h2 = new FormLineMoveHandle( q, q );
 	m_h2->hide();
+
+	q->setPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
 }
 
 
@@ -98,15 +101,8 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 {
 	Q_UNUSED( widget )
 
-	QGraphicsLineItem::paint( painter, option, widget );
-
 	if( isSelected() )
 	{
-		painter->setPen( QPen( Qt::darkGray, 1.0, Qt::DashLine ) );
-		painter->setBrush( Qt::NoBrush );
-
-		painter->drawRect( option->rect );
-
 		const QLineF l = line();
 
 		d->m_h1->setPos( l.p1().x() - d->m_h1->halfOfSize(),
@@ -122,6 +118,8 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		d->m_h1->hide();
 		d->m_h2->hide();
 	}
+
+	QGraphicsLineItem::paint( painter, option, widget );
 }
 
 void

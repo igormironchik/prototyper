@@ -102,6 +102,8 @@ FormMoveHandle::paint( QPainter * painter, const QStyleOptionGraphicsItem * opti
 {
 	Q_UNUSED( widget )
 
+	painter->setRenderHint( QPainter::Antialiasing, false );
+
 	painter->setPen( Qt::black );
 
 	if( d->m_hovered )

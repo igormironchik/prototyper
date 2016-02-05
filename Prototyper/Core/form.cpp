@@ -197,6 +197,10 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	const int w = d->m_cfg.size().width();
 	const int h = d->m_cfg.size().height();
 
+	painter->save();
+
+	painter->setRenderHint( QPainter::Antialiasing, false );
+
 	QRect r( 0, 0, w, h );
 
 	static const QColor gridColor = Qt::gray;
@@ -214,6 +218,8 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		for( int y = d->m_cfg.gridStep(); y < h; y += d->m_cfg.gridStep() )
 			painter->drawLine( 0, y, w, y );
 	}
+
+	painter->restore();
 }
 
 void
