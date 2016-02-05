@@ -76,6 +76,12 @@ public:
 
 	//! Init.
 	void init();
+	//! Set flag to all items on the form.
+	void setFlag( FormView * view, QGraphicsItem::GraphicsItemFlag f,
+		bool enabled = true );
+	//! Set flag to all children.
+	void setFlag( const QList< QGraphicsItem* > & children,
+		QGraphicsItem::GraphicsItemFlag f, bool enabled );
 
 	//! Parent.
 	ProjectWindow * q;
@@ -309,6 +315,25 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_fillColor );
 	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
 		q, &ProjectWindow::p_tabChanged );
+}
+
+void
+ProjectWindowPrivate::setFlag( FormView * view,
+	QGraphicsItem::GraphicsItemFlag f, bool enabled )
+{
+	setFlag( view->form()->childItems(), f, enabled );
+}
+
+void
+ProjectWindowPrivate::setFlag( const QList< QGraphicsItem* > & children,
+	QGraphicsItem::GraphicsItemFlag f, bool enabled )
+{
+	foreach( QGraphicsItem * item, children )
+	{
+		setFlag( item->childItems(), f, enabled );
+
+		item->setFlag( f, enabled );
+	}
 }
 
 
@@ -584,12 +609,26 @@ void
 ProjectWindow::p_drawPolyline()
 {
 	FormAction::instance()->setMode( FormAction::DrawPolyLine );
+
+	foreach( FormView * v, d->m_widget->forms() )
+	{
+		v->form()->setCursor( Qt::CrossCursor );
+
+		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+	}
 }
 
 void
 ProjectWindow::p_insertText()
 {
 	FormAction::instance()->setMode( FormAction::InsertText );
+
+	foreach( FormView * v, d->m_widget->forms() )
+	{
+		v->form()->setCursor( Qt::CrossCursor );
+
+		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+	}
 }
 
 void
@@ -607,7 +646,8 @@ ProjectWindow::p_insertImage()
 
 		if( !image.isNull() )
 		{
-
+			foreach( FormView * v, d->m_widget->forms() )
+				v->form()->setCursor( Qt::ArrowCursor );
 		}
 		else
 			QMessageBox::warning( this, tr( "Wrong Image..." ),
@@ -631,6 +671,13 @@ void
 ProjectWindow::p_select()
 {
 	FormAction::instance()->setMode( FormAction::Select );
+
+	foreach( FormView * v, d->m_widget->forms() )
+	{
+		v->form()->setCursor( Qt::ArrowCursor );
+
+		d->setFlag( v, QGraphicsItem::ItemIsSelectable, true );
+	}
 }
 
 void

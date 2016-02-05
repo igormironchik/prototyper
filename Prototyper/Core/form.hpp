@@ -93,6 +93,12 @@ private slots:
 protected:
 	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 		Q_DECL_OVERRIDE;
+	void mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
+		Q_DECL_OVERRIDE;
+	void mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
+		Q_DECL_OVERRIDE;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
+		Q_DECL_OVERRIDE;
 
 private:
 	friend class FormPrivate;

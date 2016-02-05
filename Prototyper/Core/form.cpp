@@ -25,12 +25,15 @@
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "project_cfg.hpp"
+#include "form_actions.hpp"
+#include "form_line.hpp"
 
 // Qt include.
 #include <QPainter>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QAction>
+#include <QGraphicsSceneMouseEvent>
 
 
 namespace Prototyper {
@@ -48,11 +51,18 @@ public:
 		,	m_gridMode( Form::ShowGrid )
 		,	m_gridStepAction( 0 )
 		,	m_cfg( cfg )
+		,	m_pressed( false )
+		,	m_current( 0 )
 	{
 	}
 
 	//! Init.
 	void init();
+	//! \return Current Z-value.
+	qreal currentZValue() const;
+	//! \return Current Z-value.
+	void currentZValue( const QList< QGraphicsItem* > & items,
+		qreal & z ) const;
 
 	//! Parent.
 	Form * q;
@@ -62,6 +72,12 @@ public:
 	QAction * m_gridStepAction;
 	//! Cfg.
 	Cfg::Form & m_cfg;
+	//! Pressed.
+	bool m_pressed;
+	//! Current item.
+	QGraphicsItem * m_current;
+	//! Mouse pos.
+	QPointF m_pos;
 }; // class FormPrivate
 
 void
@@ -72,6 +88,32 @@ FormPrivate::init()
 
 	Form::connect( m_gridStepAction, &QAction::triggered,
 		q, &Form::slotSetGridStep );
+}
+
+qreal
+FormPrivate::currentZValue() const
+{
+	qreal z = 0.0;
+
+	currentZValue( q->childItems(), z );
+
+	return z;
+}
+
+void
+FormPrivate::currentZValue( const QList< QGraphicsItem* > & items,
+	qreal & z ) const
+{
+	foreach( QGraphicsItem * item, items )
+	{
+		const QList< QGraphicsItem* > children = item->childItems();
+
+		if( !children.isEmpty() )
+			currentZValue( children, z );
+
+		if( item->zValue() > z )
+			z = item->zValue();
+	}
 }
 
 
@@ -191,6 +233,76 @@ Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	menu.exec( event->screenPos() );
 
 	event->accept();
+}
+
+void
+Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
+{
+	if( d->m_pressed )
+	{
+		const QPointF delta = mouseEvent->pos() - d->m_pos;
+
+		d->m_pos = mouseEvent->pos();
+
+		switch( FormAction::instance()->mode() )
+		{
+			case FormAction::DrawPolyLine :
+			{
+				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
+
+				if( line )
+				{
+					const QLineF l = line->line();
+
+					line->setLine( l.p1().x(), l.p1().y(),
+						l.p2().x() + delta.x(), l.p2().y() + delta.y() );
+				}
+			}
+				break;
+
+			default :
+				break;
+		}
+	}
+}
+
+void
+Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
+{
+	if( mouseEvent->button() == Qt::LeftButton )
+	{
+		d->m_pressed = true;
+
+		d->m_pos = mouseEvent->pos();
+
+		switch( FormAction::instance()->mode() )
+		{
+			case FormAction::DrawPolyLine :
+			{
+				FormLine * line = new FormLine( this );
+
+				line->setLine( mouseEvent->pos().x(), mouseEvent->pos().y(),
+					mouseEvent->pos().x(), mouseEvent->pos().y() );
+
+				d->m_current = line;
+			}
+				break;
+
+			default :
+				break;
+		}
+	}
+}
+
+void
+Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
+{
+	if( mouseEvent->button() == Qt::LeftButton )
+	{
+		d->m_pressed = false;
+
+		d->m_current = 0;
+	}
 }
 
 } /* namespace Core */

@@ -20,50 +20,48 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__FORM_Line_HPP__INCLUDED
-#define PROTOTYPER__CORE__FORM_Line_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_MOVE_HANDLER_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_MOVE_HANDLER_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsLineItem>
+#include <QGraphicsItem>
 #include <QScopedPointer>
-
-// Prototyper include.
-#include "form_object.hpp"
 
 
 namespace Prototyper {
 
 namespace Core {
 
-class FormLineMoveHandle;
-
 //
-// FormLine
+// FormMoveHandle
 //
 
-class FormLinePrivate;
+class FormMoveHandlePrivate;
 
-//! Line on the form.
-class FormLine
-	:	public QGraphicsLineItem
-	,	public FormObject
+//! Move handler on the form.
+class FormMoveHandle
+	:	public QGraphicsItem
 {
 public:
-	FormLine( QGraphicsItem * parent = 0 );
-	~FormLine();
+	FormMoveHandle( QGraphicsItem * parent );
+	~FormMoveHandle();
+
+	//! \return Half of the size of the edge.
+	qreal halfOfSize() const;
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
-protected:
-	friend class FormLineMoveHandle;
-
-	//! Handle moved.
-	void handleMoved( const QPointF & delta, FormLineMoveHandle * handle );
+	//! Handle was moved.
+	virtual void moved( const QPointF & delta );
 
 protected:
+	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+		Q_DECL_OVERRIDE;
+	void hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
+		Q_DECL_OVERRIDE;
 	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 		Q_DECL_OVERRIDE;
 	void mousePressEvent( QGraphicsSceneMouseEvent * event )
@@ -72,13 +70,13 @@ protected:
 		Q_DECL_OVERRIDE;
 
 private:
-	Q_DISABLE_COPY( FormLine )
+	Q_DISABLE_COPY( FormMoveHandle )
 
-	QScopedPointer< FormLinePrivate > d;
-}; // class FormLine
+	QScopedPointer< FormMoveHandlePrivate > d;
+}; // class FormMoveHandler
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__FORM_Line_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_MOVE_HANDLER_HPP__INCLUDED

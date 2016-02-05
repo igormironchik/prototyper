@@ -22,10 +22,12 @@
 
 // Prototyper include.
 #include "form_line.hpp"
+#include "form_line_move_handle.hpp"
 
 // Qt include.
-#include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
 
 namespace Prototyper {
@@ -40,6 +42,8 @@ class FormLinePrivate {
 public:
 	FormLinePrivate( FormLine * parent )
 		:	q( parent )
+		,	m_h1( 0 )
+		,	m_h2( 0 )
 	{
 	}
 
@@ -48,11 +52,20 @@ public:
 
 	//! Parent.
 	FormLine * q;
+	//! First handle.
+	FormLineMoveHandle * m_h1;
+	//! Second handle.
+	FormLineMoveHandle * m_h2;
 }; // class FormLinePrivate
 
 void
 FormLinePrivate::init()
-{
+{	
+	m_h1 = new FormLineMoveHandle( q, q );
+	m_h1->hide();
+
+	m_h2 = new FormLineMoveHandle( q, q );
+	m_h2->hide();
 }
 
 
@@ -74,26 +87,52 @@ FormLine::~FormLine()
 QRectF
 FormLine::boundingRect() const
 {
-	return QGraphicsLineItem::boundingRect();
+	return QGraphicsLineItem::boundingRect().adjusted(
+		-d->m_h1->halfOfSize(), -d->m_h1->halfOfSize(),
+		d->m_h2->halfOfSize(), d->m_h2->halfOfSize() );
 }
 
 void
 FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
+	Q_UNUSED( widget )
+
 	QGraphicsLineItem::paint( painter, option, widget );
+
+	if( isSelected() )
+	{
+		painter->setPen( QPen( Qt::darkGray, 1.0, Qt::DashLine ) );
+		painter->setBrush( Qt::NoBrush );
+
+		painter->drawRect( option->rect );
+
+		const QLineF l = line();
+
+		d->m_h1->setPos( l.p1().x() - d->m_h1->halfOfSize(),
+			l.p1().y() - d->m_h1->halfOfSize() );
+		d->m_h1->show();
+
+		d->m_h2->setPos( l.p2().x() - d->m_h2->halfOfSize(),
+			l.p2().y() - d->m_h2->halfOfSize() );
+		d->m_h2->show();
+	}
+	else
+	{
+		d->m_h1->hide();
+		d->m_h2->hide();
+	}
 }
 
 void
-FormLine::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+FormLine::handleMoved( const QPointF & delta, FormLineMoveHandle * handle )
 {
-	QGraphicsLineItem::hoverEnterEvent( event );
-}
+	const QLineF l = line();
 
-void
-FormLine::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
-{
-	QGraphicsLineItem::hoverMoveEvent( event );
+	if( handle == d->m_h1 )
+		setLine( QLineF( l.p1() + delta, l.p2() ) );
+	else if( handle == d->m_h2 )
+		setLine( QLineF( l.p1(), l.p2() + delta ) );
 }
 
 void
