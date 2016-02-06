@@ -406,7 +406,11 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					d->m_currentLines.append( line );
 				}
 
+				mouseEvent->accept();
+
 				emit changed();
+
+				return;
 			}
 				break;
 
@@ -415,11 +419,9 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 		}
 
 		d->m_current = 0;
-
-		mouseEvent->accept();
 	}
-	else
-		mouseEvent->ignore();
+
+	mouseEvent->ignore();
 }
 
 } /* namespace Core */
