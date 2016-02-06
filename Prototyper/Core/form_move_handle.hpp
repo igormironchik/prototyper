@@ -57,6 +57,15 @@ public:
 	//! Handle was moved.
 	virtual void moved( const QPointF & delta );
 
+	//! Ignore mouse events.
+	void ignoreMouseEvents( bool on = true );
+
+	//! Handle mouse move.
+	bool handleMouseMove( const QPointF & point );
+
+	//! Clear.
+	void clear();
+
 protected:
 	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 		Q_DECL_OVERRIDE;

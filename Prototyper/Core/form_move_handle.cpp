@@ -44,6 +44,7 @@ public:
 		,	m_size( 3.0 )
 		,	m_hovered( false )
 		,	m_pressed( false )
+		,	m_ignoreMouse( false )
 	{
 	}
 
@@ -60,6 +61,8 @@ public:
 	bool m_pressed;
 	//! Mouse point.
 	QPointF m_pos;
+	//! Ignore mouse events?
+	bool m_ignoreMouse;
 }; // class FormMoveHandlerPrivate;
 
 void
@@ -121,6 +124,48 @@ FormMoveHandle::moved( const QPointF & delta )
 }
 
 void
+FormMoveHandle::ignoreMouseEvents( bool on )
+{
+	d->m_ignoreMouse = on;
+
+	if( !d->m_ignoreMouse )
+	{
+		d->m_hovered = false;
+
+		update();
+	}
+}
+
+bool
+FormMoveHandle::handleMouseMove( const QPointF & point )
+{
+	if( contains( mapFromScene( point ) ) )
+	{
+		d->m_hovered = true;
+
+		update();
+
+		return true;
+	}
+	else
+	{
+		d->m_hovered = false;
+
+		update();
+
+		return false;
+	}
+}
+
+void
+FormMoveHandle::clear()
+{
+	d->m_hovered = false;
+
+	update();
+}
+
+void
 FormMoveHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
 	d->m_hovered = true;
@@ -143,24 +188,32 @@ FormMoveHandle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 void
 FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 {
-	if( d->m_pressed )
+	if( d->m_pressed && !d->m_ignoreMouse )
 	{
 		const QPointF delta = event->pos() - d->m_pos;
 
 		setPos( pos() + delta );
 
 		moved( delta );
+
+		event->accept();
 	}
+	else
+		event->ignore();
 }
 
 void
 FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
-	if( event->button() == Qt::LeftButton )
+	if( event->button() == Qt::LeftButton && !d->m_ignoreMouse )
 	{
 		d->m_pressed = true;
 		d->m_pos = event->pos();
+
+		event->accept();
 	}
+	else
+		event->ignore();
 }
 
 void
@@ -168,6 +221,11 @@ FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
 	if( event->button() == Qt::LeftButton )
 		d->m_pressed = false;
+
+	if( !d->m_ignoreMouse )
+		event->accept();
+	else
+		event->ignore();
 }
 
 } /* namespace Core */

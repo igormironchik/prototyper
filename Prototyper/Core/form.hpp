@@ -85,6 +85,9 @@ public:
 	//! \return Configuration.
 	const Cfg::Form & cfg() const;
 
+	//! Switch to select mode.
+	void switchToSelectMode();
+
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

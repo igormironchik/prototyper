@@ -46,6 +46,7 @@ public:
 		,	m_h1( 0 )
 		,	m_h2( 0 )
 		,	m_move( 0 )
+		,	m_showHandles( false )
 	{
 	}
 
@@ -60,6 +61,8 @@ public:
 	FormLineMoveHandle * m_h2;
 	//! Move handler.
 	FormLineMoveHandle * m_move;
+	//! Show handles?
+	bool m_showHandles;
 }; // class FormLinePrivate
 
 void
@@ -107,7 +110,7 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 {
 	Q_UNUSED( widget )
 
-	if( isSelected() && !group() )
+	if( ( isSelected() || d->m_showHandles ) && !group() )
 	{
 		const QLineF l = line();
 
@@ -127,8 +130,11 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	else
 	{
 		d->m_h1->hide();
+		d->m_h1->clear();
 		d->m_h2->hide();
+		d->m_h2->clear();
 		d->m_move->hide();
+		d->m_move->clear();
 	}
 
 	QGraphicsLineItem::paint( painter, option, widget );
@@ -143,16 +149,76 @@ FormLine::setObjectPen( const QPen & p )
 }
 
 void
+FormLine::showHandles( bool show )
+{
+	d->m_showHandles = show;
+
+	d->m_h1->ignoreMouseEvents( show );
+	d->m_h2->ignoreMouseEvents( show );
+	d->m_move->ignoreMouseEvents( show );
+
+	update();
+}
+
+QPointF
+FormLine::pointUnderHandle( const QPointF & point, bool & intersected ) const
+{
+	if( d->m_h1->contains( d->m_h1->mapFromScene( point ) ) )
+	{
+		intersected = true;
+
+		return line().p1();
+	}
+	else if( d->m_h2->contains( d->m_h2->mapFromScene( point ) ) )
+	{
+		intersected = true;
+
+		return line().p2();
+	}
+	else if( d->m_move->contains( d->m_move->mapFromScene( point ) ) )
+	{
+		const QLineF l = line();
+
+		intersected = true;
+
+		return QPointF( ( l.p1().x() + l.p2().x() ) / 2.0,
+			( l.p1().y() + l.p2().y() ) / 2.0 );
+	}
+	else
+	{
+		intersected = false;
+
+		return point;
+	}
+}
+
+bool
+FormLine::handleMouseMoveInHandles( const QPointF & point )
+{
+	if( d->m_h1->handleMouseMove( point ) )
+		return true;
+	else if( d->m_h2->handleMouseMove( point ) )
+		return true;
+	else if( d->m_move->handleMouseMove( point ) )
+		return true;
+	else
+		return false;
+}
+
+void
 FormLine::handleMoved( const QPointF & delta, FormLineMoveHandle * handle )
 {
-	const QLineF l = line();
+	if( isSelected() )
+	{
+		const QLineF l = line();
 
-	if( handle == d->m_h1 )
-		setLine( QLineF( l.p1() + delta, l.p2() ) );
-	else if( handle == d->m_h2 )
-		setLine( QLineF( l.p1(), l.p2() + delta ) );
-	else if( handle == d->m_move )
-		moveBy( delta.x(), delta.y() );
+		if( handle == d->m_h1 )
+			setLine( QLineF( l.p1() + delta, l.p2() ) );
+		else if( handle == d->m_h2 )
+			setLine( QLineF( l.p1(), l.p2() + delta ) );
+		else if( handle == d->m_move )
+			moveBy( delta.x(), delta.y() );
+	}
 }
 
 void

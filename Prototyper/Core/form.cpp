@@ -64,6 +64,13 @@ public:
 	//! \return Current Z-value.
 	void currentZValue( const QList< QGraphicsItem* > & items,
 		qreal & z ) const;
+	//! \return Start point for line.
+	QPointF lineStartPoint( const QPointF & point,
+		bool & intersected ) const;
+	//! Clear current lines.
+	void clearCurrentLines();
+	//! Handle mouse move in current lines.
+	void handleMouseMoveInCurrentLines( const QPointF & point );
 
 	//! Parent.
 	Form * q;
@@ -81,6 +88,8 @@ public:
 	QPointF m_pos;
 	//! ID.
 	quint64 m_id;
+	//! Current lines.
+	QList< FormLine* > m_currentLines;
 }; // class FormPrivate
 
 void
@@ -117,6 +126,36 @@ FormPrivate::currentZValue( const QList< QGraphicsItem* > & items,
 		if( item->zValue() > z )
 			z = item->zValue();
 	}
+}
+
+QPointF
+FormPrivate::lineStartPoint( const QPointF & point, bool & intersected ) const
+{
+	foreach( FormLine * line, m_currentLines )
+	{
+		const QPointF tmp = line->pointUnderHandle( point, intersected );
+
+		if( intersected )
+			return tmp;
+	}
+
+	return point;
+}
+
+void
+FormPrivate::clearCurrentLines()
+{
+	foreach( FormLine * line, m_currentLines )
+		line->showHandles( false );
+
+	m_currentLines.clear();
+}
+
+void
+FormPrivate::handleMouseMoveInCurrentLines( const QPointF & point )
+{
+	foreach( FormLine * line, m_currentLines )
+		line->handleMouseMoveInHandles( point );
 }
 
 
@@ -181,6 +220,18 @@ const Cfg::Form &
 Form::cfg() const
 {
 	return d->m_cfg;
+}
+
+void
+Form::switchToSelectMode()
+{
+	foreach( FormLine * line, d->m_currentLines )
+		line->setSelected( true );
+
+	if( d->m_current )
+		d->m_current->setSelected( true );
+
+	d->clearCurrentLines();
 }
 
 QRectF
@@ -265,18 +316,22 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					line->setLine( l.p1().x(), l.p1().y(),
 						l.p2().x() + delta.x(), l.p2().y() + delta.y() );
+
+					d->handleMouseMoveInCurrentLines( mouseEvent->pos() );
 				}
+
+				mouseEvent->accept();
+
+				return;
 			}
 				break;
 
 			default :
 				break;
 		}
-
-		mouseEvent->accept();
 	}
-	else
-		mouseEvent->ignore();
+
+	mouseEvent->ignore();
 }
 
 void
@@ -294,24 +349,32 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				FormLine * line = new FormLine( this );
 
-				line->setLine( mouseEvent->pos().x(), mouseEvent->pos().y(),
-					mouseEvent->pos().x(), mouseEvent->pos().y() );
+				bool intersected = false;
+
+				const QPointF p = d->lineStartPoint( mouseEvent->pos(),
+					intersected );
+
+				line->setLine( p.x(), p.y(), p.x(), p.y() );
 
 				line->setObjectId( ++d->m_id );
 
 				d->m_current = line;
 
+				if( !intersected )
+					d->clearCurrentLines();
+
 				mouseEvent->accept();
+
+				return;
 			}
 				break;
 
 			default :
-			{
-				mouseEvent->ignore();
-			}
 				break;
 		}
 	}
+
+	mouseEvent->ignore();
 }
 
 void
@@ -321,12 +384,28 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 	{
 		d->m_pressed = false;
 
-		d->m_current = 0;
-
 		switch( FormAction::instance()->mode() )
 		{
 			case FormAction::DrawPolyLine :
 			{
+				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
+
+				if( line )
+				{
+					bool intersected = false;
+
+					const QPointF p = d->lineStartPoint( mouseEvent->pos(),
+						intersected );
+
+					const QLineF l = line->line();
+
+					line->setLine( l.p1().x(), l.p1().y(), p.x(), p.y() );
+
+					line->showHandles( true );
+
+					d->m_currentLines.append( line );
+				}
+
 				emit changed();
 			}
 				break;
@@ -334,6 +413,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			default :
 				break;
 		}
+
+		d->m_current = 0;
 
 		mouseEvent->accept();
 	}

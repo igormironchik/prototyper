@@ -60,6 +60,17 @@ public:
 	//! Set pen.
 	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
 
+	//! Show handles.
+	void showHandles( bool show = true );
+
+	//! \return Point in the middle of handle if
+	//! given point contained by handle.
+	QPointF pointUnderHandle( const QPointF & point,
+		bool & intersected ) const;
+
+	//! Handle mouse move in handles.
+	bool handleMouseMoveInHandles( const QPointF & point );
+
 protected:
 	friend class FormLineMoveHandle;
 

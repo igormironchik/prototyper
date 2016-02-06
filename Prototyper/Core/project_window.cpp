@@ -667,6 +667,8 @@ ProjectWindow::p_select()
 		v->form()->setCursor( Qt::ArrowCursor );
 
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, true );
+
+		v->form()->switchToSelectMode();
 	}
 }
 
