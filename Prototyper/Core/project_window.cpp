@@ -249,7 +249,7 @@ ProjectWindowPrivate::init()
 		QIcon( ":/Core/img/view-grid.png" ),
 		ProjectWindow::tr( "Show Grid" ) );
 	m_grid->setShortcutContext( Qt::ApplicationShortcut );
-	m_grid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
+	m_grid->setShortcut( ProjectWindow::tr( "Ctrl+Alt+G" ) );
 	m_grid->setCheckable( true );
 	m_grid->setChecked( true );
 
@@ -261,7 +261,7 @@ ProjectWindowPrivate::init()
 		QIcon( ":/Core/img/snap-intersection.png" ),
 		ProjectWindow::tr( "Snap Grid" ) );
 	snapGrid->setShortcutContext( Qt::ApplicationShortcut );
-	snapGrid->setShortcut( ProjectWindow::tr( "Ctrl+Alt+G" ) );
+	snapGrid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
 	snapGrid->setCheckable( true );
 	snapGrid->setChecked( true );
 
