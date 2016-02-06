@@ -62,7 +62,7 @@ FormViewPrivate::init()
 {
 	q->setFrameStyle( QFrame::NoFrame );
 
-	m_scene = new FormScene( q );
+	m_scene = new FormScene( m_cfg, q );
 
 	q->setScene( m_scene );
 

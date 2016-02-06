@@ -32,6 +32,12 @@ namespace Prototyper {
 
 namespace Core {
 
+namespace Cfg {
+
+class Form;
+
+} /* namespace Cfg */
+
 //
 // FormScene
 //
@@ -49,8 +55,12 @@ signals:
 	void changed();
 
 public:
-	FormScene( QObject * parent = 0 );
+	FormScene( const Cfg::Form & c, QObject * parent = 0 );
 	~FormScene();
+
+protected:
+	void keyPressEvent( QKeyEvent * event )
+		Q_DECL_OVERRIDE;
 
 private:
 	Q_DISABLE_COPY( FormScene )

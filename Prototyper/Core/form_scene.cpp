@@ -22,6 +22,12 @@
 
 // Prototyper include.
 #include "form_scene.hpp"
+#include "project_cfg.hpp"
+#include "form_actions.hpp"
+
+// Qt include.
+#include <QKeyEvent>
+#include <QGraphicsItem>
 
 
 namespace Prototyper {
@@ -34,16 +40,21 @@ namespace Core {
 
 class FormScenePrivate {
 public:
-	FormScenePrivate( FormScene * parent )
+	FormScenePrivate( const Cfg::Form & cfg, FormScene * parent )
 		:	q( parent )
+		,	m_cfg( cfg )
 	{
 	}
 
 	//! Init.
 	void init();
+	//! Move by.
+	void moveBy( const QPointF & delta );
 
 	//! Parent.
 	FormScene * q;
+	//! Cfg.
+	const Cfg::Form & m_cfg;
 }; // class FormScenePrivate;
 
 void
@@ -52,20 +63,130 @@ FormScenePrivate::init()
 
 }
 
+void
+FormScenePrivate::moveBy( const QPointF & delta )
+{
+	foreach( QGraphicsItem * item, q->selectedItems() )
+		item->moveBy( delta.x(), delta.y() );
+}
+
+
 
 //
 // FormScene
 //
 
-FormScene::FormScene( QObject * parent )
+FormScene::FormScene( const Cfg::Form & cfg, QObject * parent )
 	:	QGraphicsScene( parent )
-	,	d( new FormScenePrivate( this ) )
+	,	d( new FormScenePrivate( cfg, this ) )
 {
 	d->init();
 }
 
 FormScene::~FormScene()
 {
+}
+
+void
+FormScene::keyPressEvent( QKeyEvent * event )
+{
+	switch( FormAction::instance()->mode() )
+	{
+		case FormAction::Select :
+		{
+			qreal delta = 0;
+
+			switch( event->modifiers() )
+			{
+				case Qt::ShiftModifier :
+					delta = d->m_cfg.gridStep();
+					break;
+
+				case Qt::AltModifier :
+					delta = 1.0;
+					break;
+
+				default :
+					delta = (qreal) d->m_cfg.gridStep() / 2.0;
+					break;
+			}
+
+			switch( event->key() )
+			{
+				case Qt::Key_Escape :
+				{
+					clearSelection();
+
+					event->accept();
+
+					emit changed();
+				}
+					break;
+
+				case Qt::Key_Up :
+				{
+					d->moveBy( QPointF( 0, -delta ) );
+
+					event->accept();
+
+					emit changed();
+				}
+					break;
+
+				case Qt::Key_Down :
+				{
+					d->moveBy( QPointF( 0, delta ) );
+
+					event->accept();
+
+					emit changed();
+				}
+					break;
+
+				case Qt::Key_Left :
+				{
+					d->moveBy( QPointF( -delta, 0 ) );
+
+					event->accept();
+
+					emit changed();
+				}
+					break;
+
+				case Qt::Key_Right :
+				{
+					d->moveBy( QPointF( delta, 0 ) );
+
+					event->accept();
+
+					emit changed();
+				}
+					break;
+
+				case Qt::Key_Delete :
+				{
+					foreach( QGraphicsItem * item, selectedItems() )
+					{
+						removeItem( item );
+
+						delete item;
+					}
+
+					event->accept();
+
+					emit changed();
+				}
+					break;
+
+				default :
+					event->ignore();
+			}
+		}
+			break;
+
+		default :
+			event->ignore();
+	}
 }
 
 } /* namespace Core */
