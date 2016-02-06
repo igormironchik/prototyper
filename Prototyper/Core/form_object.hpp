@@ -25,6 +25,8 @@
 
 // Qt include.
 #include <QtGlobal>
+#include <QPen>
+#include <QBrush>
 
 
 namespace Prototyper {
@@ -42,15 +44,30 @@ public:
 	virtual ~FormObject();
 
 	//! \return ID.
-	quint64 id() const;
+	quint64 objectId() const;
 	//! Set ID.
-	void setId( quint64 i );
+	void setObjectId( quint64 i );
+
+	//! \return Pen.
+	virtual const QPen & objectPen() const;
+	//! Set pen.
+	virtual void setObjectPen( const QPen & p );
+
+	//! \return Brush.
+	virtual const QBrush & objectBrush() const;
+	//! Set brush.
+	virtual void setObjectBrush( const QBrush & b );
+
 
 private:
 	Q_DISABLE_COPY( FormObject )
 
 	//! ID.
 	quint64 m_id;
+	//! Pen.
+	QPen m_pen;
+	//! Brush.
+	QBrush m_brush;
 }; // class FormObject
 
 } /* namespace Core */

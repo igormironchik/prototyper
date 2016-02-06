@@ -180,6 +180,8 @@ ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
 
 	ProjectWidget::connect( form->formScene(), &FormScene::changed,
 		q, &ProjectWidget::changed );
+	ProjectWidget::connect( form->form(), &Form::changed,
+		q, &ProjectWidget::changed );
 }
 
 

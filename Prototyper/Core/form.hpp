@@ -51,6 +51,10 @@ class Form
 {
 	Q_OBJECT
 
+signals:
+	//! Changed.
+	void changed();
+
 public:
 	explicit Form( Cfg::Form & c, QGraphicsItem * parent = 0 );
 	~Form();

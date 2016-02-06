@@ -42,15 +42,39 @@ FormObject::~FormObject()
 }
 
 quint64
-FormObject::id() const
+FormObject::objectId() const
 {
 	return m_id;
 }
 
 void
-FormObject::setId( quint64 i )
+FormObject::setObjectId( quint64 i )
 {
 	m_id = i;
+}
+
+const QPen &
+FormObject::objectPen() const
+{
+	return m_pen;
+}
+
+void
+FormObject::setObjectPen( const QPen & p )
+{
+	m_pen = p;
+}
+
+const QBrush &
+FormObject::objectBrush() const
+{
+	return m_brush;
+}
+
+void
+FormObject::setObjectBrush( const QBrush & b )
+{
+	m_brush = b;
 }
 
 } /* namespace Core */

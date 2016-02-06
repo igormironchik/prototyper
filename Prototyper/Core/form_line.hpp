@@ -57,6 +57,9 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
+	//! Set pen.
+	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
+
 protected:
 	friend class FormLineMoveHandle;
 

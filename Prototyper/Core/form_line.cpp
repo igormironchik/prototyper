@@ -74,7 +74,7 @@ FormLinePrivate::init()
 	m_move = new FormLineMoveHandle( q, q );
 	m_move->hide();
 
-	q->setPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
 }
 
 
@@ -132,6 +132,14 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	}
 
 	QGraphicsLineItem::paint( painter, option, widget );
+}
+
+void
+FormLine::setObjectPen( const QPen & p )
+{
+	FormObject::setObjectPen( p );
+
+	setPen( p );
 }
 
 void

@@ -35,6 +35,7 @@
 #include "form_actions.hpp"
 #include "form_hierarchy_widget.hpp"
 #include "tabs_list.hpp"
+#include "form_object.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -677,7 +678,27 @@ ProjectWindow::p_fillColor()
 		this, tr( "Select Fill Color..." ),
 		QColorDialog::ShowAlphaChannel );
 
-	FormAction::instance()->setFillColor( c );
+	if( c.isValid() )
+	{
+		FormAction::instance()->setFillColor( c );
+
+		if( FormAction::instance()->form() )
+		{
+			QList< QGraphicsItem* > selected =
+				FormAction::instance()->form()->scene()->selectedItems();
+
+			if( !selected.isEmpty() )
+			{
+				foreach( QGraphicsItem * item, selected )
+				{
+					FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+					if( obj )
+						obj->setObjectBrush( QBrush( c ) );
+				}
+			}
+		}
+	}
 }
 
 void
@@ -688,7 +709,27 @@ ProjectWindow::p_strokeColor()
 		this, tr( "Select Stroke Color..." ),
 		QColorDialog::ShowAlphaChannel );
 
-	FormAction::instance()->setStrokeColor( c );
+	if( c.isValid() )
+	{
+		FormAction::instance()->setStrokeColor( c );
+
+		if( FormAction::instance()->form() )
+		{
+			QList< QGraphicsItem* > selected =
+				FormAction::instance()->form()->scene()->selectedItems();
+
+			if( !selected.isEmpty() )
+			{
+				foreach( QGraphicsItem * item, selected )
+				{
+					FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+					if( obj )
+						obj->setObjectPen( QPen( c, 2.0 ) );
+				}
+			}
+		}
+	}
 }
 
 void

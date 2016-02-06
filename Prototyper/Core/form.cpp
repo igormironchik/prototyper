@@ -53,6 +53,7 @@ public:
 		,	m_cfg( cfg )
 		,	m_pressed( false )
 		,	m_current( 0 )
+		,	m_id( 0 )
 	{
 	}
 
@@ -78,6 +79,8 @@ public:
 	QGraphicsItem * m_current;
 	//! Mouse pos.
 	QPointF m_pos;
+	//! ID.
+	quint64 m_id;
 }; // class FormPrivate
 
 void
@@ -294,6 +297,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				line->setLine( mouseEvent->pos().x(), mouseEvent->pos().y(),
 					mouseEvent->pos().x(), mouseEvent->pos().y() );
 
+				line->setObjectId( ++d->m_id );
+
 				d->m_current = line;
 
 				mouseEvent->accept();
@@ -317,6 +322,18 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 		d->m_pressed = false;
 
 		d->m_current = 0;
+
+		switch( FormAction::instance()->mode() )
+		{
+			case FormAction::DrawPolyLine :
+			{
+				emit changed();
+			}
+				break;
+
+			default :
+				break;
+		}
 
 		mouseEvent->accept();
 	}
