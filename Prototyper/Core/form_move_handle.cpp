@@ -22,6 +22,9 @@
 
 // Prototyper include.
 #include "form_move_handle.hpp"
+#include "form.hpp"
+#include "grid_snap.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -188,6 +191,9 @@ FormMoveHandle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 void
 FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 {
+	FormAction::instance()->form()->snapItem()->setSnapPos(
+		mapToScene( event->pos() ) );
+
 	if( d->m_pressed && !d->m_ignoreMouse )
 	{
 		const QPointF delta = event->pos() - d->m_pos;
@@ -205,6 +211,9 @@ FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 void
 FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
+	FormAction::instance()->form()->snapItem()->setSnapPos(
+		mapToScene( event->pos() ) );
+
 	if( event->button() == Qt::LeftButton && !d->m_ignoreMouse )
 	{
 		d->m_pressed = true;
@@ -219,8 +228,24 @@ FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 void
 FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
+	FormAction::instance()->form()->snapItem()->setSnapPos(
+		mapToScene( event->pos() ) );
+
 	if( event->button() == Qt::LeftButton )
+	{
 		d->m_pressed = false;
+
+		if( FormAction::instance()->isSnapEnabled() )
+		{
+			const QPointF delta =
+				FormAction::instance()->form()->snapItem()->snapPos() -
+				mapToScene( d->m_pos );
+
+			setPos( pos() + delta );
+
+			moved( delta );
+		}
+	}
 
 	if( !d->m_ignoreMouse )
 		event->accept();

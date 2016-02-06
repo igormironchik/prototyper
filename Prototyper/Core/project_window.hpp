@@ -84,6 +84,8 @@ private slots:
 	void p_quit();
 	//! Show/hide grid.
 	void p_showHideGrid( bool show );
+	//! Enable/disable snap to grid.
+	void p_snapGrid( bool on );
 	//! Set grid step.
 	void p_setGridStep();
 	//! Open project.

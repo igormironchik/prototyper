@@ -45,6 +45,7 @@ public:
 		,	m_form( 0 )
 		,	m_fillColor( Qt::transparent )
 		,	m_strokeColor( Qt::black )
+		,	m_snap( true )
 	{
 	}
 
@@ -58,6 +59,8 @@ public:
 	QColor m_fillColor;
 	//! Stroke color.
 	QColor m_strokeColor;
+	//! Is snap enabled?
+	bool m_snap;
 }; // class FormActionPrivate
 
 
@@ -143,6 +146,18 @@ void
 FormAction::setStrokeColor( const QColor & c )
 {
 	d->m_strokeColor = c;
+}
+
+bool
+FormAction::isSnapEnabled() const
+{
+	return d->m_snap;
+}
+
+void
+FormAction::enableSnap( bool on )
+{
+	d->m_snap = on;
 }
 
 } /* namespace Core */

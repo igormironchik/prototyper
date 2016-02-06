@@ -257,6 +257,14 @@ ProjectWindowPrivate::init()
 		QIcon( ":/Core/img/measure.png" ),
 		ProjectWindow::tr( "Grid Step" ) );
 
+	QAction * snapGrid = form->addAction(
+		QIcon( ":/Core/img/snap-intersection.png" ),
+		ProjectWindow::tr( "Snap Grid" ) );
+	snapGrid->setShortcutContext( Qt::ApplicationShortcut );
+	snapGrid->setShortcut( ProjectWindow::tr( "Ctrl+Alt+G" ) );
+	snapGrid->setCheckable( true );
+	snapGrid->setChecked( true );
+
 	form->addSeparator();
 
 	form->addAction( select );
@@ -273,6 +281,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_quit );
 	ProjectWindow::connect( m_grid, &QAction::toggled,
 		q, &ProjectWindow::p_showHideGrid );
+	ProjectWindow::connect( snapGrid, &QAction::toggled,
+		q, &ProjectWindow::p_snapGrid );
 	ProjectWindow::connect( m_gridStep, &QAction::triggered,
 		q, &ProjectWindow::p_setGridStep );
 	ProjectWindow::connect( newForm, &QAction::triggered,
@@ -443,6 +453,15 @@ ProjectWindow::p_showHideGrid( bool show )
 		view->form()->setGridMode( mode );
 
 	setWindowModified( true );
+}
+
+void
+ProjectWindow::p_snapGrid( bool on )
+{
+	foreach( FormView * view, d->m_widget->forms() )
+		view->form()->enableSnap( on );
+
+	FormAction::instance()->enableSnap( on );
 }
 
 void

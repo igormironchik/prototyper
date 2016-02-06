@@ -40,6 +40,7 @@ HEADERS +=	form_actions.hpp \
 			form_scene.hpp \
 			form_text.hpp \
 			form_view.hpp \
+			grid_snap.hpp \
 			grid_step_dlg.hpp \
 			name_dlg.hpp \
 			project_description_tab.hpp \
@@ -64,6 +65,7 @@ SOURCES +=	form_actions.cpp \
 			form_scene.cpp \
 			form_text.cpp \
 			form_view.cpp \
+			grid_snap.cpp \
 			grid_step_dlg.cpp \
 			name_dlg.cpp \
 			project_description_tab.cpp \

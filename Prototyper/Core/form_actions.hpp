@@ -91,6 +91,11 @@ public:
 	//! Set stroke color.
 	void setStrokeColor( const QColor & c );
 
+	//! Is snap to grid enaled?
+	bool isSnapEnabled() const;
+	//! Enable/disable snap to grid.
+	void enableSnap( bool on = true );
+
 private:
 	Q_DISABLE_COPY( FormAction )
 

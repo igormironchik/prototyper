@@ -24,6 +24,8 @@
 #include "form_line.hpp"
 #include "form_line_move_handle.hpp"
 #include "form_actions.hpp"
+#include "form.hpp"
+#include "grid_snap.hpp"
 
 // Qt include.
 #include <QGraphicsSceneMouseEvent>
@@ -223,7 +225,7 @@ FormLine::handleMoved( const QPointF & delta, FormLineMoveHandle * handle )
 
 void
 FormLine::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
-{
+{	
 	QGraphicsLineItem::mouseMoveEvent( event );
 }
 

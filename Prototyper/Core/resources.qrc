@@ -33,5 +33,6 @@
 		<file>img/fill-color.png</file>
 		<file>img/format-stroke-color.png</file>
 		<file>img/transform-move.png</file>
+		<file>img/snap-intersection.png</file>
 	</qresource>
 </RCC>

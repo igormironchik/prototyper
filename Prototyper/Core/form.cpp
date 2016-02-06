@@ -27,6 +27,7 @@
 #include "project_cfg.hpp"
 #include "form_actions.hpp"
 #include "form_line.hpp"
+#include "grid_snap.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -35,6 +36,7 @@
 #include <QAction>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
+#include <QGraphicsSceneHoverEvent>
 
 
 namespace Prototyper {
@@ -55,6 +57,7 @@ public:
 		,	m_pressed( false )
 		,	m_current( 0 )
 		,	m_id( 0 )
+		,	m_snap( 0 )
 	{
 	}
 
@@ -91,6 +94,8 @@ public:
 	quint64 m_id;
 	//! Current lines.
 	QList< FormLine* > m_currentLines;
+	//! Grid snap.
+	GridSnap * m_snap;
 }; // class FormPrivate
 
 void
@@ -101,6 +106,11 @@ FormPrivate::init()
 
 	Form::connect( m_gridStepAction, &QAction::triggered,
 		q, &Form::slotSetGridStep );
+
+	m_snap = new GridSnap( q );
+	m_snap->setGridStep( m_cfg.gridStep() );
+
+	q->setAcceptHoverEvents( true );
 }
 
 qreal
@@ -214,6 +224,8 @@ Form::setGridStep( int s )
 {
 	d->m_cfg.setGridStep( s );
 
+	d->m_snap->setGridStep( s );
+
 	update();
 }
 
@@ -254,6 +266,21 @@ Form::switchToLineDrawingMode()
 			}
 		}
 	}
+}
+
+void
+Form::enableSnap( bool on )
+{
+	if( on )
+		d->m_snap->show();
+	else
+		d->m_snap->hide();
+}
+
+GridSnap *
+Form::snapItem() const
+{
+	return d->m_snap;
 }
 
 QRectF
@@ -326,6 +353,8 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 		d->m_pos = mouseEvent->pos();
 
+		d->m_snap->setSnapPos( d->m_pos );
+
 		switch( FormAction::instance()->mode() )
 		{
 			case FormAction::DrawPolyLine :
@@ -363,6 +392,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 	{
 		d->m_pos = mouseEvent->pos();
 
+		d->m_snap->setSnapPos( d->m_pos );
+
 		switch( FormAction::instance()->mode() )
 		{
 			case FormAction::DrawPolyLine :
@@ -373,8 +404,11 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				bool intersected = false;
 
-				const QPointF p = d->lineStartPoint( mouseEvent->pos(),
+				QPointF p = d->lineStartPoint( mouseEvent->pos(),
 					intersected );
+
+				if( !intersected && FormAction::instance()->isSnapEnabled() )
+					p = d->m_snap->snapPos();
 
 				line->setLine( p.x(), p.y(), p.x(), p.y() );
 
@@ -406,6 +440,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 	{
 		d->m_pressed = false;
 
+		d->m_snap->setSnapPos( mouseEvent->pos() );
+
 		switch( FormAction::instance()->mode() )
 		{
 			case FormAction::DrawPolyLine :
@@ -416,8 +452,11 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				{
 					bool intersected = false;
 
-					const QPointF p = d->lineStartPoint( mouseEvent->pos(),
+					QPointF p = d->lineStartPoint( mouseEvent->pos(),
 						intersected );
+
+					if( !intersected && FormAction::instance()->isSnapEnabled() )
+						p = d->m_snap->snapPos();
 
 					const QLineF l = line->line();
 
@@ -444,6 +483,22 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 	}
 
 	mouseEvent->ignore();
+}
+
+void
+Form::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+{
+	d->m_snap->setSnapPos( event->pos() );
+
+	event->ignore();
+}
+
+void
+Form::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
+{
+	d->m_snap->setSnapPos( event->pos() );
+
+	event->ignore();
 }
 
 } /* namespace Core */

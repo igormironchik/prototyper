@@ -39,6 +39,8 @@ class Size;
 
 } /* namespace Cfg */
 
+class GridSnap;
+
 //
 // Form
 //
@@ -90,6 +92,12 @@ public:
 	//! Switch to line drawing mode.
 	void switchToLineDrawingMode();
 
+	//! Enable/disable snap to grid.
+	void enableSnap( bool on = true );
+
+	//! \return Snap item.
+	GridSnap * snapItem() const;
+
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
@@ -107,6 +115,10 @@ protected:
 	void mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 		Q_DECL_OVERRIDE;
 	void mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
+		Q_DECL_OVERRIDE;
+	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+		Q_DECL_OVERRIDE;
+	void hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 		Q_DECL_OVERRIDE;
 
 private:
