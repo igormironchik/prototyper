@@ -28,6 +28,7 @@
 #include "form_actions.hpp"
 #include "form_line.hpp"
 #include "grid_snap.hpp"
+#include "form_polyline.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -58,6 +59,8 @@ public:
 		,	m_current( 0 )
 		,	m_id( 0 )
 		,	m_snap( 0 )
+		,	m_polyline( false )
+		,	m_currentPoly( 0 )
 	{
 	}
 
@@ -70,11 +73,14 @@ public:
 		qreal & z ) const;
 	//! \return Start point for line.
 	QPointF lineStartPoint( const QPointF & point,
-		bool & intersected ) const;
+		bool & intersected, bool & intersectedEnds,
+		FormLine* & intersectedLine ) const;
 	//! Clear current lines.
 	void clearCurrentLines();
 	//! Handle mouse move in current lines.
 	void handleMouseMoveInCurrentLines( const QPointF & point );
+	//! Handle mouse move in current polyline.
+	void handleMouseMoveInCurrentPolyLine( const QPointF & point );
 
 	//! Parent.
 	Form * q;
@@ -96,6 +102,10 @@ public:
 	QList< FormLine* > m_currentLines;
 	//! Grid snap.
 	GridSnap * m_snap;
+	//! Make polyline.
+	bool m_polyline;
+	//! Current polyline.
+	FormPolyline * m_currentPoly;
 }; // class FormPrivate
 
 void
@@ -140,14 +150,32 @@ FormPrivate::currentZValue( const QList< QGraphicsItem* > & items,
 }
 
 QPointF
-FormPrivate::lineStartPoint( const QPointF & point, bool & intersected ) const
+FormPrivate::lineStartPoint( const QPointF & point, bool & intersected,
+	bool & intersectedEnds, FormLine* & intersectedLine ) const
 {
-	foreach( FormLine * line, m_currentLines )
+	if( m_currentPoly )
 	{
-		const QPointF tmp = line->pointUnderHandle( point, intersected );
+		const QPointF tmp =
+			m_currentPoly->pointUnderHandle( point, intersected );
 
-		if( intersected )
-			return tmp;
+		intersectedEnds = intersected;
+
+		return tmp;
+	}
+	else
+	{
+		foreach( FormLine * line, m_currentLines )
+		{
+			const QPointF tmp = line->pointUnderHandle( point, intersected,
+				intersectedEnds );
+
+			if( intersected )
+			{
+				return tmp;
+
+				intersectedLine = line;
+			}
+		}
 	}
 
 	return point;
@@ -167,6 +195,12 @@ FormPrivate::handleMouseMoveInCurrentLines( const QPointF & point )
 {
 	foreach( FormLine * line, m_currentLines )
 		line->handleMouseMoveInHandles( point );
+}
+
+void
+FormPrivate::handleMouseMoveInCurrentPolyLine( const QPointF & point )
+{
+	m_currentPoly->handleMouseMoveInHandles( point );
 }
 
 
@@ -371,6 +405,9 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					d->handleMouseMoveInCurrentLines( mouseEvent->pos() );
 				}
 
+				if( d->m_currentPoly )
+					d->handleMouseMoveInCurrentPolyLine( mouseEvent->pos() );
+
 				mouseEvent->accept();
 
 				return;
@@ -403,21 +440,37 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				FormLine * line = new FormLine( this );
 
 				bool intersected = false;
+				bool intersectedEnds = false;
+				FormLine * intersectedLine = 0;
 
 				QPointF p = d->lineStartPoint( mouseEvent->pos(),
-					intersected );
+					intersected, intersectedEnds, intersectedLine );
 
 				if( !intersected && FormAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
 
 				line->setLine( p.x(), p.y(), p.x(), p.y() );
 
+				if( intersectedEnds && d->m_currentLines.size() == 1 )
+					d->m_polyline = true;
+
 				line->setObjectId( ++d->m_id );
 
 				d->m_current = line;
 
 				if( !intersected )
+				{
 					d->clearCurrentLines();
+
+					d->m_polyline = false;
+
+					if( d->m_currentPoly )
+					{
+						d->m_currentPoly->showHandles( false );
+
+						d->m_currentPoly = 0;
+					}
+				}
 
 				mouseEvent->accept();
 
@@ -451,9 +504,11 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				if( line )
 				{
 					bool intersected = false;
+					bool intersectedEnds = false;
+					FormLine * intersectedLine = 0;
 
 					QPointF p = d->lineStartPoint( mouseEvent->pos(),
-						intersected );
+						intersected, intersectedEnds, intersectedLine );
 
 					if( !intersected && FormAction::instance()->isSnapEnabled() )
 						p = d->m_snap->snapPos();
@@ -462,9 +517,44 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					line->setLine( l.p1().x(), l.p1().y(), p.x(), p.y() );
 
-					line->showHandles( true );
+					if( d->m_polyline )
+					{
+						if( !d->m_currentLines.isEmpty() )
+						{
+							d->m_currentPoly = new FormPolyline( this );
+							d->m_currentPoly->appendLine( d->m_currentLines.first()->line() );
+							d->m_currentPoly->showHandles( true );
 
-					d->m_currentLines.append( line );
+							scene()->removeItem( d->m_currentLines.first() );
+
+							delete d->m_currentLines.first();
+
+							d->m_currentLines.clear();
+						}
+
+						d->m_currentPoly->appendLine( line->line() );
+
+						scene()->removeItem( line );
+
+						delete line;
+
+						d->m_current = 0;
+
+						if( d->m_currentPoly->isClosed() )
+						{
+							d->m_currentPoly->showHandles( false );
+
+							d->m_currentPoly = 0;
+
+							d->m_polyline = false;
+						}
+					}
+					else
+					{
+						d->m_currentLines.append( line );
+
+						line->showHandles( true );
+					}
 				}
 
 				mouseEvent->accept();

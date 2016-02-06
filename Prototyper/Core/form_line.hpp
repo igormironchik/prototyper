@@ -66,7 +66,7 @@ public:
 	//! \return Point in the middle of handle if
 	//! given point contained by handle.
 	QPointF pointUnderHandle( const QPointF & point,
-		bool & intersected ) const;
+		bool & intersected, bool & intersectedEnds ) const;
 
 	//! Handle mouse move in handles.
 	bool handleMouseMoveInHandles( const QPointF & point );

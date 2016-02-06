@@ -103,8 +103,8 @@ FormMoveHandle::boundingRect() const
 }
 
 void
-FormMoveHandle::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-	QWidget * widget )
+FormMoveHandle::paint( QPainter * painter,
+	const QStyleOptionGraphicsItem * option, QWidget * widget )
 {
 	Q_UNUSED( widget )
 

@@ -163,17 +163,22 @@ FormLine::showHandles( bool show )
 }
 
 QPointF
-FormLine::pointUnderHandle( const QPointF & point, bool & intersected ) const
+FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
+	bool & intersectedEnds ) const
 {
 	if( d->m_h1->contains( d->m_h1->mapFromScene( point ) ) )
 	{
 		intersected = true;
+
+		intersectedEnds = true;
 
 		return line().p1();
 	}
 	else if( d->m_h2->contains( d->m_h2->mapFromScene( point ) ) )
 	{
 		intersected = true;
+
+		intersectedEnds = true;
 
 		return line().p2();
 	}

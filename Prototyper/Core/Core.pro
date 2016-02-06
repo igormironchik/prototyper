@@ -37,6 +37,7 @@ HEADERS +=	form_actions.hpp \
 			form_line_move_handle.hpp \
 			form_move_handle.hpp \
 			form_object.hpp \
+			form_polyline.hpp \
 			form_scene.hpp \
 			form_text.hpp \
 			form_view.hpp \
@@ -62,6 +63,7 @@ SOURCES +=	form_actions.cpp \
 			form_line_move_handle.cpp \
 			form_move_handle.cpp \
 			form_object.cpp \
+			form_polyline.cpp \
 			form_scene.cpp \
 			form_text.cpp \
 			form_view.cpp \
