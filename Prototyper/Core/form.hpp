@@ -87,6 +87,8 @@ public:
 
 	//! Switch to select mode.
 	void switchToSelectMode();
+	//! Switch to line drawing mode.
+	void switchToLineDrawingMode();
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

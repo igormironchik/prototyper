@@ -604,6 +604,8 @@ ProjectWindow::p_drawPolyline()
 	{
 		v->form()->setCursor( Qt::CrossCursor );
 
+		v->form()->switchToLineDrawingMode();
+
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
 	}
 }

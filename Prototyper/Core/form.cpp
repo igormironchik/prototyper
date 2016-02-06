@@ -34,6 +34,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QGraphicsSceneMouseEvent>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -232,6 +233,27 @@ Form::switchToSelectMode()
 		d->m_current->setSelected( true );
 
 	d->clearCurrentLines();
+}
+
+void
+Form::switchToLineDrawingMode()
+{
+	const QList< QGraphicsItem* > selected = scene()->selectedItems();
+
+	if( !selected.isEmpty() )
+	{
+		foreach( QGraphicsItem * item, selected )
+		{
+			FormLine * line = dynamic_cast< FormLine* > ( item );
+
+			if( line )
+			{
+				line->showHandles( true );
+
+				d->m_currentLines.append( line );
+			}
+		}
+	}
 }
 
 QRectF
