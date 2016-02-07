@@ -100,8 +100,10 @@ private slots:
 	void p_saveProjectAs();
 	//! Project changed.
 	void p_projectChanged();
+	//! Draw line.
+	void p_drawLine();
 	//! Draw polyline.
-	void p_drawPolyline();
+	void p_drawPolyline( bool on );
 	//! Insert text.
 	void p_insertText();
 	//! Insert image.

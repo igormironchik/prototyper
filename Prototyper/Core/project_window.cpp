@@ -72,6 +72,7 @@ public:
 		,	m_formToolBarGroup( 0 )
 		,	m_formHierarchy( 0 )
 		,	m_tabsList( 0 )
+		,	m_drawLine( 0 )
 	{
 	}
 
@@ -106,6 +107,8 @@ public:
 	FormHierarchyWidget * m_formHierarchy;
 	//! Tabs list.
 	TabsList * m_tabsList;
+	//! Draw line action.
+	QAction * m_drawLine;
 }; // class ProjectWindowPrivate
 
 void
@@ -192,13 +195,20 @@ ProjectWindowPrivate::init()
 	select->setShortcutContext( Qt::ApplicationShortcut );
 	select->setShortcut( ProjectWindow::tr( "Alt+S" ) );
 
-	QAction * drawPolyline = m_formToolBar->addAction(
+	m_drawLine = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-freehand.png" ),
+		ProjectWindow::tr( "Draw Line" ) );
+	m_drawLine->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawLine );
+	m_drawLine->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawLine->setShortcut( ProjectWindow::tr( "Alt+L" ) );
+
+	QAction * drawPolyLine = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-polyline.png" ),
-		ProjectWindow::tr( "Draw Polyline" ) );
-	drawPolyline->setCheckable( true );
-	m_formToolBarGroup->addAction( drawPolyline );
-	drawPolyline->setShortcutContext( Qt::ApplicationShortcut );
-	drawPolyline->setShortcut( ProjectWindow::tr( "Alt+L" ) );
+		ProjectWindow::tr( "Draw Line" ) );
+	drawPolyLine->setCheckable( true );
+	drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
+	drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
 
 	QAction * insertText = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-text.png" ),
@@ -268,7 +278,7 @@ ProjectWindowPrivate::init()
 	form->addSeparator();
 
 	form->addAction( select );
-	form->addAction( drawPolyline );
+	form->addAction( m_drawLine );
 	form->addAction( insertText );
 	form->addAction( insertImage );
 
@@ -299,7 +309,9 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_projectChanged );
 	ProjectWindow::connect( select, &QAction::triggered,
 		q, &ProjectWindow::p_select );
-	ProjectWindow::connect( drawPolyline, &QAction::triggered,
+	ProjectWindow::connect( m_drawLine, &QAction::triggered,
+		q, &ProjectWindow::p_drawLine );
+	ProjectWindow::connect( drawPolyLine, &QAction::toggled,
 		q, &ProjectWindow::p_drawPolyline );
 	ProjectWindow::connect( insertText, &QAction::triggered,
 		q, &ProjectWindow::p_insertText );
@@ -615,9 +627,9 @@ ProjectWindow::p_projectChanged()
 }
 
 void
-ProjectWindow::p_drawPolyline()
+ProjectWindow::p_drawLine()
 {
-	FormAction::instance()->setMode( FormAction::DrawPolyLine );
+	FormAction::instance()->setMode( FormAction::DrawLine );
 
 	foreach( FormView * v, d->m_widget->forms() )
 	{
@@ -627,6 +639,19 @@ ProjectWindow::p_drawPolyline()
 
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
 	}
+}
+
+void
+ProjectWindow::p_drawPolyline( bool on )
+{
+	if( on )
+	{
+		d->m_drawLine->trigger();
+
+		FormAction::instance()->setFlag( FormAction::Polyline );
+	}
+	else
+		FormAction::instance()->clearFlag( FormAction::Polyline );
 }
 
 void

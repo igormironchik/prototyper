@@ -34,5 +34,6 @@
 		<file>img/format-stroke-color.png</file>
 		<file>img/transform-move.png</file>
 		<file>img/snap-intersection.png</file>
+		<file>img/draw-freehand.png</file>
 	</qresource>
 </RCC>

@@ -46,6 +46,7 @@ public:
 		,	m_fillColor( Qt::transparent )
 		,	m_strokeColor( Qt::black )
 		,	m_snap( true )
+		,	m_flags( 0 )
 	{
 	}
 
@@ -61,6 +62,8 @@ public:
 	QColor m_strokeColor;
 	//! Is snap enabled?
 	bool m_snap;
+	//! Flags.
+	FormAction::Flags m_flags;
 }; // class FormActionPrivate
 
 
@@ -98,6 +101,36 @@ FormAction::instance()
 	}
 
 	return formActionInstance;
+}
+
+const FormAction::Flags &
+FormAction::flags() const
+{
+	return d->m_flags;
+}
+
+void
+FormAction::setFlags( const Flags & f )
+{
+	d->m_flags = f;
+}
+
+void
+FormAction::setFlag( Flag f )
+{
+	d->m_flags |= f;
+}
+
+bool
+FormAction::testFlag( Flag f ) const
+{
+	return d->m_flags.testFlag( f );
+}
+
+void
+FormAction::clearFlag( Flag f )
+{
+	d->m_flags &= ~Flags( f );
 }
 
 FormAction::Mode

@@ -391,7 +391,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 		switch( FormAction::instance()->mode() )
 		{
-			case FormAction::DrawPolyLine :
+			case FormAction::DrawLine :
 			{
 				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
 
@@ -433,7 +433,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 		switch( FormAction::instance()->mode() )
 		{
-			case FormAction::DrawPolyLine :
+			case FormAction::DrawLine :
 			{
 				d->m_pressed = true;
 
@@ -451,8 +451,9 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				line->setLine( p.x(), p.y(), p.x(), p.y() );
 
-				if( intersectedEnds && d->m_currentLines.size() == 1 )
-					d->m_polyline = true;
+				if( intersectedEnds && d->m_currentLines.size() == 1 &&
+					FormAction::instance()->testFlag( FormAction::Polyline ) )
+						d->m_polyline = true;
 
 				line->setObjectId( ++d->m_id );
 
@@ -497,7 +498,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 		switch( FormAction::instance()->mode() )
 		{
-			case FormAction::DrawPolyLine :
+			case FormAction::DrawLine :
 			{
 				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
 

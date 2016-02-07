@@ -26,6 +26,7 @@
 // Qt include.
 #include <QObject>
 #include <QScopedPointer>
+#include <QFlags>
 
 QT_BEGIN_NAMESPACE
 class QColor;
@@ -67,9 +68,28 @@ public:
 		Move,
 		//! Insert text.
 		InsertText,
-		//! Draw polyline.
-		DrawPolyLine
+		//! Draw line.
+		DrawLine
 	}; // enum Mode
+
+	//! Falgs.
+	enum Flag {
+		//! Polyline.
+		Polyline = 1
+	}; // enum Flag
+
+	Q_DECLARE_FLAGS( Flags, Flag )
+
+	//! \return Flags.
+	const Flags & flags() const;
+	//! Set flags.
+	void setFlags( const Flags & f );
+	//! Set flag.
+	void setFlag( Flag f );
+	//! Test flag.
+	bool testFlag( Flag f ) const;
+	//! Clear flag.
+	void clearFlag( Flag f );
 
 	//! \return Current mode.
 	Mode mode() const;
@@ -101,6 +121,8 @@ private:
 
 	QScopedPointer< FormActionPrivate > d;
 }; // class FormAction
+
+Q_DECLARE_OPERATORS_FOR_FLAGS( FormAction::Flags )
 
 } /* namespace Core */
 
