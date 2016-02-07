@@ -32,6 +32,8 @@ namespace Prototyper {
 
 namespace Core {
 
+class FormObject;
+
 //
 // FormMoveHandle
 //
@@ -43,7 +45,7 @@ class FormMoveHandle
 	:	public QGraphicsItem
 {
 public:
-	FormMoveHandle( QGraphicsItem * parent );
+	FormMoveHandle( FormObject * object, QGraphicsItem * parent );
 	~FormMoveHandle();
 
 	//! \return Half of the size of the edge.
@@ -54,9 +56,6 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
-	//! Handle was moved.
-	virtual void moved( const QPointF & delta );
-
 	//! Ignore mouse events.
 	void ignoreMouseEvents( bool on = true );
 
@@ -65,6 +64,10 @@ public:
 
 	//! Clear.
 	void clear();
+
+protected:
+	//! Handle was moved.
+	virtual void moved( const QPointF & delta );
 
 protected:
 	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )

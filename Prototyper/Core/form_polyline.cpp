@@ -64,10 +64,10 @@ public:
 void
 FormPolylinePrivate::init()
 {
-	m_start = new FormMoveHandle( q );
+	m_start = new FormMoveHandle( q, q );
 	m_start->ignoreMouseEvents( true );
 
-	m_end = new FormMoveHandle( q );
+	m_end = new FormMoveHandle( q, q );
 	m_end->ignoreMouseEvents( true );
 
 	m_start->hide();

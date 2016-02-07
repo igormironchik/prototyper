@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "form_line.hpp"
-#include "form_line_move_handle.hpp"
+#include "form_move_handle.hpp"
 #include "form_actions.hpp"
 #include "form.hpp"
 #include "grid_snap.hpp"
@@ -58,11 +58,11 @@ public:
 	//! Parent.
 	FormLine * q;
 	//! First handle.
-	FormLineMoveHandle * m_h1;
+	FormMoveHandle * m_h1;
 	//! Second handle.
-	FormLineMoveHandle * m_h2;
+	FormMoveHandle * m_h2;
 	//! Move handler.
-	FormLineMoveHandle * m_move;
+	FormMoveHandle * m_move;
 	//! Show handles?
 	bool m_showHandles;
 }; // class FormLinePrivate
@@ -70,13 +70,13 @@ public:
 void
 FormLinePrivate::init()
 {	
-	m_h1 = new FormLineMoveHandle( q, q );
+	m_h1 = new FormMoveHandle( q, q );
 	m_h1->hide();
 
-	m_h2 = new FormLineMoveHandle( q, q );
+	m_h2 = new FormMoveHandle( q, q );
 	m_h2->hide();
 
-	m_move = new FormLineMoveHandle( q, q );
+	m_move = new FormMoveHandle( q, q );
 	m_move->hide();
 
 	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
@@ -213,7 +213,7 @@ FormLine::handleMouseMoveInHandles( const QPointF & point )
 }
 
 void
-FormLine::handleMoved( const QPointF & delta, FormLineMoveHandle * handle )
+FormLine::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	if( isSelected() )
 	{

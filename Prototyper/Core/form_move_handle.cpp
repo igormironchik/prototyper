@@ -25,6 +25,7 @@
 #include "form.hpp"
 #include "grid_snap.hpp"
 #include "form_actions.hpp"
+#include "form_object.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -42,8 +43,9 @@ namespace Core {
 
 class FormMoveHandlePrivate {
 public:
-	FormMoveHandlePrivate( FormMoveHandle * parent )
+	FormMoveHandlePrivate( FormObject * object, FormMoveHandle * parent )
 		:	q( parent )
+		,	m_object( object )
 		,	m_size( 3.0 )
 		,	m_hovered( false )
 		,	m_pressed( false )
@@ -56,6 +58,8 @@ public:
 
 	//! Parent.
 	FormMoveHandle * q;
+	//! Object.
+	FormObject * m_object;
 	//! Half of the size.
 	qreal m_size;
 	//! Hovered.
@@ -79,9 +83,9 @@ FormMoveHandlePrivate::init()
 // FormMoveHandle
 //
 
-FormMoveHandle::FormMoveHandle( QGraphicsItem * parent )
+FormMoveHandle::FormMoveHandle( FormObject * object, QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	d( new FormMoveHandlePrivate( this ) )
+	,	d( new FormMoveHandlePrivate( object, this ) )
 {
 	d->init();
 }
@@ -123,7 +127,7 @@ FormMoveHandle::paint( QPainter * painter,
 void
 FormMoveHandle::moved( const QPointF & delta )
 {
-	Q_UNUSED( delta )
+	d->m_object->handleMoved( delta, this );
 }
 
 void

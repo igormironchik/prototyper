@@ -72,10 +72,9 @@ public:
 	bool handleMouseMoveInHandles( const QPointF & point );
 
 protected:
-	friend class FormLineMoveHandle;
-
 	//! Handle moved.
-	void handleMoved( const QPointF & delta, FormLineMoveHandle * handle );
+	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
+		Q_DECL_OVERRIDE;
 
 protected:
 	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )

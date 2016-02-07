@@ -33,6 +33,8 @@ namespace Prototyper {
 
 namespace Core {
 
+class FormMoveHandle;
+
 //
 // FormObject
 //
@@ -58,6 +60,11 @@ public:
 	//! Set brush.
 	virtual void setObjectBrush( const QBrush & b );
 
+protected:
+	friend class FormMoveHandle;
+
+	//! Handle moved.
+	virtual void handleMoved( const QPointF & delta, FormMoveHandle * handle );
 
 private:
 	Q_DISABLE_COPY( FormObject )
