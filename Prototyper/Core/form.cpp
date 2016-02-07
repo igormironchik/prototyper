@@ -523,6 +523,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 						if( !d->m_currentLines.isEmpty() )
 						{
 							d->m_currentPoly = new FormPolyline( this );
+							d->m_currentPoly->setObjectId( ++d->m_id );
 							d->m_currentPoly->appendLine( d->m_currentLines.first()->line() );
 							d->m_currentPoly->showHandles( true );
 
