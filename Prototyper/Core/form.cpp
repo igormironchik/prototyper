@@ -29,6 +29,7 @@
 #include "form_line.hpp"
 #include "grid_snap.hpp"
 #include "form_polyline.hpp"
+#include "form_group.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -38,6 +39,9 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsScene>
 #include <QGraphicsSceneHoverEvent>
+#include <QApplication>
+
+#include <QDebug>
 
 
 namespace Prototyper {
@@ -309,6 +313,61 @@ GridSnap *
 Form::snapItem() const
 {
 	return d->m_snap;
+}
+
+void
+Form::group()
+{
+	QList< QGraphicsItem* > items =
+		scene()->selectedItems();
+
+	FormGroup * group = 0;
+
+	if( items.size() > 1 )
+	{
+		group = new FormGroup( this );
+
+		foreach( QGraphicsItem * item, items )
+		{
+			scene()->removeItem( item );
+
+			item->setSelected( false );
+
+			group->addToGroup( item );
+		}
+	}
+	else if( d->m_currentLines.size() > 1 )
+	{
+		group = new FormGroup( this );
+
+		foreach( FormLine * line, d->m_currentLines )
+		{
+			scene()->removeItem( line );
+
+			group->addToGroup( line );
+		}
+
+		d->m_currentLines.clear();
+	}
+
+	if( group )
+	{
+		d->m_current = group;
+
+		if( FormAction::instance()->mode() == FormAction::Select )
+		{
+			group->setFlag( QGraphicsItem::ItemIsSelectable );
+
+			// Workaround for stay group selected.
+			// Without this processEvents() after selecting group
+			// its selected and next unknown to me event clears selection.
+			QApplication::processEvents();
+
+			group->setSelected( true );
+		}
+
+		group->setObjectId( ++d->m_id );
+	}
 }
 
 QRectF

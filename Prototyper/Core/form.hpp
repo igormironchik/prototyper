@@ -98,6 +98,9 @@ public:
 	//! \return Snap item.
 	GridSnap * snapItem() const;
 
+	//! Group.
+	void group();
+
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

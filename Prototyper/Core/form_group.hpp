@@ -49,6 +49,9 @@ public:
 	FormGroup( QGraphicsItem * parent = 0 );
 	~FormGroup();
 
+	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
+		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+
 private:
 	Q_DISABLE_COPY( FormGroup )
 

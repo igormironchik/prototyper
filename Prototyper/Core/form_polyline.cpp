@@ -353,7 +353,7 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 {
 	QGraphicsPathItem::paint( painter, option, widget );
 
-	if( isSelected() )
+	if( isSelected() && !group() )
 	{
 		d->m_topLeft->setPos( option->rect.x(), option->rect.y() );
 		d->m_top->setPos( option->rect.x() + option->rect.width() / 2.0 -

@@ -694,7 +694,7 @@ ProjectWindow::p_insertImage()
 void
 ProjectWindow::p_group()
 {
-
+	FormAction::instance()->form()->group();
 }
 
 void

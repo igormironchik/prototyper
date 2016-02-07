@@ -23,6 +23,10 @@
 // Prototyper include.
 #include "form_group.hpp"
 
+// Qt include.
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
+
 
 namespace Prototyper {
 
@@ -65,6 +69,22 @@ FormGroup::FormGroup( QGraphicsItem * parent )
 
 FormGroup::~FormGroup()
 {
+}
+
+void
+FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
+	QWidget * widget )
+{
+	Q_UNUSED( widget )
+
+	if( isSelected() && !group() )
+	{
+		painter->setPen( QPen( Qt::gray, 1.0, Qt::DashLine ) );
+
+		painter->setBrush( Qt::NoBrush );
+
+		painter->drawRect( option->rect );
+	}
 }
 
 } /* namespace Core */
