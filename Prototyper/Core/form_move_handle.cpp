@@ -41,14 +41,15 @@ namespace Core {
 // FormMoveHandlePrivate
 //
 
-FormMoveHandlePrivate::FormMoveHandlePrivate( FormObject * object,
-	FormMoveHandle * parent )
+FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
+	const QPointF & zero, FormObject * object, FormMoveHandle * parent )
 	:	q( parent )
 	,	m_object( object )
-	,	m_size( 3.0 )
+	,	m_size( halfSize )
 	,	m_hovered( false )
 	,	m_pressed( false )
 	,	m_ignoreMouse( false )
+	,	m_zero( zero )
 {
 }
 
@@ -67,9 +68,10 @@ FormMoveHandlePrivate::init()
 // FormMoveHandle
 //
 
-FormMoveHandle::FormMoveHandle( FormObject * object, QGraphicsItem * parent )
+FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
+	FormObject * object, QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	d( new FormMoveHandlePrivate( object, this ) )
+	,	d( new FormMoveHandlePrivate( halfSize, zero, object, this ) )
 {
 	d->init();
 }
@@ -214,6 +216,7 @@ FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	{
 		d->m_pressed = true;
 		d->m_pos = event->pos();
+		d->m_touchDelta = event->pos() - d->m_zero;
 
 		event->accept();
 	}
@@ -235,7 +238,7 @@ FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		{
 			const QPointF delta =
 				FormAction::instance()->form()->snapItem()->snapPos() -
-				mapToScene( d->m_pos );
+				mapToScene( d->m_pos ) + d->m_touchDelta;
 
 			setPos( pos() + delta );
 

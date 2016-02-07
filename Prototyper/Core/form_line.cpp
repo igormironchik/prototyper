@@ -70,13 +70,13 @@ public:
 void
 FormLinePrivate::init()
 {	
-	m_h1 = new FormMoveHandle( q, q );
+	m_h1 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
 	m_h1->hide();
 
-	m_h2 = new FormMoveHandle( q, q );
+	m_h2 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q );
 	m_h2->hide();
 
-	m_move = new FormMoveHandle( q, q );
+	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
 	m_move->hide();
 
 	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );

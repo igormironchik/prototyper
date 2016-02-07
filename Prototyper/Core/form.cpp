@@ -278,28 +278,22 @@ Form::switchToSelectMode()
 	if( d->m_current )
 		d->m_current->setSelected( true );
 
+	if( d->m_currentPoly )
+	{
+		d->m_currentPoly->setSelected( true );
+		d->m_currentPoly->showHandles( false );
+	}
+
 	d->clearCurrentLines();
 }
 
 void
 Form::switchToLineDrawingMode()
 {
-	const QList< QGraphicsItem* > selected = scene()->selectedItems();
-
-	if( !selected.isEmpty() )
-	{
-		foreach( QGraphicsItem * item, selected )
-		{
-			FormLine * line = dynamic_cast< FormLine* > ( item );
-
-			if( line )
-			{
-				line->showHandles( true );
-
-				d->m_currentLines.append( line );
-			}
-		}
-	}
+	d->m_currentLines.clear();
+	d->m_current = 0;
+	d->m_currentPoly = 0;
+	d->m_polyline = false;
 }
 
 void

@@ -42,7 +42,8 @@ class FormResizeHandle
 	:	public FormMoveHandle
 {
 public:
-	FormResizeHandle( FormObject * object, QGraphicsItem * parent );
+	FormResizeHandle( qreal halfSize, const QPointF & zero,
+		qreal angle, FormObject * object, QGraphicsItem * parent );
 	~FormResizeHandle();
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

@@ -42,7 +42,8 @@ class FormMoveHandle;
 
 class FormMoveHandlePrivate {
 public:
-	FormMoveHandlePrivate( FormObject * object, FormMoveHandle * parent );
+	FormMoveHandlePrivate( qreal halfSize, const QPointF & zero,
+		FormObject * object, FormMoveHandle * parent );
 	virtual ~FormMoveHandlePrivate();
 
 	//! Init.
@@ -62,6 +63,10 @@ public:
 	QPointF m_pos;
 	//! Ignore mouse events?
 	bool m_ignoreMouse;
+	//! Zero point.
+	QPointF m_zero;
+	//! Touch delta.
+	QPointF m_touchDelta;
 }; // class FormMoveHandlerPrivate
 
 
@@ -74,7 +79,8 @@ class FormMoveHandle
 	:	public QGraphicsItem
 {
 public:
-	FormMoveHandle( FormObject * object, QGraphicsItem * parent );
+	FormMoveHandle( qreal halfSize, const QPointF & zero,
+		FormObject * object, QGraphicsItem * parent );
 	~FormMoveHandle();
 
 	//! \return Half of the size of the edge.

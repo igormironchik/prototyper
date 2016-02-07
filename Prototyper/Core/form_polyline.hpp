@@ -77,6 +77,14 @@ public:
 	//! Handle mouse move in handles.
 	void handleMouseMoveInHandles( const QPointF & p );
 
+	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
+		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+
+protected:
+	//! Handle moved.
+	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
+		Q_DECL_OVERRIDE;
+
 private:
 	Q_DISABLE_COPY( FormPolyline )
 
