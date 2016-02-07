@@ -33,12 +33,41 @@ namespace Prototyper {
 namespace Core {
 
 class FormObject;
+class FormMoveHandle;
+
+
+//
+// FormMoveHandlePrivate
+//
+
+class FormMoveHandlePrivate {
+public:
+	FormMoveHandlePrivate( FormObject * object, FormMoveHandle * parent );
+	virtual ~FormMoveHandlePrivate();
+
+	//! Init.
+	virtual void init();
+
+	//! Parent.
+	FormMoveHandle * q;
+	//! Object.
+	FormObject * m_object;
+	//! Half of the size.
+	qreal m_size;
+	//! Hovered.
+	bool m_hovered;
+	//! Pressed.
+	bool m_pressed;
+	//! Mouse point.
+	QPointF m_pos;
+	//! Ignore mouse events?
+	bool m_ignoreMouse;
+}; // class FormMoveHandlerPrivate
+
 
 //
 // FormMoveHandle
 //
-
-class FormMoveHandlePrivate;
 
 //! Move handler on the form.
 class FormMoveHandle
@@ -81,10 +110,15 @@ protected:
 	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		Q_DECL_OVERRIDE;
 
+protected:
+	FormMoveHandle( FormMoveHandlePrivate * dd,
+		QGraphicsItem * parent );
+
+protected:
+	QScopedPointer< FormMoveHandlePrivate > d;
+
 private:
 	Q_DISABLE_COPY( FormMoveHandle )
-
-	QScopedPointer< FormMoveHandlePrivate > d;
 }; // class FormMoveHandler
 
 } /* namespace Core */

@@ -41,36 +41,20 @@ namespace Core {
 // FormMoveHandlePrivate
 //
 
-class FormMoveHandlePrivate {
-public:
-	FormMoveHandlePrivate( FormObject * object, FormMoveHandle * parent )
-		:	q( parent )
-		,	m_object( object )
-		,	m_size( 3.0 )
-		,	m_hovered( false )
-		,	m_pressed( false )
-		,	m_ignoreMouse( false )
-	{
-	}
+FormMoveHandlePrivate::FormMoveHandlePrivate( FormObject * object,
+	FormMoveHandle * parent )
+	:	q( parent )
+	,	m_object( object )
+	,	m_size( 3.0 )
+	,	m_hovered( false )
+	,	m_pressed( false )
+	,	m_ignoreMouse( false )
+{
+}
 
-	//! Init.
-	void init();
-
-	//! Parent.
-	FormMoveHandle * q;
-	//! Object.
-	FormObject * m_object;
-	//! Half of the size.
-	qreal m_size;
-	//! Hovered.
-	bool m_hovered;
-	//! Pressed.
-	bool m_pressed;
-	//! Mouse point.
-	QPointF m_pos;
-	//! Ignore mouse events?
-	bool m_ignoreMouse;
-}; // class FormMoveHandlerPrivate;
+FormMoveHandlePrivate::~FormMoveHandlePrivate()
+{
+}
 
 void
 FormMoveHandlePrivate::init()
@@ -86,6 +70,14 @@ FormMoveHandlePrivate::init()
 FormMoveHandle::FormMoveHandle( FormObject * object, QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	d( new FormMoveHandlePrivate( object, this ) )
+{
+	d->init();
+}
+
+FormMoveHandle::FormMoveHandle( FormMoveHandlePrivate * dd,
+	QGraphicsItem * parent )
+	:	QGraphicsItem( parent )
+	,	d( dd )
 {
 	d->init();
 }
