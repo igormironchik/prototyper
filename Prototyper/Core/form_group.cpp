@@ -58,7 +58,7 @@ void
 FormGroupPrivate::init()
 {
 	m_handle = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
-		q->parentItem() );
+		q->parentItem(), Qt::SizeAllCursor );
 	m_handle->setZValue( 999 );
 	m_handle->hide();
 }

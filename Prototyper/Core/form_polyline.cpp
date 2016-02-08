@@ -84,9 +84,11 @@ FormPolylinePrivate::init()
 {
 	m_start = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
 	m_start->ignoreMouseEvents( true );
+	m_start->unsetCursor();
 
 	m_end = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
 	m_end->ignoreMouseEvents( true );
+	m_end->unsetCursor();
 
 	m_start->hide();
 	m_end->hide();
@@ -291,10 +293,7 @@ QRectF
 FormPolyline::boundingRect() const
 {
 	return QGraphicsPathItem::boundingRect().adjusted(
-		-d->m_handles.m_topLeft->halfOfSize() * 2.0,
-		-d->m_handles.m_topLeft->halfOfSize() * 2.0,
-		d->m_handles.m_bottomRight->halfOfSize() * 2.0,
-		d->m_handles.m_bottomRight->halfOfSize() * 2.0 );
+		-12.0, -12.0, 12.0, 12.0 );
 }
 
 void

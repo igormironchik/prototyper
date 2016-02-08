@@ -70,13 +70,16 @@ public:
 void
 FormLinePrivate::init()
 {	
-	m_h1 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
+	m_h1 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q,
+		Qt::CrossCursor );
 	m_h1->hide();
 
-	m_h2 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q );
+	m_h2 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q,
+		Qt::CrossCursor );
 	m_h2->hide();
 
-	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
+	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q,
+		Qt::SizeAllCursor );
 	m_move->hide();
 
 	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
@@ -101,9 +104,7 @@ FormLine::~FormLine()
 QRectF
 FormLine::boundingRect() const
 {
-	return QGraphicsLineItem::boundingRect().adjusted(
-		-d->m_h1->halfOfSize(), -d->m_h1->halfOfSize(),
-		d->m_h2->halfOfSize(), d->m_h2->halfOfSize() );
+	return QGraphicsLineItem::boundingRect().adjusted( -3.0, -3.0, 3.0, 3.0 );
 }
 
 void
@@ -118,25 +119,40 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 
 		d->m_h1->setPos( l.p1().x() - d->m_h1->halfOfSize(),
 			l.p1().y() - d->m_h1->halfOfSize() );
+
+		if( !d->m_showHandles )
+			d->m_h1->setCursor( d->m_h1->handleCursor() );
+
 		d->m_h1->show();
 
 		d->m_h2->setPos( l.p2().x() - d->m_h2->halfOfSize(),
 			l.p2().y() - d->m_h2->halfOfSize() );
+
+		if( !d->m_showHandles )
+			d->m_h2->setCursor( d->m_h2->handleCursor() );
+
 		d->m_h2->show();
 
 		d->m_move->setPos(
 			( l.p1().x() + l.p2().x() ) / 2.0 - d->m_move->halfOfSize(),
 			( l.p1().y() + l.p2().y() ) / 2.0 - d->m_move->halfOfSize() );
+
+		if( !d->m_showHandles )
+			d->m_move->setCursor( d->m_move->handleCursor() );
+
 		d->m_move->show();
 	}
 	else
 	{
 		d->m_h1->hide();
 		d->m_h1->clear();
+		d->m_h1->unsetCursor();
 		d->m_h2->hide();
 		d->m_h2->clear();
+		d->m_h2->unsetCursor();
 		d->m_move->hide();
 		d->m_move->clear();
+		d->m_h2->unsetCursor();
 	}
 
 	QGraphicsLineItem::paint( painter, option, widget );
@@ -158,6 +174,9 @@ FormLine::showHandles( bool show )
 	d->m_h1->ignoreMouseEvents( show );
 	d->m_h2->ignoreMouseEvents( show );
 	d->m_move->ignoreMouseEvents( show );
+	d->m_h1->unsetCursor();
+	d->m_h2->unsetCursor();
+	d->m_move->unsetCursor();
 
 	update();
 }

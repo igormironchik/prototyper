@@ -26,6 +26,7 @@
 // Qt include.
 #include <QGraphicsItem>
 #include <QScopedPointer>
+#include <QCursor>
 
 
 namespace Prototyper {
@@ -43,7 +44,7 @@ class FormMoveHandle;
 class FormMoveHandlePrivate {
 public:
 	FormMoveHandlePrivate( qreal halfSize, const QPointF & zero,
-		FormObject * object, FormMoveHandle * parent );
+		FormObject * object, FormMoveHandle * parent, const QCursor & c );
 	virtual ~FormMoveHandlePrivate();
 
 	//! Init.
@@ -67,6 +68,8 @@ public:
 	QPointF m_zero;
 	//! Touch delta.
 	QPointF m_touchDelta;
+	//! Cursor.
+	QCursor m_cursor;
 }; // class FormMoveHandlerPrivate
 
 
@@ -80,7 +83,8 @@ class FormMoveHandle
 {
 public:
 	FormMoveHandle( qreal halfSize, const QPointF & zero,
-		FormObject * object, QGraphicsItem * parent );
+		FormObject * object, QGraphicsItem * parent,
+		const QCursor & c = QCursor() );
 	~FormMoveHandle();
 
 	//! \return Half of the size of the edge.
@@ -99,6 +103,9 @@ public:
 
 	//! Clear.
 	void clear();
+
+	//! \return Cursor.
+	const QCursor & handleCursor() const;
 
 protected:
 	//! Handle was moved.

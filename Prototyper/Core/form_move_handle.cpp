@@ -42,7 +42,8 @@ namespace Core {
 //
 
 FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
-	const QPointF & zero, FormObject * object, FormMoveHandle * parent )
+	const QPointF & zero, FormObject * object, FormMoveHandle * parent,
+	const QCursor & c )
 	:	q( parent )
 	,	m_object( object )
 	,	m_size( halfSize )
@@ -50,6 +51,7 @@ FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
 	,	m_pressed( false )
 	,	m_ignoreMouse( false )
 	,	m_zero( zero )
+	,	m_cursor( c )
 {
 }
 
@@ -61,6 +63,8 @@ void
 FormMoveHandlePrivate::init()
 {
 	q->setAcceptHoverEvents( true );
+
+	q->setCursor( m_cursor );
 }
 
 
@@ -69,9 +73,9 @@ FormMoveHandlePrivate::init()
 //
 
 FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
-	FormObject * object, QGraphicsItem * parent )
+	FormObject * object, QGraphicsItem * parent, const QCursor & c )
 	:	QGraphicsItem( parent )
-	,	d( new FormMoveHandlePrivate( halfSize, zero, object, this ) )
+	,	d( new FormMoveHandlePrivate( halfSize, zero, object, this, c ) )
 {
 	d->init();
 }
@@ -164,6 +168,12 @@ FormMoveHandle::clear()
 	d->m_hovered = false;
 
 	update();
+}
+
+const QCursor &
+FormMoveHandle::handleCursor() const
+{
+	return d->m_cursor;
 }
 
 void
