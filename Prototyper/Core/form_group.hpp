@@ -49,8 +49,15 @@ public:
 	FormGroup( QGraphicsItem * parent = 0 );
 	~FormGroup();
 
+	QRectF boundingRect() const Q_DECL_OVERRIDE;
+
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+
+protected:
+	//! Handle moved.
+	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
+		Q_DECL_OVERRIDE;
 
 private:
 	Q_DISABLE_COPY( FormGroup )

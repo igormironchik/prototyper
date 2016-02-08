@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "form_group.hpp"
+#include "form_move_handle.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -40,6 +41,7 @@ class FormGroupPrivate {
 public:
 	FormGroupPrivate( FormGroup * parent )
 		:	q( parent )
+		,	m_handle( 0 )
 	{
 	}
 
@@ -48,11 +50,17 @@ public:
 
 	//! Parent.
 	FormGroup * q;
+	//! Handles.
+	FormMoveHandle * m_handle;
 }; // class FormGroupPrivate
 
 void
 FormGroupPrivate::init()
 {
+	m_handle = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
+		q->parentItem() );
+	m_handle->setZValue( 999 );
+	m_handle->hide();
 }
 
 
@@ -71,6 +79,12 @@ FormGroup::~FormGroup()
 {
 }
 
+QRectF
+FormGroup::boundingRect() const
+{
+	return QGraphicsItemGroup::boundingRect();
+}
+
 void
 FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
@@ -84,7 +98,25 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		painter->setBrush( Qt::NoBrush );
 
 		painter->drawRect( option->rect );
+
+		const QPointF p( option->rect.x() + option->rect.width() / 2.0 -
+				 d->m_handle->halfOfSize(),
+			 option->rect.y() + option->rect.height() / 2.0 -
+				 d->m_handle->halfOfSize() );
+
+		d->m_handle->setPos( mapToParent( p ) );
+
+		d->m_handle->show();
 	}
+	else
+		d->m_handle->hide();
+}
+
+void
+FormGroup::handleMoved( const QPointF & delta, FormMoveHandle * handle )
+{
+	if( handle == d->m_handle )
+		moveBy( delta.x(), delta.y() );
 }
 
 } /* namespace Core */
