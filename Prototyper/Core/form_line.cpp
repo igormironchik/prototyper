@@ -104,7 +104,8 @@ FormLine::~FormLine()
 QRectF
 FormLine::boundingRect() const
 {
-	return QGraphicsLineItem::boundingRect().adjusted( -3.0, -3.0, 3.0, 3.0 );
+	return QGraphicsLineItem::boundingRect()
+		.adjusted( -3.0, -3.0, 3.0, 3.0 );
 }
 
 void
