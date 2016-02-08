@@ -52,6 +52,7 @@ HEADERS +=	form_actions.hpp \
 			text_editor.hpp \
 			text_opts_bar.hpp \
 			top_gui.hpp \
+			with_resize_and_move_handles.hpp \
 			$$GENERATED
 
 SOURCES +=	form_actions.cpp \
@@ -77,7 +78,8 @@ SOURCES +=	form_actions.cpp \
 			tabs_list.cpp \
 			text_editor.cpp \
 			text_opts_bar.cpp \
-			top_gui.cpp
+			top_gui.cpp \
+			with_resize_and_move_handles.cpp
 
 FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui

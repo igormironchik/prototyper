@@ -25,6 +25,7 @@
 #include "form_move_handle.hpp"
 #include "form_actions.hpp"
 #include "form_resize_handle.hpp"
+#include "with_resize_and_move_handles.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -49,15 +50,7 @@ public:
 		,	m_start( 0 )
 		,	m_end( 0 )
 		,	m_closed( false )
-		,	m_topLeft( 0 )
-		,	m_top( 0 )
-		,	m_topRight( 0 )
-		,	m_left( 0 )
-		,	m_bottomLeft( 0 )
-		,	m_bottom( 0 )
-		,	m_bottomRight( 0 )
-		,	m_right( 0 )
-		,	m_move( 0 )
+		,	m_handles( parent )
 	{
 	}
 
@@ -82,24 +75,8 @@ public:
 	FormMoveHandle * m_end;
 	//! Closed?
 	bool m_closed;
-	//! Top-left resize.
-	FormResizeHandle * m_topLeft;
-	//! Top resize.
-	FormResizeHandle * m_top;
-	//! Top-right resize.
-	FormResizeHandle * m_topRight;
-	//! Left resize.
-	FormResizeHandle * m_left;
-	//! Left-bottom resize.
-	FormResizeHandle * m_bottomLeft;
-	//! Bottom resize.
-	FormResizeHandle * m_bottom;
-	//! Right-bottom resize.
-	FormResizeHandle * m_bottomRight;
-	//! Right resize.
-	FormResizeHandle * m_right;
-	//! Move handle.
-	FormMoveHandle * m_move;
+	//! Resize & move handles.
+	WithResizeAndMoveHandles m_handles;
 }; // class FormPolylinePrivate
 
 void
@@ -114,25 +91,7 @@ FormPolylinePrivate::init()
 	m_start->hide();
 	m_end->hide();
 
-	m_topLeft = new FormResizeHandle( 6.0, QPointF( 12.0, 12.0 ), -45.0, q, q );
-	m_top = new FormResizeHandle( 6.0, QPointF( 6.0, 12.0 ), 0.0, q, q );
-	m_topRight = new FormResizeHandle( 6.0, QPointF( 0.0, 12.0 ), 45.0, q, q );
-	m_left = new FormResizeHandle( 6.0, QPointF( 12.0, 6.0 ), -90.0, q, q );
-	m_bottomLeft = new FormResizeHandle( 6.0, QPointF( 12.0, 0.0 ), 45.0, q, q );
-	m_bottom = new FormResizeHandle( 6.0, QPointF( 6.0, 0.0 ), 0.0, q, q );
-	m_bottomRight = new FormResizeHandle( 6.0, QPointF( 0.0, 0.0 ), -45.0, q, q );
-	m_right = new FormResizeHandle( 6.0, QPointF( 0.0, 6.0 ), 90, q, q );
-	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
-
-	m_topLeft->hide();
-	m_top->hide();
-	m_topRight->hide();
-	m_left->hide();
-	m_bottomLeft->hide();
-	m_bottom->hide();
-	m_bottomRight->hide();
-	m_right->hide();
-	m_move->hide();
+	m_handles.hide();
 
 	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
 
@@ -332,10 +291,10 @@ QRectF
 FormPolyline::boundingRect() const
 {
 	return QGraphicsPathItem::boundingRect().adjusted(
-		-d->m_topLeft->halfOfSize() * 2.0,
-		-d->m_topLeft->halfOfSize() * 2.0,
-		d->m_bottomRight->halfOfSize() * 2.0,
-		d->m_bottomRight->halfOfSize() * 2.0 );
+		-d->m_handles.m_topLeft->halfOfSize() * 2.0,
+		-d->m_handles.m_topLeft->halfOfSize() * 2.0,
+		d->m_handles.m_bottomRight->halfOfSize() * 2.0,
+		d->m_handles.m_bottomRight->halfOfSize() * 2.0 );
 }
 
 void
@@ -355,85 +314,41 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 	if( isSelected() && !group() )
 	{
-		d->m_topLeft->setPos( option->rect.x(), option->rect.y() );
-		d->m_top->setPos( option->rect.x() + option->rect.width() / 2.0 -
-			d->m_top->halfOfSize(), option->rect.y() );
-		d->m_topRight->setPos( option->rect.x() + option->rect.width() -
-			d->m_topRight->halfOfSize() * 2.0, option->rect.y() );
-		d->m_left->setPos( option->rect.x(),
-			option->rect.y() + option->rect.height() / 2.0 -
-				d->m_left->halfOfSize() );
-		d->m_bottomLeft->setPos( option->rect.x(),
-			option->rect.y() + option->rect.height() -
-				d->m_bottomLeft->halfOfSize() * 2.0 );
-		d->m_bottom->setPos( option->rect.x() + option->rect.width() / 2.0 -
-				d->m_bottom->halfOfSize(),
-			option->rect.y() + option->rect.height() -
-				d->m_bottom->halfOfSize() * 2.0 );
-		d->m_bottomRight->setPos( option->rect.x() + option->rect.width() -
-				d->m_bottomRight->halfOfSize() * 2.0,
-			option->rect.y() + option->rect.height() -
-				d->m_bottomRight->halfOfSize() * 2.0 );
-		d->m_right->setPos( option->rect.x() + option->rect.width() -
-				d->m_right->halfOfSize() * 2.0,
-			option->rect.y() + option->rect.height() / 2.0 -
-				d->m_right->halfOfSize() );
-		d->m_move->setPos( option->rect.x() + option->rect.width() / 2.0 -
-				d->m_move->halfOfSize(),
-			option->rect.y() + option->rect.height() / 2.0 -
-				d->m_move->halfOfSize() );
+		d->m_handles.place( option->rect );
 
-		d->m_topLeft->show();
-		d->m_top->show();
-		d->m_topRight->show();
-		d->m_left->show();
-		d->m_bottomLeft->show();
-		d->m_bottom->show();
-		d->m_bottomRight->show();
-		d->m_right->show();
-		d->m_move->show();
+		d->m_handles.show();
 	}
 	else
-	{
-		d->m_topLeft->hide();
-		d->m_top->hide();
-		d->m_topRight->hide();
-		d->m_left->hide();
-		d->m_bottomLeft->hide();
-		d->m_bottom->hide();
-		d->m_bottomRight->hide();
-		d->m_right->hide();
-		d->m_move->hide();
-	}
+		d->m_handles.hide();
 }
 
 void
 FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
-	if( handle == d->m_move )
+	if( handle == d->m_handles.m_move )
 		moveBy( delta.x(), delta.y() );
-	else if( handle == d->m_topLeft )
+	else if( handle == d->m_handles.m_topLeft )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( delta.x(), delta.y(), 0.0, 0.0 ) );
-	else if( handle == d->m_top )
+	else if( handle == d->m_handles.m_top )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( 0.0, delta.y(), 0.0, 0.0 ) );
-	else if( handle == d->m_topRight )
+	else if( handle == d->m_handles.m_topRight )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( 0.0, delta.y(), delta.x(), 0.0 ) );
-	else if( handle == d->m_right )
+	else if( handle == d->m_handles.m_right )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( 0.0, 0.0, delta.x(), 0.0 ) );
-	else if( handle == d->m_bottomRight )
+	else if( handle == d->m_handles.m_bottomRight )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( 0.0, 0.0, delta.x(), delta.y() ) );
-	else if( handle == d->m_bottom )
+	else if( handle == d->m_handles.m_bottom )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( 0.0, 0.0, 0.0, delta.y() ) );
-	else if( handle == d->m_bottomLeft )
+	else if( handle == d->m_handles.m_bottomLeft )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( delta.x(), 0.0, 0.0, delta.y() ) );
-	else if( handle == d->m_left )
+	else if( handle == d->m_handles.m_left )
 		d->updateLines( d->boundingRect(),
 			d->boundingRect().adjusted( delta.x(), 0.0, 0.0, 0.0 ) );
 }
