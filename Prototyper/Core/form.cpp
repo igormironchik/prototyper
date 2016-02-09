@@ -647,6 +647,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 						{
 							d->m_currentPoly->showHandles( false );
 
+							d->m_current = d->m_currentPoly;
+
 							d->m_currentPoly = 0;
 
 							d->m_polyline = false;
