@@ -66,7 +66,6 @@ public:
 
 protected:
 	friend class FormMoveHandle;
-	friend class FormGroup;
 
 	//! Handle moved.
 	virtual void handleMoved( const QPointF & delta, FormMoveHandle * handle );
