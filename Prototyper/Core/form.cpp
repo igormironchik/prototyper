@@ -41,8 +41,6 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QApplication>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 
@@ -85,6 +83,8 @@ public:
 	void handleMouseMoveInCurrentLines( const QPointF & point );
 	//! Handle mouse move in current polyline.
 	void handleMouseMoveInCurrentPolyLine( const QPointF & point );
+	//! Ungroup.
+	void ungroup( QGraphicsItem * group );
 
 	//! Parent.
 	Form * q;
@@ -205,6 +205,35 @@ void
 FormPrivate::handleMouseMoveInCurrentPolyLine( const QPointF & point )
 {
 	m_currentPoly->handleMouseMoveInHandles( point );
+}
+
+void
+FormPrivate::ungroup( QGraphicsItem * group )
+{
+	FormGroup * tmp = dynamic_cast< FormGroup* > ( group );
+
+	if( tmp )
+	{
+		QList< QGraphicsItem* > items = tmp->childItems();
+
+		foreach( QGraphicsItem * item, items )
+		{
+			tmp->removeFromGroup( item );
+
+			if( FormAction::instance()->mode() == FormAction::Select )
+			{
+				item->setFlag( QGraphicsItem::ItemIsSelectable, true );
+
+				item->setSelected( true );
+			}
+		}
+
+		q->scene()->removeItem( tmp );
+
+		tmp->desrtoyHandles();
+
+		delete tmp;
+	}
 }
 
 
@@ -329,11 +358,12 @@ Form::group()
 
 		foreach( QGraphicsItem * item, items )
 		{
-			scene()->removeItem( item );
+			item->setFlag( QGraphicsItem::ItemIsSelectable, false );
 
 			item->setSelected( false );
 
-			group->addToGroup( item );
+			if( item->parentItem() == this )
+				group->addToGroup( item );
 		}
 	}
 	else if( d->m_currentLines.size() > 1 )
@@ -342,7 +372,9 @@ Form::group()
 
 		foreach( FormLine * line, d->m_currentLines )
 		{
-			scene()->removeItem( line );
+			line->setFlag( QGraphicsItem::ItemIsSelectable, false );
+
+			line->setSelected( false );
 
 			group->addToGroup( line );
 		}
@@ -368,6 +400,22 @@ Form::group()
 
 		group->setObjectId( ++d->m_id );
 	}
+}
+
+void
+Form::ungroup()
+{
+	QList< QGraphicsItem* > items =
+		scene()->selectedItems();
+
+	if( !items.isEmpty() )
+	{
+		foreach( QGraphicsItem * item, items )
+			if( item->parentItem() == this )
+				d->ungroup( item );
+	}
+	else if( d->m_current )
+		d->ungroup( d->m_current );
 }
 
 QRectF

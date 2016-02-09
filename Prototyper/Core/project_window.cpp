@@ -344,7 +344,10 @@ ProjectWindowPrivate::setFlag( const QList< QGraphicsItem* > & children,
 	{
 		setFlag( item->childItems(), f, enabled );
 
-		item->setFlag( f, enabled );
+		FormObject * tmp = dynamic_cast< FormObject* > ( item );
+
+		if( tmp )
+			item->setFlag( f, enabled );
 	}
 }
 
@@ -700,7 +703,7 @@ ProjectWindow::p_group()
 void
 ProjectWindow::p_ungroup()
 {
-
+	FormAction::instance()->form()->ungroup();
 }
 
 void

@@ -27,6 +27,9 @@
 // Qt include.
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
+#include <QGraphicsScene>
+#include <QEvent>
+#include <QGraphicsSceneMouseEvent>
 
 
 namespace Prototyper {
@@ -49,6 +52,10 @@ public:
 	{
 	}
 
+	~FormGroupPrivate()
+	{
+	}
+
 	//! Init.
 	void init();
 
@@ -64,6 +71,8 @@ public:
 	FormMoveHandle * m_bottomRight;
 	//! Bottom-left handle.
 	FormMoveHandle * m_bottomLeft;
+	//! Child.
+	QList< FormObject* > m_child;
 }; // class FormGroupPrivate
 
 void
@@ -181,6 +190,22 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		d->m_bottomRight->hide();
 		d->m_bottomLeft->hide();
 	}
+}
+
+void
+FormGroup::desrtoyHandles()
+{
+	delete d->m_center;
+	delete d->m_topLeft;
+	delete d->m_topRight;
+	delete d->m_bottomRight;
+	delete d->m_bottomLeft;
+
+	d->m_center = 0;
+	d->m_topLeft = 0;
+	d->m_topRight = 0;
+	d->m_bottomRight = 0;
+	d->m_bottomLeft = 0;
 }
 
 void

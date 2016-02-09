@@ -100,6 +100,8 @@ public:
 
 	//! Group.
 	void group();
+	//! Ungroup.
+	void ungroup();
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

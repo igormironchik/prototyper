@@ -63,6 +63,7 @@ WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormObject * object )
 	,	m_move( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),
 			object, dynamic_cast< QGraphicsItem* > ( object ),
 			Qt::SizeAllCursor ) )
+	,	q( dynamic_cast< QGraphicsItem* > ( object ) )
 {
 }
 

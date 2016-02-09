@@ -28,6 +28,10 @@
 #include <QPen>
 #include <QBrush>
 
+QT_BEGIN_NAMESPACE
+class QGraphicsItem;
+QT_END_NAMESPACE
+
 
 namespace Prototyper {
 
@@ -62,6 +66,7 @@ public:
 
 protected:
 	friend class FormMoveHandle;
+	friend class FormGroup;
 
 	//! Handle moved.
 	virtual void handleMoved( const QPointF & delta, FormMoveHandle * handle );

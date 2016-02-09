@@ -23,6 +23,13 @@
 #ifndef PROTOTYPER__CORE__WITH_RESIZE_AND_MOVE_HANDLES_HPP__INCLUDED
 #define PROTOTYPER__CORE__WITH_RESIZE_AND_MOVE_HANDLES_HPP__INCLUDED
 
+// Qt include.
+#include <QtGlobal>
+
+QT_BEGIN_NAMESPACE
+class QGraphicsItem;
+QT_END_NAMESPACE
+
 
 namespace Prototyper {
 
@@ -67,6 +74,8 @@ public:
 	FormResizeHandle * m_right;
 	//! Move handle.
 	FormMoveHandle * m_move;
+	//! Parent.
+	QGraphicsItem * q;
 }; // class WithResizeAndMoveHandles
 
 } /* namespace Core */
