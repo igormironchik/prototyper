@@ -35,7 +35,7 @@ namespace Core {
 // WithResizeAndMoveHandles
 //
 
-WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormObject * object )
+WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormWithHandle * object )
 	:	m_topLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 12.0 ), -45.0,
 			object, dynamic_cast< QGraphicsItem* > ( object ),
 			Qt::SizeFDiagCursor ) )
@@ -64,6 +64,7 @@ WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormObject * object )
 			object, dynamic_cast< QGraphicsItem* > ( object ),
 			Qt::SizeAllCursor ) )
 	,	q( dynamic_cast< QGraphicsItem* > ( object ) )
+	,	m_min( 25.0, 25.0 )
 {
 }
 
@@ -129,6 +130,18 @@ WithResizeAndMoveHandles::hide()
 	m_bottomRight->hide();
 	m_right->hide();
 	m_move->hide();
+}
+
+bool
+WithResizeAndMoveHandles::checkConstraint( const QSizeF & s )
+{
+	return ( s.width() >= m_min.width() && s.height() >= m_min.height() );
+}
+
+void
+WithResizeAndMoveHandles::setMinSize( const QSizeF & min )
+{
+	m_min = min;
 }
 
 } /* namespace Core */

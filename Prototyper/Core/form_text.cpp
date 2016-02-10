@@ -22,10 +22,15 @@
 
 // Prototyper include.
 #include "form_text.hpp"
+#include "with_resize_and_move_handles.hpp"
+#include "form_resizable.hpp"
 
 // Qt include.
-#include <QGraphicsSceneHoverEvent>
-#include <QGraphicsSceneMouseEvent>
+#include <QStyleOptionGraphicsItem>
+#include <QPainter>
+#include <QTextDocument>
+#include <QTextCursor>
+#include <QFontMetrics>
 
 
 namespace Prototyper {
@@ -38,21 +43,53 @@ namespace Core {
 
 class FormTextPrivate {
 public:
-	FormTextPrivate( FormText * parent )
+	FormTextPrivate( const QRectF & rect, FormText * parent )
 		:	q( parent )
+		,	m_rect( rect )
+		,	m_proxy( new FormResizableProxy( q, q->parentItem() ) )
 	{
 	}
 
 	//! Init.
 	void init();
+	//! Set rect.
+	void setRect( const QRectF & rect );
 
 	//! Parent.
 	FormText * q;
+	//! Rect.
+	QRectF m_rect;
+	//! Resizable proxy.
+	FormResizableProxy * m_proxy;
 }; // class FormTextPrivate
 
 void
 FormTextPrivate::init()
 {
+	q->enableEditing( true );
+
+	q->setPlainText( FormText::tr( "Text" ) );
+
+	setRect( m_rect );
+
+	QFontMetrics m( q->font() );
+	m_proxy->setMinSize(
+		QSizeF( m.boundingRect( QLatin1Char( 'a' ) ).size() ) );
+}
+
+void
+FormTextPrivate::setRect( const QRectF & rect )
+{
+	m_rect = rect;
+
+	q->setPos( m_rect.topLeft() );
+
+	q->setTextWidth( m_rect.width() );
+
+	QRectF r = q->boundingRect();
+	r.moveTo( q->pos() );
+
+	m_proxy->setRect( r );
 }
 
 
@@ -60,9 +97,9 @@ FormTextPrivate::init()
 // FormText
 //
 
-FormText::FormText( QGraphicsItem * parent )
+FormText::FormText( const QRectF & rect, QGraphicsItem * parent )
 	:	QGraphicsTextItem( parent )
-	,	d( new FormTextPrivate( this ) )
+	,	d( new FormTextPrivate( rect, this ) )
 {
 	d->init();
 }
@@ -71,10 +108,21 @@ FormText::~FormText()
 {
 }
 
-QRectF
-FormText::boundingRect() const
+void
+FormText::enableEditing( bool on )
 {
-	return QGraphicsTextItem::boundingRect();
+	if( on )
+		setTextInteractionFlags( Qt::TextEditorInteraction );
+	else
+		setTextInteractionFlags( Qt::NoTextInteraction );
+}
+
+void
+FormText::clearSelection()
+{
+	QTextCursor c = textCursor();
+	c.clearSelection();
+	setTextCursor( c );
 }
 
 void
@@ -82,36 +130,41 @@ FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
 	QGraphicsTextItem::paint( painter, option, widget );
+
+	if( isSelected() && !group() )
+	{
+		unsetCursor();
+
+		d->m_proxy->show();
+	}
+	else
+	{
+		setCursor( Qt::IBeamCursor );
+
+		d->m_proxy->hide();
+	}
 }
 
 void
-FormText::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+FormText::resize( const QRectF & rect )
 {
-	QGraphicsTextItem::hoverEnterEvent( event );
+	d->setRect( rect );
 }
 
 void
-FormText::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
+FormText::moveResizable( const QPointF & delta )
 {
-	QGraphicsTextItem::hoverMoveEvent( event );
+	moveBy( delta.x(), delta.y() );
 }
 
 void
-FormText::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
+FormText::focusOutEvent( QFocusEvent * event )
 {
-	QGraphicsTextItem::mouseMoveEvent( event );
-}
+	QTextCursor c = textCursor();
+	c.clearSelection();
+	setTextCursor( c );
 
-void
-FormText::mousePressEvent( QGraphicsSceneMouseEvent * event )
-{
-	QGraphicsTextItem::mousePressEvent( event );
-}
-
-void
-FormText::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
-{
-	QGraphicsTextItem::mouseReleaseEvent( event );
+	QGraphicsTextItem::focusOutEvent( event );
 }
 
 } /* namespace Core */

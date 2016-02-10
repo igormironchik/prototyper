@@ -77,13 +77,6 @@ FormObject::setObjectBrush( const QBrush & b )
 	m_brush = b;
 }
 
-void
-FormObject::handleMoved( const QPointF & delta, FormMoveHandle * handle )
-{
-	Q_UNUSED( delta )
-	Q_UNUSED( handle )
-}
-
 } /* namespace Core */
 
 } /* namespace Prototyper */

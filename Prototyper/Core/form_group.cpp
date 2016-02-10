@@ -118,6 +118,7 @@ FormGroup::FormGroup( QGraphicsItem * parent )
 
 FormGroup::~FormGroup()
 {
+	desrtoyHandles();
 }
 
 QRectF

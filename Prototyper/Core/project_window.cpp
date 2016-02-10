@@ -36,6 +36,7 @@
 #include "form_hierarchy_widget.hpp"
 #include "tabs_list.hpp"
 #include "form_object.hpp"
+#include "form_text.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -84,6 +85,11 @@ public:
 	//! Set flag to all children.
 	void setFlag( const QList< QGraphicsItem* > & children,
 		QGraphicsItem::GraphicsItemFlag f, bool enabled );
+	//! Enable/disbale editing.
+	void enableEditing( FormView * view, bool on = true );
+	//! Enable/disable editing.
+	void enableEditing( const QList< QGraphicsItem* > & children,
+		bool on );
 
 	//! Parent.
 	ProjectWindow * q;
@@ -178,7 +184,8 @@ ProjectWindowPrivate::init()
 	m_tabsList->toggleViewAction()->setShortcut(
 		ProjectWindow::tr( "Ctrl+Alt+T" ) );
 
-	QAction * newForm = new QAction( q );
+	QAction * newForm = new QAction( QIcon( ":/Core/img/list-add.png" ),
+		ProjectWindow::tr( "Add Form" ), q );
 	newForm->setShortcutContext( Qt::ApplicationShortcut );
 	newForm->setShortcut( ProjectWindow::tr( "Ctrl+T" ) );
 	q->addAction( newForm );
@@ -287,6 +294,10 @@ ProjectWindowPrivate::init()
 	form->addAction( group );
 	form->addAction( ungroup );
 
+	form->addSeparator();
+
+	form->addAction( newForm );
+
 	ProjectWindow::connect( quitAction, &QAction::triggered,
 		q, &ProjectWindow::p_quit );
 	ProjectWindow::connect( m_grid, &QAction::toggled,
@@ -348,6 +359,28 @@ ProjectWindowPrivate::setFlag( const QList< QGraphicsItem* > & children,
 
 		if( tmp )
 			item->setFlag( f, enabled );
+	}
+}
+
+void
+ProjectWindowPrivate::enableEditing( FormView * view, bool on )
+{
+	enableEditing( view->form()->childItems(), on );
+}
+
+void
+ProjectWindowPrivate::enableEditing( const QList< QGraphicsItem* > & children,
+	bool on )
+{
+	foreach( QGraphicsItem * item, children )
+	{
+		FormText * text = dynamic_cast< FormText* > ( item );
+
+		if( text )
+		{
+			text->enableEditing( on );
+			text->clearSelection();
+		}
 	}
 }
 
@@ -641,6 +674,8 @@ ProjectWindow::p_drawLine()
 		v->form()->switchToLineDrawingMode();
 
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+
+		d->enableEditing( v, false );
 	}
 }
 
@@ -667,6 +702,8 @@ ProjectWindow::p_insertText()
 		v->form()->setCursor( Qt::CrossCursor );
 
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+
+		d->enableEditing( v, true );
 	}
 }
 
@@ -716,6 +753,8 @@ ProjectWindow::p_select()
 		v->form()->setCursor( Qt::ArrowCursor );
 
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, true );
+
+		d->enableEditing( v, false );
 
 		v->form()->switchToSelectMode();
 	}

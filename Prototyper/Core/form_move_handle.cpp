@@ -25,7 +25,6 @@
 #include "form.hpp"
 #include "grid_snap.hpp"
 #include "form_actions.hpp"
-#include "form_object.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -38,11 +37,37 @@ namespace Prototyper {
 namespace Core {
 
 //
+// FormWithHandle
+//
+
+FormWithHandle::FormWithHandle()
+{
+}
+
+FormWithHandle::~FormWithHandle()
+{
+}
+
+void
+FormWithHandle::handleMoved( const QPointF & delta, FormMoveHandle * handle )
+{
+	Q_UNUSED( delta )
+	Q_UNUSED( handle )
+}
+
+void
+FormWithHandle::handleReleased( FormMoveHandle * handle )
+{
+	Q_UNUSED( handle )
+}
+
+
+//
 // FormMoveHandlePrivate
 //
 
 FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
-	const QPointF & zero, FormObject * object, FormMoveHandle * parent,
+	const QPointF & zero, FormWithHandle * object, FormMoveHandle * parent,
 	const QCursor & c )
 	:	q( parent )
 	,	m_object( object )
@@ -73,7 +98,7 @@ FormMoveHandlePrivate::init()
 //
 
 FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
-	FormObject * object, QGraphicsItem * parent, const QCursor & c )
+	FormWithHandle * object, QGraphicsItem * parent, const QCursor & c )
 	:	QGraphicsItem( parent )
 	,	d( new FormMoveHandlePrivate( halfSize, zero, object, this, c ) )
 {
@@ -126,6 +151,12 @@ void
 FormMoveHandle::moved( const QPointF & delta )
 {
 	d->m_object->handleMoved( delta, this );
+}
+
+void
+FormMoveHandle::released( FormMoveHandle * handle )
+{
+	d->m_object->handleReleased( handle );
 }
 
 void
@@ -206,8 +237,6 @@ FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 	{
 		const QPointF delta = event->pos() - d->m_pos;
 
-		setPos( pos() + delta );
-
 		moved( delta );
 
 		event->accept();
@@ -253,6 +282,8 @@ FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 			setPos( pos() + delta );
 
 			moved( delta );
+
+			released( this );
 		}
 	}
 

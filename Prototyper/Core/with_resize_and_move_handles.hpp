@@ -28,6 +28,7 @@
 
 QT_BEGIN_NAMESPACE
 class QGraphicsItem;
+class QSizeF;
 QT_END_NAMESPACE
 
 
@@ -35,7 +36,7 @@ namespace Prototyper {
 
 namespace Core {
 
-class FormObject;
+class FormWithHandle;
 class FormMoveHandle;
 class FormResizeHandle;
 
@@ -46,7 +47,7 @@ class FormResizeHandle;
 //! Storage of resize and move handles.
 class WithResizeAndMoveHandles {
 public:
-	WithResizeAndMoveHandles( FormObject * object );
+	WithResizeAndMoveHandles( FormWithHandle * object );
 	~WithResizeAndMoveHandles();
 
 	//! Place handles.
@@ -55,6 +56,10 @@ public:
 	void show();
 	//! Hide handles.
 	void hide();
+	//! Check constraint.
+	bool checkConstraint( const QSizeF & s );
+	//! Set min size.
+	void setMinSize( const QSizeF & min );
 
 	//! Top-left resize.
 	FormResizeHandle * m_topLeft;
@@ -76,6 +81,8 @@ public:
 	FormMoveHandle * m_move;
 	//! Parent.
 	QGraphicsItem * q;
+	//! Min size.
+	QSizeF m_min;
 }; // class WithResizeAndMoveHandles
 
 } /* namespace Core */

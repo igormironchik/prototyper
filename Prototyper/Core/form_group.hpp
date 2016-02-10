@@ -29,6 +29,7 @@
 
 // Prototyper include.
 #include "form_object.hpp"
+#include "form_move_handle.hpp"
 
 
 namespace Prototyper {
@@ -44,6 +45,7 @@ class FormGroupPrivate;
 class FormGroup
 	:	public QGraphicsItemGroup
 	,	public FormObject
+	,	public FormWithHandle
 {
 public:
 	FormGroup( QGraphicsItem * parent = 0 );

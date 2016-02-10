@@ -20,11 +20,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__FORM_RESIZE_HANDLE_HPP__INCLUDED
-#define PROTOTYPER__CORE__FORM_RESIZE_HANDLE_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_RECT_PLACER_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_RECT_PLACER_HPP__INCLUDED
 
-// Prototyper include.
-#include "form_move_handle.hpp"
+// Qt include.
+#include <QGraphicsItem>
+#include <QScopedPointer>
 
 
 namespace Prototyper {
@@ -32,35 +33,41 @@ namespace Prototyper {
 namespace Core {
 
 //
-// FormResizeHandle
+// FormRectPlacer
 //
 
-class FormResizeHandlePrivate;
+class FormRectPlacerPrivate;
 
-//! Move handler on the form.
-class FormResizeHandle
-	:	public FormMoveHandle
+//! Helper for placing rectangle items.
+class FormRectPlacer
+	:	public QGraphicsItem
 {
 public:
-	FormResizeHandle( qreal halfSize, const QPointF & zero,
-		qreal angle, FormWithHandle * object, QGraphicsItem * parent,
-		const QCursor & c = Qt::SizeAllCursor );
-	~FormResizeHandle();
+	FormRectPlacer( QGraphicsItem * parent );
+	~FormRectPlacer();
+
+	//! Set start pos.
+	void setStartPos( const QPointF & pos );
+
+	//! \return Rect.
+	const QRectF & rect() const;
+
+	//! Set end pos.
+	void setEndPos( const QPointF & pos );
+
+	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 private:
-	Q_DISABLE_COPY( FormResizeHandle )
+	Q_DISABLE_COPY( FormRectPlacer )
 
-	inline FormResizeHandlePrivate * d_func()
-		{ return reinterpret_cast< FormResizeHandlePrivate* > ( d.data() ); }
-	inline const FormResizeHandlePrivate * d_func() const
-		{ return reinterpret_cast< const FormResizeHandlePrivate* >( d.data() ); }
-}; // class FormResizeHandler
+	QScopedPointer< FormRectPlacerPrivate > d;
+}; // class FormRectPlacer
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__FORM_RESIZE_HANDLE_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_RECT_PLACER_HPP__INCLUDED

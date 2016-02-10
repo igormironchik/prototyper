@@ -29,6 +29,7 @@
 
 // Prototyper include.
 #include "form_object.hpp"
+#include "form_resizable.hpp"
 
 
 namespace Prototyper {
@@ -45,27 +46,28 @@ class FormTextPrivate;
 class FormText
 	:	public QGraphicsTextItem
 	,	public FormObject
+	,	public FormResizable
 {
 public:
-	FormText( QGraphicsItem * parent = 0 );
+	explicit FormText( const QRectF & rect, QGraphicsItem * parent = 0 );
 	~FormText();
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	//! Enable/disable editing.
+	void enableEditing( bool on = true );
+
+	//! Clear selection.
+	void clearSelection();
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 protected:
-	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void hoverMoveEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mousePressEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
+	//! Resize.
+	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
+	//! Move resizable.
+	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
+
+	void focusOutEvent( QFocusEvent * event ) Q_DECL_OVERRIDE;
 
 private:
 	Q_DISABLE_COPY( FormText )

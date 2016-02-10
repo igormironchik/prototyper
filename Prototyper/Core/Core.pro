@@ -37,6 +37,8 @@ HEADERS +=	form_actions.hpp \
 			form_move_handle.hpp \
 			form_object.hpp \
 			form_polyline.hpp \
+			form_rect_placer.hpp \
+			form_resizable.hpp \
 			form_resize_handle.hpp \
 			form_scene.hpp \
 			form_text.hpp \
@@ -64,6 +66,8 @@ SOURCES +=	form_actions.cpp \
 			form_move_handle.cpp \
 			form_object.cpp \
 			form_polyline.cpp \
+			form_rect_placer.cpp \
+			form_resizable.cpp \
 			form_resize_handle.cpp \
 			form_scene.cpp \
 			form_text.cpp \

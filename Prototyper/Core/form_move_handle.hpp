@@ -33,8 +33,30 @@ namespace Prototyper {
 
 namespace Core {
 
-class FormObject;
 class FormMoveHandle;
+
+
+//
+// FormWithHandle
+//
+
+//! Base class for objects with handle.
+class FormWithHandle {
+public:
+	FormWithHandle();
+	virtual ~FormWithHandle();
+
+protected:
+	friend class FormMoveHandle;
+
+	//! Handle moved.
+	virtual void handleMoved( const QPointF & delta, FormMoveHandle * handle );
+	//! Handle released.
+	virtual void handleReleased( FormMoveHandle * handle );
+
+private:
+	Q_DISABLE_COPY( FormWithHandle )
+}; // class FormWithHandle
 
 
 //
@@ -44,7 +66,7 @@ class FormMoveHandle;
 class FormMoveHandlePrivate {
 public:
 	FormMoveHandlePrivate( qreal halfSize, const QPointF & zero,
-		FormObject * object, FormMoveHandle * parent, const QCursor & c );
+		FormWithHandle * object, FormMoveHandle * parent, const QCursor & c );
 	virtual ~FormMoveHandlePrivate();
 
 	//! Init.
@@ -53,7 +75,7 @@ public:
 	//! Parent.
 	FormMoveHandle * q;
 	//! Object.
-	FormObject * m_object;
+	FormWithHandle * m_object;
 	//! Half of the size.
 	qreal m_size;
 	//! Hovered.
@@ -83,7 +105,7 @@ class FormMoveHandle
 {
 public:
 	FormMoveHandle( qreal halfSize, const QPointF & zero,
-		FormObject * object, QGraphicsItem * parent,
+		FormWithHandle * object, QGraphicsItem * parent,
 		const QCursor & c = QCursor() );
 	~FormMoveHandle();
 
@@ -110,6 +132,8 @@ public:
 protected:
 	//! Handle was moved.
 	virtual void moved( const QPointF & delta );
+	//! Handle released.
+	virtual void released( FormMoveHandle * handle );
 
 protected:
 	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )

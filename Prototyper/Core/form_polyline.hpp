@@ -29,6 +29,7 @@
 
 // Prototyper include.
 #include "form_object.hpp"
+#include "form_move_handle.hpp"
 
 
 namespace Prototyper {
@@ -45,6 +46,7 @@ class FormPolylinePrivate;
 class FormPolyline
 	:	public QGraphicsPathItem
 	,	public FormObject
+	,	public FormWithHandle
 {
 public:
 	FormPolyline( QGraphicsItem * parent );

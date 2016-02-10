@@ -41,7 +41,7 @@ class FormResizeHandlePrivate
 {
 public:
 	FormResizeHandlePrivate( qreal halfSize, const QPointF & zero,
-		qreal angle, FormObject * object, FormResizeHandle * parent,
+		qreal angle, FormWithHandle * object, FormResizeHandle * parent,
 		const QCursor & c )
 		:	FormMoveHandlePrivate( halfSize, zero, object, parent, c )
 		,	m_angle( angle )
@@ -92,7 +92,7 @@ FormResizeHandlePrivate::init()
 //
 
 FormResizeHandle::FormResizeHandle( qreal halfSize, const QPointF & zero,
-	qreal angle, FormObject * object, QGraphicsItem * parent,
+	qreal angle, FormWithHandle * object, QGraphicsItem * parent,
 	const QCursor & c )
 	:	FormMoveHandle( new FormResizeHandlePrivate( halfSize, zero, angle,
 			object, this, c ), parent )

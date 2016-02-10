@@ -185,7 +185,7 @@ FormScene::keyPressEvent( QKeyEvent * event )
 			break;
 
 		default :
-			event->ignore();
+			QGraphicsScene::keyPressEvent( event );
 	}
 }
 

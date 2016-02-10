@@ -30,6 +30,8 @@
 #include "grid_snap.hpp"
 #include "form_polyline.hpp"
 #include "form_group.hpp"
+#include "form_rect_placer.hpp"
+#include "form_text.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -40,6 +42,7 @@
 #include <QGraphicsScene>
 #include <QGraphicsSceneHoverEvent>
 #include <QApplication>
+#include <QTextCursor>
 
 
 namespace Prototyper {
@@ -229,8 +232,6 @@ FormPrivate::ungroup( QGraphicsItem * group )
 		}
 
 		q->scene()->removeItem( tmp );
-
-		tmp->desrtoyHandles();
 
 		delete tmp;
 	}
@@ -515,6 +516,22 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
+			case FormAction::InsertText :
+			{
+				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+					( d->m_current );
+
+				if( rect )
+					rect->setEndPos( mouseEvent->pos() );
+
+				mouseEvent->accept();
+
+				update();
+
+				return;
+			}
+				break;
+
 			default :
 				break;
 		}
@@ -573,6 +590,27 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 						d->m_currentPoly = 0;
 					}
 				}
+
+				mouseEvent->accept();
+
+				return;
+			}
+				break;
+
+			case FormAction::InsertText :
+			{
+				d->m_pressed = true;
+
+				FormRectPlacer * rect = new FormRectPlacer( this );
+
+				QPointF p = mouseEvent->pos();
+
+				if( FormAction::instance()->isSnapEnabled() )
+					p = d->m_snap->snapPos();
+
+				rect->setStartPos( p );
+
+				d->m_current = rect;
 
 				mouseEvent->accept();
 
@@ -662,7 +700,43 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					}
 				}
 
+				d->m_pressed = false;
+
 				mouseEvent->accept();
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::InsertText :
+			{
+				scene()->removeItem( d->m_current );
+
+				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+					( d->m_current );
+
+				FormText * text = 0;
+
+				if( rect )
+				{
+					text = new FormText( rect->rect(), this );
+
+					text->setFocus();
+
+					QTextCursor c = text->textCursor();
+					c.select( QTextCursor::Document );
+					text->setTextCursor( c );
+				}
+
+				delete d->m_current;
+
+				d->m_current = text;
+
+				mouseEvent->accept();
+
+				d->m_pressed = false;
 
 				emit changed();
 
