@@ -105,9 +105,14 @@ FormResizableProxyPrivate::init()
 FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	d( new FormResizableProxyPrivate( resizable, this ) )
+	,	d( 0 )
 {
-	d->init();
+	QScopedPointer< FormResizableProxyPrivate > tmp(
+		new FormResizableProxyPrivate( resizable, this ) );
+
+	tmp->init();
+
+	d.swap( tmp );
 }
 
 FormResizableProxy::~FormResizableProxy()
@@ -137,7 +142,10 @@ FormResizableProxy::setMinSize( const QSizeF & min )
 QRectF
 FormResizableProxy::boundingRect() const
 {
-	return d->m_rect.adjusted( -12.0, -12.0, 12.0, 12.0 );
+	if( !d.isNull() )
+		return d->m_rect.adjusted( -12.0, -12.0, 12.0, 12.0 );
+	else
+		return QRectF();
 }
 
 void

@@ -244,9 +244,13 @@ FormPrivate::ungroup( QGraphicsItem * group )
 
 Form::Form( Cfg::Form & c, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	d( new FormPrivate( c, this ) )
+	,	d( 0 )
 {
-	d->init();
+	QScopedPointer< FormPrivate > tmp( new FormPrivate( c, this ) );
+
+	tmp->init();
+
+	d.swap( tmp );
 }
 
 Form::~Form()
@@ -422,8 +426,11 @@ Form::ungroup()
 QRectF
 Form::boundingRect() const
 {
-	return QRectF( 0, 0, d->m_cfg.size().width(),
-		d->m_cfg.size().height() );
+	if( !d.isNull() )
+		return QRectF( 0, 0, d->m_cfg.size().width(),
+			d->m_cfg.size().height() );
+	else
+		return QRectF();
 }
 
 void

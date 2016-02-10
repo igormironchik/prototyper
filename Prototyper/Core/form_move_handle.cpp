@@ -100,17 +100,26 @@ FormMoveHandlePrivate::init()
 FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
 	FormWithHandle * object, QGraphicsItem * parent, const QCursor & c )
 	:	QGraphicsItem( parent )
-	,	d( new FormMoveHandlePrivate( halfSize, zero, object, this, c ) )
+	,	d( 0 )
 {
-	d->init();
+	QScopedPointer< FormMoveHandlePrivate > tmp(
+		new FormMoveHandlePrivate( halfSize, zero, object, this, c ) );
+
+	tmp->init();
+
+	d.swap( tmp );
 }
 
 FormMoveHandle::FormMoveHandle( FormMoveHandlePrivate * dd,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	d( dd )
+	,	d( 0 )
 {
-	d->init();
+	QScopedPointer< FormMoveHandlePrivate > tmp( dd );
+
+	tmp->init();
+
+	d.swap( tmp );
 }
 
 FormMoveHandle::~FormMoveHandle()
@@ -126,7 +135,10 @@ FormMoveHandle::halfOfSize() const
 QRectF
 FormMoveHandle::boundingRect() const
 {
-	return QRectF( 0, 0, d->m_size * 2, d->m_size * 2 );
+	if( !d.isNull() )
+		return QRectF( 0, 0, d->m_size * 2, d->m_size * 2 );
+	else
+		return QRectF();
 }
 
 void
