@@ -3,7 +3,6 @@ TEMPLATE = lib
 CONFIG += shared
 TARGET = Prototyper.Core
 QT += core gui widgets
-VERSION = 1.0.0
 CONFIG += c++14
 
 RESOURCES = resources.qrc
@@ -23,7 +22,7 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = GENERATED
 
-generate_cfg.commands = ../../3rdparty/QtConfFile/qtconffile.generator -i ${QMAKE_FILE_IN} \
+generate_cfg.commands = $${OUT_PWD}/../../3rdparty/QtConfFile/qtconffile.generator -i ${QMAKE_FILE_IN} \
 -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
