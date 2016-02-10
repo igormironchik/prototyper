@@ -23,7 +23,7 @@ defineTest(minQtVersion) {
 }
 
 !minQtVersion(5, 5, 1) {
-    message("Cannot build Globe with Qt version $${QT_VERSION}.")
+	message("Cannot build Prototyper with Qt version $${QT_VERSION}.")
     error("Use at least Qt 5.5.1.")
 }
 
