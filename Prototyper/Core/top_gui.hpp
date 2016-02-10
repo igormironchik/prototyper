@@ -27,6 +27,9 @@
 #include <QObject>
 #include <QScopedPointer>
 
+// Prototyper include.
+#include "export.hpp"
+
 
 namespace Prototyper {
 
@@ -42,7 +45,7 @@ class ProjectWindow;
 class TopGuiPrivate;
 
 //! Singleton for top GUI components.
-class TopGui
+class PROTOTYPER_CORE_EXPORT TopGui
 	:	public QObject
 {
 	Q_OBJECT

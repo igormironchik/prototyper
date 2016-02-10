@@ -4,6 +4,7 @@ CONFIG += shared
 TARGET = Prototyper.Core
 QT += core gui widgets
 CONFIG += c++14
+DEFINES += PROTOTYPER_CORE
 
 RESOURCES = resources.qrc
 
@@ -22,12 +23,14 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = GENERATED
 
-generate_cfg.commands = $${OUT_PWD}/../../3rdparty/QtConfFile/qtconffile.generator -i ${QMAKE_FILE_IN} \
+generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/QtConfFile/qtconffile.generator.exe ) ) \
+-i ${QMAKE_FILE_IN} \
 -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
-HEADERS +=	form_actions.hpp \
+HEADERS +=	export.hpp \
+			form_actions.hpp \
 			form.hpp \
 			form_group.hpp \
 			form_hierarchy_widget.hpp \
