@@ -94,8 +94,9 @@ FormResizeHandlePrivate::init()
 FormResizeHandle::FormResizeHandle( qreal halfSize, const QPointF & zero,
 	qreal angle, FormWithHandle * object, QGraphicsItem * parent,
 	const QCursor & c )
-	:	FormMoveHandle( new FormResizeHandlePrivate( halfSize, zero, angle,
-			object, this, c ), parent )
+	:	FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > (
+			new FormResizeHandlePrivate( halfSize, zero, angle,
+				object, this, c ) ), parent )
 {
 }
 

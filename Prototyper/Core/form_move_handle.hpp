@@ -148,7 +148,7 @@ protected:
 		Q_DECL_OVERRIDE;
 
 protected:
-	FormMoveHandle( FormMoveHandlePrivate * dd,
+	FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > && dd,
 		QGraphicsItem * parent );
 
 protected:

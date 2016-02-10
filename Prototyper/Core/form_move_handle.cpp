@@ -110,12 +110,14 @@ FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
 	d.swap( tmp );
 }
 
-FormMoveHandle::FormMoveHandle( FormMoveHandlePrivate * dd,
+FormMoveHandle::FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > && dd,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	d( 0 )
 {
-	QScopedPointer< FormMoveHandlePrivate > tmp( dd );
+	QScopedPointer< FormMoveHandlePrivate > tmp( 0 );
+
+	tmp.swap( dd );
 
 	tmp->init();
 
