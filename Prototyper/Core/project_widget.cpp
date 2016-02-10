@@ -161,6 +161,11 @@ ProjectWidgetPrivate::newProject()
 	m_desc->editor()->reset();
 
 	m_cfg = Cfg::Project();
+
+	m_cfg.description().setTabName( projectDescTabName );
+
+	TopGui::instance()->projectWindow()->tabsList()->model()->
+		setStringList( m_tabNames );
 }
 
 void

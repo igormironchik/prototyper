@@ -585,6 +585,8 @@ ProjectWindow::p_newProject()
 
 	d->m_widget->newProject();
 
+	d->m_fileName.clear();
+
 	setWindowTitle( tr( "Prototyper - Unsaved[*]" ) );
 
 	setWindowModified( false );
