@@ -23,7 +23,7 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = GENERATED
 
-generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/QtConfFile/qtconffile.generator.exe ) ) \
+generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/QtConfFile/qtconffile.generator ) ) \
 -i ${QMAKE_FILE_IN} \
 -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
 
