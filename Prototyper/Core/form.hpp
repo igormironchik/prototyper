@@ -27,6 +27,9 @@
 #include <QGraphicsObject>
 #include <QScopedPointer>
 
+// Prototyper include.
+#include "form_object.hpp"
+
 
 namespace Prototyper {
 
@@ -50,6 +53,7 @@ class FormPrivate;
 //! Form.
 class Form
 	:	public QGraphicsObject
+	,	public FormObject
 {
 	Q_OBJECT
 

@@ -258,6 +258,8 @@ Form::Form( Cfg::Form & c, QGraphicsItem * parent )
 	tmp->init();
 
 	d.swap( tmp );
+
+	setObjectId( d->m_cfg.tabName() );
 }
 
 Form::~Form()

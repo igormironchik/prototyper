@@ -34,6 +34,7 @@ HEADERS +=	export.hpp \
 			form_aspect_ratio_handle.hpp \
 			form.hpp \
 			form_group.hpp \
+			form_hierarchy_model.hpp \
 			form_hierarchy_widget.hpp \
 			form_image_handles.hpp \
 			form_image.hpp \
@@ -65,6 +66,7 @@ SOURCES +=	form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
 			form.cpp \
 			form_group.cpp \
+			form_hierarchy_model.cpp \
 			form_hierarchy_widget.cpp \
 			form_image_handles.cpp \
 			form_image.cpp \

@@ -289,7 +289,11 @@ ProjectWidget::renameTab( const QString & oldName )
 			d->m_tabNames[ index ] = dlg.name();
 
 			if( index > 0 )
+			{
 				d->m_cfg.form()[ index - 1 ].setTabName( dlg.name() );
+
+				d->m_forms[ index - 1 ]->form()->setObjectId( dlg.name() );
+			}
 			else
 				d->m_cfg.description().setTabName( dlg.name() );
 
