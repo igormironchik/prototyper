@@ -718,7 +718,10 @@ ProjectWindow::p_insertImage()
 		QFileDialog::getOpenFileName( this, tr( "Select Image" ),
 			QStandardPaths::standardLocations(
 				QStandardPaths::PicturesLocation ).first(),
-			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ) );
+			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ), 0,
+			QFileDialog::DontUseNativeDialog );
+
+	QApplication::processEvents();
 
 	if( !fileName.isEmpty() )
 	{
@@ -746,11 +749,6 @@ ProjectWindow::p_insertImage()
 			drag->setPixmap( p );
 
 			QApplication::processEvents();
-
-			QMouseEvent event( QEvent::MouseButtonPress,
-				QPointF( -10.0, -10.0 ), Qt::LeftButton, 0, 0 );
-
-			QApplication::sendEvent( this, &event );
 
 			drag->exec();
 		}
