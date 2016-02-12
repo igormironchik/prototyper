@@ -69,8 +69,9 @@ FormImageHandlesPrivate::place( const QRectF & rect )
 {
 	FormResizableProxyPrivate::place( rect );
 
-	m_aspectRatioHandle->setPos( m_handles.m_move->pos() +
-		QPointF( m_handles.m_move->halfOfSize() * 2.0 + 6.0, 0.0 ) );
+	m_aspectRatioHandle->setPos( rect.x() - 12.0, rect.y() - 12.0 );
+
+	q->parentItem()->update( rect.adjusted( -20.0, -20.0, 20.0, 20.0 ) );
 }
 
 
@@ -93,6 +94,13 @@ bool
 FormImageHandles::isKeepAspectRatio() const
 {
 	return d_ptr()->m_aspectRatioHandle->isKeepAspectRatio();
+}
+
+QRectF
+FormImageHandles::boundingRect() const
+{
+	return FormResizableProxy::boundingRect()
+		.adjusted( -12.0, -12.0, 0.0, 0.0 );
 }
 
 } /* namespace Core */

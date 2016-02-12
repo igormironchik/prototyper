@@ -49,9 +49,13 @@ public:
 	//! \return Is keep aspect ratio?
 	bool isKeepAspectRatio() const;
 
+	QRectF boundingRect() const Q_DECL_OVERRIDE;
+
 private:
 	inline const FormImageHandlesPrivate * d_ptr() const
 		{ return reinterpret_cast< const FormImageHandlesPrivate* > ( d.data() ); }
+	inline FormImageHandlesPrivate * d_ptr()
+		{ return reinterpret_cast< FormImageHandlesPrivate* > ( d.data() ); }
 
 private:
 	Q_DISABLE_COPY( FormImageHandles )

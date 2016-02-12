@@ -49,6 +49,8 @@
 #include <QImage>
 #include <QVariant>
 
+#include <QDebug>
+
 
 namespace Prototyper {
 
@@ -133,6 +135,8 @@ FormPrivate::init()
 	m_snap->setGridStep( m_cfg.gridStep() );
 
 	q->setAcceptHoverEvents( true );
+
+	q->setAcceptDrops( true );
 }
 
 qreal
@@ -735,6 +739,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				{
 					text = new FormText( rect->rect(), this );
 
+					text->setObjectId( ++d->m_id );
+
 					text->setFocus();
 
 					QTextCursor c = text->textCursor();
@@ -785,10 +791,23 @@ Form::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 void
 Form::dragEnterEvent( QGraphicsSceneDragDropEvent * event )
 {
+	qDebug() << "dragEnterEvent";
+
 	if( event->mimeData()->hasImage() )
 		event->acceptProposedAction();
 	else
 		QGraphicsObject::dragEnterEvent( event );
+}
+
+void
+Form::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
+{
+	qDebug() << "dragMoveEvent";
+
+	if( event->mimeData()->hasImage() )
+		event->acceptProposedAction();
+	else
+		QGraphicsObject::dragMoveEvent( event );
 }
 
 void
@@ -797,11 +816,29 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 	if( event->mimeData()->hasImage() )
 	{
 		FormImage * image = new FormImage( this );
-		image->setPos( event->pos() );
+
+		image->setObjectId( ++d->m_id );
+
+		if( FormAction::instance()->mode() == FormAction::Select )
+		{
+			image->setFlag( QGraphicsItem::ItemIsSelectable, true );
+
+			image->setSelected( true );
+		}
+
+		d->m_snap->setSnapPos( event->pos() );
+
+		if( FormAction::instance()->isSnapEnabled() )
+			image->setPos( d->m_snap->snapPos() );
+		else
+			image->setPos( event->pos() );
+
 		image->setImage( qvariant_cast< QImage >
 			( event->mimeData()->imageData() ) );
 
 		event->acceptProposedAction();
+
+		emit changed();
 	}
 	else
 		QGraphicsObject::dropEvent( event );

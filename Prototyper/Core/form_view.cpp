@@ -75,6 +75,8 @@ FormViewPrivate::init()
 	q->setDragMode( QGraphicsView::RubberBandDrag );
 
 	q->setRenderHints( QPainter::Antialiasing );
+
+	q->setAcceptDrops( true );
 }
 
 

@@ -35,35 +35,27 @@ namespace Core {
 // WithResizeAndMoveHandles
 //
 
-WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormWithHandle * object )
+WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormWithHandle * object,
+	QGraphicsItem * parent )
 	:	m_topLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 12.0 ), -45.0,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeFDiagCursor ) )
+			object, parent, Qt::SizeFDiagCursor ) )
 	,	m_top( new FormResizeHandle( 6.0, QPointF( 6.0, 12.0 ), 0.0,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeVerCursor ) )
+			object, parent, Qt::SizeVerCursor ) )
 	,	m_topRight( new FormResizeHandle( 6.0, QPointF( 0.0, 12.0 ), 45.0,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeBDiagCursor ) )
+			object, parent, Qt::SizeBDiagCursor ) )
 	,	m_left( new FormResizeHandle( 6.0, QPointF( 12.0, 6.0 ), -90.0,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeHorCursor ) )
+			object, parent, Qt::SizeHorCursor ) )
 	,	m_bottomLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 0.0 ), 45.0,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeBDiagCursor ) )
+			object, parent, Qt::SizeBDiagCursor ) )
 	,	m_bottom( new FormResizeHandle( 6.0, QPointF( 6.0, 0.0 ), 0.0,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeVerCursor ) )
+			object, parent, Qt::SizeVerCursor ) )
 	,	m_bottomRight( new FormResizeHandle( 6.0, QPointF( 0.0, 0.0 ), -45.0,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeFDiagCursor ) )
+			object, parent, Qt::SizeFDiagCursor ) )
 	,	m_right( new FormResizeHandle( 6.0, QPointF( 0.0, 6.0 ), 90,
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeHorCursor ) )
+			object, parent, Qt::SizeHorCursor ) )
 	,	m_move( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),
-			object, dynamic_cast< QGraphicsItem* > ( object ),
-			Qt::SizeAllCursor ) )
-	,	q( dynamic_cast< QGraphicsItem* > ( object ) )
+			object, parent, Qt::SizeAllCursor ) )
+	,	q( parent )
 	,	m_min( 25.0, 25.0 )
 {
 }

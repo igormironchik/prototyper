@@ -50,7 +50,7 @@ public:
 		,	m_start( 0 )
 		,	m_end( 0 )
 		,	m_closed( false )
-		,	m_handles( parent )
+		,	m_handles( parent, parent )
 	{
 	}
 

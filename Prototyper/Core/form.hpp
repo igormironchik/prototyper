@@ -127,6 +127,8 @@ protected:
 		Q_DECL_OVERRIDE;
 	void dragEnterEvent( QGraphicsSceneDragDropEvent * event )
 		Q_DECL_OVERRIDE;
+	void dragMoveEvent( QGraphicsSceneDragDropEvent * event )
+		Q_DECL_OVERRIDE;
 	void dropEvent( QGraphicsSceneDragDropEvent * event )
 		Q_DECL_OVERRIDE;
 

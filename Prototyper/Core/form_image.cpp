@@ -95,7 +95,7 @@ FormImage::setImage( const QImage & img )
 
 	QRectF r = d->m_image.rect();
 	r.moveTop( pos().y() );
-	r.moveRight( pos().x() );
+	r.moveLeft( pos().x() );
 
 	d->m_handles->setRect( r );
 }
@@ -124,7 +124,7 @@ FormImage::resize( const QRectF & rect )
 
 	QRectF r = pixmap().rect();
 	r.moveTop( pos().y() );
-	r.moveRight( pos().x() );
+	r.moveLeft( pos().x() );
 
 	d->m_handles->setRect( r );
 }

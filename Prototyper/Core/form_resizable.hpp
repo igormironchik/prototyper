@@ -84,7 +84,7 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Handles.
-	WithResizeAndMoveHandles m_handles;
+	QScopedPointer< WithResizeAndMoveHandles > m_handles;
 }; // class FormResizableProxyPrivate;
 
 

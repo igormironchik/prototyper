@@ -68,7 +68,7 @@ FormResizableProxyPrivate::FormResizableProxyPrivate( FormResizable * resizable,
 	:	q( parent )
 	,	m_object( resizable )
 	,	m_rect( 0.0, 0.0, 24.0, 24.0 )
-	,	m_handles( q )
+	,	m_handles( 0 )
 {
 }
 
@@ -79,9 +79,14 @@ FormResizableProxyPrivate::~FormResizableProxyPrivate()
 void
 FormResizableProxyPrivate::init()
 {
-	m_handles.setMinSize( QSizeF( 35.0, 35.0 ) );
+	QScopedPointer< WithResizeAndMoveHandles > tmp(
+		new WithResizeAndMoveHandles( q, q ) );
 
-	m_handles.show();
+	m_handles.swap( tmp );
+
+	m_handles->setMinSize( QSizeF( 35.0, 35.0 ) );
+
+	m_handles->show();
 
 	q->setZValue( 999 );
 }
@@ -89,7 +94,7 @@ FormResizableProxyPrivate::init()
 void
 FormResizableProxyPrivate::place( const QRectF & rect )
 {
-	m_handles.place( rect );
+	m_handles->place( rect );
 }
 
 
@@ -146,7 +151,7 @@ FormResizableProxy::setRect( const QRectF & rect )
 void
 FormResizableProxy::setMinSize( const QSizeF & min )
 {
-	d->m_handles.setMinSize( min );
+	d->m_handles->setMinSize( min );
 }
 
 QRectF
@@ -174,7 +179,7 @@ FormResizableProxy::paint( QPainter * painter,
 void
 FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
-	if( handle == d->m_handles.m_move )
+	if( handle == d->m_handles->m_move )
 	{
 		d->m_rect.moveTop( d->m_rect.top() + delta.y() );
 		d->m_rect.moveRight( d->m_rect.right() + delta.x() );
@@ -183,60 +188,60 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 
 		d->m_object->moveResizable( delta );
 	}
-	else if( handle == d->m_handles.m_topLeft )
+	else if( handle == d->m_handles->m_topLeft )
 	{
 		const QRectF r = d->m_rect.adjusted( delta.x(), delta.y(), 0.0, 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles.m_top )
+	else if( handle == d->m_handles->m_top )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, delta.y(), 0.0, 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles.m_topRight )
+	else if( handle == d->m_handles->m_topRight )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, delta.y(), delta.x(), 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles.m_right )
+	else if( handle == d->m_handles->m_right )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, delta.x(), 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles.m_bottomRight )
+	else if( handle == d->m_handles->m_bottomRight )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, delta.x(), delta.y() );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles.m_bottom )
+	else if( handle == d->m_handles->m_bottom )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, 0.0, delta.y() );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles.m_bottomLeft )
+	else if( handle == d->m_handles->m_bottomLeft )
 	{
 		const QRectF r = d->m_rect.adjusted( delta.x(), 0.0, 0.0, delta.y() );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles.m_left )
+	else if( handle == d->m_handles->m_left )
 	{
 		const QRectF r = d->m_rect.adjusted( delta.x(), 0.0, 0.0, 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
 }
@@ -244,7 +249,7 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 void
 FormResizableProxy::handleReleased( FormMoveHandle * handle )
 {
-	if( handle != d->m_handles.m_move )
+	if( handle != d->m_handles->m_move )
 		d->m_object->resize( d->m_rect );
 }
 

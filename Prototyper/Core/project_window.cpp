@@ -51,6 +51,8 @@
 #include <QActionGroup>
 #include <QImage>
 #include <QColorDialog>
+#include <QMimeData>
+#include <QDrag>
 
 
 namespace Prototyper {
@@ -724,8 +726,33 @@ ProjectWindow::p_insertImage()
 
 		if( !image.isNull() )
 		{
-			foreach( FormView * v, d->m_widget->forms() )
-				v->form()->setCursor( Qt::ArrowCursor );
+			QDrag * drag = new QDrag( this );
+			QMimeData * mimeData = new QMimeData;
+
+			QPixmap p;
+			QSize s = image.size();
+
+			if( s.width() > 50 || s.height() > 50 )
+			{
+				s = s.boundedTo( QSize( 50, 50 ) );
+				p = QPixmap::fromImage(
+					image.scaled( s, Qt::KeepAspectRatio, Qt::SmoothTransformation ) );
+			}
+			else
+				p = QPixmap::fromImage( image );
+
+			mimeData->setImageData( image );
+			drag->setMimeData( mimeData );
+			drag->setPixmap( p );
+
+			QApplication::processEvents();
+
+			QMouseEvent event( QEvent::MouseButtonPress,
+				QPointF( -10.0, -10.0 ), Qt::LeftButton, 0, 0 );
+
+			QApplication::sendEvent( this, &event );
+
+			drag->exec();
 		}
 		else
 			QMessageBox::warning( this, tr( "Wrong Image..." ),

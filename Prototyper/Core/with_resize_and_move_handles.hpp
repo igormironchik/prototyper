@@ -47,7 +47,8 @@ class FormResizeHandle;
 //! Storage of resize and move handles.
 class WithResizeAndMoveHandles {
 public:
-	WithResizeAndMoveHandles( FormWithHandle * object );
+	WithResizeAndMoveHandles( FormWithHandle * object,
+		QGraphicsItem * parent );
 	~WithResizeAndMoveHandles();
 
 	//! Place handles.

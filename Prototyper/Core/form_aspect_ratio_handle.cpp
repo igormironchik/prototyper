@@ -65,6 +65,8 @@ void
 AspectRatioHandlePrivate::init()
 {
 	q->setCursor( Qt::ArrowCursor );
+
+	q->setAcceptHoverEvents( true );
 }
 
 
@@ -177,9 +179,11 @@ AspectRatioHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
 	if( event->button() == Qt::LeftButton && d->m_pressed )
 	{
+		d->m_pressed = false;
+
 		QRectF r = boundingRect();
 		r.moveTop( pos().y() );
-		r.moveRight( pos().x() );
+		r.moveLeft( pos().x() );
 
 		if( r.contains( mapToScene( event->pos() ) ) )
 		{
