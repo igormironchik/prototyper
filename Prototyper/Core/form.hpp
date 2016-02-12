@@ -125,6 +125,10 @@ protected:
 		Q_DECL_OVERRIDE;
 	void hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 		Q_DECL_OVERRIDE;
+	void dragEnterEvent( QGraphicsSceneDragDropEvent * event )
+		Q_DECL_OVERRIDE;
+	void dropEvent( QGraphicsSceneDragDropEvent * event )
+		Q_DECL_OVERRIDE;
 
 private:
 	friend class FormPrivate;

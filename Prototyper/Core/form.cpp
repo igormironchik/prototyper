@@ -32,6 +32,7 @@
 #include "form_group.hpp"
 #include "form_rect_placer.hpp"
 #include "form_text.hpp"
+#include "form_image.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -43,6 +44,10 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QApplication>
 #include <QTextCursor>
+#include <QGraphicsSceneDragDropEvent>
+#include <QMimeData>
+#include <QImage>
+#include <QVariant>
 
 
 namespace Prototyper {
@@ -775,6 +780,31 @@ Form::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 	d->m_snap->setSnapPos( event->pos() );
 
 	event->ignore();
+}
+
+void
+Form::dragEnterEvent( QGraphicsSceneDragDropEvent * event )
+{
+	if( event->mimeData()->hasImage() )
+		event->acceptProposedAction();
+	else
+		QGraphicsObject::dragEnterEvent( event );
+}
+
+void
+Form::dropEvent( QGraphicsSceneDragDropEvent * event )
+{
+	if( event->mimeData()->hasImage() )
+	{
+		FormImage * image = new FormImage( this );
+		image->setPos( event->pos() );
+		image->setImage( qvariant_cast< QImage >
+			( event->mimeData()->imageData() ) );
+
+		event->acceptProposedAction();
+	}
+	else
+		QGraphicsObject::dropEvent( event );
 }
 
 } /* namespace Core */
