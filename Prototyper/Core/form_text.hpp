@@ -67,6 +67,7 @@ protected:
 	//! Move resizable.
 	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
 
+protected:
 	void focusOutEvent( QFocusEvent * event ) Q_DECL_OVERRIDE;
 
 private:

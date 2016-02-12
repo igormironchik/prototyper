@@ -29,6 +29,7 @@
 
 // Prototyper include.
 #include "form_object.hpp"
+#include "form_resizable.hpp"
 
 
 namespace Prototyper {
@@ -45,6 +46,7 @@ class FormImagePrivate;
 class FormImage
 	:	public QGraphicsPixmapItem
 	,	public FormObject
+	,	public FormResizable
 {
 public:
 	FormImage( QGraphicsItem * parent = 0 );
@@ -57,6 +59,12 @@ public:
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+
+protected:
+	//! Resize.
+	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
+	//! Move resizable.
+	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
 
 private:
 	Q_DISABLE_COPY( FormImage )

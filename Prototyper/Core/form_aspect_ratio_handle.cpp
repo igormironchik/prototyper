@@ -64,6 +64,7 @@ public:
 void
 AspectRatioHandlePrivate::init()
 {
+	q->setCursor( Qt::ArrowCursor );
 }
 
 

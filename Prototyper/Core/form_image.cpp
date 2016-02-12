@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "form_image.hpp"
+#include "form_image_handles.hpp"
 
 // Qt include.
 #include <QGraphicsSceneHoverEvent>
@@ -40,6 +41,7 @@ class FormImagePrivate {
 public:
 	FormImagePrivate( FormImage * parent )
 		:	q( parent )
+		,	m_handles( 0 )
 	{
 	}
 
@@ -52,11 +54,14 @@ public:
 	QImage m_image;
 	//! Rect.
 	QRectF m_rect;
+	//! Handles.
+	FormImageHandles * m_handles;
 }; // class FormImagePrivate
 
 void
 FormImagePrivate::init()
 {
+	m_handles = new FormImageHandles( q, q->parentItem() );
 }
 
 
@@ -87,6 +92,12 @@ FormImage::setImage( const QImage & img )
 	d->m_image = img;
 
 	setPixmap( QPixmap::fromImage( d->m_image ) );
+
+	QRectF r = d->m_image.rect();
+	r.moveTop( pos().y() );
+	r.moveRight( pos().x() );
+
+	d->m_handles->setRect( r );
 }
 
 void
@@ -94,6 +105,34 @@ FormImage::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
 	QGraphicsPixmapItem::paint( painter, option, widget );
+
+	if( isSelected() && !group() )
+		d->m_handles->show();
+	else
+		d->m_handles->hide();
+}
+
+void
+FormImage::resize( const QRectF & rect )
+{
+	setPos( rect.topLeft() );
+
+	setPixmap( QPixmap::fromImage( d->m_image.scaled(
+		QSize( rect.width(), rect.height() ),
+		( d->m_handles->isKeepAspectRatio() ? Qt::KeepAspectRatio :
+			Qt::IgnoreAspectRatio ), Qt::SmoothTransformation ) ) );
+
+	QRectF r = pixmap().rect();
+	r.moveTop( pos().y() );
+	r.moveRight( pos().x() );
+
+	d->m_handles->setRect( r );
+}
+
+void
+FormImage::moveResizable( const QPointF & delta )
+{
+	moveBy( delta.x(), delta.y() );
 }
 
 } /* namespace Core */
