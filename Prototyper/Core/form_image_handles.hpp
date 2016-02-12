@@ -20,15 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__FORM_Pixmap_HPP__INCLUDED
-#define PROTOTYPER__CORE__FORM_Pixmap_HPP__INCLUDED
-
-// Qt include.
-#include <QGraphicsPixmapItem>
-#include <QScopedPointer>
+#ifndef PROTOTYPER__CORE__FORM_IMAGE_HANDLES_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_IMAGE_HANDLES_HPP__INCLUDED
 
 // Prototyper include.
-#include "form_object.hpp"
+#include "form_resizable.hpp"
 
 
 namespace Prototyper {
@@ -36,36 +32,33 @@ namespace Prototyper {
 namespace Core {
 
 //
-// FormImage
+// FormImageHandles
 //
 
-class FormImagePrivate;
+class FormImageHandlesPrivate;
 
-//! Pixmap on the form.
-class FormImage
-	:	public QGraphicsPixmapItem
-	,	public FormObject
+//! Image handles.
+class FormImageHandles
+	:	public FormResizableProxy
 {
 public:
-	FormImage( QGraphicsItem * parent = 0 );
-	~FormImage();
+	FormImageHandles( FormResizable * resizable,
+		QGraphicsItem * parent );
+	~FormImageHandles();
 
-	//! \return Image.
-	const QImage & image() const;
-	//! Set image.
-	void setImage( const QImage & img );
-
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+	//! \return Is keep aspect ratio?
+	bool isKeepAspectRatio() const;
 
 private:
-	Q_DISABLE_COPY( FormImage )
+	inline const FormImageHandlesPrivate * d_ptr() const
+		{ return reinterpret_cast< const FormImageHandlesPrivate* > ( d.data() ); }
 
-	QScopedPointer< FormImagePrivate > d;
-}; // class FormImage
+private:
+	Q_DISABLE_COPY( FormImageHandles )
+}; // class FormImageHandles
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__FORM_Pixmap_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_IMAGE_HANDLES_HPP__INCLUDED

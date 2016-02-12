@@ -29,6 +29,7 @@
 
 // Prototyper include.
 #include "form_move_handle.hpp"
+#include "with_resize_and_move_handles.hpp"
 
 
 namespace Prototyper {
@@ -59,10 +60,37 @@ private:
 
 
 //
-// FormResizableProxy
+// FormResizableProxyPrivate
 //
 
-class FormResizableProxyPrivate;
+class FormResizableProxy;
+
+class FormResizableProxyPrivate {
+public:
+	FormResizableProxyPrivate( FormResizable * resizable,
+		FormResizableProxy * parent );
+
+	virtual ~FormResizableProxyPrivate();
+
+	//! Init.
+	virtual void init();
+	//! Place handles.
+	virtual void place( const QRectF & rect );
+
+	//! Parent.
+	FormResizableProxy * q;
+	//! Object.
+	FormResizable * m_object;
+	//! Rect.
+	QRectF m_rect;
+	//! Handles.
+	WithResizeAndMoveHandles m_handles;
+}; // class FormResizableProxyPrivate;
+
+
+//
+// FormResizableProxy
+//
 
 //! Proxy for resizable object. This proxy has resize and move handles
 //! and on resize draw new rectangle but don't resize actual FormResizable.
@@ -88,16 +116,21 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 protected:
+	FormResizableProxy( QScopedPointer< FormResizableProxyPrivate > && dd,
+		QGraphicsItem * parent );
+
+protected:
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		Q_DECL_OVERRIDE;
 	//! Handle released.
 	void handleReleased( FormMoveHandle * handle ) Q_DECL_OVERRIDE;
 
+protected:
+	QScopedPointer< FormResizableProxyPrivate > d;
+
 private:
 	Q_DISABLE_COPY( FormResizableProxy )
-
-	QScopedPointer< FormResizableProxyPrivate > d;
 }; // class FormResizableProxy
 
 } /* namespace Core */

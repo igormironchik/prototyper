@@ -20,15 +20,12 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__FORM_Pixmap_HPP__INCLUDED
-#define PROTOTYPER__CORE__FORM_Pixmap_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_ASPECT_RATIO_HANDLE_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_ASPECT_RATIO_HANDLE_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsPixmapItem>
+#include <QGraphicsItem>
 #include <QScopedPointer>
-
-// Prototyper include.
-#include "form_object.hpp"
 
 
 namespace Prototyper {
@@ -36,36 +33,45 @@ namespace Prototyper {
 namespace Core {
 
 //
-// FormImage
+// AspectRatioHandle
 //
 
-class FormImagePrivate;
+class AspectRatioHandlePrivate;
 
-//! Pixmap on the form.
-class FormImage
-	:	public QGraphicsPixmapItem
-	,	public FormObject
+//! Aspect ratio handle.
+class AspectRatioHandle
+	:	public QGraphicsItem
 {
 public:
-	FormImage( QGraphicsItem * parent = 0 );
-	~FormImage();
+	AspectRatioHandle( QGraphicsItem * parent );
+	~AspectRatioHandle();
 
-	//! \return Image.
-	const QImage & image() const;
-	//! Set image.
-	void setImage( const QImage & img );
+	//! \return Is keep aspect ratio?
+	bool isKeepAspectRatio() const;
+
+	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
-private:
-	Q_DISABLE_COPY( FormImage )
+protected:
+	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+		Q_DECL_OVERRIDE;
+	void hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
+		Q_DECL_OVERRIDE;
+	void mousePressEvent( QGraphicsSceneMouseEvent * event )
+		Q_DECL_OVERRIDE;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
+		Q_DECL_OVERRIDE;
 
-	QScopedPointer< FormImagePrivate > d;
-}; // class FormImage
+private:
+	Q_DISABLE_COPY( AspectRatioHandle )
+
+	QScopedPointer< AspectRatioHandlePrivate > d;
+}; // class AspectRatioHandle
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__FORM_Pixmap_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_ASPECT_RATIO_HANDLE_HPP__INCLUDED

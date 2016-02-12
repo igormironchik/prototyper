@@ -48,6 +48,10 @@ public:
 
 	//! Parent.
 	FormImage * q;
+	//! Image.
+	QImage m_image;
+	//! Rect.
+	QRectF m_rect;
 }; // class FormImagePrivate
 
 void
@@ -71,10 +75,18 @@ FormImage::~FormImage()
 {
 }
 
-QRectF
-FormImage::boundingRect() const
+const QImage &
+FormImage::image() const
 {
-	return QGraphicsPixmapItem::boundingRect();
+	return d->m_image;
+}
+
+void
+FormImage::setImage( const QImage & img )
+{
+	d->m_image = img;
+
+	setPixmap( QPixmap::fromImage( d->m_image ) );
 }
 
 void
@@ -82,36 +94,6 @@ FormImage::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
 	QGraphicsPixmapItem::paint( painter, option, widget );
-}
-
-void
-FormImage::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
-{
-	QGraphicsPixmapItem::hoverEnterEvent( event );
-}
-
-void
-FormImage::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
-{
-	QGraphicsPixmapItem::hoverMoveEvent( event );
-}
-
-void
-FormImage::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
-{
-	QGraphicsPixmapItem::mouseMoveEvent( event );
-}
-
-void
-FormImage::mousePressEvent( QGraphicsSceneMouseEvent * event )
-{
-	QGraphicsPixmapItem::mousePressEvent( event );
-}
-
-void
-FormImage::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
-{
-	QGraphicsPixmapItem::mouseReleaseEvent( event );
 }
 
 } /* namespace Core */
