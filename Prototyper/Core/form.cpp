@@ -49,8 +49,6 @@
 #include <QImage>
 #include <QVariant>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 
@@ -791,7 +789,7 @@ Form::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 void
 Form::dragEnterEvent( QGraphicsSceneDragDropEvent * event )
 {
-	qDebug() << "dragEnterEvent";
+	d->m_snap->setSnapPos( event->pos() );
 
 	if( event->mimeData()->hasImage() )
 		event->acceptProposedAction();
@@ -802,7 +800,7 @@ Form::dragEnterEvent( QGraphicsSceneDragDropEvent * event )
 void
 Form::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
 {
-	qDebug() << "dragMoveEvent";
+	d->m_snap->setSnapPos( event->pos() );
 
 	if( event->mimeData()->hasImage() )
 		event->acceptProposedAction();
