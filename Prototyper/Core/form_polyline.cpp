@@ -50,7 +50,7 @@ public:
 		,	m_start( 0 )
 		,	m_end( 0 )
 		,	m_closed( false )
-		,	m_handles( parent, parent )
+		,	m_handles( 0 )
 	{
 	}
 
@@ -76,7 +76,7 @@ public:
 	//! Closed?
 	bool m_closed;
 	//! Resize & move handles.
-	WithResizeAndMoveHandles m_handles;
+	QScopedPointer< WithResizeAndMoveHandles > m_handles;
 }; // class FormPolylinePrivate
 
 void
@@ -93,9 +93,14 @@ FormPolylinePrivate::init()
 	m_start->hide();
 	m_end->hide();
 
-	m_handles.setMinSize( QSizeF( 25.0, 25.0 ) );
+	QScopedPointer< WithResizeAndMoveHandles > tmp(
+		new WithResizeAndMoveHandles( q, q ) );
 
-	m_handles.hide();
+	m_handles.swap( tmp );
+
+	m_handles->setMinSize( QSizeF( 25.0, 25.0 ) );
+
+	m_handles->hide();
 
 	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
 
@@ -315,81 +320,81 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 	if( isSelected() && !group() )
 	{
-		d->m_handles.place( option->rect );
+		d->m_handles->place( option->rect );
 
-		d->m_handles.show();
+		d->m_handles->show();
 	}
 	else
-		d->m_handles.hide();
+		d->m_handles->hide();
 }
 
 void
 FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
-	if( handle == d->m_handles.m_move )
+	if( handle == d->m_handles->m_move )
 		moveBy( delta.x(), delta.y() );
-	else if( handle == d->m_handles.m_topLeft )
+	else if( handle == d->m_handles->m_topLeft )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( delta.x(), delta.y(), 0.0, 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles.m_top )
+	else if( handle == d->m_handles->m_top )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( 0.0, delta.y(), 0.0, 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles.m_topRight )
+	else if( handle == d->m_handles->m_topRight )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( 0.0, delta.y(), delta.x(), 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles.m_right )
+	else if( handle == d->m_handles->m_right )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( 0.0, 0.0, delta.x(), 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles.m_bottomRight )
+	else if( handle == d->m_handles->m_bottomRight )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( 0.0, 0.0, delta.x(), delta.y() );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles.m_bottom )
+	else if( handle == d->m_handles->m_bottom )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( 0.0, 0.0, 0.0, delta.y() );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles.m_bottomLeft )
+	else if( handle == d->m_handles->m_bottomLeft )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( delta.x(), 0.0, 0.0, delta.y() );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles.m_left )
+	else if( handle == d->m_handles->m_left )
 	{
 		const QRectF r =
 			d->boundingRect().adjusted( delta.x(), 0.0, 0.0, 0.0 );
 
-		if( d->m_handles.checkConstraint( r.size() ) )
+		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
 }
