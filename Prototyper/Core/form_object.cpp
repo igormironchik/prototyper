@@ -33,7 +33,7 @@ namespace Core {
 //
 
 FormObject::FormObject()
-	:	m_id( 0 )
+	:	m_id( QString::number( 0 ) )
 {
 }
 
@@ -41,14 +41,14 @@ FormObject::~FormObject()
 {
 }
 
-quint64
+const QString &
 FormObject::objectId() const
 {
 	return m_id;
 }
 
 void
-FormObject::setObjectId( quint64 i )
+FormObject::setObjectId( const QString & i )
 {
 	m_id = i;
 }

@@ -48,9 +48,9 @@ public:
 	virtual ~FormObject();
 
 	//! \return ID.
-	quint64 objectId() const;
+	const QString & objectId() const;
 	//! Set ID.
-	void setObjectId( quint64 i );
+	void setObjectId( const QString & i );
 
 	//! \return Pen.
 	virtual const QPen & objectPen() const;
@@ -66,7 +66,7 @@ private:
 	Q_DISABLE_COPY( FormObject )
 
 	//! ID.
-	quint64 m_id;
+	QString m_id;
 	//! Pen.
 	QPen m_pen;
 	//! Brush.

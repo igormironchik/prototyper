@@ -410,7 +410,7 @@ Form::group()
 			group->setSelected( true );
 		}
 
-		group->setObjectId( ++d->m_id );
+		group->setObjectId( QString::number( ++d->m_id ) );
 	}
 }
 
@@ -587,7 +587,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					FormAction::instance()->testFlag( FormAction::Polyline ) )
 						d->m_polyline = true;
 
-				line->setObjectId( ++d->m_id );
+				line->setObjectId( QString::number( ++d->m_id ) );
 
 				d->m_current = line;
 
@@ -676,8 +676,10 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 						if( !d->m_currentLines.isEmpty() )
 						{
 							d->m_currentPoly = new FormPolyline( this );
-							d->m_currentPoly->setObjectId( ++d->m_id );
-							d->m_currentPoly->appendLine( d->m_currentLines.first()->line() );
+							d->m_currentPoly->setObjectId(
+								QString::number( ++d->m_id ) );
+							d->m_currentPoly->appendLine(
+								d->m_currentLines.first()->line() );
 							d->m_currentPoly->showHandles( true );
 
 							scene()->removeItem( d->m_currentLines.first() );
@@ -737,7 +739,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				{
 					text = new FormText( rect->rect(), this );
 
-					text->setObjectId( ++d->m_id );
+					text->setObjectId( QString::number( ++d->m_id ) );
 
 					text->setFocus();
 
@@ -815,7 +817,7 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 	{
 		FormImage * image = new FormImage( this );
 
-		image->setObjectId( ++d->m_id );
+		image->setObjectId( QString::number( ++d->m_id ) );
 
 		if( FormAction::instance()->mode() == FormAction::Select )
 		{
