@@ -33,6 +33,10 @@
 #include "form_rect_placer.hpp"
 #include "form_text.hpp"
 #include "form_image.hpp"
+#include "form_hierarchy_model.hpp"
+#include "top_gui.hpp"
+#include "project_window.hpp"
+#include "form_hierarchy_widget.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -71,6 +75,7 @@ public:
 		,	m_snap( 0 )
 		,	m_polyline( false )
 		,	m_currentPoly( 0 )
+		,	m_model( 0 )
 	{
 	}
 
@@ -118,6 +123,8 @@ public:
 	bool m_polyline;
 	//! Current polyline.
 	FormPolyline * m_currentPoly;
+	//! Hierarchy model.
+	FormHierarchyModel * m_model;
 }; // class FormPrivate
 
 void
@@ -135,6 +142,8 @@ FormPrivate::init()
 	q->setAcceptHoverEvents( true );
 
 	q->setAcceptDrops( true );
+
+	m_model = TopGui::instance()->projectWindow()->formHierarchy()->model();
 }
 
 qreal
@@ -158,7 +167,9 @@ FormPrivate::currentZValue( const QList< QGraphicsItem* > & items,
 		if( !children.isEmpty() )
 			currentZValue( children, z );
 
-		if( item->zValue() > z )
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj && item->zValue() > z )
 			z = item->zValue();
 	}
 }
