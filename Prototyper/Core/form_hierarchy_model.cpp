@@ -126,6 +126,49 @@ FormHierarchyModel::~FormHierarchyModel()
 {
 }
 
+void
+FormHierarchyModel::addForm( FormObject * form )
+{
+	if( !d->m_root.contains( form ) )
+	{
+		beginInsertRows( QModelIndex(), d->m_root.size(), d->m_root.size() );
+		d->m_root.append( form );
+		endInsertRows();
+	}
+}
+
+void
+FormHierarchyModel::removeForm( FormObject * form )
+{
+	if( d->m_root.contains( form ) )
+	{
+		const int index = d->m_root.indexOf( form );
+
+		beginRemoveRows( QModelIndex(), index, index );
+		d->m_root.removeAt( index );
+		endRemoveRows();
+	}
+}
+
+void
+FormHierarchyModel::renameForm( FormObject * form )
+{
+	if( d->m_root.contains( form ) )
+	{
+		const QModelIndex i = index( d->m_root.indexOf( form ), 0 );
+
+		emit dataChanged( i, i );
+	}
+}
+
+void
+FormHierarchyModel::clear()
+{
+	beginResetModel();
+	d->m_root.clear();
+	endResetModel();
+}
+
 int
 FormHierarchyModel::columnCount( const QModelIndex & parent ) const
 {
@@ -210,13 +253,18 @@ FormHierarchyModel::parent( const QModelIndex & index ) const
 int
 FormHierarchyModel::rowCount( const QModelIndex & parent ) const
 {
-	FormObject * obj = static_cast< FormObject* >
-		( parent.internalPointer() );
+	if( parent.isValid() )
+	{
+		FormObject * obj = static_cast< FormObject* >
+			( parent.internalPointer() );
 
-	if( obj )
-		return d->children( obj ).size();
+		if( obj )
+			return d->children( obj ).size();
+		else
+			return 0;
+	}
 	else
-		return 0;
+		return d->m_root.size();
 }
 
 } /* namespace Core */

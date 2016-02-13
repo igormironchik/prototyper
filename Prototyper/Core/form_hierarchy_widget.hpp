@@ -32,6 +32,8 @@ namespace Prototyper {
 
 namespace Core {
 
+class FormHierarchyModel;
+
 //
 // FormHierarchyWidget
 //
@@ -47,6 +49,9 @@ class FormHierarchyWidget
 public:
 	FormHierarchyWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~FormHierarchyWidget();
+
+	//! \return Model.
+	FormHierarchyModel * model() const;
 
 private:
 	Q_DISABLE_COPY( FormHierarchyWidget )

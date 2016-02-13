@@ -32,6 +32,8 @@ namespace Prototyper {
 
 namespace Core {
 
+class FormObject;
+
 //
 // FormHierarchyModel
 //
@@ -45,6 +47,15 @@ class FormHierarchyModel
 public:
 	FormHierarchyModel( QObject * parent = 0 );
 	~FormHierarchyModel();
+
+	//! Add form.
+	void addForm( FormObject * form );
+	//! Remove form.
+	void removeForm( FormObject * form );
+	//! Rename form.
+	void renameForm( FormObject * form );
+	//! Clear model.
+	void clear();
 
 	int columnCount( const QModelIndex & parent = QModelIndex() ) const
 		Q_DECL_OVERRIDE;

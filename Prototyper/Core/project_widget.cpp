@@ -33,6 +33,8 @@
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "tabs_list.hpp"
+#include "form_hierarchy_widget.hpp"
+#include "form_hierarchy_model.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -136,6 +138,8 @@ ProjectWidgetPrivate::init()
 void
 ProjectWidgetPrivate::newProject()
 {
+	TopGui::instance()->projectWindow()->formHierarchy()->model()->clear();
+
 	for( int i = 1; i < m_tabNames.size(); )
 	{
 		QWidget * tab = m_tabs->widget( i );
@@ -182,6 +186,9 @@ ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
 	m_tabs->addTab( form, cfg.tabName() );
 
 	m_forms.append( form );
+
+	TopGui::instance()->projectWindow()->formHierarchy()->model()->addForm(
+		form->form() );
 
 	ProjectWidget::connect( form->formScene(), &FormScene::changed,
 		q, &ProjectWidget::changed );
@@ -293,6 +300,9 @@ ProjectWidget::renameTab( const QString & oldName )
 				d->m_cfg.form()[ index - 1 ].setTabName( dlg.name() );
 
 				d->m_forms[ index - 1 ]->form()->setObjectId( dlg.name() );
+
+				TopGui::instance()->projectWindow()->formHierarchy()->model()->
+					renameForm( d->m_forms.at( index - 1 )->form() );
 			}
 			else
 				d->m_cfg.description().setTabName( dlg.name() );
@@ -324,6 +334,9 @@ ProjectWidget::deleteForm( const QString & name )
 			d->m_tabs->removeTab( index );
 
 			d->m_tabNames.removeAt( index );
+
+			TopGui::instance()->projectWindow()->formHierarchy()->model()->
+				removeForm( d->m_forms.at( index - 1 )->form() );
 
 			d->m_forms.removeAt( index - 1 );
 

@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "form_hierarchy_widget.hpp"
+#include "form_hierarchy_model.hpp"
 
 // Qt include.
 #include <QTreeView>
@@ -40,6 +41,7 @@ public:
 	FormHierarchyWidgetPrivate( FormHierarchyWidget * parent )
 		:	q( parent )
 		,	m_view( 0 )
+		,	m_model( 0 )
 	{
 	}
 
@@ -50,12 +52,20 @@ public:
 	FormHierarchyWidget * q;
 	//! Tree.
 	QTreeView * m_view;
+	//! Model.
+	FormHierarchyModel * m_model;
 }; // class FormHierarchyWidgetPrivate
 
 void
 FormHierarchyWidgetPrivate::init()
 {
 	m_view = new QTreeView( q );
+
+	m_view->setHeaderHidden( true );
+
+	m_model = new FormHierarchyModel( q );
+
+	m_view->setModel( m_model );
 
 	q->setWindowTitle( FormHierarchyWidget::tr( "Form's Hierarchy" ) );
 
@@ -76,6 +86,12 @@ FormHierarchyWidget::FormHierarchyWidget( QWidget * parent, Qt::WindowFlags f )
 
 FormHierarchyWidget::~FormHierarchyWidget()
 {
+}
+
+FormHierarchyModel *
+FormHierarchyWidget::model() const
+{
+	return d->m_model;
 }
 
 } /* namespace Core */

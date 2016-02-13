@@ -65,7 +65,7 @@ public:
 	QAction * gridStepAction() const;
 
 	//! \return Form hierarchy widget.
-	FormHierarchyWidget * fowmHierarchy() const;
+	FormHierarchyWidget * formHierarchy() const;
 
 	//! \return Tabs list widget.
 	TabsList * tabsList() const;

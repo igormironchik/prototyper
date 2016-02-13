@@ -427,7 +427,7 @@ ProjectWindow::gridStepAction() const
 }
 
 FormHierarchyWidget *
-ProjectWindow::fowmHierarchy() const
+ProjectWindow::formHierarchy() const
 {
 	return d->m_formHierarchy;
 }
