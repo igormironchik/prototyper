@@ -28,14 +28,13 @@
 #include <QPen>
 #include <QBrush>
 
-QT_BEGIN_NAMESPACE
-class QGraphicsItem;
-QT_END_NAMESPACE
-
 
 namespace Prototyper {
 
 namespace Core {
+
+class Form;
+
 
 //
 // FormObject
@@ -44,7 +43,7 @@ namespace Core {
 //! Object on the form.
 class FormObject {
 public:
-	FormObject();
+	explicit FormObject( Form * parent );
 	virtual ~FormObject();
 
 	//! \return ID.
@@ -62,6 +61,9 @@ public:
 	//! Set brush.
 	virtual void setObjectBrush( const QBrush & b );
 
+	//! \return Form.
+	Form * form() const;
+
 private:
 	Q_DISABLE_COPY( FormObject )
 
@@ -71,6 +73,8 @@ private:
 	QPen m_pen;
 	//! Brush.
 	QBrush m_brush;
+	//! Form.
+	Form * m_form;
 }; // class FormObject
 
 } /* namespace Core */

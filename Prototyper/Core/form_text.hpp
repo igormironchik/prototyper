@@ -36,6 +36,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class Form;
+
+
 //
 // FormText
 //
@@ -49,7 +52,7 @@ class FormText
 	,	public FormResizable
 {
 public:
-	explicit FormText( const QRectF & rect, QGraphicsItem * parent = 0 );
+	FormText( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
 	~FormText();
 
 	//! Enable/disable editing.

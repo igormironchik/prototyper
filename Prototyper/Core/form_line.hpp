@@ -36,7 +36,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class Form;
 class FormLineMoveHandle;
+
 
 //
 // FormLine
@@ -51,7 +53,7 @@ class FormLine
 	,	public FormWithHandle
 {
 public:
-	FormLine( QGraphicsItem * parent = 0 );
+	explicit FormLine( Form * form, QGraphicsItem * parent = 0 );
 	~FormLine();
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;

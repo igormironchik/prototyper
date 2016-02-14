@@ -178,8 +178,9 @@ FormPolylinePrivate::boundingRect() const
 // FormPolyline
 //
 
-FormPolyline::FormPolyline( QGraphicsItem * parent )
+FormPolyline::FormPolyline( Form * form, QGraphicsItem * parent )
 	:	QGraphicsPathItem( parent )
+	,	FormObject( form )
 	,	d( new FormPolylinePrivate( this ) )
 {
 	d->init();

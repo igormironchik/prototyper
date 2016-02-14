@@ -36,6 +36,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class Form;
+
+
 //
 // FormImage
 //
@@ -49,7 +52,7 @@ class FormImage
 	,	public FormResizable
 {
 public:
-	FormImage( QGraphicsItem * parent = 0 );
+	explicit FormImage( Form * form, QGraphicsItem * parent = 0 );
 	~FormImage();
 
 	//! \return Image.

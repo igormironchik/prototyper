@@ -32,8 +32,9 @@ namespace Core {
 // FormObject
 //
 
-FormObject::FormObject()
+FormObject::FormObject( Form * form )
 	:	m_id( QString::number( 0 ) )
+	,	m_form( form )
 {
 }
 
@@ -75,6 +76,12 @@ void
 FormObject::setObjectBrush( const QBrush & b )
 {
 	m_brush = b;
+}
+
+Form *
+FormObject::form() const
+{
+	return m_form;
 }
 
 } /* namespace Core */

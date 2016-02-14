@@ -119,8 +119,9 @@ FormLinePrivate::createHandles()
 // FormLine
 //
 
-FormLine::FormLine( QGraphicsItem * parent )
+FormLine::FormLine( Form * form, QGraphicsItem * parent )
 	:	QGraphicsLineItem( parent )
+	,	FormObject( form )
 	,	d( new FormLinePrivate( this ) )
 {
 	d->init();

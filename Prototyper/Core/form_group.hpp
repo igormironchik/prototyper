@@ -36,6 +36,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class Form;
+
+
 //
 // FormGroup
 //
@@ -48,7 +51,7 @@ class FormGroup
 	,	public FormWithHandle
 {
 public:
-	FormGroup( QGraphicsItem * parent = 0 );
+	explicit FormGroup( Form * form, QGraphicsItem * parent = 0 );
 	~FormGroup();
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;

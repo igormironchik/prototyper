@@ -32,7 +32,6 @@
 // Qt include.
 #include <QGraphicsItem>
 #include <QGraphicsScene>
-#include <QItemSelection>
 #include <QApplication>
 #include <QItemSelectionModel>
 

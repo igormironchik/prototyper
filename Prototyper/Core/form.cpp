@@ -98,6 +98,8 @@ public:
 	void handleMouseMoveInCurrentPolyLine( const QPointF & point );
 	//! Ungroup.
 	void ungroup( QGraphicsItem * group );
+	//! \return Next ID.
+	QString id();
 
 	//! Parent.
 	Form * q;
@@ -125,6 +127,8 @@ public:
 	FormPolyline * m_currentPoly;
 	//! Hierarchy model.
 	FormHierarchyModel * m_model;
+	//! IDs
+	QStringList m_ids;
 }; // class FormPrivate
 
 void
@@ -273,6 +277,16 @@ FormPrivate::ungroup( QGraphicsItem * group )
 	}
 }
 
+QString
+FormPrivate::id()
+{
+	while( !m_ids.contains( QString::number( ++m_id ) ) )
+	{
+	}
+
+	return QString::number( m_id );
+}
+
 
 //
 // Form
@@ -280,6 +294,7 @@ FormPrivate::ungroup( QGraphicsItem * group )
 
 Form::Form( Cfg::Form & c, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
+	,	FormObject( this )
 	,	d( 0 )
 {
 	QScopedPointer< FormPrivate > tmp( new FormPrivate( c, this ) );
@@ -397,9 +412,13 @@ Form::group()
 
 	if( items.size() > 1 )
 	{
-		group = new FormGroup( this );
+		group = new FormGroup( this, this );
 
-		group->setObjectId( QString::number( ++d->m_id ) );
+		const QString id = d->id();
+
+		group->setObjectId( id );
+
+		d->m_ids.append( id );
 
 		d->m_model->addObject( group, this );
 
@@ -422,9 +441,13 @@ Form::group()
 	}
 	else if( d->m_currentLines.size() > 1 )
 	{
-		group = new FormGroup( this );
+		group = new FormGroup( this, this );
 
-		group->setObjectId( QString::number( ++d->m_id ) );
+		const QString id = d->id();
+
+		group->setObjectId( id );
+
+		d->m_ids.append( id );
 
 		d->m_model->addObject( group, this );
 
@@ -615,7 +638,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			{
 				d->m_pressed = true;
 
-				FormLine * line = new FormLine( this );
+				FormLine * line = new FormLine( this, this );
 
 				bool intersected = false;
 				bool intersectedEnds = false;
@@ -633,7 +656,11 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					FormAction::instance()->testFlag( FormAction::Polyline ) )
 						d->m_polyline = true;
 
-				line->setObjectId( QString::number( ++d->m_id ) );
+				const QString id = d->id();
+
+				line->setObjectId( id );
+
+				d->m_ids.append( id );
 
 				d->m_model->addObject( line, this );
 
@@ -723,9 +750,13 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					{
 						if( !d->m_currentLines.isEmpty() )
 						{
-							d->m_currentPoly = new FormPolyline( this );
-							d->m_currentPoly->setObjectId(
-								QString::number( ++d->m_id ) );
+							d->m_currentPoly = new FormPolyline( this, this );
+
+							const QString id = d->id();
+
+							d->m_currentPoly->setObjectId( id );
+
+							d->m_ids.append( id );
 
 							d->m_model->addObject( d->m_currentPoly, this );
 
@@ -797,9 +828,13 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				if( rect )
 				{
-					text = new FormText( rect->rect(), this );
+					text = new FormText( rect->rect(), this, this );
 
-					text->setObjectId( QString::number( ++d->m_id ) );
+					const QString id = d->id();
+
+					text->setObjectId( id );
+
+					d->m_ids.append( id );
 
 					d->m_model->addObject( text, this );
 
@@ -877,9 +912,13 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 {
 	if( event->mimeData()->hasImage() )
 	{
-		FormImage * image = new FormImage( this );
+		FormImage * image = new FormImage( this, this );
 
-		image->setObjectId( QString::number( ++d->m_id ) );
+		const QString id = d->id();
+
+		image->setObjectId( id );
+
+		d->m_ids.append( id );
 
 		d->m_model->addObject( image, this );
 

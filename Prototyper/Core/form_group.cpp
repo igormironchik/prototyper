@@ -109,8 +109,9 @@ FormGroupPrivate::init()
 // FormGroup
 //
 
-FormGroup::FormGroup( QGraphicsItem * parent )
+FormGroup::FormGroup( Form * form, QGraphicsItem * parent )
 	:	QGraphicsItemGroup( parent )
+	,	FormObject( form )
 	,	d( new FormGroupPrivate( this ) )
 {
 	d->init();
