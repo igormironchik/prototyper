@@ -551,7 +551,7 @@ Form::renameObject( FormObject * obj )
 {
 	if( obj->form() == this )
 	{
-		NameDlg dlg( d->m_ids, tr( "Enter New ID of the Object..." ),
+		NameDlg dlg( d->m_ids, tr( "Enter New Name of the Object..." ),
 			scene()->views().first() );
 
 		if( dlg.exec() == QDialog::Accepted )
