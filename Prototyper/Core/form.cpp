@@ -37,6 +37,7 @@
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "form_hierarchy_widget.hpp"
+#include "name_dlg.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -52,6 +53,7 @@
 #include <QMimeData>
 #include <QImage>
 #include <QVariant>
+#include <QGraphicsView>
 
 
 namespace Prototyper {
@@ -280,7 +282,7 @@ FormPrivate::ungroup( QGraphicsItem * group )
 QString
 FormPrivate::id()
 {
-	while( !m_ids.contains( QString::number( ++m_id ) ) )
+	while( m_ids.contains( QString::number( ++m_id ) ) )
 	{
 	}
 
@@ -542,6 +544,27 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	}
 
 	painter->restore();
+}
+
+void
+Form::renameObject( FormObject * obj )
+{
+	if( obj->form() == this )
+	{
+		NameDlg dlg( d->m_ids, tr( "Enter New ID of the Object..." ),
+			scene()->views().first() );
+
+		if( dlg.exec() == QDialog::Accepted )
+		{
+			const QString old = obj->objectId();
+
+			obj->setObjectId( dlg.name() );
+
+			d->m_ids.removeOne( old );
+
+			d->m_ids.append( dlg.name() );
+		}
+	}
 }
 
 void

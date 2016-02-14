@@ -28,12 +28,16 @@
 #include "project_window.hpp"
 #include "project_widget.hpp"
 #include "form_view.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QGraphicsItem>
 #include <QGraphicsScene>
 #include <QApplication>
 #include <QItemSelectionModel>
+#include <QMenu>
+#include <QAction>
+#include <QContextMenuEvent>
 
 
 namespace Prototyper {
@@ -52,6 +56,22 @@ FormHierarchyView::FormHierarchyView( QWidget * parent )
 
 FormHierarchyView::~FormHierarchyView()
 {
+}
+
+void
+FormHierarchyView::changeId()
+{
+	const QModelIndex index = currentIndex();
+
+	if( index.isValid() )
+	{
+		FormObject * obj = static_cast< FormObject* >
+			( index.internalPointer() );
+
+		obj->form()->renameObject( obj );
+
+		update( index );
+	}
 }
 
 void
@@ -79,6 +99,24 @@ FormHierarchyView::selectionChanged( const QItemSelection & selected,
 				item->setSelected( true );
 		}
 	}
+}
+
+void
+FormHierarchyView::contextMenuEvent( QContextMenuEvent * e )
+{
+	if( currentIndex().isValid() )
+	{
+		QMenu menu;
+
+		menu.addAction( QIcon( ":/Core/img/edit-rename.png" ),
+			tr( "Change ID" ), this, SLOT( changeId() ) );
+
+		menu.exec( e->globalPos() );
+
+		e->accept();
+	}
+	else
+		e->ignore();
 }
 
 

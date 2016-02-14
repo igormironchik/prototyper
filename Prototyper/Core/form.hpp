@@ -112,6 +112,10 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget ) Q_DECL_OVERRIDE;
 
+public slots:
+	//! Rename object.
+	void renameObject( FormObject * obj );
+
 private slots:
 	//! Set grid step.
 	void slotSetGridStep();

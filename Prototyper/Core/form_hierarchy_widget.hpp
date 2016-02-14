@@ -41,14 +41,21 @@ namespace Core {
 class FormHierarchyView
 	:	public QTreeView
 {
+	Q_OBJECT
+
 public:
 	FormHierarchyView( QWidget * parent );
 	~FormHierarchyView();
+
+public slots:
+	//! Change ID.
+	void changeId();
 
 protected:
 	void selectionChanged( const QItemSelection & selected,
 		const QItemSelection & deselected )
 			Q_DECL_OVERRIDE;
+	void contextMenuEvent( QContextMenuEvent * e );
 
 private:
 	Q_DISABLE_COPY( FormHierarchyView )
