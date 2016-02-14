@@ -57,6 +57,16 @@ public:
 	//! Clear model.
 	void clear();
 
+	//! Add object.
+	void addObject( FormObject * obj, FormObject * parent );
+	//! Remove object.
+	void removeObject( FormObject * obj, FormObject * parent );
+	//! End remove object.
+	void endRemoveObject();
+
+	//! \return Index for the given object.
+	QModelIndex index( FormObject * obj ) const;
+
 	int columnCount( const QModelIndex & parent = QModelIndex() ) const
 		Q_DECL_OVERRIDE;
 

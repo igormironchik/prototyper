@@ -24,6 +24,13 @@
 #include "form_scene.hpp"
 #include "project_cfg.hpp"
 #include "form_actions.hpp"
+#include "top_gui.hpp"
+#include "project_window.hpp"
+#include "form_hierarchy_widget.hpp"
+#include "form_hierarchy_model.hpp"
+#include "form_object.hpp"
+#include "form_actions.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QKeyEvent>
@@ -165,9 +172,28 @@ FormScene::keyPressEvent( QKeyEvent * event )
 
 				case Qt::Key_Delete :
 				{
+					QList< QGraphicsItem* > toDelete;
+
 					foreach( QGraphicsItem * item, selectedItems() )
 					{
+						if( item->parentItem() == FormAction::instance()->form() )
+							toDelete.append( item );
+					}
+
+					foreach( QGraphicsItem * item, toDelete )
+					{
+						FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+						if( obj )
+							TopGui::instance()->projectWindow()->
+								formHierarchy()->model()->removeObject( obj,
+									FormAction::instance()->form() );
+
 						removeItem( item );
+
+						if( obj )
+							TopGui::instance()->projectWindow()->
+								formHierarchy()->model()->endRemoveObject();
 
 						delete item;
 					}

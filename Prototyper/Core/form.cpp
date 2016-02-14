@@ -239,7 +239,21 @@ FormPrivate::ungroup( QGraphicsItem * group )
 
 		foreach( QGraphicsItem * item, items )
 		{
+			FormGroup * obj = dynamic_cast< FormGroup* > ( item );
+
+			if( obj )
+				m_model->removeObject( obj, tmp );
+
 			tmp->removeFromGroup( item );
+
+			if( obj )
+			{
+				m_model->endRemoveObject();
+
+				QApplication::processEvents();
+
+				m_model->addObject( obj, q );
+			}
 
 			if( FormAction::instance()->mode() == FormAction::Select )
 			{
@@ -249,7 +263,11 @@ FormPrivate::ungroup( QGraphicsItem * group )
 			}
 		}
 
+		m_model->removeObject( tmp, q );
+
 		q->scene()->removeItem( tmp );
+
+		m_model->endRemoveObject();
 
 		delete tmp;
 	}
@@ -381,6 +399,10 @@ Form::group()
 	{
 		group = new FormGroup( this );
 
+		group->setObjectId( QString::number( ++d->m_id ) );
+
+		d->m_model->addObject( group, this );
+
 		foreach( QGraphicsItem * item, items )
 		{
 			item->setFlag( QGraphicsItem::ItemIsSelectable, false );
@@ -388,12 +410,23 @@ Form::group()
 			item->setSelected( false );
 
 			if( item->parentItem() == this )
+			{
 				group->addToGroup( item );
+
+				FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+				if( obj )
+					d->m_model->addObject( obj, group );
+			}
 		}
 	}
 	else if( d->m_currentLines.size() > 1 )
 	{
 		group = new FormGroup( this );
+
+		group->setObjectId( QString::number( ++d->m_id ) );
+
+		d->m_model->addObject( group, this );
 
 		foreach( FormLine * line, d->m_currentLines )
 		{
@@ -402,6 +435,8 @@ Form::group()
 			line->setSelected( false );
 
 			group->addToGroup( line );
+
+			d->m_model->addObject( line, group );
 		}
 
 		d->m_currentLines.clear();
@@ -422,8 +457,6 @@ Form::group()
 
 			group->setSelected( true );
 		}
-
-		group->setObjectId( QString::number( ++d->m_id ) );
 	}
 }
 
@@ -602,6 +635,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				line->setObjectId( QString::number( ++d->m_id ) );
 
+				d->m_model->addObject( line, this );
+
 				d->m_current = line;
 
 				if( !intersected )
@@ -691,11 +726,19 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 							d->m_currentPoly = new FormPolyline( this );
 							d->m_currentPoly->setObjectId(
 								QString::number( ++d->m_id ) );
+
+							d->m_model->addObject( d->m_currentPoly, this );
+
 							d->m_currentPoly->appendLine(
 								d->m_currentLines.first()->line() );
 							d->m_currentPoly->showHandles( true );
 
+							d->m_model->removeObject( d->m_currentLines.first(),
+								this );
+
 							scene()->removeItem( d->m_currentLines.first() );
+
+							d->m_model->endRemoveObject();
 
 							delete d->m_currentLines.first();
 
@@ -704,7 +747,11 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 						d->m_currentPoly->appendLine( line->line() );
 
+						d->m_model->removeObject( line, this );
+
 						scene()->removeItem( line );
+
+						d->m_model->endRemoveObject();
 
 						delete line;
 
@@ -753,6 +800,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					text = new FormText( rect->rect(), this );
 
 					text->setObjectId( QString::number( ++d->m_id ) );
+
+					d->m_model->addObject( text, this );
 
 					text->setFocus();
 
@@ -831,6 +880,8 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 		FormImage * image = new FormImage( this );
 
 		image->setObjectId( QString::number( ++d->m_id ) );
+
+		d->m_model->addObject( image, this );
 
 		if( FormAction::instance()->mode() == FormAction::Select )
 		{

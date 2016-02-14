@@ -169,6 +169,52 @@ FormHierarchyModel::clear()
 	endResetModel();
 }
 
+void
+FormHierarchyModel::addObject( FormObject * obj, FormObject * parent )
+{
+	Q_UNUSED( obj )
+
+	QModelIndex i = index( parent );
+
+	if( i.isValid() )
+	{
+		const int row = rowCount( i );
+
+		beginInsertRows( i, row, row );
+		endInsertRows();
+	}
+}
+
+void
+FormHierarchyModel::removeObject( FormObject * obj, FormObject * parent )
+{
+	QModelIndex i = index( parent );
+
+	if( i.isValid() )
+	{
+		const int r = d->row( obj );
+
+		beginRemoveRows( i, r, r );
+	}
+}
+
+void
+FormHierarchyModel::endRemoveObject()
+{
+	endRemoveRows();
+}
+
+QModelIndex
+FormHierarchyModel::index( FormObject * obj ) const
+{
+	const int row = d->row( obj );
+
+	if( row >= 0 )
+		return createIndex( row, 0, obj );
+	else
+		return QModelIndex();
+}
+
 int
 FormHierarchyModel::columnCount( const QModelIndex & parent ) const
 {
