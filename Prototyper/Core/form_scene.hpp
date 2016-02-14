@@ -58,6 +58,10 @@ public:
 	FormScene( const Cfg::Form & c, QObject * parent = 0 );
 	~FormScene();
 
+public slots:
+	//! Delete selected items.
+	void deleteSelected();
+
 protected:
 	void keyPressEvent( QKeyEvent * event )
 		Q_DECL_OVERRIDE;

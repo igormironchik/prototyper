@@ -55,7 +55,10 @@ protected:
 	void selectionChanged( const QItemSelection & selected,
 		const QItemSelection & deselected )
 			Q_DECL_OVERRIDE;
-	void contextMenuEvent( QContextMenuEvent * e );
+	void contextMenuEvent( QContextMenuEvent * e )
+		Q_DECL_OVERRIDE;
+	void keyPressEvent( QKeyEvent* e )
+		Q_DECL_OVERRIDE;
 
 private:
 	Q_DISABLE_COPY( FormHierarchyView )

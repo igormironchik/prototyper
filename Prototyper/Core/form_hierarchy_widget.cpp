@@ -29,6 +29,8 @@
 #include "project_widget.hpp"
 #include "form_view.hpp"
 #include "form.hpp"
+#include "form_actions.hpp"
+#include "form_scene.hpp"
 
 // Qt include.
 #include <QGraphicsItem>
@@ -117,6 +119,26 @@ FormHierarchyView::contextMenuEvent( QContextMenuEvent * e )
 	}
 	else
 		e->ignore();
+}
+
+void
+FormHierarchyView::keyPressEvent( QKeyEvent* e )
+{
+	if( e->key() == Qt::Key_Delete )
+	{
+		if( selectionModel()->hasSelection() )
+		{
+			FormScene * s = dynamic_cast< FormScene* >
+				( FormAction::instance()->form()->scene() );
+
+			if( s )
+				s->deleteSelected();
+		}
+
+		e->accept();
+	}
+	else
+		QTreeView::keyPressEvent( e );
 }
 
 
