@@ -23,14 +23,65 @@
 // Prototyper include.
 #include "form_hierarchy_widget.hpp"
 #include "form_hierarchy_model.hpp"
+#include "form_object.hpp"
+#include "top_gui.hpp"
+#include "project_window.hpp"
+#include "project_widget.hpp"
+#include "form_view.hpp"
 
 // Qt include.
-#include <QTreeView>
+#include <QGraphicsItem>
+#include <QGraphicsScene>
+#include <QItemSelection>
+#include <QApplication>
+#include <QItemSelectionModel>
 
 
 namespace Prototyper {
 
 namespace Core {
+
+//
+// FormHierarchyView
+//
+
+FormHierarchyView::FormHierarchyView( QWidget * parent )
+	:	QTreeView( parent )
+{
+	setSelectionMode( QAbstractItemView::ExtendedSelection );
+}
+
+FormHierarchyView::~FormHierarchyView()
+{
+}
+
+void
+FormHierarchyView::selectionChanged( const QItemSelection & selected,
+	const QItemSelection & deselected )
+{
+	QTreeView::selectionChanged( selected, deselected );
+
+	foreach( FormView * view,
+		TopGui::instance()->projectWindow()->projectWidget()->forms() )
+	{
+		view->scene()->clearSelection();
+	}
+
+	QApplication::processEvents();
+
+	foreach( const QModelIndex & index, selectionModel()->selectedIndexes() )
+	{
+		if( index.isValid() )
+		{
+			QGraphicsItem * item = dynamic_cast< QGraphicsItem* >
+				( static_cast< FormObject* > ( index.internalPointer() ) );
+
+			if( item )
+				item->setSelected( true );
+		}
+	}
+}
+
 
 //
 // FormHierarchyWidgetPrivate
@@ -51,7 +102,7 @@ public:
 	//! Parent.
 	FormHierarchyWidget * q;
 	//! Tree.
-	QTreeView * m_view;
+	FormHierarchyView * m_view;
 	//! Model.
 	FormHierarchyModel * m_model;
 }; // class FormHierarchyWidgetPrivate
@@ -59,7 +110,7 @@ public:
 void
 FormHierarchyWidgetPrivate::init()
 {
-	m_view = new QTreeView( q );
+	m_view = new FormHierarchyView( q );
 
 	m_view->setHeaderHidden( true );
 

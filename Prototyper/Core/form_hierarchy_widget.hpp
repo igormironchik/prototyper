@@ -26,11 +26,34 @@
 // Qt include.
 #include <QDockWidget>
 #include <QScopedPointer>
+#include <QTreeView>
 
 
 namespace Prototyper {
 
 namespace Core {
+
+//
+// FormHierarchyView
+//
+
+//! Form's hierarchy view.
+class FormHierarchyView
+	:	public QTreeView
+{
+public:
+	FormHierarchyView( QWidget * parent );
+	~FormHierarchyView();
+
+protected:
+	void selectionChanged( const QItemSelection & selected,
+		const QItemSelection & deselected )
+			Q_DECL_OVERRIDE;
+
+private:
+	Q_DISABLE_COPY( FormHierarchyView )
+}; // class FormHierarchyView
+
 
 class FormHierarchyModel;
 
