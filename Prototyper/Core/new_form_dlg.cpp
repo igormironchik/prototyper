@@ -21,14 +21,15 @@
 */
 
 // Prototyper include.
-#include "name_dlg.hpp"
-#include "ui_name_dlg.h"
+#include "new_form_dlg.hpp"
+#include "ui_new_form_dlg.h"
 
 // Qt include.
 #include <QLineEdit>
 #include <QPushButton>
 #include <QPalette>
 #include <QDialogButtonBox>
+#include <QSpinBox>
 
 
 namespace Prototyper {
@@ -36,13 +37,13 @@ namespace Prototyper {
 namespace Core {
 
 //
-// NameDlgPrivate
+// NewFormDlgPrivate
 //
 
-class NameDlgPrivate {
+class NewFormDlgPrivate {
 public:
-	NameDlgPrivate( const QStringList & names, const QString & title,
-		NameDlg * parent )
+	NewFormDlgPrivate( const QStringList & names, const QString & title,
+		NewFormDlg * parent )
 		:	q( parent )
 		,	m_names( names )
 		,	m_title( title )
@@ -53,19 +54,19 @@ public:
 	void init();
 
 	//! Parent.
-	NameDlg * q;
+	NewFormDlg * q;
 	//! Ui.
-	Ui::NameDlg m_ui;
+	Ui::NewFormDlg m_ui;
 	//! Names.
 	const QStringList & m_names;
 	//! Normal text color.
 	QColor m_color;
 	//! Title.
 	QString m_title;
-}; // class NameDlgPrivate
+}; // class NewFormDlgPrivate
 
 void
-NameDlgPrivate::init()
+NewFormDlgPrivate::init()
 {
 	m_ui.setupUi( q );
 
@@ -75,35 +76,42 @@ NameDlgPrivate::init()
 
 	m_ui.m_btns->button( QDialogButtonBox::Ok )->setEnabled( false );
 
-	NameDlg::connect( m_ui.m_edit, &QLineEdit::textChanged,
-		q, &NameDlg::textChanged );
+	NewFormDlg::connect( m_ui.m_edit, &QLineEdit::textChanged,
+		q, &NewFormDlg::textChanged );
 }
 
 
 //
-// NameDlg
+// NewFormDlg
 //
 
-NameDlg::NameDlg( const QStringList & names,
+NewFormDlg::NewFormDlg( const QStringList & names,
 	const QString & title, QWidget * parent, Qt::WindowFlags f )
 	:	QDialog( parent, f )
-	,	d( new NameDlgPrivate( names, title, this ) )
+	,	d( new NewFormDlgPrivate( names, title, this ) )
 {
 	d->init();
 }
 
-NameDlg::~NameDlg()
+NewFormDlg::~NewFormDlg()
 {
 }
 
 QString
-NameDlg::name() const
+NewFormDlg::name() const
 {
 	return d->m_ui.m_edit->text().trimmed();
 }
 
+QSize
+NewFormDlg::size() const
+{
+	return QSize( d->m_ui.m_width->value(),
+		d->m_ui.m_height->value() );
+}
+
 void
-NameDlg::textChanged( const QString & text )
+NewFormDlg::textChanged( const QString & text )
 {
 	if( !text.isEmpty() && !d->m_names.contains( text.trimmed() ) )
 	{

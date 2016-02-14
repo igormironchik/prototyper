@@ -51,6 +51,7 @@ HEADERS +=	export.hpp \
 			grid_snap.hpp \
 			grid_step_dlg.hpp \
 			name_dlg.hpp \
+			new_form_dlg.hpp \
 			project_description_tab.hpp \
 			project_widget.hpp \
 			project_widget_tab_bar.hpp \
@@ -83,6 +84,7 @@ SOURCES +=	form_actions.cpp \
 			grid_snap.cpp \
 			grid_step_dlg.cpp \
 			name_dlg.cpp \
+			new_form_dlg.cpp \
 			project_description_tab.cpp \
 			project_widget.cpp \
 			project_widget_tab_bar.cpp \
@@ -94,7 +96,8 @@ SOURCES +=	form_actions.cpp \
 			with_resize_and_move_handles.cpp
 
 FORMS +=	grid_step_dlg.ui \
-			name_dlg.ui
+			name_dlg.ui \
+			new_form_dlg.ui
 
 unix|win32: LIBS += -L$$OUT_PWD/../../3rdparty/QtConfFile/lib/ -lQtConfFile
 

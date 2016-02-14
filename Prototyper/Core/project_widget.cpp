@@ -35,6 +35,7 @@
 #include "tabs_list.hpp"
 #include "form_hierarchy_widget.hpp"
 #include "form_hierarchy_model.hpp"
+#include "new_form_dlg.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -257,14 +258,14 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 void
 ProjectWidget::addForm()
 {
-	NameDlg dlg( d->m_tabNames, tr( "Inter New Form Name..." ), this );
+	NewFormDlg dlg( d->m_tabNames, tr( "Inter New Form Properties..." ), this );
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
 		Cfg::Form cfg;
 		cfg.setGridStep( d->m_cfg.defaultGridStep() );
-		cfg.size().setWidth( 800 );
-		cfg.size().setHeight( 600 );
+		cfg.size().setWidth( dlg.size().width() );
+		cfg.size().setHeight( dlg.size().height() );
 		cfg.setTabName( dlg.name() );
 
 		d->m_cfg.form().append( cfg );
