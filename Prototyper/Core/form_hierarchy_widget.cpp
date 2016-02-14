@@ -109,7 +109,7 @@ FormHierarchyView::contextMenuEvent( QContextMenuEvent * e )
 		QMenu menu;
 
 		menu.addAction( QIcon( ":/Core/img/edit-rename.png" ),
-			tr( "Change ID" ), this, SLOT( changeId() ) );
+			tr( "Rename" ), this, SLOT( changeId() ) );
 
 		menu.exec( e->globalPos() );
 

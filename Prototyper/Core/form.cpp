@@ -24,6 +24,7 @@
 #include "form.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
+#include "project_widget.hpp"
 #include "project_cfg.hpp"
 #include "form_actions.hpp"
 #include "form_line.hpp"
@@ -551,19 +552,25 @@ Form::renameObject( FormObject * obj )
 {
 	if( obj->form() == this )
 	{
-		NameDlg dlg( d->m_ids, tr( "Enter New Name of the Object..." ),
-			scene()->views().first() );
-
-		if( dlg.exec() == QDialog::Accepted )
+		if( obj != this )
 		{
-			const QString old = obj->objectId();
+			NameDlg dlg( d->m_ids, tr( "Enter New Name of the Object..." ),
+				scene()->views().first() );
 
-			obj->setObjectId( dlg.name() );
+			if( dlg.exec() == QDialog::Accepted )
+			{
+				const QString old = obj->objectId();
 
-			d->m_ids.removeOne( old );
+				obj->setObjectId( dlg.name() );
 
-			d->m_ids.append( dlg.name() );
+				d->m_ids.removeOne( old );
+
+				d->m_ids.append( dlg.name() );
+			}
 		}
+		else
+			TopGui::instance()->projectWindow()->projectWidget()->renameTab(
+				obj->objectId() );
 	}
 }
 
