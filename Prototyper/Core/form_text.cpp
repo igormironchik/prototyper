@@ -24,6 +24,7 @@
 #include "form_text.hpp"
 #include "with_resize_and_move_handles.hpp"
 #include "form_resizable.hpp"
+#include "form_text_opts.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -31,6 +32,7 @@
 #include <QTextDocument>
 #include <QTextCursor>
 #include <QFontMetrics>
+#include <QFont>
 
 
 namespace Prototyper {
@@ -46,7 +48,8 @@ public:
 	FormTextPrivate( const QRectF & rect, FormText * parent )
 		:	q( parent )
 		,	m_rect( rect )
-		,	m_proxy( new FormResizableProxy( q, q->parentItem() ) )
+		,	m_proxy( 0 )
+		,	m_opts( 0 )
 	{
 	}
 
@@ -61,6 +64,8 @@ public:
 	QRectF m_rect;
 	//! Resizable proxy.
 	FormResizableProxy * m_proxy;
+	//! Text options.
+	FormTextOpts * m_opts;
 }; // class FormTextPrivate
 
 void
@@ -68,13 +73,55 @@ FormTextPrivate::init()
 {
 	q->enableEditing( true );
 
-	q->setPlainText( FormText::tr( "Text" ) );
+	m_proxy = new FormResizableProxy( q, q->parentItem() );
+
+	m_opts = new FormTextOpts( q->parentItem() );
+
+	m_opts->setFocusProxy( q );
+
+	m_opts->hide();
 
 	setRect( m_rect );
 
-	QFontMetrics m( q->font() );
+	QFont f = q->font();
+
+	f.setPointSize( 10.0 );
+
+	q->setFont( f );
+
+	q->document()->setDefaultFont( f );
+
+	QTextCursor c = q->textCursor();
+
+	QTextCharFormat fmt = c.charFormat();
+	fmt.setFontPointSize( 10.0 );
+
+	c.setCharFormat( fmt );
+
+	q->setTextCursor( c );
+
+	q->setPlainText( FormText::tr( "Text" ) );
+
+	QFontMetrics m( f );
 	m_proxy->setMinSize(
 		QSizeF( m.boundingRect( QLatin1Char( 'a' ) ).size() ) );
+
+	FormText::connect( q->document(), &QTextDocument::cursorPositionChanged,
+		q, &FormText::p_cursorChanged );
+	FormText::connect( m_opts, &FormTextOpts::lessFontSize,
+		q, &FormText::lessFontSize );
+	FormText::connect( m_opts, &FormTextOpts::moreFontSize,
+		q, &FormText::moreFontSize );
+	FormText::connect( m_opts, &FormTextOpts::bold,
+		q, &FormText::bold );
+	FormText::connect( m_opts, &FormTextOpts::italic,
+		q, &FormText::italic );
+	FormText::connect( m_opts, &FormTextOpts::underline,
+		q, &FormText::underline );
+	FormText::connect( m_opts, &FormTextOpts::textColor,
+		q, &FormText::changeTextColor );
+	FormText::connect( m_opts, &FormTextOpts::clearFormat,
+		q, &FormText::clearFormat );
 }
 
 void
@@ -137,12 +184,212 @@ FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		unsetCursor();
 
 		d->m_proxy->show();
+
+		d->m_opts->hide();
 	}
 	else
 	{
 		setCursor( Qt::IBeamCursor );
 
+		if( !group() && hasFocus() )
+		{
+			d->m_opts->setPos( pos() +
+				QPointF( 0.0, -d->m_opts->size().height() ) );
+
+			d->m_opts->show();
+		}
+		else
+			d->m_opts->hide();
+
 		d->m_proxy->hide();
+	}
+}
+
+void
+FormText::lessFontSize()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
+
+		QTextCharFormat fmt = c.charFormat();
+
+		qreal s = fmt.fontPointSize();
+		s -= 1.0;
+
+		if( s < 5.0 )
+			s = 5.0;
+
+		fmt.setFontPointSize( s );
+
+		textCursor().setCharFormat( fmt );
+	}
+	else
+	{
+		QFont f = font();
+
+		qreal s = f.pointSize();
+		s -= 1.0;
+
+		if( s < 5.0 )
+			s = 5.0;
+
+		f.setPointSize( s );
+
+		setFont( f );
+	}
+}
+
+void
+FormText::moreFontSize()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
+
+		QTextCharFormat fmt = c.charFormat();
+
+		qreal s = fmt.fontPointSize();
+
+		s += 1.0;
+		fmt.setFontPointSize( s );
+
+		textCursor().setCharFormat( fmt );
+	}
+	else
+	{
+		QFont f = font();
+
+		qreal s = f.pointSize();
+
+		s += 1.0;
+
+		f.setPointSize( s );
+
+		setFont( f );
+	}
+}
+
+void
+FormText::bold( bool on )
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
+
+		QTextCharFormat fmt = c.charFormat();
+
+		fmt.setFontWeight( on ? QFont::Bold : QFont::Normal );
+
+		textCursor().setCharFormat( fmt );
+	}
+	else
+	{
+		QFont f = font();
+
+		f.setWeight( on ? QFont::Bold : QFont::Normal );
+
+		setFont( f );
+	}
+}
+
+void
+FormText::italic( bool on )
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
+
+		QTextCharFormat fmt = c.charFormat();
+
+		fmt.setFontItalic( on );
+
+		textCursor().setCharFormat( fmt );
+	}
+	else
+	{
+		QFont f = font();
+
+		f.setItalic( on );
+
+		setFont( f );
+	}
+}
+
+void
+FormText::underline( bool on )
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		if( c.position() != c.selectionEnd() )
+			c.setPosition( c.selectionEnd() );
+
+		QTextCharFormat fmt = c.charFormat();
+
+		fmt.setFontUnderline( on );
+
+		textCursor().setCharFormat( fmt );
+	}
+	else
+	{
+		QFont f = font();
+
+		f.setUnderline( on );
+
+		setFont( f );
+	}
+}
+
+void
+FormText::changeTextColor()
+{
+}
+
+void
+FormText::p_cursorChanged( const QTextCursor & cursor )
+{
+	d->m_opts->updateState( cursor );
+}
+
+void
+FormText::clearFormat()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		QTextCharFormat fmt = c.charFormat();
+
+		fmt.setFontUnderline( false );
+		fmt.setFontItalic( false );
+		fmt.setFontWeight( QFont::Normal );
+		fmt.setFontPointSize( 10 );
+
+		textCursor().setCharFormat( fmt );
+	}
+	else
+	{
+		QFont f = font();
+		f.setUnderline( false );
+		f.setItalic( false );
+		f.setWeight( QFont::Normal );
+		f.setPointSize( 10.0 );
+
+		setFont( f );
 	}
 }
 

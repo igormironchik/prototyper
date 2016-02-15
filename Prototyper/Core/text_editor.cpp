@@ -58,6 +58,15 @@ TextEditorPrivate::init()
 
 	q->setFontPointSize( 10.0 );
 
+	QTextCursor c = q->textCursor();
+
+	QTextCharFormat fmt = c.charFormat();
+	fmt.setFontPointSize( 10.0 );
+
+	c.setCharFormat( fmt );
+
+	q->setTextCursor( c );
+
 	TextEditor::connect( q, &QTextEdit::cursorPositionChanged,
 		q, &TextEditor::slotCursorChanged );
 	TextEditor::connect( q, &QTextEdit::textChanged,

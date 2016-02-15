@@ -51,6 +51,8 @@ class FormText
 	,	public FormObject
 	,	public FormResizable
 {
+	Q_OBJECT
+
 public:
 	FormText( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
 	~FormText();
@@ -64,6 +66,25 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
+public slots:
+	//! Less font size.
+	void lessFontSize();
+	//! More font size.
+	void moreFontSize();
+	//! Bold.
+	void bold( bool on );
+	//! Italic.
+	void italic( bool on );
+	//! Underline.
+	void underline( bool on );
+	//! Change text color.
+	void changeTextColor();
+	//! Clear format.
+	void clearFormat();
+
+private slots:
+	void p_cursorChanged( const QTextCursor & cursor );
+
 protected:
 	//! Resize.
 	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
@@ -74,6 +95,8 @@ protected:
 	void focusOutEvent( QFocusEvent * event ) Q_DECL_OVERRIDE;
 
 private:
+	friend class FormTextPrivate;
+
 	Q_DISABLE_COPY( FormText )
 
 	QScopedPointer< FormTextPrivate > d;
