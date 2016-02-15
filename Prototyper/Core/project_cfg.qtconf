@@ -113,6 +113,12 @@
 						{name pos}
 						{required}
 					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
 				} || class Line
 
 
@@ -129,6 +135,12 @@
 					{tag
 						{valueType Point}
 						{name pos}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
 						{required}
 					}
 				} || class Polyline
@@ -152,6 +164,12 @@
 					{tagScalar
 						{valueType qreal}
 						{name textWidth}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
 						{required}
 					}
 				} || class Text
@@ -178,7 +196,50 @@
 						{name pos}
 						{required}
 					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
 				} || class Image
+
+
+				|#
+					Group on the form.
+				#|
+				{class Group
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
+
+					{tagVectorOfTags
+						{valueType Line}
+						{name line}
+					}
+
+					{tagVectorOfTags
+						{valueType Polyline}
+						{name polyline}
+					}
+
+					{tagVectorOfTags
+						{valueType Text}
+						{name text}
+					}
+
+					{tagVectorOfTags
+						{valueType Image}
+						{name image}
+					}
+
+					{tagVectorOfTags
+						{valueType Group}
+						{name group}
+					}
+				} || class Group
 
 
 				|#
@@ -222,6 +283,11 @@
 					{tagVectorOfTags
 						{valueType Image}
 						{name image}
+					}
+
+					{tagVectorOfTags
+						{valueType Group}
+						{name group}
 					}
 				} || class Form
 
