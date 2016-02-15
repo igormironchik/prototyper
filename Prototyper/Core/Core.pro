@@ -47,6 +47,7 @@ HEADERS +=	export.hpp \
 			form_resize_handle.hpp \
 			form_scene.hpp \
 			form_text.hpp \
+			form_text_opts.hpp \
 			form_view.hpp \
 			grid_snap.hpp \
 			grid_step_dlg.hpp \
@@ -80,6 +81,7 @@ SOURCES +=	form_actions.cpp \
 			form_resize_handle.cpp \
 			form_scene.cpp \
 			form_text.cpp \
+			form_text_opts.cpp \
 			form_view.cpp \
 			grid_snap.cpp \
 			grid_step_dlg.cpp \

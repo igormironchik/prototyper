@@ -157,7 +157,10 @@ FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
 
 	m_resized = newR;
 
-	m_handles->place( m_resized.adjusted( -12.0, -12.0, 12.0, 12.0 ) );
+	const qreal w = (qreal) q->objectPen().width() / 2.0;
+
+	m_handles->place( m_resized.adjusted( -12.0 - w, -12.0 - w,
+		12.0 + w, 12.0 + w ) );
 
 	const QRectF b = boundingRect();
 	const qreal mx = b.width() / m_resized.width();
@@ -336,7 +339,10 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 	if( isSelected() && !group() )
 	{
-		d->m_handles->place( d->m_resized.adjusted( -12.0, -12.0, 12.0, 12.0 ) );
+		const qreal w = (qreal) objectPen().width() / 2.0;
+
+		d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
+			12.0 + w, 12.0 + w ) );
 
 		d->m_handles->show();
 	}
