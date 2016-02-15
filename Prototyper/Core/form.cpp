@@ -56,6 +56,9 @@
 #include <QVariant>
 #include <QGraphicsView>
 
+// C++ include.
+#include <algorithm>
+
 
 namespace Prototyper {
 
@@ -103,6 +106,20 @@ public:
 	void ungroup( QGraphicsItem * group );
 	//! \return Next ID.
 	QString id();
+	//! Update form from the configuration.
+	void updateFromCfg();
+	//! Clear form.
+	void clear();
+	//! Create line.
+	FormLine * createLine( const Cfg::Line & cfg );
+	//! Create polyline.
+	FormPolyline * createPolyline( const Cfg::Polyline & cfg );
+	//! Create text.
+	FormText * createText( const Cfg::Text & cfg );
+	//! Create image.
+	FormImage * createImage( const Cfg::Image & cfg );
+	//! Create group.
+	FormGroup * createGroup( const Cfg::Group & cfg );
 
 	//! Parent.
 	Form * q;
@@ -290,6 +307,152 @@ FormPrivate::id()
 	return QString::number( m_id );
 }
 
+void
+FormPrivate::updateFromCfg()
+{
+	clear();
+
+	QApplication::processEvents();
+
+	q->setSize( m_cfg.size() );
+
+	q->setGridStep( m_cfg.gridStep() );
+
+	q->setObjectId( m_cfg.tabName() );
+
+	TopGui::instance()->projectWindow()->formHierarchy()->view()->update(
+		m_model->index( q ) );
+
+	foreach( const Cfg::Line & c, m_cfg.line() )
+	{
+		FormLine * line = createLine( c );
+
+		m_model->addObject( line, q );
+	}
+
+	foreach( const Cfg::Polyline & c, m_cfg.polyline() )
+	{
+		FormPolyline * line = createPolyline( c );
+
+		m_model->addObject( line, q );
+	}
+
+	foreach( const Cfg::Text & c, m_cfg.text() )
+	{
+		FormText * text = createText( c );
+
+		m_model->addObject( text, q );
+	}
+
+	foreach( const Cfg::Image & c, m_cfg.image() )
+	{
+		FormImage * image = createImage( c );
+
+		m_model->addObject( image, q );
+	}
+
+	foreach( const Cfg::Group & c, m_cfg.group() )
+	{
+		FormGroup * group = createGroup( c );
+
+		m_model->addObject( group, q );
+	}
+}
+
+void
+FormPrivate::clear()
+{
+	QList< QGraphicsItem* > items = q->childItems();
+
+	QList< FormObject* > objs;
+
+	foreach( QGraphicsItem * item, items )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj )
+			objs.append( obj );
+		else
+		{
+			GridSnap * snap = dynamic_cast< GridSnap* > ( item );
+
+			if( !snap )
+				q->scene()->removeItem( item );
+			else
+				items.removeOne( item );
+		}
+	}
+
+	std::reverse( objs.begin(), objs.end() );
+
+	foreach( FormObject * obj, objs )
+	{
+		m_model->removeObject( obj, q );
+
+		QGraphicsItem * item = dynamic_cast< QGraphicsItem* > ( obj );
+
+		if( item )
+			q->scene()->removeItem( item );
+
+		m_model->endRemoveObject();
+	}
+
+	foreach( QGraphicsItem * item, items )
+		delete item;
+}
+
+FormLine *
+FormPrivate::createLine( const Cfg::Line & cfg )
+{
+	FormLine * line = new FormLine( q, q );
+
+	line->setCfg( cfg );
+
+	return line;
+}
+
+FormPolyline *
+FormPrivate::createPolyline( const Cfg::Polyline & cfg )
+{
+	FormPolyline * poly = new FormPolyline( q, q );
+
+	poly->setCfg( cfg );
+
+	return poly;
+}
+
+FormText *
+FormPrivate::createText( const Cfg::Text & cfg )
+{
+	const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
+
+	FormText * text = new FormText( r, q, q );
+
+	text->setCfg( cfg );
+
+	return text;
+}
+
+FormImage *
+FormPrivate::createImage( const Cfg::Image & cfg )
+{
+	FormImage * image = new FormImage( q, q );
+
+	image->setCfg( cfg );
+
+	return image;
+}
+
+FormGroup *
+FormPrivate::createGroup( const Cfg::Group & cfg )
+{
+	FormGroup * group = new FormGroup( q, q );
+
+	group->setCfg( cfg );
+
+	return group;
+}
+
 
 //
 // Form
@@ -306,7 +469,7 @@ Form::Form( Cfg::Form & c, QGraphicsItem * parent )
 
 	d.swap( tmp );
 
-	setObjectId( d->m_cfg.tabName() );
+	d->m_model->addForm( this );
 }
 
 Form::~Form()
@@ -357,10 +520,64 @@ Form::setGridStep( int s )
 	update();
 }
 
-const Cfg::Form &
+Cfg::Form
 Form::cfg() const
 {
-	return d->m_cfg;
+	Cfg::Form c = d->m_cfg;
+
+	c.line().clear();
+	c.polyline().clear();
+	c.text().clear();
+	c.image().clear();
+	c.group().clear();
+
+	foreach( QGraphicsItem * item, childItems() )
+	{
+		FormLine * line = dynamic_cast< FormLine* > ( item );
+
+		if( line )
+			c.line().append( line->cfg() );
+		else
+		{
+			FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
+
+			if( poly )
+				c.polyline().append( poly->cfg() );
+			else
+			{
+				FormText * text = dynamic_cast< FormText* > ( item );
+
+				if( text )
+					c.text().append( text->cfg() );
+				else
+				{
+					FormImage * image = dynamic_cast< FormImage* > ( item );
+
+					if( image )
+						c.image().append( image->cfg() );
+					else
+					{
+						FormGroup * group = dynamic_cast< FormGroup* > ( item );
+
+						if( group )
+							c.group().append( group->cfg() );
+					}
+				}
+			}
+		}
+	}
+
+	c.setTabName( objectId() );
+
+	return c;
+}
+
+void
+Form::setCfg( const Cfg::Form & c )
+{
+	d->m_cfg = c;
+
+	d->updateFromCfg();
 }
 
 void

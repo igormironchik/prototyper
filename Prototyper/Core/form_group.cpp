@@ -23,6 +23,10 @@
 // Prototyper include.
 #include "form_group.hpp"
 #include "form_move_handle.hpp"
+#include "form_line.hpp"
+#include "form_polyline.hpp"
+#include "form_text.hpp"
+#include "form_image.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -120,6 +124,109 @@ FormGroup::FormGroup( Form * form, QGraphicsItem * parent )
 FormGroup::~FormGroup()
 {
 	desrtoyHandles();
+}
+
+Cfg::Group
+FormGroup::cfg() const
+{
+	Cfg::Group c;
+
+	foreach( QGraphicsItem * item, childItems() )
+	{
+		FormLine * line = dynamic_cast< FormLine* > ( item );
+
+		if( line )
+			c.line().append( line->cfg() );
+		else
+		{
+			FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
+
+			if( poly )
+				c.polyline().append( poly->cfg() );
+			else
+			{
+				FormText * text = dynamic_cast< FormText* > ( item );
+
+				if( text )
+					c.text().append( text->cfg() );
+				else
+				{
+					FormImage * image = dynamic_cast< FormImage* > ( item );
+
+					if( image )
+						c.image().append( image->cfg() );
+					else
+					{
+						FormGroup * group = dynamic_cast< FormGroup* > ( item );
+
+						if( group )
+							c.group().append( group->cfg() );
+					}
+				}
+			}
+		}
+	}
+
+	c.setObjectId( objectId() );
+
+	Cfg::Point p;
+	p.setX( pos().x() );
+	p.setY( pos().y() );
+
+	c.setPos( p );
+
+	return c;
+}
+
+void
+FormGroup::setCfg( const Cfg::Group & c )
+{
+	foreach( const Cfg::Line & cfg, c.line() )
+	{
+		FormLine * line = new FormLine( form(), this );
+
+		line->setCfg( cfg );
+
+		addToGroup( line );
+	}
+
+	foreach( const Cfg::Polyline & cfg, c.polyline() )
+	{
+		FormPolyline * poly = new FormPolyline( form(), this );
+
+		poly->setCfg( cfg );
+
+		addToGroup( poly );
+	}
+
+	foreach( const Cfg::Text & cfg, c.text() )
+	{
+		const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
+
+		FormText * text = new FormText( r, form(), this );
+
+		text->setCfg( cfg );
+
+		addToGroup( text );
+	}
+
+	foreach( const Cfg::Image & cfg, c.image() )
+	{
+		FormImage * image = new FormImage( form(), this );
+
+		image->setCfg( cfg );
+
+		addToGroup( image );
+	}
+
+	foreach( const Cfg::Group & cfg, c.group() )
+	{
+		FormGroup * group = new FormGroup( form(), this );
+
+		group->setCfg( cfg );
+
+		addToGroup( group );
+	}
 }
 
 QRectF

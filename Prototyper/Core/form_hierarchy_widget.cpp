@@ -198,6 +198,12 @@ FormHierarchyWidget::~FormHierarchyWidget()
 {
 }
 
+FormHierarchyView *
+FormHierarchyWidget::view() const
+{
+	return d->m_view;
+}
+
 FormHierarchyModel *
 FormHierarchyWidget::model() const
 {

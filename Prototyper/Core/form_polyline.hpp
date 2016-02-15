@@ -30,6 +30,7 @@
 // Prototyper include.
 #include "form_object.hpp"
 #include "form_move_handle.hpp"
+#include "project_cfg.hpp"
 
 
 namespace Prototyper {
@@ -54,6 +55,11 @@ class FormPolyline
 public:
 	explicit FormPolyline( Form * form, QGraphicsItem * parent = 0 );
 	~FormPolyline();
+
+	//! \return Cfg.
+	Cfg::Polyline cfg() const;
+	//! Set cfg.
+	void setCfg( const Cfg::Polyline & c );
 
 	//! \return Lines.
 	const QList< QLineF > & lines() const;

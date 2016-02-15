@@ -42,6 +42,7 @@
 #include <QVBoxLayout>
 #include <QMessageBox>
 #include <QStringListModel>
+#include <QApplication>
 
 
 namespace Prototyper {
@@ -188,9 +189,6 @@ ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
 
 	m_forms.append( form );
 
-	TopGui::instance()->projectWindow()->formHierarchy()->model()->addForm(
-		form->form() );
-
 	ProjectWidget::connect( form->formScene(), &FormScene::changed,
 		q, &ProjectWidget::changed );
 	ProjectWidget::connect( form->form(), &Form::changed,
@@ -236,6 +234,10 @@ void
 ProjectWidget::setProject( const Cfg::Project & cfg )
 {
 	d->newProject();
+
+	TopGui::instance()->projectWindow()->formHierarchy()->model()->clear();
+
+	QApplication::processEvents();
 
 	d->m_cfg = cfg;
 
@@ -340,6 +342,8 @@ ProjectWidget::deleteForm( const QString & name )
 				removeForm( d->m_forms.at( index - 1 )->form() );
 
 			d->m_forms.removeAt( index - 1 );
+
+			d->m_cfg.form().removeAt( index - 1 );
 
 			disconnect( tab, 0, 0, 0 );
 

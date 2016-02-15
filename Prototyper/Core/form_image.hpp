@@ -30,6 +30,7 @@
 // Prototyper include.
 #include "form_object.hpp"
 #include "form_resizable.hpp"
+#include "project_cfg.hpp"
 
 
 namespace Prototyper {
@@ -54,6 +55,11 @@ class FormImage
 public:
 	explicit FormImage( Form * form, QGraphicsItem * parent = 0 );
 	~FormImage();
+
+	//! \return Cfg.
+	Cfg::Image cfg() const;
+	//! Set cfg.
+	void setCfg( const Cfg::Image & c );
 
 	//! \return Image.
 	const QImage & image() const;

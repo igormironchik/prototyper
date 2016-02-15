@@ -30,6 +30,7 @@
 // Prototyper include.
 #include "form_object.hpp"
 #include "form_move_handle.hpp"
+#include "project_cfg.hpp"
 
 
 namespace Prototyper {
@@ -53,6 +54,11 @@ class FormGroup
 public:
 	explicit FormGroup( Form * form, QGraphicsItem * parent = 0 );
 	~FormGroup();
+
+	//! \return Cfg.
+	Cfg::Group cfg() const;
+	//! Set cfg. \warning This group must be empty.
+	void setCfg( const Cfg::Group & c );
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

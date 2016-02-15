@@ -91,6 +91,14 @@ AspectRatioHandle::isKeepAspectRatio() const
 	return d->m_keepAspectRatio;
 }
 
+void
+AspectRatioHandle::setKeepAspectRatio( bool on )
+{
+	d->m_keepAspectRatio = on;
+
+	update();
+}
+
 QRectF
 AspectRatioHandle::boundingRect() const
 {

@@ -30,6 +30,7 @@
 // Prototyper include.
 #include "form_object.hpp"
 #include "form_move_handle.hpp"
+#include "project_cfg.hpp"
 
 
 namespace Prototyper {
@@ -55,6 +56,11 @@ class FormLine
 public:
 	explicit FormLine( Form * form, QGraphicsItem * parent = 0 );
 	~FormLine();
+
+	//! \return Cfg.
+	Cfg::Line cfg() const;
+	//! Set cfg.
+	void setCfg( const Cfg::Line & c );
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

@@ -131,6 +131,49 @@ FormLine::~FormLine()
 {
 }
 
+Cfg::Line
+FormLine::cfg() const
+{
+	const QLineF l = line();
+
+	Cfg::Line c;
+
+	Cfg::Point p1;
+	p1.setX( l.p1().x() );
+	p1.setY( l.p1().y() );
+
+	Cfg::Point p2;
+	p2.setX( l.p2().x() );
+	p2.setY( l.p2().y() );
+
+	c.p1() = p1;
+	c.p2() = p2;
+
+	Cfg::Point p;
+	p.setX( pos().x() );
+	p.setY( pos().y() );
+
+	c.pos() = p;
+
+	c.setObjectId( objectId() );
+
+	return c;
+}
+
+void
+FormLine::setCfg( const Cfg::Line & c )
+{
+	QLineF line;
+	line.setP1( QPointF( c.p1().x(), c.p1().y() ) );
+	line.setP2( QPointF( c.p2().x(), c.p2().y() ) );
+
+	setLine( line );
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	setObjectId( c.objectId() );
+}
+
 QRectF
 FormLine::boundingRect() const
 {

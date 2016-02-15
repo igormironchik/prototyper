@@ -27,6 +27,10 @@
 // Qt include.
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QByteArray>
+
+// C++ include.
+#include <string>
 
 
 namespace Prototyper {
@@ -52,8 +56,6 @@ public:
 	FormImage * q;
 	//! Image.
 	QImage m_image;
-	//! Rect.
-	QRectF m_rect;
 	//! Handles.
 	FormImageHandles * m_handles;
 }; // class FormImagePrivate
@@ -79,6 +81,63 @@ FormImage::FormImage( Form * form, QGraphicsItem * parent )
 
 FormImage::~FormImage()
 {
+}
+
+Cfg::Image
+FormImage::cfg() const
+{
+	Cfg::Image c;
+
+	c.setObjectId( objectId() );
+
+	Cfg::Point p;
+	p.setX( pos().x() );
+	p.setY( pos().y() );
+
+	c.setPos( p );
+
+	Cfg::Size s;
+	s.setWidth( pixmap().width() );
+	s.setHeight( pixmap().height() );
+
+	c.setSize( s );
+
+	c.setKeepAspectRatio( d->m_handles->isKeepAspectRatio() );
+
+	c.setData( QString( QByteArray(
+		reinterpret_cast< const char* > ( d->m_image.constBits() ),
+		d->m_image.byteCount() ).toBase64() ) );
+
+	return c;
+}
+
+void
+FormImage::setCfg( const Cfg::Image & c )
+{
+	setObjectId( c.objectId() );
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	const QSize s( c.size().width(), c.size().height() );
+
+	const QByteArray data = QByteArray::fromBase64(
+		QByteArray( c.data().toLatin1().toStdString().c_str(),
+			c.data().size() ) );
+
+	d->m_image = QImage::fromData(
+		reinterpret_cast< const uchar* > ( data.constData() ), data.size() );
+
+	d->m_handles->setKeepAspectRatio( c.keepAspectRatio() );
+
+	setPixmap( QPixmap::fromImage( d->m_image.scaled( s,
+		( c.keepAspectRatio() ? Qt::KeepAspectRatio : Qt::IgnoreAspectRatio ),
+		Qt::SmoothTransformation ) ) );
+
+	QRectF r = pixmap().rect();
+	r.moveTop( pos().y() );
+	r.moveLeft( pos().x() );
+
+	d->m_handles->setRect( r );
 }
 
 const QImage &

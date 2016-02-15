@@ -96,6 +96,12 @@ FormImageHandles::isKeepAspectRatio() const
 	return d_ptr()->m_aspectRatioHandle->isKeepAspectRatio();
 }
 
+void
+FormImageHandles::setKeepAspectRatio( bool on )
+{
+	d_ptr()->m_aspectRatioHandle->setKeepAspectRatio( on );
+}
+
 QRectF
 FormImageHandles::boundingRect() const
 {

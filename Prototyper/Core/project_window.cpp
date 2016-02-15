@@ -1,4 +1,3 @@
-
 /*!
 	\file
 
@@ -608,6 +607,9 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 	{
 		d->m_cfg.description().setText(
 			d->m_widget->descriptionTab()->editor()->text() );
+
+		for( int i = 0; i < d->m_widget->forms().size(); ++i )
+			d->m_cfg.form()[ i ] = d->m_widget->forms().at( i )->form()->cfg();
 
 		if( !d->m_fileName.endsWith( ext ) )
 			d->m_fileName.append( ext );

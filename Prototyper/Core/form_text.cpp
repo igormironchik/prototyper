@@ -25,6 +25,7 @@
 #include "form_with_resize_and_move_handles.hpp"
 #include "form_resizable.hpp"
 #include "form_text_opts.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -154,6 +155,78 @@ FormText::FormText( const QRectF & rect, Form * form, QGraphicsItem * parent )
 
 FormText::~FormText()
 {
+}
+
+Cfg::Text
+FormText::cfg() const
+{
+	Cfg::Text c;
+
+	c.setObjectId( objectId() );
+
+	Cfg::Point p;
+	p.setX( pos().x() );
+	p.setY( pos().y() );
+
+	c.setPos( p );
+
+	c.setTextWidth( textWidth() );
+
+	c.setText( Cfg::text( textCursor(), toPlainText() ) );
+
+	return c;
+}
+
+void
+FormText::setCfg( const Cfg::Text & c )
+{
+	setPlainText( QString() );
+
+	QFont f = font();
+
+	foreach( const Cfg::TextStyle & s, c.text() )
+	{
+		if( s.style().contains( Cfg::c_normalStyle ) )
+		{
+			f.setWeight( QFont::Normal );
+			f.setItalic( false );
+			f.setUnderline( false );
+
+			setFont( f );
+		}
+		else
+		{
+			if( s.style().contains( Cfg::c_boldStyle ) )
+				f.setWeight( QFont::Bold );
+			else
+				f.setWeight( QFont::Normal );
+
+			if( s.style().contains( Cfg::c_italicStyle ) )
+				f.setItalic( true );
+			else
+				f.setItalic( false );
+
+			if( s.style().contains( Cfg::c_underlineStyle ) )
+				f.setUnderline( true );
+			else
+				f.setUnderline( false );
+		}
+
+		f.setPointSize( s.fontSize() );
+
+		setFont( f );
+
+		QTextCursor cursor = textCursor();
+		cursor.movePosition( QTextCursor::End );
+		cursor.insertText( s.text() );
+		setTextCursor( cursor );
+	}
+
+	setObjectId( c.objectId() );
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	setTextWidth( c.textWidth() );
 }
 
 void

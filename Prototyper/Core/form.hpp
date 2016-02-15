@@ -89,7 +89,9 @@ public:
 	void setGridStep( int s );
 
 	//! \return Configuration.
-	const Cfg::Form & cfg() const;
+	Cfg::Form cfg() const;
+	//! Set configuration.
+	void setCfg( const Cfg::Form & c );
 
 	//! Switch to select mode.
 	void switchToSelectMode();

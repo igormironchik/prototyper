@@ -25,6 +25,9 @@
 #include "form_scene.hpp"
 #include "form.hpp"
 
+// Qt include.
+#include <QApplication>
+
 
 namespace Prototyper {
 
@@ -69,6 +72,10 @@ FormViewPrivate::init()
 	m_form = new Form( m_cfg );
 
 	m_scene->addItem( m_form );
+
+	QApplication::processEvents();
+
+	m_form->setCfg( m_cfg );
 
 	q->setRubberBandSelectionMode( Qt::ContainsItemShape );
 

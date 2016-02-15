@@ -30,6 +30,7 @@
 // Prototyper include.
 #include "form_object.hpp"
 #include "form_resizable.hpp"
+#include "project_cfg.hpp"
 
 
 namespace Prototyper {
@@ -56,6 +57,11 @@ class FormText
 public:
 	FormText( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
 	~FormText();
+
+	//! \return Cfg.
+	Cfg::Text cfg() const;
+	//! Set cfg.
+	void setCfg( const Cfg::Text & c );
 
 	//! Enable/disable editing.
 	void enableEditing( bool on = true );

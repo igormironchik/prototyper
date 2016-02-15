@@ -83,6 +83,9 @@ public:
 	FormHierarchyWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~FormHierarchyWidget();
 
+	//! \return View.
+	FormHierarchyView * view() const;
+
 	//! \return Model.
 	FormHierarchyModel * model() const;
 

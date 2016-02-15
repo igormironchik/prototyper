@@ -111,7 +111,6 @@
 					{tag
 						{valueType Point}
 						{name pos}
-						{required}
 					}
 
 					{tagScalar
@@ -185,6 +184,12 @@
 						{required}
 					}
 
+					{tagScalar
+						{valueType bool}
+						{name keepAspectRatio}
+						{required}
+					}
+
 					{tag
 						{valueType Size}
 						{name size}
@@ -238,6 +243,12 @@
 					{tagVectorOfTags
 						{valueType Group}
 						{name group}
+					}
+
+					{tag
+						{valueType Point}
+						{name pos}
+						{required}
 					}
 				} || class Group
 

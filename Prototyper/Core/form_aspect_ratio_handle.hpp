@@ -48,6 +48,8 @@ public:
 
 	//! \return Is keep aspect ratio?
 	bool isKeepAspectRatio() const;
+	//! Set keep aspect ratio.
+	void setKeepAspectRatio( bool on = true );
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

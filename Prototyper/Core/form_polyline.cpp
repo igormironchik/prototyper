@@ -208,6 +208,58 @@ FormPolyline::~FormPolyline()
 {
 }
 
+Cfg::Polyline
+FormPolyline::cfg() const
+{
+	Cfg::Polyline c;
+
+	c.setObjectId( objectId() );
+
+	Cfg::Point p;
+	p.setX( pos().x() );
+	p.setY( pos().y() );
+
+	c.setPos( p );
+
+	foreach( const QLineF & l, d->m_lines )
+	{
+		Cfg::Point p1;
+		p1.setX( l.p1().x() );
+		p1.setY( l.p1().y() );
+
+		Cfg::Point p2;
+		p2.setX( l.p2().x() );
+		p2.setY( l.p2().y() );
+
+		Cfg::Line line;
+		line.setP1( p1 );
+		line.setP2( p2 );
+
+		c.line().append( line );
+	}
+
+	return c;
+}
+
+void
+FormPolyline::setCfg( const Cfg::Polyline & c )
+{
+	setObjectId( c.objectId() );
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	d->m_lines.clear();
+
+	foreach( const Cfg::Line & l, c.line() )
+	{
+		QLineF line;
+		line.setP1( QPointF( l.p1().x(), l.p1().y() ) );
+		line.setP2( QPointF( l.p2().x(), l.p2().y() ) );
+
+		appendLine( line );
+	}
+}
+
 const QList< QLineF > &
 FormPolyline::lines() const
 {
