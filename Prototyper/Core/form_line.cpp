@@ -25,7 +25,7 @@
 #include "form_move_handle.hpp"
 #include "form_actions.hpp"
 #include "form.hpp"
-#include "grid_snap.hpp"
+#include "form_grid_snap.hpp"
 
 // Qt include.
 #include <QGraphicsSceneMouseEvent>

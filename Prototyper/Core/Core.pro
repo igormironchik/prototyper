@@ -33,6 +33,7 @@ HEADERS +=	export.hpp \
 			form_actions.hpp \
 			form_aspect_ratio_handle.hpp \
 			form.hpp \
+			form_grid_snap.hpp \
 			form_group.hpp \
 			form_hierarchy_model.hpp \
 			form_hierarchy_widget.hpp \
@@ -50,7 +51,6 @@ HEADERS +=	export.hpp \
 			form_text_opts.hpp \
 			form_view.hpp \
 			form_with_resize_and_move_handles.hpp \
-			grid_snap.hpp \
 			grid_step_dlg.hpp \
 			name_dlg.hpp \
 			new_form_dlg.hpp \
@@ -68,6 +68,7 @@ HEADERS +=	export.hpp \
 SOURCES +=	form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
 			form.cpp \
+			form_grid_snap.cpp \
 			form_group.cpp \
 			form_hierarchy_model.cpp \
 			form_hierarchy_widget.cpp \
@@ -85,7 +86,6 @@ SOURCES +=	form_actions.cpp \
 			form_text_opts.cpp \
 			form_view.cpp \
 			form_with_resize_and_move_handles.cpp \
-			grid_snap.cpp \
 			grid_step_dlg.cpp \
 			name_dlg.cpp \
 			new_form_dlg.cpp \

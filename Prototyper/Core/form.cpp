@@ -28,7 +28,7 @@
 #include "project_cfg.hpp"
 #include "form_actions.hpp"
 #include "form_line.hpp"
-#include "grid_snap.hpp"
+#include "form_grid_snap.hpp"
 #include "form_polyline.hpp"
 #include "form_group.hpp"
 #include "form_rect_placer.hpp"

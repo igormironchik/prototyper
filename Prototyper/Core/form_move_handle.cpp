@@ -23,7 +23,7 @@
 // Prototyper include.
 #include "form_move_handle.hpp"
 #include "form.hpp"
-#include "grid_snap.hpp"
+#include "form_grid_snap.hpp"
 #include "form_actions.hpp"
 
 // Qt include.

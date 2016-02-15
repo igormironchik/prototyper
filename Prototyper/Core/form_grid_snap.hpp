@@ -20,8 +20,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__GRID_SNAP_H__INCLUDED
-#define PROTOTYPER__CORE__GRID_SNAP_H__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_GRID_SNAP_H__INCLUDED
+#define PROTOTYPER__CORE__FORM_GRID_SNAP_H__INCLUDED
 
 // Qt include.
 #include <QGraphicsItem>
@@ -80,4 +80,4 @@ private:
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__GRID_SNAP_H__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_GRID_SNAP_H__INCLUDED

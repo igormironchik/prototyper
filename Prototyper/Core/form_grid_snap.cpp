@@ -21,7 +21,7 @@
 */
 
 // Prototyper include.
-#include "grid_snap.hpp"
+#include "form_grid_snap.hpp"
 
 // Qt include.
 #include <QPainter>
