@@ -49,6 +49,7 @@ HEADERS +=	export.hpp \
 			form_text.hpp \
 			form_text_opts.hpp \
 			form_view.hpp \
+			form_with_resize_and_move_handles.hpp \
 			grid_snap.hpp \
 			grid_step_dlg.hpp \
 			name_dlg.hpp \
@@ -62,7 +63,6 @@ HEADERS +=	export.hpp \
 			text_opts_bar.hpp \
 			top_gui.hpp \
 			utils.hpp \
-			with_resize_and_move_handles.hpp \
 			$$GENERATED
 
 SOURCES +=	form_actions.cpp \
@@ -84,6 +84,7 @@ SOURCES +=	form_actions.cpp \
 			form_text.cpp \
 			form_text_opts.cpp \
 			form_view.cpp \
+			form_with_resize_and_move_handles.cpp \
 			grid_snap.cpp \
 			grid_step_dlg.cpp \
 			name_dlg.cpp \
@@ -96,8 +97,7 @@ SOURCES +=	form_actions.cpp \
 			text_editor.cpp \
 			text_opts_bar.cpp \
 			top_gui.cpp \
-			utils.cpp \
-			with_resize_and_move_handles.cpp
+			utils.cpp
 
 FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui \

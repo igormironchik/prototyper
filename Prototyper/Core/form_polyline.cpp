@@ -25,7 +25,7 @@
 #include "form_move_handle.hpp"
 #include "form_actions.hpp"
 #include "form_resize_handle.hpp"
-#include "with_resize_and_move_handles.hpp"
+#include "form_with_resize_and_move_handles.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>

@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "form_text.hpp"
-#include "with_resize_and_move_handles.hpp"
+#include "form_with_resize_and_move_handles.hpp"
 #include "form_resizable.hpp"
 #include "form_text_opts.hpp"
 

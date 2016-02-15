@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "form_resizable.hpp"
-#include "with_resize_and_move_handles.hpp"
+#include "form_with_resize_and_move_handles.hpp"
 #include "form_resize_handle.hpp"
 
 // Qt include.
