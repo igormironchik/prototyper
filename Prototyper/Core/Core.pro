@@ -47,6 +47,7 @@ HEADERS +=	export.hpp \
 			form_resizable.hpp \
 			form_resize_handle.hpp \
 			form_scene.hpp \
+			form_size_dlg.hpp \
 			form_text.hpp \
 			form_text_opts.hpp \
 			form_view.hpp \
@@ -82,6 +83,7 @@ SOURCES +=	form_actions.cpp \
 			form_resizable.cpp \
 			form_resize_handle.cpp \
 			form_scene.cpp \
+			form_size_dlg.cpp \
 			form_text.cpp \
 			form_text_opts.cpp \
 			form_view.cpp \
@@ -99,7 +101,8 @@ SOURCES +=	form_actions.cpp \
 			top_gui.cpp \
 			utils.cpp
 
-FORMS +=	grid_step_dlg.ui \
+FORMS +=	form_size_dlg.ui \
+			grid_step_dlg.ui \
 			name_dlg.ui \
 			new_form_dlg.ui
 
