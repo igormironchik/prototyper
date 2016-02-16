@@ -183,6 +183,7 @@ FormText::setCfg( const Cfg::Text & c )
 	setPlainText( QString() );
 
 	QFont f = font();
+	QTextCharFormat fmt = textCursor().charFormat();
 
 	foreach( const Cfg::TextStyle & s, c.text() )
 	{
@@ -192,32 +193,55 @@ FormText::setCfg( const Cfg::Text & c )
 			f.setItalic( false );
 			f.setUnderline( false );
 
-			setFont( f );
+			fmt.setFontWeight( QFont::Normal );
+			fmt.setFontItalic( false );
+			fmt.setFontUnderline( false );
 		}
 		else
 		{
 			if( s.style().contains( Cfg::c_boldStyle ) )
+			{
 				f.setWeight( QFont::Bold );
+				fmt.setFontWeight( QFont::Bold );
+			}
 			else
+			{
 				f.setWeight( QFont::Normal );
+				fmt.setFontWeight( QFont::Normal );
+			}
 
 			if( s.style().contains( Cfg::c_italicStyle ) )
+			{
 				f.setItalic( true );
+				fmt.setFontItalic( true );
+			}
 			else
+			{
 				f.setItalic( false );
+				fmt.setFontItalic( false );
+			}
 
 			if( s.style().contains( Cfg::c_underlineStyle ) )
+			{
 				f.setUnderline( true );
+				fmt.setFontUnderline( true );
+			}
 			else
+			{
 				f.setUnderline( false );
+				fmt.setFontUnderline( false );
+			}
 		}
 
 		f.setPointSize( s.fontSize() );
+
+		fmt.setFontPointSize( s.fontSize() );
 
 		setFont( f );
 
 		QTextCursor cursor = textCursor();
 		cursor.movePosition( QTextCursor::End );
+		cursor.setCharFormat( fmt );
 		cursor.insertText( s.text() );
 		setTextCursor( cursor );
 	}
