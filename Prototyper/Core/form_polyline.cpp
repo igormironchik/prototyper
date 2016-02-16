@@ -26,6 +26,7 @@
 #include "form_actions.hpp"
 #include "form_resize_handle.hpp"
 #include "form_with_resize_and_move_handles.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -238,6 +239,10 @@ FormPolyline::cfg() const
 		c.line().append( line );
 	}
 
+	c.setPen( Cfg::pen( objectPen() ) );
+
+	c.setBrush( Cfg::brush( objectBrush() ) );
+
 	return c;
 }
 
@@ -263,6 +268,10 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 		12.0 + w, 12.0 + w ) );
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	setObjectPen( Cfg::fromPen( c.pen() ) );
+
+	setObjectBrush( Cfg::fromBrush( c.brush() ) );
 }
 
 const QList< QLineF > &

@@ -117,6 +117,55 @@ QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 	return blocks;
 } // text
 
+
+//
+// pen
+//
+
+Cfg::Pen pen( const QPen & p )
+{
+	Cfg::Pen res;
+
+	res.setWidth( p.widthF() );
+	res.setColor( p.color().name() );
+
+	return res;
+} // pen
+
+
+//
+// fromPen
+//
+
+QPen fromPen( const Cfg::Pen & p )
+{
+	return QPen( QColor( p.color() ), p.width(), Qt::SolidLine );
+} // fromPen
+
+
+//
+// brush
+//
+
+Cfg::Brush brush( const QBrush & b )
+{
+	Cfg::Brush res;
+
+	res.setColor( b.color().name() );
+
+	return res;
+} // brush
+
+
+//
+// fromBrush
+//
+
+QBrush fromBrush( const Cfg::Brush & b )
+{
+	return QBrush( QColor( b.color() ) );
+}
+
 } /* namespace Cfg */
 
 } /* namespace Core */

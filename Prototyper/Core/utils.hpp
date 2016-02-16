@@ -70,6 +70,34 @@ QList< QString > textStyle( const QTextCharFormat & f );
 //! \return Text for the configuration.
 QList< Cfg::TextStyle > text( QTextCursor c, const QString & data );
 
+
+//
+// pen
+//
+
+Cfg::Pen pen( const QPen & p );
+
+
+//
+// fromPen
+//
+
+QPen fromPen( const Cfg::Pen & p );
+
+
+//
+// brush
+//
+
+Cfg::Brush brush( const QBrush & b );
+
+
+//
+// fromBrush
+//
+
+QBrush fromBrush( const Cfg::Brush & b );
+
 } /* namespace Cfg */
 
 } /* namespace Core */

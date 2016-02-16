@@ -26,6 +26,7 @@
 #include "form_actions.hpp"
 #include "form.hpp"
 #include "form_grid_snap.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QGraphicsSceneMouseEvent>
@@ -157,6 +158,8 @@ FormLine::cfg() const
 
 	c.setObjectId( objectId() );
 
+	c.setPen( Cfg::pen( objectPen() ) );
+
 	return c;
 }
 
@@ -174,6 +177,8 @@ FormLine::setCfg( const Cfg::Line & c )
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
 	setObjectId( c.objectId() );
+
+	setObjectPen( Cfg::fromPen( c.pen() ) );
 }
 
 QRectF

@@ -93,6 +93,39 @@
 
 
 				|#
+					Pen.
+				#|
+				{class Pen
+					{tagScalar
+						{valueType qreal}
+						{name width}
+						{required}
+						{defaultValue 2.0}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name color}
+						{required}
+						{defaultValue "QLatin1String( \"black\" )"}
+					}
+				} || class Pen
+
+
+				|#
+					Brush.
+				#|
+				{class Brush
+					{tagScalar
+						{valueType QString}
+						{name color}
+						{required}
+						{defaultValue "QLatin1String( \"transparent\" )"}
+					}
+				} || class Brush
+
+
+				|#
 					Line on the form.
 				#|
 				{class Line
@@ -118,6 +151,11 @@
 						{name objectId}
 						{required}
 					}
+
+					{tag
+						{valueType Pen}
+						{name pen}
+					}
 				} || class Line
 
 
@@ -141,6 +179,16 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tag
+						{valueType Pen}
+						{name pen}
+					}
+
+					{tag
+						{valueType Brush}
+						{name brush}
 					}
 				} || class Polyline
 
