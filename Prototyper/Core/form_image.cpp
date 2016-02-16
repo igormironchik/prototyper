@@ -71,7 +71,7 @@ FormImagePrivate::init()
 
 FormImage::FormImage( Form * form, QGraphicsItem * parent )
 	:	QGraphicsPixmapItem( parent )
-	,	FormObject( form )
+	,	FormObject( FormObject::ImageType, form )
 	,	d( new FormImagePrivate( this ) )
 {
 	d->init();

@@ -43,8 +43,27 @@ class Form;
 //! Object on the form.
 class FormObject {
 public:
-	explicit FormObject( Form * parent );
+	//! Type of the object.
+	enum ObjectType {
+		//! Line.
+		LineType,
+		//! Polyline.
+		PolylineType,
+		//! Text.
+		TextType,
+		//! Image.
+		ImageType,
+		//! Group.
+		GroupType,
+		//! Form.
+		FormType
+	}; // enum ObjectType
+
+	FormObject( ObjectType t, Form * parent );
 	virtual ~FormObject();
+
+	//! \return Type.
+	ObjectType type() const;
 
 	//! \return ID.
 	const QString & objectId() const;
@@ -75,6 +94,8 @@ private:
 	QBrush m_brush;
 	//! Form.
 	Form * m_form;
+	//! Type.
+	ObjectType m_type;
 }; // class FormObject
 
 } /* namespace Core */

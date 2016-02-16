@@ -147,7 +147,7 @@ FormTextPrivate::setRect( const QRectF & rect )
 
 FormText::FormText( const QRectF & rect, Form * form, QGraphicsItem * parent )
 	:	QGraphicsTextItem( parent )
-	,	FormObject( form )
+	,	FormObject( FormObject::TextType, form )
 	,	d( new FormTextPrivate( rect, this ) )
 {
 	d->init();

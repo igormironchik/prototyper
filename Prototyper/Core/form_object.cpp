@@ -32,14 +32,21 @@ namespace Core {
 // FormObject
 //
 
-FormObject::FormObject( Form * form )
+FormObject::FormObject( ObjectType t, Form * form )
 	:	m_id( QString::number( 0 ) )
 	,	m_form( form )
+	,	m_type( t )
 {
 }
 
 FormObject::~FormObject()
 {
+}
+
+FormObject::ObjectType
+FormObject::type() const
+{
+	return m_type;
 }
 
 const QString &

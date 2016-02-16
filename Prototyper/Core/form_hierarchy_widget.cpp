@@ -171,8 +171,6 @@ FormHierarchyWidgetPrivate::init()
 {
 	m_view = new FormHierarchyView( q );
 
-	m_view->setHeaderHidden( true );
-
 	m_model = new FormHierarchyModel( q );
 
 	m_view->setModel( m_model );

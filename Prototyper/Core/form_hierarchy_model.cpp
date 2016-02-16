@@ -220,7 +220,52 @@ FormHierarchyModel::columnCount( const QModelIndex & parent ) const
 {
 	Q_UNUSED( parent )
 
-	return 1;
+	return 2;
+}
+
+static inline QString objectType( FormObject * obj )
+{
+	switch( obj->type() )
+	{
+		case FormObject::LineType :
+		{
+			return FormHierarchyModel::tr( "Line" );
+		}
+			break;
+
+		case FormObject::PolylineType :
+		{
+			return FormHierarchyModel::tr( "Polyline" );
+		}
+			break;
+
+		case FormObject::TextType :
+		{
+			return FormHierarchyModel::tr( "Text" );
+		}
+			break;
+
+		case FormObject::ImageType :
+		{
+			return FormHierarchyModel::tr( "Image" );
+		}
+			break;
+
+		case FormObject::GroupType :
+		{
+			return FormHierarchyModel::tr( "Group" );
+		}
+			break;
+
+		case FormObject::FormType :
+		{
+			return FormHierarchyModel::tr( "Form" );
+		}
+			break;
+
+		default :
+			return QString();
+	}
 }
 
 QVariant
@@ -233,10 +278,29 @@ FormHierarchyModel::data( const QModelIndex & index, int role ) const
 		case Qt::DisplayRole :
 		case Qt::EditRole :
 		{
-			FormObject * obj = static_cast< FormObject* >
-				( index.internalPointer() );
+			switch( index.column() )
+			{
+				case 0 :
+				{
+					FormObject * obj = static_cast< FormObject* >
+						( index.internalPointer() );
 
-			return obj->objectId();
+					return obj->objectId();
+				}
+					break;
+
+				case 1 :
+				{
+					FormObject * obj = static_cast< FormObject* >
+						( index.internalPointer() );
+
+					return objectType( obj );
+				}
+					break;
+
+				default :
+					return QVariant();
+			}
 		}
 			break;
 
@@ -311,6 +375,29 @@ FormHierarchyModel::rowCount( const QModelIndex & parent ) const
 	}
 	else
 		return d->m_root.size();
+}
+
+QVariant
+FormHierarchyModel::headerData( int section, Qt::Orientation orientation,
+	int role ) const
+{
+	if( orientation == Qt::Vertical )
+		return QVariant();
+
+	if( role != Qt::DisplayRole )
+		return QVariant();
+
+	switch( section )
+	{
+		case 0 :
+			return tr( "Name" );
+
+		case 1 :
+			return tr( "Type" );
+
+		default :
+			return QVariant();
+	}
 }
 
 } /* namespace Core */

@@ -516,7 +516,7 @@ FormPrivate::addIds( FormGroup * group )
 
 Form::Form( Cfg::Form & c, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	FormObject( this )
+	,	FormObject( FormObject::FormType, this )
 	,	d( 0 )
 {
 	QScopedPointer< FormPrivate > tmp( new FormPrivate( c, this ) );
@@ -589,36 +589,59 @@ Form::cfg() const
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
-		FormLine * line = dynamic_cast< FormLine* > ( item );
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
 
-		if( line )
-			c.line().append( line->cfg() );
-		else
+		if( obj )
 		{
-			FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
-
-			if( poly )
-				c.polyline().append( poly->cfg() );
-			else
+			switch( obj->type() )
 			{
-				FormText * text = dynamic_cast< FormText* > ( item );
+				case FormObject::LineType :
+				{
+					FormLine * line = dynamic_cast< FormLine* > ( item );
 
-				if( text )
-					c.text().append( text->cfg() );
-				else
+					if( line )
+						c.line().append( line->cfg() );
+				}
+					break;
+
+				case FormObject::PolylineType :
+				{
+					FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
+
+					if( poly )
+						c.polyline().append( poly->cfg() );
+				}
+					break;
+
+				case FormObject::TextType :
+				{
+					FormText * text = dynamic_cast< FormText* > ( item );
+
+					if( text )
+						c.text().append( text->cfg() );
+				}
+					break;
+
+				case FormObject::ImageType :
 				{
 					FormImage * image = dynamic_cast< FormImage* > ( item );
 
 					if( image )
 						c.image().append( image->cfg() );
-					else
-					{
-						FormGroup * group = dynamic_cast< FormGroup* > ( item );
-
-						if( group )
-							c.group().append( group->cfg() );
-					}
 				}
+					break;
+
+				case FormObject::GroupType :
+				{
+					FormGroup * group = dynamic_cast< FormGroup* > ( item );
+
+					if( group )
+						c.group().append( group->cfg() );
+				}
+					break;
+
+				default :
+					break;
 			}
 		}
 	}
@@ -793,27 +816,41 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 
 			d->m_ids.removeOne( obj->objectId() );
 
-			FormGroup * group = dynamic_cast< FormGroup* > ( item );
-
-			if( group )
+			switch( obj->type() )
 			{
-				d->clearIds( group );
+				case FormObject::GroupType :
+				{
+					FormGroup * group = dynamic_cast< FormGroup* > ( item );
 
-				group->destroyHandles();
-			}
-			else
-			{
-				FormText * text = dynamic_cast< FormText* > ( item );
+					if( group )
+					{
+						d->clearIds( group );
 
-				if( text )
-					text->destroyHandles();
-				else
+						group->destroyHandles();
+					}
+				}
+					break;
+
+				case FormObject::TextType :
+				{
+					FormText * text = dynamic_cast< FormText* > ( item );
+
+					if( text )
+						text->destroyHandles();
+				}
+					break;
+
+				case FormObject::ImageType :
 				{
 					FormImage * image = dynamic_cast< FormImage* > ( item );
 
 					if( image )
 						image->destroyHandles();
 				}
+					break;
+
+				default :
+					break;
 			}
 		}
 
