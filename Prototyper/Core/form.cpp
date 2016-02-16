@@ -120,6 +120,10 @@ public:
 	FormImage * createImage( const Cfg::Image & cfg );
 	//! Create group.
 	FormGroup * createGroup( const Cfg::Group & cfg );
+	//! Clear IDs.
+	void clearIds( FormGroup * group );
+	//! Add IDs.
+	void addIds( FormGroup * group );
 
 	//! Parent.
 	Form * q;
@@ -362,6 +366,8 @@ FormPrivate::updateFromCfg()
 void
 FormPrivate::clear()
 {
+	m_ids.clear();
+
 	QList< QGraphicsItem* > items = q->childItems();
 
 	QList< FormObject* > objs;
@@ -408,6 +414,8 @@ FormPrivate::createLine( const Cfg::Line & cfg )
 
 	line->setCfg( cfg );
 
+	m_ids.append( line->objectId() );
+
 	return line;
 }
 
@@ -417,6 +425,8 @@ FormPrivate::createPolyline( const Cfg::Polyline & cfg )
 	FormPolyline * poly = new FormPolyline( q, q );
 
 	poly->setCfg( cfg );
+
+	m_ids.append( poly->objectId() );
 
 	return poly;
 }
@@ -430,6 +440,8 @@ FormPrivate::createText( const Cfg::Text & cfg )
 
 	text->setCfg( cfg );
 
+	m_ids.append( text->objectId() );
+
 	return text;
 }
 
@@ -439,6 +451,8 @@ FormPrivate::createImage( const Cfg::Image & cfg )
 	FormImage * image = new FormImage( q, q );
 
 	image->setCfg( cfg );
+
+	m_ids.append( image->objectId() );
 
 	return image;
 }
@@ -450,7 +464,47 @@ FormPrivate::createGroup( const Cfg::Group & cfg )
 
 	group->setCfg( cfg );
 
+	addIds( group );
+
 	return group;
+}
+
+void
+FormPrivate::clearIds( FormGroup * group )
+{
+	foreach( QGraphicsItem * item, group->childItems() )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj )
+		{
+			m_ids.removeOne( obj->objectId() );
+
+			FormGroup * childGroup = dynamic_cast< FormGroup* > ( item );
+
+			if( childGroup )
+				clearIds( childGroup );
+		}
+	}
+}
+
+void
+FormPrivate::addIds( FormGroup * group )
+{
+	foreach( QGraphicsItem * item, group->childItems() )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj )
+		{
+			m_ids.append( obj->objectId() );
+
+			FormGroup * childGroup = dynamic_cast< FormGroup* > ( item );
+
+			if( childGroup )
+				addIds( childGroup );
+		}
+	}
 }
 
 
@@ -717,6 +771,34 @@ Form::ungroup()
 	}
 	else if( d->m_current )
 		d->ungroup( d->m_current );
+}
+
+void
+Form::deleteItems( const QList< QGraphicsItem* > & items )
+{
+	foreach( QGraphicsItem * item, items )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj )
+			d->m_model->removeObject( obj, this );
+
+		scene()->removeItem( item );
+
+		if( obj )
+		{
+			d->m_model->endRemoveObject();
+
+			d->m_ids.removeOne( obj->objectId() );
+
+			FormGroup * group = dynamic_cast< FormGroup* > ( item );
+
+			if( group )
+				d->clearIds( group );
+		}
+
+		delete item;
+	}
 }
 
 QRectF

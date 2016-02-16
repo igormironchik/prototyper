@@ -50,6 +50,7 @@ public:
 	FormScenePrivate( const Cfg::Form & cfg, FormScene * parent )
 		:	q( parent )
 		,	m_cfg( cfg )
+		,	m_form( 0 )
 	{
 	}
 
@@ -62,6 +63,8 @@ public:
 	FormScene * q;
 	//! Cfg.
 	const Cfg::Form & m_cfg;
+	//! Form.
+	Form * m_form;
 }; // class FormScenePrivate;
 
 void
@@ -94,6 +97,30 @@ FormScene::~FormScene()
 {
 }
 
+Form *
+FormScene::form() const
+{
+	return d->m_form;
+}
+
+void
+FormScene::setForm( Form * f )
+{
+	if( d->m_form )
+	{
+		TopGui::instance()->projectWindow()->
+			formHierarchy()->model()->removeForm( d->m_form );
+
+		removeItem( d->m_form );
+
+		delete d->m_form;
+	}
+
+	d->m_form = f;
+
+	addItem( d->m_form );
+}
+
 void
 FormScene::deleteSelected()
 {
@@ -101,27 +128,11 @@ FormScene::deleteSelected()
 
 	foreach( QGraphicsItem * item, selectedItems() )
 	{
-		if( item->parentItem() == FormAction::instance()->form() )
+		if( item->parentItem() == d->m_form )
 			toDelete.append( item );
 	}
 
-	foreach( QGraphicsItem * item, toDelete )
-	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
-
-		if( obj )
-			TopGui::instance()->projectWindow()->
-				formHierarchy()->model()->removeObject( obj,
-					FormAction::instance()->form() );
-
-		removeItem( item );
-
-		if( obj )
-			TopGui::instance()->projectWindow()->
-				formHierarchy()->model()->endRemoveObject();
-
-		delete item;
-	}
+	d->m_form->deleteItems( toDelete );
 
 	emit changed();
 }

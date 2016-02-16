@@ -246,8 +246,6 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 {
 	setObjectId( c.objectId() );
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
-
 	d->m_lines.clear();
 
 	foreach( const Cfg::Line & l, c.line() )
@@ -258,6 +256,13 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 
 		appendLine( line );
 	}
+
+	const qreal w = (qreal) objectPen().width() / 2.0;
+
+	d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
+		12.0 + w, 12.0 + w ) );
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 }
 
 const QList< QLineF > &

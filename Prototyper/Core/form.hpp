@@ -109,6 +109,9 @@ public:
 	//! Ungroup.
 	void ungroup();
 
+	//! Delete items.
+	void deleteItems( const QList< QGraphicsItem* > & items );
+
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

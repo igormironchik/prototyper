@@ -116,8 +116,6 @@ FormImage::setCfg( const Cfg::Image & c )
 {
 	setObjectId( c.objectId() );
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
-
 	const QSize s( c.size().width(), c.size().height() );
 
 	const QByteArray data = QByteArray::fromBase64(
@@ -132,6 +130,8 @@ FormImage::setCfg( const Cfg::Image & c )
 	setPixmap( QPixmap::fromImage( d->m_image.scaled( s,
 		( c.keepAspectRatio() ? Qt::KeepAspectRatio : Qt::IgnoreAspectRatio ),
 		Qt::SmoothTransformation ) ) );
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
 	QRectF r = pixmap().rect();
 	r.moveTop( pos().y() );

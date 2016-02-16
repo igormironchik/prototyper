@@ -75,6 +75,7 @@ public:
 		,	m_formHierarchy( 0 )
 		,	m_tabsList( 0 )
 		,	m_drawLine( 0 )
+		,	m_select( 0 )
 	{
 	}
 
@@ -116,6 +117,8 @@ public:
 	TabsList * m_tabsList;
 	//! Draw line action.
 	QAction * m_drawLine;
+	//! Select action.
+	QAction * m_select;
 }; // class ProjectWindowPrivate
 
 void
@@ -195,13 +198,13 @@ ProjectWindowPrivate::init()
 	m_formToolBarGroup = new QActionGroup( q );
 	m_formToolBarGroup->setExclusive( true );
 
-	QAction * select = m_formToolBar->addAction(
+	m_select = m_formToolBar->addAction(
 		QIcon( ":/Core/img/edit-select.png" ),
 		ProjectWindow::tr( "Select" ) );
-	select->setCheckable( true );
-	m_formToolBarGroup->addAction( select );
-	select->setShortcutContext( Qt::ApplicationShortcut );
-	select->setShortcut( ProjectWindow::tr( "Alt+S" ) );
+	m_select->setCheckable( true );
+	m_formToolBarGroup->addAction( m_select );
+	m_select->setShortcutContext( Qt::ApplicationShortcut );
+	m_select->setShortcut( ProjectWindow::tr( "Alt+S" ) );
 
 	m_drawLine = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-freehand.png" ),
@@ -226,7 +229,7 @@ ProjectWindowPrivate::init()
 	insertText->setShortcutContext( Qt::ApplicationShortcut );
 	insertText->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
-	select->setChecked( true );
+	m_select->setChecked( true );
 
 	QAction * insertImage = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-image.png" ),
@@ -285,7 +288,7 @@ ProjectWindowPrivate::init()
 
 	form->addSeparator();
 
-	form->addAction( select );
+	form->addAction( m_select );
 	form->addAction( m_drawLine );
 	form->addAction( insertText );
 	form->addAction( insertImage );
@@ -319,7 +322,7 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_saveProjectAs );
 	ProjectWindow::connect( m_widget, &ProjectWidget::changed,
 		q, &ProjectWindow::p_projectChanged );
-	ProjectWindow::connect( select, &QAction::triggered,
+	ProjectWindow::connect( m_select, &QAction::triggered,
 		q, &ProjectWindow::p_select );
 	ProjectWindow::connect( m_drawLine, &QAction::triggered,
 		q, &ProjectWindow::p_drawLine );
@@ -456,6 +459,8 @@ ProjectWindow::readProject( const QString & fileName )
 
 		setWindowTitle( tr( "Prototyper - %1[*]" )
 			.arg( QFileInfo( fileName ).baseName() ) );
+
+		d->m_select->trigger();
 	}
 	catch( const QtConfFile::Exception & x )
 	{
@@ -592,7 +597,7 @@ ProjectWindow::p_newProject()
 
 	setWindowModified( false );
 
-	d->m_saveProject->setEnabled( true );
+	d->m_select->trigger();
 }
 
 void
@@ -628,8 +633,6 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 			return;
 		}
 
-		d->m_saveProject->setEnabled( false );
-
 		setWindowModified( false );
 	}
 	else
@@ -663,8 +666,6 @@ ProjectWindow::p_saveProjectAs()
 void
 ProjectWindow::p_projectChanged()
 {
-	d->m_saveProject->setEnabled( true );
-
 	setWindowModified( true );
 }
 
@@ -722,6 +723,8 @@ ProjectWindow::p_insertImage()
 				QStandardPaths::PicturesLocation ).first(),
 			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ), 0,
 			QFileDialog::DontUseNativeDialog );
+
+	FormAction::instance()->form()->setFocus();
 
 	QApplication::processEvents();
 

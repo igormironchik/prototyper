@@ -224,9 +224,14 @@ FormText::setCfg( const Cfg::Text & c )
 
 	setObjectId( c.objectId() );
 
+	setTextWidth( c.textWidth() );
+
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
-	setTextWidth( c.textWidth() );
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 void

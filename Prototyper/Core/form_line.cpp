@@ -169,6 +169,8 @@ FormLine::setCfg( const Cfg::Line & c )
 
 	setLine( line );
 
+	d->placeChild();
+
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
 	setObjectId( c.objectId() );

@@ -227,6 +227,10 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 		addToGroup( group );
 	}
+
+	setObjectId( c.objectId() );
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 }
 
 QRectF

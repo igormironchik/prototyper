@@ -38,6 +38,9 @@ class Form;
 
 } /* namespace Cfg */
 
+class Form;
+
+
 //
 // FormScene
 //
@@ -57,6 +60,11 @@ signals:
 public:
 	FormScene( const Cfg::Form & c, QObject * parent = 0 );
 	~FormScene();
+
+	//! \return Form.
+	Form * form() const;
+	//! Set form.
+	void setForm( Form * f );
 
 public slots:
 	//! Delete selected items.
