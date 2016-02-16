@@ -724,8 +724,6 @@ ProjectWindow::p_insertImage()
 			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ), 0,
 			QFileDialog::DontUseNativeDialog );
 
-	FormAction::instance()->form()->setFocus();
-
 	QApplication::processEvents();
 
 	if( !fileName.isEmpty() )
@@ -734,6 +732,8 @@ ProjectWindow::p_insertImage()
 
 		if( !image.isNull() )
 		{
+			QApplication::processEvents();
+
 			QDrag * drag = new QDrag( this );
 			QMimeData * mimeData = new QMimeData;
 

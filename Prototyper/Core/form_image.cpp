@@ -28,9 +28,7 @@
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QByteArray>
-
-// C++ include.
-#include <string>
+#include <QBuffer>
 
 
 namespace Prototyper {
@@ -81,6 +79,7 @@ FormImage::FormImage( Form * form, QGraphicsItem * parent )
 
 FormImage::~FormImage()
 {
+	delete d->m_handles;
 }
 
 Cfg::Image
@@ -104,9 +103,11 @@ FormImage::cfg() const
 
 	c.setKeepAspectRatio( d->m_handles->isKeepAspectRatio() );
 
-	c.setData( QString( QByteArray(
-		reinterpret_cast< const char* > ( d->m_image.constBits() ),
-		d->m_image.byteCount() ).toBase64() ) );
+	QByteArray byteArray;
+	QBuffer buffer( &byteArray );
+	d->m_image.save( &buffer, "PNG" );
+
+	c.setData( QString::fromLatin1( byteArray.toBase64().data() ) );
 
 	return c;
 }
@@ -118,12 +119,9 @@ FormImage::setCfg( const Cfg::Image & c )
 
 	const QSize s( c.size().width(), c.size().height() );
 
-	const QByteArray data = QByteArray::fromBase64(
-		QByteArray( c.data().toLatin1().toStdString().c_str(),
-			c.data().size() ) );
+	const QByteArray data = QByteArray::fromBase64( c.data().toLatin1() );
 
-	d->m_image = QImage::fromData(
-		reinterpret_cast< const uchar* > ( data.constData() ), data.size() );
+	d->m_image = QImage::fromData( data, "PNG" );
 
 	d->m_handles->setKeepAspectRatio( c.keepAspectRatio() );
 

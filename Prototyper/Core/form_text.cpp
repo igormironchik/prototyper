@@ -155,6 +155,8 @@ FormText::FormText( const QRectF & rect, Form * form, QGraphicsItem * parent )
 
 FormText::~FormText()
 {
+	delete d->m_proxy;
+	delete d->m_opts;
 }
 
 Cfg::Text

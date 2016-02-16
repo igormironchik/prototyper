@@ -132,6 +132,8 @@ FormScene::deleteSelected()
 			toDelete.append( item );
 	}
 
+	clearSelection();
+
 	d->m_form->deleteItems( toDelete );
 
 	emit changed();
