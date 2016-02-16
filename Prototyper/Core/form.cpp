@@ -39,6 +39,7 @@
 #include "project_window.hpp"
 #include "form_hierarchy_widget.hpp"
 #include "name_dlg.hpp"
+#include "form_size_dlg.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -938,11 +939,33 @@ Form::slotSetGridStep()
 }
 
 void
+Form::resizeForm()
+{
+	FormSizeDlg dlg( d->m_cfg.size().width(),
+		d->m_cfg.size().height(),
+		TopGui::instance()->projectWindow() );
+
+	if( dlg.exec() == QDialog::Accepted )
+	{
+		d->m_cfg.size().width() = dlg.size().width();
+		d->m_cfg.size().height() = dlg.size().height();
+
+		emit changed();
+
+		update();
+
+		scene()->update();
+	}
+}
+
+void
 Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
 	QMenu menu;
 	menu.addAction( TopGui::instance()->projectWindow()->showHideGridAction() );
 	menu.addAction( d->m_gridStepAction );
+	menu.addAction( QIcon( ":/Core/img/transform-scale.png" ),
+		tr( "Resize" ), this, SLOT( resizeForm() ) );
 
 	menu.exec( event->screenPos() );
 

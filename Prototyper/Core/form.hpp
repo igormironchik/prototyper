@@ -124,6 +124,8 @@ public slots:
 private slots:
 	//! Set grid step.
 	void slotSetGridStep();
+	//! Resize form.
+	void resizeForm();
 
 protected:
 	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )

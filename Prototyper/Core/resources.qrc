@@ -35,5 +35,6 @@
 		<file>img/transform-move.png</file>
 		<file>img/snap-intersection.png</file>
 		<file>img/draw-freehand.png</file>
+		<file>img/transform-scale.png</file>
 	</qresource>
 </RCC>
