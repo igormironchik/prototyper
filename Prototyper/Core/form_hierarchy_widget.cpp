@@ -54,6 +54,8 @@ FormHierarchyView::FormHierarchyView( QWidget * parent )
 	:	QTreeView( parent )
 {
 	setSelectionMode( QAbstractItemView::ExtendedSelection );
+	setAllColumnsShowFocus( true );
+	setAlternatingRowColors( true );
 }
 
 FormHierarchyView::~FormHierarchyView()
