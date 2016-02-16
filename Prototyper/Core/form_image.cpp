@@ -79,7 +79,6 @@ FormImage::FormImage( Form * form, QGraphicsItem * parent )
 
 FormImage::~FormImage()
 {
-	delete d->m_handles;
 }
 
 Cfg::Image
@@ -156,6 +155,12 @@ FormImage::setImage( const QImage & img )
 	r.moveLeft( pos().x() );
 
 	d->m_handles->setRect( r );
+}
+
+void
+FormImage::destroyHandles()
+{
+	delete d->m_handles;
 }
 
 void

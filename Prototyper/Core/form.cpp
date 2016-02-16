@@ -267,7 +267,7 @@ FormPrivate::ungroup( QGraphicsItem * group )
 
 		foreach( QGraphicsItem * item, items )
 		{
-			FormGroup * obj = dynamic_cast< FormGroup* > ( item );
+			FormObject * obj = dynamic_cast< FormObject* > ( item );
 
 			if( obj )
 				m_model->removeObject( obj, tmp );
@@ -296,6 +296,8 @@ FormPrivate::ungroup( QGraphicsItem * group )
 		q->scene()->removeItem( tmp );
 
 		m_model->endRemoveObject();
+
+		tmp->destroyHandles();
 
 		delete tmp;
 	}
@@ -794,7 +796,25 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 			FormGroup * group = dynamic_cast< FormGroup* > ( item );
 
 			if( group )
+			{
 				d->clearIds( group );
+
+				group->destroyHandles();
+			}
+			else
+			{
+				FormText * text = dynamic_cast< FormText* > ( item );
+
+				if( text )
+					text->destroyHandles();
+				else
+				{
+					FormImage * image = dynamic_cast< FormImage* > ( item );
+
+					if( image )
+						image->destroyHandles();
+				}
+			}
 		}
 
 		delete item;

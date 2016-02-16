@@ -66,7 +66,7 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 	//! Destroy handles.
-	void desrtoyHandles();
+	void destroyHandles();
 
 protected:
 	//! Handle moved.

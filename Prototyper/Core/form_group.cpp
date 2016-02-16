@@ -123,7 +123,6 @@ FormGroup::FormGroup( Form * form, QGraphicsItem * parent )
 
 FormGroup::~FormGroup()
 {
-	desrtoyHandles();
 }
 
 Cfg::Group
@@ -306,7 +305,7 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormGroup::desrtoyHandles()
+FormGroup::destroyHandles()
 {
 	delete d->m_center;
 	delete d->m_topLeft;

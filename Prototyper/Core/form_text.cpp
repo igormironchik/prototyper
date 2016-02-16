@@ -155,8 +155,6 @@ FormText::FormText( const QRectF & rect, Form * form, QGraphicsItem * parent )
 
 FormText::~FormText()
 {
-	delete d->m_proxy;
-	delete d->m_opts;
 }
 
 Cfg::Text
@@ -251,6 +249,13 @@ FormText::clearSelection()
 	QTextCursor c = textCursor();
 	c.clearSelection();
 	setTextCursor( c );
+}
+
+void
+FormText::destroyHandles()
+{
+	delete d->m_proxy;
+	delete d->m_opts;
 }
 
 void
