@@ -36,6 +36,7 @@
 #include "tabs_list.hpp"
 #include "form_object.hpp"
 #include "form_text.hpp"
+#include "desc_window.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -76,6 +77,7 @@ public:
 		,	m_tabsList( 0 )
 		,	m_drawLine( 0 )
 		,	m_select( 0 )
+		,	m_desc( 0 )
 	{
 	}
 
@@ -119,12 +121,16 @@ public:
 	QAction * m_drawLine;
 	//! Select action.
 	QAction * m_select;
+	//! Descriptions window.
+	QScopedPointer< DescWindow > m_desc;
 }; // class ProjectWindowPrivate
 
 void
 ProjectWindowPrivate::init()
 {
 	m_widget = new ProjectWidget( m_cfg, q );
+
+	m_desc.reset( new DescWindow );
 
 	q->addToolBar( Qt::LeftToolBarArea, m_widget->descriptionTab()->toolBar() );
 
@@ -408,6 +414,12 @@ ProjectWidget *
 ProjectWindow::projectWidget() const
 {
 	return d->m_widget;
+}
+
+DescWindow *
+ProjectWindow::descWindow() const
+{
+	return d->m_desc.data();
 }
 
 const QString &

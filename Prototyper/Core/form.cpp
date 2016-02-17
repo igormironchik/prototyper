@@ -40,6 +40,7 @@
 #include "form_hierarchy_widget.hpp"
 #include "name_dlg.hpp"
 #include "form_size_dlg.hpp"
+#include "desc_window.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -56,6 +57,8 @@
 #include <QImage>
 #include <QVariant>
 #include <QGraphicsView>
+#include <QTextDocument>
+#include <QSharedPointer>
 
 // C++ include.
 #include <algorithm>
@@ -154,6 +157,8 @@ public:
 	FormHierarchyModel * m_model;
 	//! IDs
 	QStringList m_ids;
+	//! Descriptions.
+	QMap< QString, QSharedPointer< QTextDocument > > m_desc;
 }; // class FormPrivate
 
 void
@@ -702,6 +707,12 @@ Form::snapItem() const
 	return d->m_snap;
 }
 
+const QStringList &
+Form::ids() const
+{
+	return d->m_ids;
+}
+
 void
 Form::group()
 {
@@ -918,6 +929,16 @@ Form::renameObject( FormObject * obj )
 			{
 				const QString old = obj->objectId();
 
+				QSharedPointer< QTextDocument > doc =
+					d->m_desc[ obj->objectId() ];
+
+				d->m_desc.remove( obj->objectId() );
+
+				d->m_desc[ dlg.name() ] = doc;
+
+				TopGui::instance()->projectWindow()->descWindow()->renameItem(
+					this, obj->objectId(), dlg.name() );
+
 				obj->setObjectId( dlg.name() );
 
 				d->m_ids.removeOne( old );
@@ -929,6 +950,16 @@ Form::renameObject( FormObject * obj )
 			TopGui::instance()->projectWindow()->projectWidget()->renameTab(
 				obj->objectId() );
 	}
+}
+
+void
+Form::renameForm( const QString & name )
+{
+	d->m_ids.removeOne( objectId() );
+
+	d->m_ids.append( name );
+
+	setObjectId( name );
 }
 
 void

@@ -288,12 +288,17 @@ ProjectWidget::renameTab( const QString & oldName )
 {
 	if( d->m_tabNames.contains( oldName ) )
 	{
-		NameDlg dlg( d->m_tabNames, tr( "Enter New Tab Name..." ), this );
+		const int index = d->m_tabNames.indexOf( oldName );
+
+		QStringList names = d->m_tabNames;
+
+		if( index - 1 >= 0 )
+			names << d->m_forms.at( index - 1 )->form()->ids();
+
+		NameDlg dlg( names, tr( "Enter New Tab Name..." ), this );
 
 		if( dlg.exec() == QDialog::Accepted )
 		{
-			const int index = d->m_tabNames.indexOf( oldName );
-
 			d->m_tabs->setTabText( index, dlg.name() );
 
 			d->m_tabNames[ index ] = dlg.name();
@@ -302,7 +307,7 @@ ProjectWidget::renameTab( const QString & oldName )
 			{
 				d->m_cfg.form()[ index - 1 ].setTabName( dlg.name() );
 
-				d->m_forms[ index - 1 ]->form()->setObjectId( dlg.name() );
+				d->m_forms[ index - 1 ]->form()->renameForm( dlg.name() );
 
 				TopGui::instance()->projectWindow()->formHierarchy()->model()->
 					renameForm( d->m_forms.at( index - 1 )->form() );

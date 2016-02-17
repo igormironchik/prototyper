@@ -29,7 +29,8 @@ generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdpart
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
-HEADERS +=	export.hpp \
+HEADERS +=	desc_window.hpp \
+			export.hpp \
 			form_actions.hpp \
 			form_aspect_ratio_handle.hpp \
 			form.hpp \
@@ -66,7 +67,8 @@ HEADERS +=	export.hpp \
 			utils.hpp \
 			$$GENERATED
 
-SOURCES +=	form_actions.cpp \
+SOURCES +=	desc_window.cpp \
+			form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
 			form.cpp \
 			form_grid_snap.cpp \

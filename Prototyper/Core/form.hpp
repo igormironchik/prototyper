@@ -104,6 +104,9 @@ public:
 	//! \return Snap item.
 	GridSnap * snapItem() const;
 
+	//! \return IDs.
+	const QStringList & ids() const;
+
 	//! Group.
 	void group();
 	//! Ungroup.
@@ -120,6 +123,8 @@ public:
 public slots:
 	//! Rename object.
 	void renameObject( FormObject * obj );
+	//! Rename form.
+	void renameForm( const QString & name );
 
 private slots:
 	//! Set grid step.

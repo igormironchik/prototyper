@@ -35,6 +35,7 @@ namespace Core {
 class ProjectWidget;
 class TabsList;
 class FormHierarchyWidget;
+class DescWindow;
 
 
 //
@@ -55,6 +56,9 @@ public:
 
 	//! \return Project widget.
 	ProjectWidget * projectWidget() const;
+
+	//! \return Descriptions window.
+	DescWindow * descWindow() const;
 
 	//! \return Project's file name.
 	const QString & projectFileName() const;
