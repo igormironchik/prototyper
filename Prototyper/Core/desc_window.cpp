@@ -115,11 +115,7 @@ void
 DescWindowPrivate::clear()
 {
 	for( int i = 0; i < m_editors.size(); ++i )
-	{
 		DescWindow::disconnect( m_editors.at( i ), 0, 0, 0 );
-
-		delete m_editors.at( i );
-	}
 
 	m_editors.clear();
 
