@@ -37,5 +37,8 @@
 		<file>img/draw-freehand.png</file>
 		<file>img/transform-scale.png</file>
 		<file>img/document-edit.png</file>
+		<file>img/insert-link.png</file>
+		<file>img/remove-link.png</file>
+		<file>img/link.png</file>
 	</qresource>
 </RCC>
