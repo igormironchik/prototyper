@@ -77,6 +77,10 @@ public:
 void
 DescWindowPrivate::init()
 {
+	m_box = new QToolBox( q );
+
+	q->setCentralWidget( m_box );
+
 	q->setWindowTitle( DescWindow::tr( "Descriptions" ) );
 
 	m_bar = new TextOptsBar( TextOptsBar::Large, q );
@@ -97,6 +101,8 @@ DescWindowPrivate::init()
 		q, &DescWindow::textColor );
 	DescWindow::connect( m_bar, &TextOptsBar::clearFormat,
 		q, &DescWindow::clearFormat );
+	DescWindow::connect( m_box, &QToolBox::currentChanged,
+		q, &DescWindow::currentIndexChanged );
 }
 
 TextEditor *
@@ -115,7 +121,13 @@ void
 DescWindowPrivate::clear()
 {
 	for( int i = 0; i < m_editors.size(); ++i )
+	{
+		m_box->removeItem( 0 );
+
 		DescWindow::disconnect( m_editors.at( i ), 0, 0, 0 );
+
+		delete m_editors.at( i );
+	}
 
 	m_editors.clear();
 
@@ -143,22 +155,6 @@ DescWindow::setEditors( const QString & current,
 	const QMap< QString, QSharedPointer< QTextDocument > > & docs, Form * form )
 {
 	d->clear();
-
-	if( d->m_box )
-	{
-		disconnect( d->m_box, 0, 0, 0 );
-
-		setCentralWidget( 0 );
-
-		delete d->m_box;
-	}
-
-	d->m_box = new QToolBox( this );
-
-	setCentralWidget( d->m_box );
-
-	DescWindow::connect( d->m_box, &QToolBox::currentChanged,
-		this, &DescWindow::currentIndexChanged );
 
 	auto it = docs.constBegin();
 	auto last = docs.constEnd();
