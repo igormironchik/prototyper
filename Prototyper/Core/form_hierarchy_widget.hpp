@@ -50,6 +50,8 @@ public:
 public slots:
 	//! Change ID.
 	void changeId();
+	//! Edit description.
+	void editDesc();
 
 protected:
 	void selectionChanged( const QItemSelection & selected,

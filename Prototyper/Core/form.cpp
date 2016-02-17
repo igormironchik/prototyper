@@ -963,6 +963,34 @@ Form::renameForm( const QString & name )
 }
 
 void
+Form::editDescription( const QString & id )
+{
+	if( !d->m_desc.contains( id ) )
+	{
+		QSharedPointer< QTextDocument > doc( new QTextDocument );
+
+		QFont f = QApplication::font();
+		f.setPointSize( 10.0 );
+
+		doc->setDefaultFont( f );
+
+		QTextCursor c( doc.data() );
+
+		QTextCharFormat fmt = c.charFormat();
+		fmt.setFontPointSize( 10.0 );
+
+		c.setCharFormat( fmt );
+
+		d->m_desc[ id ] = doc;
+	}
+
+	TopGui::instance()->projectWindow()->descWindow()->setEditors(
+		id, d->m_desc, this );
+
+	TopGui::instance()->projectWindow()->descWindow()->show();
+}
+
+void
 Form::slotSetGridStep()
 {
 	TopGui::instance()->projectWindow()->setGridStep(

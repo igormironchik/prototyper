@@ -125,6 +125,8 @@ public slots:
 	void renameObject( FormObject * obj );
 	//! Rename form.
 	void renameForm( const QString & name );
+	//! Edit description.
+	void editDescription( const QString & id );
 
 private slots:
 	//! Set grid step.

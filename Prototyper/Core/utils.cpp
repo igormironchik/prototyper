@@ -81,6 +81,9 @@ QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 
 	QTextCharFormat f = c.charFormat();
 
+	if( f.fontPointSize() < 1.0 )
+		f.setFontPointSize( 10.0 );
+
 	QString t;
 
 	while( c.movePosition( QTextCursor::NextCharacter ) )

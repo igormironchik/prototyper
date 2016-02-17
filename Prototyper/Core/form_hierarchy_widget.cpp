@@ -79,6 +79,20 @@ FormHierarchyView::changeId()
 }
 
 void
+FormHierarchyView::editDesc()
+{
+	const QModelIndex index = currentIndex();
+
+	if( index.isValid() )
+	{
+		FormObject * obj = static_cast< FormObject* >
+			( index.internalPointer() );
+
+		obj->form()->editDescription( obj->objectId() );
+	}
+}
+
+void
 FormHierarchyView::selectionChanged( const QItemSelection & selected,
 	const QItemSelection & deselected )
 {
@@ -114,6 +128,9 @@ FormHierarchyView::contextMenuEvent( QContextMenuEvent * e )
 
 		menu.addAction( QIcon( ":/Core/img/edit-rename.png" ),
 			tr( "Rename" ), this, SLOT( changeId() ) );
+
+		menu.addAction( QIcon( ":/Core/img/document-edit.png" ),
+			tr( "Edit Description" ), this, SLOT( editDesc() ) );
 
 		menu.exec( e->globalPos() );
 

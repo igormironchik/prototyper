@@ -152,6 +152,10 @@ TextEditor::lessFontSize()
 		QTextCharFormat fmt = c.charFormat();
 
 		qreal s = fmt.fontPointSize();
+
+		if( s < 1.0 )
+			s = 10.0;
+
 		s -= 1.0;
 
 		if( s < 5.0 )
@@ -188,6 +192,10 @@ TextEditor::moreFontSize()
 		QTextCharFormat fmt = c.charFormat();
 
 		qreal s = fmt.fontPointSize();
+
+		if( s < 1.0 )
+			s = 10.0;
+
 		s += 1.0;
 		fmt.setFontPointSize( s );
 
