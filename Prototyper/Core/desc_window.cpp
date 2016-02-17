@@ -169,6 +169,9 @@ DescWindow::setEditors( const QString & current,
 		connect( d->m_editors.last(), &TextEditor::cursorPositionChanged,
 			this, &DescWindow::cursorPositionChanged );
 
+		connect( d->m_editors.last(), &TextEditor::changed,
+			this, &DescWindow::changed );
+
 		d->m_box->addItem( d->m_editors.last(), it.key() );
 	}
 

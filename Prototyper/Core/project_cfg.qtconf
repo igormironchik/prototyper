@@ -302,6 +302,23 @@
 
 
 				|#
+					Description of the form's item.
+				#|
+				{class Description
+					{tagVectorOfTags
+						{valueType TextStyle}
+						{name text}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name id}
+						{required}
+					}
+				} || class Description
+
+
+				|#
 					Form.
 				#|
 				{class Form
@@ -347,6 +364,11 @@
 					{tagVectorOfTags
 						{valueType Group}
 						{name group}
+					}
+
+					{tagVectorOfTags
+						{valueType Description}
+						{name desc}
 					}
 				} || class Form
 

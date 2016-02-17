@@ -348,6 +348,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_fillColor );
 	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
 		q, &ProjectWindow::p_tabChanged );
+	ProjectWindow::connect( m_desc.data(), &DescWindow::changed,
+		q, &ProjectWindow::p_projectChanged );
 }
 
 void

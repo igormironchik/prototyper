@@ -41,6 +41,7 @@
 #include "name_dlg.hpp"
 #include "form_size_dlg.hpp"
 #include "desc_window.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -653,6 +654,18 @@ Form::cfg() const
 	}
 
 	c.setTabName( objectId() );
+
+	auto last = d->m_desc.constEnd();
+
+	for( auto it = d->m_desc.constBegin(); it != last; ++it )
+	{
+		Cfg::Description desc;
+		desc.setId( it.key() );
+		desc.setText( Cfg::text( QTextCursor( it.value().data() ),
+			it.value()->toPlainText() ) );
+
+		c.desc().append( desc );
+	}
 
 	return c;
 }

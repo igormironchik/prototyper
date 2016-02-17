@@ -51,6 +51,10 @@ class DescWindow
 {
 	Q_OBJECT
 
+signals:
+	//! Changed.
+	void changed();
+
 public:
 	DescWindow( QWidget * parent = 0, Qt::WindowFlags flags = 0 );
 	~DescWindow();
