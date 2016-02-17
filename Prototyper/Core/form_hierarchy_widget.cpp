@@ -54,8 +54,13 @@ FormHierarchyView::FormHierarchyView( QWidget * parent )
 	:	QTreeView( parent )
 {
 	setSelectionMode( QAbstractItemView::ExtendedSelection );
+
 	setAllColumnsShowFocus( true );
+
 	setAlternatingRowColors( true );
+
+	connect( this, &QTreeView::doubleClicked,
+		this, &FormHierarchyView::p_doubleClicked );
 }
 
 FormHierarchyView::~FormHierarchyView()
@@ -143,6 +148,8 @@ FormHierarchyView::contextMenuEvent( QContextMenuEvent * e )
 void
 FormHierarchyView::keyPressEvent( QKeyEvent* e )
 {
+	QTreeView::keyPressEvent( e );
+
 	if( e->key() == Qt::Key_Delete )
 	{
 		if( selectionModel()->hasSelection() )
@@ -156,8 +163,21 @@ FormHierarchyView::keyPressEvent( QKeyEvent* e )
 
 		e->accept();
 	}
-	else
-		QTreeView::keyPressEvent( e );
+	else if( e->key() == Qt::Key_Return ||
+		e->key() == Qt::Key_Enter )
+	{
+		editDesc();
+
+		e->accept();
+	}
+}
+
+void
+FormHierarchyView::p_doubleClicked( const QModelIndex & index )
+{
+	Q_UNUSED( index )
+
+	editDesc();
 }
 
 

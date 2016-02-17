@@ -62,6 +62,10 @@ protected:
 	void keyPressEvent( QKeyEvent* e )
 		Q_DECL_OVERRIDE;
 
+private slots:
+	//! Double clicked.
+	void p_doubleClicked( const QModelIndex & index );
+
 private:
 	Q_DISABLE_COPY( FormHierarchyView )
 }; // class FormHierarchyView
