@@ -80,6 +80,11 @@ public:
 	//! Set brush.
 	virtual void setObjectBrush( const QBrush & b );
 
+	//! \return Link.
+	const QString & link() const;
+	//! Set link.
+	void setLink( const QString & l );
+
 	//! \return Form.
 	Form * form() const;
 
@@ -96,6 +101,8 @@ private:
 	Form * m_form;
 	//! Type.
 	ObjectType m_type;
+	//! Link.
+	QString m_link;
 }; // class FormObject
 
 } /* namespace Core */

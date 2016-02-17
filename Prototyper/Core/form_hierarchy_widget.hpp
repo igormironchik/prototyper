@@ -33,6 +33,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class FormHierarchyModel;
+
+
 //
 // FormHierarchyView
 //
@@ -44,7 +47,7 @@ class FormHierarchyView
 	Q_OBJECT
 
 public:
-	FormHierarchyView( QWidget * parent );
+	FormHierarchyView( FormHierarchyModel * model, QWidget * parent );
 	~FormHierarchyView();
 
 public slots:
@@ -52,6 +55,10 @@ public slots:
 	void changeId();
 	//! Edit description.
 	void editDesc();
+	//! Set link.
+	void setLink();
+	//! Remove link.
+	void removeLink();
 
 protected:
 	void selectionChanged( const QItemSelection & selected,
@@ -68,6 +75,8 @@ private slots:
 
 private:
 	Q_DISABLE_COPY( FormHierarchyView )
+
+	FormHierarchyModel * m_model;
 }; // class FormHierarchyView
 
 

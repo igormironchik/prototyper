@@ -108,6 +108,8 @@ FormImage::cfg() const
 
 	c.setData( QString::fromLatin1( byteArray.toBase64().data() ) );
 
+	c.setLink( link() );
+
 	return c;
 }
 
@@ -129,6 +131,8 @@ FormImage::setCfg( const Cfg::Image & c )
 		Qt::SmoothTransformation ) ) );
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	setLink( c.link() );
 
 	QRectF r = pixmap().rect();
 	r.moveTop( pos().y() );

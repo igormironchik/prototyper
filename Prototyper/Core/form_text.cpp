@@ -174,6 +174,8 @@ FormText::cfg() const
 
 	c.setText( Cfg::text( textCursor(), toPlainText() ) );
 
+	c.setLink( link() );
+
 	return c;
 }
 
@@ -251,6 +253,8 @@ FormText::setCfg( const Cfg::Text & c )
 	setTextWidth( c.textWidth() );
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	setLink( c.link() );
 
 	QRectF r = boundingRect();
 	r.moveTo( pos() );

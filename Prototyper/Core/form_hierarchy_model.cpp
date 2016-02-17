@@ -27,6 +27,7 @@
 // Qt include.
 #include <QList>
 #include <QGraphicsItem>
+#include <QIcon>
 
 
 namespace Prototyper {
@@ -204,6 +205,29 @@ FormHierarchyModel::endRemoveObject()
 	endRemoveRows();
 }
 
+void
+FormHierarchyModel::update( FormObject * obj )
+{
+	QModelIndex start = index( obj );
+	QModelIndex end = createIndex( start.row(), 3, start.internalPointer() );
+
+	emit dataChanged( start, end );
+}
+
+bool
+FormHierarchyModel::isLinked( const QModelIndex & index ) const
+{
+	if( index.isValid() )
+	{
+		FormObject * obj = static_cast< FormObject* >
+			( index.internalPointer() );
+
+		return ( !obj->link().isEmpty() );
+	}
+	else
+		return false;
+}
+
 QModelIndex
 FormHierarchyModel::index( FormObject * obj ) const
 {
@@ -220,7 +244,7 @@ FormHierarchyModel::columnCount( const QModelIndex & parent ) const
 {
 	Q_UNUSED( parent )
 
-	return 2;
+	return 3;
 }
 
 static inline QString objectType( FormObject * obj )
@@ -298,9 +322,35 @@ FormHierarchyModel::data( const QModelIndex & index, int role ) const
 				}
 					break;
 
+				case 2 :
+				{
+					FormObject * obj = static_cast< FormObject* >
+						( index.internalPointer() );
+
+					return obj->link();
+				}
+					break;
+
 				default :
 					return QVariant();
 			}
+		}
+			break;
+
+		case Qt::DecorationRole :
+		{
+			if( index.column() == 0 )
+			{
+				FormObject * obj = static_cast< FormObject* >
+					( index.internalPointer() );
+
+				if( !obj->link().isEmpty() )
+					return QIcon( ":/Core/img/link.png" );
+				else
+					return QVariant();
+			}
+			else
+				return QVariant();
 		}
 			break;
 
@@ -394,6 +444,9 @@ FormHierarchyModel::headerData( int section, Qt::Orientation orientation,
 
 		case 1 :
 			return tr( "Type" );
+
+		case 2 :
+			return tr( "Linked To" );
 
 		default :
 			return QVariant();

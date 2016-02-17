@@ -31,6 +31,7 @@
 #include "form.hpp"
 #include "form_actions.hpp"
 #include "form_scene.hpp"
+#include "link_dlg.hpp"
 
 // Qt include.
 #include <QGraphicsItem>
@@ -40,6 +41,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QContextMenuEvent>
+#include <QMessageBox>
 
 
 namespace Prototyper {
@@ -50,8 +52,9 @@ namespace Core {
 // FormHierarchyView
 //
 
-FormHierarchyView::FormHierarchyView( QWidget * parent )
+FormHierarchyView::FormHierarchyView( FormHierarchyModel * model, QWidget * parent )
 	:	QTreeView( parent )
+	,	m_model( model )
 {
 	setSelectionMode( QAbstractItemView::ExtendedSelection );
 
@@ -61,6 +64,8 @@ FormHierarchyView::FormHierarchyView( QWidget * parent )
 
 	connect( this, &QTreeView::doubleClicked,
 		this, &FormHierarchyView::p_doubleClicked );
+
+	setModel( model );
 }
 
 FormHierarchyView::~FormHierarchyView()
@@ -94,6 +99,59 @@ FormHierarchyView::editDesc()
 			( index.internalPointer() );
 
 		obj->form()->editDescription( obj->objectId() );
+	}
+}
+
+void
+FormHierarchyView::setLink()
+{
+	const QModelIndex index = currentIndex();
+
+	if( index.isValid() )
+	{
+		FormObject * obj = static_cast< FormObject* >
+			( index.internalPointer() );
+
+		QStringList names = TopGui::instance()->projectWindow()->
+			projectWidget()->formsNames();
+
+		names.removeOne( obj->form()->objectId() );
+
+		if( !names.isEmpty() )
+		{
+			LinkDlg dlg( names, this );
+
+			if( dlg.exec() == QDialog::Accepted )
+			{
+				obj->setLink( dlg.form() );
+
+				m_model->update( obj );
+			}
+		}
+	}
+}
+
+void
+FormHierarchyView::removeLink()
+{
+	const QModelIndex index = currentIndex();
+
+	if( index.isValid() )
+	{
+		QMessageBox::StandardButton btn = QMessageBox::question( this,
+			tr( "You are about to remove link..." ),
+			tr( "You are about to remove link.\n"
+				"Are you sure?" ) );
+
+		if( btn == QMessageBox::Yes )
+		{
+			FormObject * obj = static_cast< FormObject* >
+				( index.internalPointer() );
+
+			obj->setLink( QString() );
+
+			m_model->update( obj );
+		}
 	}
 }
 
@@ -136,6 +194,21 @@ FormHierarchyView::contextMenuEvent( QContextMenuEvent * e )
 
 		menu.addAction( QIcon( ":/Core/img/document-edit.png" ),
 			tr( "Edit Description" ), this, SLOT( editDesc() ) );
+
+		QStringList names = TopGui::instance()->projectWindow()->
+			projectWidget()->formsNames();
+
+		if( names.size() > 1 )
+		{
+			menu.addSeparator();
+
+			menu.addAction( QIcon( ":/Core/img/insert-link.png" ),
+				tr( "Set Link" ), this, SLOT( setLink() ) );
+
+			if( m_model->isLinked( currentIndex() ) )
+				menu.addAction( QIcon( ":/Core/img/remove-link.png" ),
+					tr( "Remove Link" ), this, SLOT( removeLink() ) );
+		}
 
 		menu.exec( e->globalPos() );
 
@@ -208,11 +281,9 @@ public:
 void
 FormHierarchyWidgetPrivate::init()
 {
-	m_view = new FormHierarchyView( q );
-
 	m_model = new FormHierarchyModel( q );
 
-	m_view->setModel( m_model );
+	m_view = new FormHierarchyView( m_model, q );
 
 	q->setWindowTitle( FormHierarchyWidget::tr( "Form's Hierarchy" ) );
 

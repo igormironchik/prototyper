@@ -218,6 +218,15 @@ ProjectWidget::forms() const
 	return d->m_forms;
 }
 
+QStringList
+ProjectWidget::formsNames() const
+{
+	QStringList res = d->m_tabNames;
+	res.removeFirst();
+
+	return res;
+}
+
 QTabWidget *
 ProjectWidget::tabs() const
 {
@@ -311,6 +320,9 @@ ProjectWidget::renameTab( const QString & oldName )
 
 				TopGui::instance()->projectWindow()->formHierarchy()->model()->
 					renameForm( d->m_forms.at( index - 1 )->form() );
+
+				foreach( FormView * view, d->m_forms )
+					view->form()->updateLink( oldName, dlg.name() );
 			}
 			else
 				d->m_cfg.description().setTabName( dlg.name() );
@@ -356,6 +368,9 @@ ProjectWidget::deleteForm( const QString & name )
 
 			TopGui::instance()->projectWindow()->tabsList()->model()->
 				setStringList( d->m_tabNames );
+
+			foreach( FormView * view, d->m_forms )
+				view->form()->updateLink( name, QString() );
 
 			emit changed();
 		}

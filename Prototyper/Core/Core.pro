@@ -54,6 +54,7 @@ HEADERS +=	desc_window.hpp \
 			form_view.hpp \
 			form_with_resize_and_move_handles.hpp \
 			grid_step_dlg.hpp \
+			link_dlg.hpp \
 			name_dlg.hpp \
 			new_form_dlg.hpp \
 			project_description_tab.hpp \
@@ -91,6 +92,7 @@ SOURCES +=	desc_window.cpp \
 			form_view.cpp \
 			form_with_resize_and_move_handles.cpp \
 			grid_step_dlg.cpp \
+			link_dlg.cpp \
 			name_dlg.cpp \
 			new_form_dlg.cpp \
 			project_description_tab.cpp \
@@ -105,6 +107,7 @@ SOURCES +=	desc_window.cpp \
 
 FORMS +=	form_size_dlg.ui \
 			grid_step_dlg.ui \
+			link_dlg.ui \
 			name_dlg.ui \
 			new_form_dlg.ui
 

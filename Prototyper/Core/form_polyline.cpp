@@ -243,6 +243,8 @@ FormPolyline::cfg() const
 
 	c.setBrush( Cfg::brush( objectBrush() ) );
 
+	c.setLink( link() );
+
 	return c;
 }
 
@@ -272,6 +274,8 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 	setObjectPen( Cfg::fromPen( c.pen() ) );
 
 	setObjectBrush( Cfg::fromBrush( c.brush() ) );
+
+	setLink( c.link() );
 }
 
 const QList< QLineF > &

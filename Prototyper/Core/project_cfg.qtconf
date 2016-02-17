@@ -156,6 +156,11 @@
 						{valueType Pen}
 						{name pen}
 					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
 				} || class Line
 
 
@@ -190,6 +195,11 @@
 						{valueType Brush}
 						{name brush}
 					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
 				} || class Polyline
 
 
@@ -218,6 +228,11 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
 					}
 				} || class Text
 
@@ -254,6 +269,11 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
 					}
 				} || class Image
 
@@ -297,6 +317,11 @@
 						{valueType Point}
 						{name pos}
 						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
 					}
 				} || class Group
 
@@ -369,6 +394,11 @@
 					{tagVectorOfTags
 						{valueType Description}
 						{name desc}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
 					}
 				} || class Form
 

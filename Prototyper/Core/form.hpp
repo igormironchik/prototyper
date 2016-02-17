@@ -115,6 +115,9 @@ public:
 	//! Delete items.
 	void deleteItems( const QList< QGraphicsItem* > & items );
 
+	//! Update renamed link.
+	void updateLink( const QString & oldName, const QString & name );
+
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

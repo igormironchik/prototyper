@@ -134,6 +134,9 @@ public:
 	//! Set text.
 	void setText( const QSharedPointer< QTextDocument > & doc,
 		const QList< Cfg::TextStyle > & text );
+	//! Update link.
+	void updateLink( const QList< QGraphicsItem* > & childItems,
+		const QString & oldName, const QString & name );
 
 	//! Parent.
 	Form * q;
@@ -382,6 +385,8 @@ FormPrivate::updateFromCfg()
 
 		setText( m_desc[ c.id() ], c.text() );
 	}
+
+	q->setLink( m_cfg.link() );
 }
 
 void
@@ -593,6 +598,29 @@ FormPrivate::setText( const QSharedPointer< QTextDocument > & doc,
 	}
 }
 
+void
+FormPrivate::updateLink( const QList< QGraphicsItem* > & childItems,
+	const QString & oldName, const QString & name )
+{
+	foreach( QGraphicsItem * item, childItems )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj )
+		{
+			if( obj->link() == oldName )
+			{
+				obj->setLink( name );
+
+				m_model->update( obj );
+			}
+
+			if( obj->type() == FormObject::GroupType )
+				updateLink( item->childItems(), oldName, name );
+		}
+	}
+}
+
 
 //
 // Form
@@ -744,6 +772,8 @@ Form::cfg() const
 
 		c.desc().append( desc );
 	}
+
+	c.setLink( link() );
 
 	return c;
 }
@@ -959,6 +989,12 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 
 		delete item;
 	}
+}
+
+void
+Form::updateLink( const QString & oldName, const QString & name )
+{
+	d->updateLink( childItems(), oldName, name );
 }
 
 QRectF

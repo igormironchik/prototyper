@@ -197,6 +197,8 @@ FormGroup::cfg() const
 
 	c.setPos( p );
 
+	c.setLink( link() );
+
 	return c;
 }
 
@@ -253,6 +255,8 @@ FormGroup::setCfg( const Cfg::Group & c )
 	setObjectId( c.objectId() );
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	setLink( c.link() );
 }
 
 QRectF

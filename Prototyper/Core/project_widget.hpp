@@ -69,6 +69,9 @@ public:
 	//! \return Forms.
 	const QList< FormView* > & forms() const;
 
+	//! \return Forms' names.
+	QStringList formsNames() const;
+
 	//! \return Tab widget.
 	QTabWidget * tabs() const;
 

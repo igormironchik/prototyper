@@ -64,6 +64,12 @@ public:
 	//! End remove object.
 	void endRemoveObject();
 
+	//! Update.
+	void update( FormObject * obj );
+
+	//! \return Is linked?
+	bool isLinked( const QModelIndex & index ) const;
+
 	//! \return Index for the given object.
 	QModelIndex index( FormObject * obj ) const;
 

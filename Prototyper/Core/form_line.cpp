@@ -160,6 +160,8 @@ FormLine::cfg() const
 
 	c.setPen( Cfg::pen( objectPen() ) );
 
+	c.setLink( link() );
+
 	return c;
 }
 
@@ -179,6 +181,8 @@ FormLine::setCfg( const Cfg::Line & c )
 	setObjectId( c.objectId() );
 
 	setObjectPen( Cfg::fromPen( c.pen() ) );
+
+	setLink( c.link() );
 }
 
 QRectF
