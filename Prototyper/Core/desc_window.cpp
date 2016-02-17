@@ -78,6 +78,8 @@ DescWindowPrivate::init()
 
 	q->setCentralWidget( m_box );
 
+	q->setWindowTitle( DescWindow::tr( "Descriptions" ) );
+
 	m_bar = new TextOptsBar( TextOptsBar::Large, q );
 
 	q->addToolBar( Qt::TopToolBarArea, m_bar );
@@ -165,6 +167,17 @@ DescWindow::setEditors( const QString & current,
 		d->m_editors.append( new TextEditor( d->m_box ) );
 
 		d->m_editors.last()->setDocument( it.value().data() );
+
+		d->m_editors.last()->setFontPointSize( 10.0 );
+
+		QTextCursor c = d->m_editors.last()->textCursor();
+
+		QTextCharFormat fmt = c.charFormat();
+		fmt.setFontPointSize( 10.0 );
+
+		c.setCharFormat( fmt );
+
+		d->m_editors.last()->setTextCursor( c );
 
 		connect( d->m_editors.last(), &TextEditor::cursorPositionChanged,
 			this, &DescWindow::cursorPositionChanged );

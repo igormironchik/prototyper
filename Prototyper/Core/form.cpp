@@ -129,6 +129,11 @@ public:
 	void clearIds( FormGroup * group );
 	//! Add IDs.
 	void addIds( FormGroup * group );
+	//! Create description.
+	void createDescription( const QString & id );
+	//! Set text.
+	void setText( const QSharedPointer< QTextDocument > & doc,
+		const QList< Cfg::TextStyle > & text );
 
 	//! Parent.
 	Form * q;
@@ -370,12 +375,21 @@ FormPrivate::updateFromCfg()
 
 		m_model->addObject( group, q );
 	}
+
+	foreach( const Cfg::Description & c, m_cfg.desc() )
+	{
+		createDescription( c.id() );
+
+		setText( m_desc[ c.id() ], c.text() );
+	}
 }
 
 void
 FormPrivate::clear()
 {
 	m_ids.clear();
+
+	m_desc.clear();
 
 	QList< QGraphicsItem* > items = q->childItems();
 
@@ -516,6 +530,69 @@ FormPrivate::addIds( FormGroup * group )
 	}
 }
 
+void
+FormPrivate::createDescription( const QString & id )
+{
+	QSharedPointer< QTextDocument > doc( new QTextDocument );
+
+	QFont f = QApplication::font();
+	f.setPointSize( 10.0 );
+
+	doc->setDefaultFont( f );
+
+	QTextCursor c( doc.data() );
+
+	QTextCharFormat fmt = c.charFormat();
+	fmt.setFontPointSize( 10.0 );
+
+	c.setCharFormat( fmt );
+
+	m_desc[ id ] = doc;
+}
+
+void
+FormPrivate::setText( const QSharedPointer< QTextDocument > & doc,
+	const QList< Cfg::TextStyle > & text )
+{
+	QTextCursor c( doc.data() );
+	QTextCharFormat fmt = c.charFormat();
+
+	foreach( const Cfg::TextStyle & s, text )
+	{
+		if( s.style().contains( Cfg::c_normalStyle ) )
+		{
+			fmt.setFontWeight( QFont::Normal );
+			fmt.setFontItalic( false );
+			fmt.setFontUnderline( false );
+		}
+		else
+		{
+			if( s.style().contains( Cfg::c_boldStyle ) )
+				fmt.setFontWeight( QFont::Bold );
+			else
+				fmt.setFontWeight( QFont::Normal );
+
+			if( s.style().contains( Cfg::c_italicStyle ) )
+				fmt.setFontItalic( true );
+			else
+				fmt.setFontItalic( false );
+
+			if( s.style().contains( Cfg::c_underlineStyle ) )
+				fmt.setFontUnderline( true );
+			else
+				fmt.setFontUnderline( false );
+		}
+
+		fmt.setFontPointSize( s.fontSize() );
+
+		c.setCharFormat( fmt );
+
+		c.insertText( s.text() );
+
+		c.movePosition( QTextCursor::End );
+	}
+}
+
 
 //
 // Form
@@ -593,6 +670,7 @@ Form::cfg() const
 	c.text().clear();
 	c.image().clear();
 	c.group().clear();
+	c.desc().clear();
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
@@ -979,23 +1057,7 @@ void
 Form::editDescription( const QString & id )
 {
 	if( !d->m_desc.contains( id ) )
-	{
-		QSharedPointer< QTextDocument > doc( new QTextDocument );
-
-		QFont f = QApplication::font();
-		f.setPointSize( 10.0 );
-
-		doc->setDefaultFont( f );
-
-		QTextCursor c( doc.data() );
-
-		QTextCharFormat fmt = c.charFormat();
-		fmt.setFontPointSize( 10.0 );
-
-		c.setCharFormat( fmt );
-
-		d->m_desc[ id ] = doc;
-	}
+		d->createDescription( id );
 
 	TopGui::instance()->projectWindow()->descWindow()->setEditors(
 		id, d->m_desc, this );
