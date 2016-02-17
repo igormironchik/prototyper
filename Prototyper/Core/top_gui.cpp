@@ -26,6 +26,7 @@
 #include "windows_cfg.hpp"
 #include "session_cfg.hpp"
 #include "project_widget.hpp"
+#include "desc_window.hpp"
 
 // Qt include.
 #include <QApplication>
@@ -103,6 +104,11 @@ TopGuiPrivate::init()
 				cfg.projectWindow().y() );
 			m_projectWindow->resize( cfg.projectWindow().width(),
 				cfg.projectWindow().height() );
+
+			m_projectWindow->descWindow()->move( cfg.descWindow().x(),
+				cfg.descWindow().y() );
+			m_projectWindow->descWindow()->resize( cfg.descWindow().width(),
+				cfg.descWindow().height() );
 		}
 		catch( const QtConfFile::Exception & )
 		{
@@ -219,6 +225,14 @@ TopGui::saveCfg( QWidget * parent )
 		proj.setIsShown( true );
 
 		cfg.setProjectWindow( proj );
+
+		Cfg::Window desc;
+		desc.setX( d->m_projectWindow->descWindow()->x() );
+		desc.setY( d->m_projectWindow->descWindow()->y() );
+		desc.setWidth( d->m_projectWindow->descWindow()->width() );
+		desc.setHeight( d->m_projectWindow->descWindow()->height() );
+
+		cfg.setDescWindow( desc );
 
 		Cfg::TagWindowsCfg tag( cfg );
 
