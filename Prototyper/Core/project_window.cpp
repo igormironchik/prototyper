@@ -350,6 +350,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_tabChanged );
 	ProjectWindow::connect( m_desc.data(), &DescWindow::changed,
 		q, &ProjectWindow::p_projectChanged );
+	ProjectWindow::connect( m_formHierarchy, &FormHierarchyWidget::changed,
+		q, &ProjectWindow::p_projectChanged );
 }
 
 void

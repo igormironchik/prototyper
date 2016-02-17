@@ -994,6 +994,13 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 void
 Form::updateLink( const QString & oldName, const QString & name )
 {
+	if( link() == oldName )
+	{
+		setLink( name );
+
+		d->m_model->update( this );
+	}
+
 	d->updateLink( childItems(), oldName, name );
 }
 

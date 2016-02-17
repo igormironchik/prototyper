@@ -46,6 +46,10 @@ class FormHierarchyView
 {
 	Q_OBJECT
 
+signals:
+	//! Changed.
+	void changed();
+
 public:
 	FormHierarchyView( FormHierarchyModel * model, QWidget * parent );
 	~FormHierarchyView();
@@ -93,6 +97,10 @@ class FormHierarchyWidget
 	:	public QDockWidget
 {
 	Q_OBJECT
+
+signals:
+	//! Changed.
+	void changed();
 
 public:
 	FormHierarchyWidget( QWidget * parent = 0, Qt::WindowFlags f = 0 );

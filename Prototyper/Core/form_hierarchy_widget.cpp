@@ -125,6 +125,8 @@ FormHierarchyView::setLink()
 			{
 				obj->setLink( dlg.form() );
 
+				emit changed();
+
 				m_model->update( obj );
 			}
 		}
@@ -149,6 +151,8 @@ FormHierarchyView::removeLink()
 				( index.internalPointer() );
 
 			obj->setLink( QString() );
+
+			emit changed();
 
 			m_model->update( obj );
 		}
@@ -288,6 +292,9 @@ FormHierarchyWidgetPrivate::init()
 	q->setWindowTitle( FormHierarchyWidget::tr( "Form's Hierarchy" ) );
 
 	q->setWidget( m_view );
+
+	FormHierarchyWidget::connect( m_view, &FormHierarchyView::changed,
+		q, &FormHierarchyWidget::changed );
 }
 
 
