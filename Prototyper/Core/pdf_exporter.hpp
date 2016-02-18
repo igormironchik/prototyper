@@ -20,8 +20,8 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__PDF_PdfExporter_HPP__INCLUDED
-#define PROTOTYPER__CORE__PDF_PdfExporter_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__PDF_EXPORTER_HPP__INCLUDED
+#define PROTOTYPER__CORE__PDF_EXPORTER_HPP__INCLUDED
 
 // Prototyper include.
 #include "exporter.hpp"
@@ -35,7 +35,7 @@ namespace Core {
 // PdfExporter
 //
 
-//! Base class for PdfExporters to the doc.
+//! Exporter to PDF.
 class PdfExporter
 	:	public Exporter
 {
@@ -55,4 +55,4 @@ private:
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__PDF_PdfExporter_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__PDF_EXPORTER_HPP__INCLUDED

@@ -37,6 +37,8 @@
 #include "form_object.hpp"
 #include "form_text.hpp"
 #include "desc_window.hpp"
+#include "pdf_exporter.hpp"
+#include "html_exporter.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -94,6 +96,8 @@ public:
 	//! Enable/disable editing.
 	void enableEditing( const QList< QGraphicsItem* > & children,
 		bool on );
+	//! Update cfg.
+	void updateCfg();
 
 	//! Parent.
 	ProjectWindow * q;
@@ -163,6 +167,18 @@ ProjectWindowPrivate::init()
 	QAction * saveProjectAs = file->addAction(
 		QIcon( ":/Core/img/document-save-as.png" ),
 		ProjectWindow::tr( "Save Project As" ) );
+
+	file->addSeparator();
+
+	QMenu * exportMenu = file->addMenu( ProjectWindow::tr( "Export To" ) );
+
+	QAction * exportToPdf = exportMenu->addAction(
+		QIcon( ":/Core/img/application-pdf.png" ),
+		ProjectWindow::tr( "PDF" ) );
+
+	QAction * exportToHtml = exportMenu->addAction(
+		QIcon( ":/Core/img/text-html.png" ),
+		ProjectWindow::tr( "HTML" ) );
 
 	file->addSeparator();
 
@@ -352,6 +368,10 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_projectChanged );
 	ProjectWindow::connect( m_formHierarchy, &FormHierarchyWidget::changed,
 		q, &ProjectWindow::p_projectChanged );
+	ProjectWindow::connect( exportToPdf, &QAction::triggered,
+		q, &ProjectWindow::p_exportToPDf );
+	ProjectWindow::connect( exportToHtml, &QAction::triggered,
+		q, &ProjectWindow::p_exportToHtml );
 }
 
 void
@@ -396,6 +416,16 @@ ProjectWindowPrivate::enableEditing( const QList< QGraphicsItem* > & children,
 			text->clearSelection();
 		}
 	}
+}
+
+void
+ProjectWindowPrivate::updateCfg()
+{
+	m_cfg.description().setText(
+		m_widget->descriptionTab()->editor()->text() );
+
+	for( int i = 0; i < m_widget->forms().size(); ++i )
+		m_cfg.form()[ i ] = m_widget->forms().at( i )->form()->cfg();
 }
 
 
@@ -626,11 +656,7 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 
 	if( !d->m_fileName.isEmpty() )
 	{
-		d->m_cfg.description().setText(
-			d->m_widget->descriptionTab()->editor()->text() );
-
-		for( int i = 0; i < d->m_widget->forms().size(); ++i )
-			d->m_cfg.form()[ i ] = d->m_widget->forms().at( i )->form()->cfg();
+		d->updateCfg();
 
 		if( !d->m_fileName.endsWith( ext ) )
 			d->m_fileName.append( ext );
@@ -887,6 +913,66 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_widget->descriptionTab()->toolBar()->show();
 
 		FormAction::instance()->setForm( 0 );
+	}
+}
+
+void
+ProjectWindow::p_exportToPDf()
+{
+	if( isWindowModified() )
+	{
+		QMessageBox::StandardButton btn =
+			QMessageBox::question( this, tr( "Project Modified..." ),
+				tr( "Project modified.\nDo you want to save it?" ),
+				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+
+		if( btn == QMessageBox::Yes )
+			p_saveProjectImpl();
+	}
+
+	const QString fileName = QFileDialog::getSaveFileName( this,
+		tr( "Select file to export project..." ),
+		QStandardPaths::standardLocations(
+			QStandardPaths::DocumentsLocation ).first(),
+		tr( "PDF (*.pdf)" ) );
+
+	if( !fileName.isEmpty() )
+	{
+		d->updateCfg();
+
+		PdfExporter exporter( d->m_cfg );
+
+		exporter.exportToDoc( fileName );
+	}
+}
+
+void
+ProjectWindow::p_exportToHtml()
+{
+	if( isWindowModified() )
+	{
+		QMessageBox::StandardButton btn =
+			QMessageBox::question( this, tr( "Project Modified..." ),
+				tr( "Project modified.\nDo you want to save it?" ),
+				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+
+		if( btn == QMessageBox::Yes )
+			p_saveProjectImpl();
+	}
+
+	const QString fileName = QFileDialog::getSaveFileName( this,
+		tr( "Select file to export project..." ),
+		QStandardPaths::standardLocations(
+			QStandardPaths::DocumentsLocation ).first(),
+		tr( "HTML (*.htm *.html)" ) );
+
+	if( !fileName.isEmpty() )
+	{
+		d->updateCfg();
+
+		HtmlExporter exporter( d->m_cfg );
+
+		exporter.exportToDoc( fileName );
 	}
 }
 

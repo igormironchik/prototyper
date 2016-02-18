@@ -40,5 +40,7 @@
 		<file>img/insert-link.png</file>
 		<file>img/remove-link.png</file>
 		<file>img/link.png</file>
+		<file>img/application-pdf.png</file>
+		<file>img/text-html.png</file>
 	</qresource>
 </RCC>

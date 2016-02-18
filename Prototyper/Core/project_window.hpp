@@ -124,6 +124,10 @@ private slots:
 	void p_strokeColor();
 	//! Tab changed.
 	void p_tabChanged( int index );
+	//! Export to PDF.
+	void p_exportToPDf();
+	//! Export to HTML.
+	void p_exportToHtml();
 
 private:
 	friend class ProjectWindowPrivate;
