@@ -170,7 +170,9 @@ ProjectWindowPrivate::init()
 
 	file->addSeparator();
 
-	QMenu * exportMenu = file->addMenu( ProjectWindow::tr( "Export To" ) );
+	QMenu * exportMenu = file->addMenu(
+		QIcon( ":/Core/img/document-export.png" ),
+		ProjectWindow::tr( "Export To" ) );
 
 	QAction * exportToPdf = exportMenu->addAction(
 		QIcon( ":/Core/img/application-pdf.png" ),
