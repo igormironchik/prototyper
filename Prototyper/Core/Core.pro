@@ -30,6 +30,7 @@ generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdpart
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
 HEADERS +=	desc_window.hpp \
+			exporter.hpp \
 			export.hpp \
 			form_actions.hpp \
 			form_aspect_ratio_handle.hpp \
@@ -54,9 +55,11 @@ HEADERS +=	desc_window.hpp \
 			form_view.hpp \
 			form_with_resize_and_move_handles.hpp \
 			grid_step_dlg.hpp \
+			html_exporter.hpp \
 			link_dlg.hpp \
 			name_dlg.hpp \
 			new_form_dlg.hpp \
+			pdf_exporter.hpp \
 			project_description_tab.hpp \
 			project_widget.hpp \
 			project_widget_tab_bar.hpp \
@@ -69,6 +72,7 @@ HEADERS +=	desc_window.hpp \
 			$$GENERATED
 
 SOURCES +=	desc_window.cpp \
+			exporter.cpp \
 			form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
 			form.cpp \
@@ -92,9 +96,11 @@ SOURCES +=	desc_window.cpp \
 			form_view.cpp \
 			form_with_resize_and_move_handles.cpp \
 			grid_step_dlg.cpp \
+			html_exporter.cpp \
 			link_dlg.cpp \
 			name_dlg.cpp \
 			new_form_dlg.cpp \
+			pdf_exporter.cpp \
 			project_description_tab.cpp \
 			project_widget.cpp \
 			project_widget_tab_bar.cpp \
