@@ -26,6 +26,7 @@
 // Qt include.
 #include <QTextCharFormat>
 #include <QTextCursor>
+#include <QTextDocument>
 
 
 namespace Prototyper {
@@ -167,6 +168,55 @@ Cfg::Brush brush( const QBrush & b )
 QBrush fromBrush( const Cfg::Brush & b )
 {
 	return QBrush( QColor( b.color() ) );
+}
+
+
+//
+// fillTextDocument
+//
+
+void fillTextDocument( QTextDocument * doc,
+	const QList< Cfg::TextStyle > & text )
+{
+	doc->clear();
+
+	QTextCursor c( doc );
+	QTextCharFormat fmt = c.charFormat();
+
+	foreach( const Cfg::TextStyle & s, text )
+	{
+		if( s.style().contains( Cfg::c_normalStyle ) )
+		{
+			fmt.setFontWeight( QFont::Normal );
+			fmt.setFontItalic( false );
+			fmt.setFontUnderline( false );
+		}
+		else
+		{
+			if( s.style().contains( Cfg::c_boldStyle ) )
+				fmt.setFontWeight( QFont::Bold );
+			else
+				fmt.setFontWeight( QFont::Normal );
+
+			if( s.style().contains( Cfg::c_italicStyle ) )
+				fmt.setFontItalic( true );
+			else
+				fmt.setFontItalic( false );
+
+			if( s.style().contains( Cfg::c_underlineStyle ) )
+				fmt.setFontUnderline( true );
+			else
+				fmt.setFontUnderline( false );
+		}
+
+		fmt.setFontPointSize( s.fontSize() );
+
+		c.setCharFormat( fmt );
+
+		c.insertText( s.text() );
+
+		c.movePosition( QTextCursor::End );
+	}
 }
 
 } /* namespace Cfg */

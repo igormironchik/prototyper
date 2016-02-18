@@ -33,6 +33,7 @@
 QT_BEGIN_NAMESPACE
 class QTextCharFormat;
 class QTextCursor;
+class QTextDocument;
 QT_END_NAMESPACE
 
 
@@ -97,6 +98,14 @@ Cfg::Brush brush( const QBrush & b );
 //
 
 QBrush fromBrush( const Cfg::Brush & b );
+
+
+//
+// fillTextDocument
+//
+
+void fillTextDocument( QTextDocument * doc,
+	const QList< Cfg::TextStyle > & text );
 
 } /* namespace Cfg */
 

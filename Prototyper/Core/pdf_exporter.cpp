@@ -23,6 +23,10 @@
 // Prototyper include.
 #include "pdf_exporter.hpp"
 
+// Qt include.
+#include <QPdfWriter>
+#include <QPainter>
+
 
 namespace Prototyper {
 
@@ -69,7 +73,12 @@ PdfExporter::~PdfExporter()
 void
 PdfExporter::exportToDoc( const QString & fileName ) const
 {
-	Q_UNUSED( fileName )
+	QPdfWriter pdf( fileName );
+
+	QPainter p;
+	p.begin( &pdf );
+
+	p.end();
 }
 
 } /* namespace Core */
