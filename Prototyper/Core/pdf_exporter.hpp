@@ -35,6 +35,8 @@ namespace Core {
 // PdfExporter
 //
 
+class PdfExporterPrivate;
+
 //! Exporter to PDF.
 class PdfExporter
 	:	public Exporter
@@ -46,6 +48,13 @@ public:
 	//! Export documentation.
 	void exportToDoc( const QString & fileName ) const
 		Q_DECL_OVERRIDE;
+
+private:
+	inline const PdfExporterPrivate * d_ptr() const
+		{ return reinterpret_cast< const PdfExporterPrivate* > ( d.data() ); }
+	inline PdfExporterPrivate * d_ptr()
+		{ return reinterpret_cast< PdfExporterPrivate* > ( d.data() ); }
+
 
 private:
 	Q_DISABLE_COPY( PdfExporter )

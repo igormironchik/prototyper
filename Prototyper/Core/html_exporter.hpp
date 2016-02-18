@@ -35,6 +35,8 @@ namespace Core {
 // HtmlExporter
 //
 
+class HtmlExporterPrivate;
+
 //! Exporter to HTML.
 class HtmlExporter
 	:	public Exporter
@@ -46,6 +48,12 @@ public:
 	//! Export documentation.
 	void exportToDoc( const QString & fileName ) const
 		Q_DECL_OVERRIDE;
+
+private:
+	inline const HtmlExporterPrivate * d_ptr() const
+		{ return reinterpret_cast< const HtmlExporterPrivate* > ( d.data() ); }
+	inline HtmlExporterPrivate * d_ptr()
+		{ return reinterpret_cast< HtmlExporterPrivate* > ( d.data() ); }
 
 private:
 	Q_DISABLE_COPY( HtmlExporter )
