@@ -29,6 +29,10 @@
 // Prototyper include.
 #include "project_cfg.hpp"
 
+QT_BEGIN_NAMESPACE
+class QSvgGenerator;
+QT_END_NAMESPACE
+
 
 namespace Prototyper {
 
@@ -48,6 +52,8 @@ public:
 
 	//! Init.
 	virtual void init();
+	//! Draw form.
+	void drawForm( QSvgGenerator & svg, const Cfg::Form & form );
 
 	//! Parent.
 	Exporter * q;
@@ -67,7 +73,7 @@ public:
 	virtual ~Exporter();
 
 	//! Export documentation.
-	virtual void exportToDoc( const QString & fileName ) const = 0;
+	virtual void exportToDoc( const QString & fileName ) = 0;
 
 protected:
 	Exporter( QScopedPointer< ExporterPrivate > && dd );

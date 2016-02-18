@@ -236,6 +236,8 @@ FormPolyline::cfg() const
 		line.setP1( p1 );
 		line.setP2( p2 );
 
+		line.setPen( Cfg::pen( objectPen() ) );
+
 		c.line().append( line );
 	}
 

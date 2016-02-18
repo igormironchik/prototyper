@@ -46,7 +46,7 @@ public:
 	~HtmlExporter();
 
 	//! Export documentation.
-	void exportToDoc( const QString & fileName ) const
+	void exportToDoc( const QString & fileName )
 		Q_DECL_OVERRIDE;
 
 private:

@@ -71,7 +71,7 @@ HtmlExporter::~HtmlExporter()
 }
 
 void
-HtmlExporter::exportToDoc( const QString & fileName ) const
+HtmlExporter::exportToDoc( const QString & fileName )
 {
 	Q_UNUSED( fileName )
 }

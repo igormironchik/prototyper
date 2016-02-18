@@ -22,6 +22,12 @@
 
 // Prototyper include.
 #include "exporter.hpp"
+#include "utils.hpp"
+
+// Qt include.
+#include <QSvgGenerator>
+#include <QPainter>
+#include <QTextDocument>
 
 
 namespace Prototyper {
@@ -46,6 +52,114 @@ void
 ExporterPrivate::init()
 {
 
+}
+
+static inline void drawLine( const Cfg::Line & line, QPainter & p )
+{
+	p.save();
+
+	p.setPen( QPen( QColor( line.pen().color() ), line.pen().width() ) );
+
+	p.drawLine( line.p1().x(), line.p1().y(),
+		line.p2().x(), line.p2().y() );
+
+	p.restore();
+}
+
+static inline void drawGroup( const Cfg::Group & group, QPainter & p )
+{
+	foreach( const Cfg::Group & group, group.group() )
+		drawGroup( group, p );
+
+	foreach( const Cfg::Line & line, group.line() )
+		drawLine( line, p );
+
+	foreach( const Cfg::Polyline & poly, group.polyline() )
+	{
+		foreach( const Cfg::Line & line, poly.line() )
+			drawLine( line, p );
+	}
+
+	foreach( const Cfg::Text & text, group.text() )
+	{
+		p.save();
+
+		QTextDocument doc;
+		doc.setTextWidth( text.textWidth() );
+
+		Cfg::fillTextDocument( &doc, text.text() );
+
+		p.translate( text.pos().x(), text.pos().y() );
+
+		doc.drawContents( &p );
+
+		p.restore();
+	}
+
+	foreach( const Cfg::Image & image, group.image() )
+	{
+		const QSize s( image.size().width(), image.size().height() );
+
+		const QByteArray data = QByteArray::fromBase64( image.data().toLatin1() );
+
+		QImage img = QImage::fromData( data, "PNG" );
+
+		p.drawImage( image.pos().x(), image.pos().y(),
+			img.scaled( s, ( image.keepAspectRatio() ? Qt::KeepAspectRatio :
+					Qt::IgnoreAspectRatio ),
+				Qt::SmoothTransformation ) );
+	}
+}
+
+void
+ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
+{
+	QPainter p;
+	p.begin( &svg );
+
+	foreach( const Cfg::Group & group, form.group() )
+		drawGroup( group, p );
+
+	foreach( const Cfg::Line & line, form.line() )
+		drawLine( line, p );
+
+	foreach( const Cfg::Polyline & poly, form.polyline() )
+	{
+		foreach( const Cfg::Line & line, poly.line() )
+			drawLine( line, p );
+	}
+
+	foreach( const Cfg::Text & text, form.text() )
+	{
+		p.save();
+
+		QTextDocument doc;
+		doc.setTextWidth( text.textWidth() );
+
+		Cfg::fillTextDocument( &doc, text.text() );
+
+		p.translate( text.pos().x(), text.pos().y() );
+
+		doc.drawContents( &p );
+
+		p.restore();
+	}
+
+	foreach( const Cfg::Image & image, form.image() )
+	{
+		const QSize s( image.size().width(), image.size().height() );
+
+		const QByteArray data = QByteArray::fromBase64( image.data().toLatin1() );
+
+		QImage img = QImage::fromData( data, "PNG" );
+
+		p.drawImage( image.pos().x(), image.pos().y(),
+			img.scaled( s, ( image.keepAspectRatio() ? Qt::KeepAspectRatio :
+					Qt::IgnoreAspectRatio ),
+				Qt::SmoothTransformation ) );
+	}
+
+	p.end();
 }
 
 

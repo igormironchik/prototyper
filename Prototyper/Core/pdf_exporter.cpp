@@ -22,10 +22,16 @@
 
 // Prototyper include.
 #include "pdf_exporter.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QPdfWriter>
-#include <QPainter>
+#include <QPageLayout>
+#include <QTextDocument>
+#include <QList>
+#include <QTemporaryFile>
+#include <QSharedPointer>
+#include <QSvgGenerator>
 
 
 namespace Prototyper {
@@ -45,14 +51,38 @@ public:
 	{
 	}
 
+	//! Create tmp images.
+	void createImages();
+
 	//! Init.
 	void init() Q_DECL_OVERRIDE;
+
+	//! Images' files.
+	QList< QSharedPointer< QTemporaryFile > > m_images;
 }; // class PdfExporterPrivate
 
 void
 PdfExporterPrivate::init()
 {
 	ExporterPrivate::init();
+}
+
+void
+PdfExporterPrivate::createImages()
+{
+	foreach( const Cfg::Form & form, m_cfg.form() )
+	{
+		m_images.append( QSharedPointer< QTemporaryFile >
+			( new QTemporaryFile ) );
+
+		m_images.last()->open();
+
+		QSvgGenerator svg;
+		svg.setFileName( m_images.last()->fileName() );
+		svg.setResolution( 72 );
+
+		drawForm( svg, form );
+	}
 }
 
 
@@ -71,14 +101,24 @@ PdfExporter::~PdfExporter()
 }
 
 void
-PdfExporter::exportToDoc( const QString & fileName ) const
+PdfExporter::exportToDoc( const QString & fileName )
 {
+	PdfExporterPrivate * d = d_ptr();
+
 	QPdfWriter pdf( fileName );
 
-	QPainter p;
-	p.begin( &pdf );
+	pdf.setResolution( 72 );
 
-	p.end();
+	const QRect page = pdf.pageLayout().paintRectPixels( pdf.resolution() );
+
+	d->createImages();
+
+	QTextDocument doc;
+	doc.setPageSize( QSizeF( page.size() ) );
+
+	Cfg::fillTextDocument( &doc, d->m_cfg.description().text() );
+
+	doc.print( &pdf );
 }
 
 } /* namespace Core */

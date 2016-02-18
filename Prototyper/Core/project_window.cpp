@@ -281,9 +281,9 @@ ProjectWindowPrivate::init()
 		QIcon( ":/Core/img/format-stroke-color.png" ),
 		ProjectWindow::tr( "Line Color" ) );
 
-	QAction * fillColor = m_formToolBar->addAction(
-		QIcon( ":/Core/img/fill-color.png" ),
-		ProjectWindow::tr( "Fill Color" ) );
+//	QAction * fillColor = m_formToolBar->addAction(
+//		QIcon( ":/Core/img/fill-color.png" ),
+//		ProjectWindow::tr( "Fill Color" ) );
 
 	q->addToolBar( Qt::LeftToolBarArea, m_formToolBar );
 
@@ -362,8 +362,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_ungroup );
 	ProjectWindow::connect( strokeColor, &QAction::triggered,
 		q, &ProjectWindow::p_strokeColor );
-	ProjectWindow::connect( fillColor, &QAction::triggered,
-		q, &ProjectWindow::p_fillColor );
+//	ProjectWindow::connect( fillColor, &QAction::triggered,
+//		q, &ProjectWindow::p_fillColor );
 	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
 		q, &ProjectWindow::p_tabChanged );
 	ProjectWindow::connect( m_desc.data(), &DescWindow::changed,
