@@ -117,6 +117,11 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 	QPainter p;
 	p.begin( &svg );
 
+	p.setPen( Qt::gray );
+
+	p.drawRect( QRect( 0, 0, form.size().width(),
+		form.size().height() ) );
+
 	foreach( const Cfg::Group & group, form.group() )
 		drawGroup( group, p );
 

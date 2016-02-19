@@ -32,6 +32,7 @@
 #include <QTemporaryFile>
 #include <QSharedPointer>
 #include <QSvgGenerator>
+#include <QTextCursor>
 
 
 namespace Prototyper {
@@ -117,6 +118,34 @@ PdfExporter::exportToDoc( const QString & fileName )
 	doc.setPageSize( QSizeF( page.size() ) );
 
 	Cfg::fillTextDocument( &doc, d->m_cfg.description().text() );
+
+	QTextCursor c( &doc );
+
+	int i = 0;
+
+	foreach( const Cfg::Form & form, d->m_cfg.form() )
+	{
+		c.movePosition( QTextCursor::End );
+
+		c.insertText( QLatin1String( "\n\n" ) );
+
+		c.movePosition( QTextCursor::End );
+
+		QTextImageFormat image;
+		QSize s = QSize( form.size().width(), form.size().height() );
+
+		if( s.width() > page.width() - 5 || s.height() > page.height() - 5 )
+			s = s.scaled( page.adjusted( 0, 0, -5, -5 ).size(),
+				Qt::KeepAspectRatio );
+
+		image.setHeight( s.height() );
+		image.setWidth( s.width() );
+		image.setName( d->m_images.at( i )->fileName() );
+
+		c.insertImage( image );
+
+		++i;
+	}
 
 	doc.print( &pdf );
 }
