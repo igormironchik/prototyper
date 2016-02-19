@@ -111,7 +111,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 	QPdfWriter pdf( fileName );
 
-	pdf.setResolution( 300 );
+	pdf.setResolution( 150 );
 
 	QPageLayout layout = pdf.pageLayout();
 	layout.setUnits( QPageLayout::Point );
@@ -135,6 +135,8 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 	foreach( const Cfg::Form & form, d->m_cfg.form() )
 	{
+		QMap< QString, QString > links = d->links( form );
+
 		c.movePosition( QTextCursor::End );
 
 		c.insertText( QString( "\n" ) );
@@ -194,6 +196,21 @@ PdfExporter::exportToDoc( const QString & fileName )
 			c.insertText( QLatin1String( "\n\n" ) );
 
 			c.movePosition( QTextCursor::End );
+
+			if( links.contains( formIt->id() ) )
+			{
+				QTextCharFormat fmt;
+				fmt.setFontItalic( true );
+				fmt.setFontUnderline( true );
+				fmt.setFontPointSize( 8.0 );
+
+				c.insertText( QString( "Linked to: " ) +
+					links[ formIt->id() ] + QLatin1String( "\n\n" ), fmt );
+
+				links.remove( formIt->id() );
+
+				c.movePosition( QTextCursor::End );
+			}
 		}
 
 		for( auto it = form.desc().constBegin(), last = form.desc().constEnd();
@@ -219,6 +236,45 @@ PdfExporter::exportToDoc( const QString & fileName )
 				c.insertText( QLatin1String( "\n\n" ) );
 
 				c.movePosition( QTextCursor::End );
+
+				if( links.contains( it->id() ) )
+				{
+					QTextCharFormat fmt;
+					fmt.setFontItalic( true );
+					fmt.setFontUnderline( true );
+					fmt.setFontPointSize( 8.0 );
+
+					c.insertText( QString( "Linked to: " ) +
+						links[ it->id() ] + QLatin1String( "\n\n" ), fmt );
+
+					links.remove( it->id() );
+
+					c.movePosition( QTextCursor::End );
+				}
+			}
+		}
+
+		if( !links.isEmpty() )
+		{
+			QTextCharFormat fmt;
+			fmt.setFontWeight( QFont::Bold );
+			fmt.setFontItalic( true );
+			fmt.setFontPointSize( 15.0 );
+
+			c.insertText( QLatin1String( "Links:\n\n" ), fmt );
+
+			fmt.setFontWeight( QFont::Normal );
+			fmt.setFontUnderline( true );
+			fmt.setFontPointSize( 8.0 );
+
+			QMapIterator< QString, QString > it( links );
+
+			while( it.hasNext() )
+			{
+				it.next();
+
+				c.insertText( it.key() + QLatin1String( " -> " ) +
+					it.value() + QLatin1String( "\n" ), fmt );
 			}
 		}
 	}
@@ -267,9 +323,12 @@ PdfExporter::exportToDoc( const QString & fileName )
 		else if( isImage )
 		{
 			QSvgRenderer svg( imageFormat.name() );
-			const QSize s =
-				svg.viewBox().size().scaled( QSize( body.size().width(),
-					body.size().height() ), Qt::KeepAspectRatio );
+			QSize s = svg.viewBox().size();
+
+			if( s.width() > body.size().width() ||
+				s.height() > body.size().height() )
+					s.scale( QSize( body.size().width(),
+						body.size().height() ), Qt::KeepAspectRatio );
 
 			if( ( y + s.height() ) > body.height() )
 			{
@@ -280,7 +339,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 			p.save();
 
-			p.translate( 0, y );
+			p.translate( ( body.size().width() - s.width() ) / 2, y );
 
 			svg.render( &p, QRectF( 0, 0, s.width(), s.height() ) );
 

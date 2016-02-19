@@ -170,6 +170,62 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 	p.end();
 }
 
+static inline void findLinksInGroup( QMap< QString, QString > & lnks,
+	const Cfg::Group & group )
+{
+	if( !group.link().isEmpty() )
+		lnks.insert( group.objectId(), group.link() );
+
+	foreach( const Cfg::Group & g, group.group() )
+		findLinksInGroup( lnks, g );
+
+	foreach( const Cfg::Line & line, group.line() )
+		if( !line.link().isEmpty() )
+			lnks.insert( line.objectId(), line.link() );
+
+	foreach( const Cfg::Polyline & poly, group.polyline() )
+		if( !poly.link().isEmpty() )
+			lnks.insert( poly.objectId(), poly.link() );
+
+	foreach( const Cfg::Text & text, group.text() )
+		if( !text.link().isEmpty() )
+			lnks.insert( text.objectId(), text.link() );
+
+	foreach( const Cfg::Image & image, group.image() )
+		if( !image.link().isEmpty() )
+			lnks.insert( image.objectId(), image.link() );
+}
+
+QMap< QString, QString >
+ExporterPrivate::links( const Cfg::Form & form )
+{
+	QMap< QString, QString > lnks;
+
+	if( !form.link().isEmpty() )
+		lnks.insert( form.tabName(), form.link() );
+
+	foreach( const Cfg::Group & g, form.group() )
+		findLinksInGroup( lnks, g );
+
+	foreach( const Cfg::Line & line, form.line() )
+		if( !line.link().isEmpty() )
+			lnks.insert( line.objectId(), line.link() );
+
+	foreach( const Cfg::Polyline & poly, form.polyline() )
+		if( !poly.link().isEmpty() )
+			lnks.insert( poly.objectId(), poly.link() );
+
+	foreach( const Cfg::Text & text, form.text() )
+		if( !text.link().isEmpty() )
+			lnks.insert( text.objectId(), text.link() );
+
+	foreach( const Cfg::Image & image, form.image() )
+		if( !image.link().isEmpty() )
+			lnks.insert( image.objectId(), image.link() );
+
+	return lnks;
+}
+
 
 //
 // Exporter
