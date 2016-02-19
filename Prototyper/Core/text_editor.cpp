@@ -137,6 +137,10 @@ TextEditor::setText( const QList< Cfg::TextStyle > & blocks )
 		cursor.movePosition( QTextCursor::End );
 		setTextCursor( cursor );
 	}
+
+	QTextCursor cursor = textCursor();
+	cursor.setPosition( 0 );
+	setTextCursor( cursor );
 }
 
 void

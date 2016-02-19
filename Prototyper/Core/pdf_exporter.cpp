@@ -32,7 +32,14 @@
 #include <QTemporaryFile>
 #include <QSharedPointer>
 #include <QSvgGenerator>
+#include <QSvgRenderer>
 #include <QTextCursor>
+#include <QTextBlock>
+#include <QAbstractTextDocumentLayout>
+#include <QPainter>
+#include <QPageSize>
+#include <QBuffer>
+#include <QByteArray>
 
 
 namespace Prototyper {
@@ -108,46 +115,121 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 	QPdfWriter pdf( fileName );
 
-	pdf.setResolution( 72 );
+	pdf.setResolution( 300 );
 
-	const QRect page = pdf.pageLayout().paintRectPixels( pdf.resolution() );
+	QPageLayout layout = pdf.pageLayout();
+	layout.setUnits( QPageLayout::Point );
+	const qreal margin = ( 2.0 / 2.54 ) * 72;
+	layout.setMargins( QMarginsF( margin, margin,
+		margin, margin ) );
+	pdf.setPageLayout( layout );
+
+	const QRectF body( 0, 0, pdf.width(), pdf.height() );
 
 	d->createImages();
 
 	QTextDocument doc;
-	doc.setPageSize( QSizeF( page.size() ) );
+	doc.setPageSize( body.size() );
 
 	Cfg::fillTextDocument( &doc, d->m_cfg.description().text() );
 
 	QTextCursor c( &doc );
 
-	int i = 0;
-
-	foreach( const Cfg::Form & form, d->m_cfg.form() )
+	for( int i = 0; i < d->m_cfg.form().size(); ++i )
 	{
 		c.movePosition( QTextCursor::End );
 
-		c.insertText( QLatin1String( "\n\n" ) );
+		c.insertText( QLatin1String( "\n" ) );
 
 		c.movePosition( QTextCursor::End );
 
 		QTextImageFormat image;
-		QSize s = QSize( form.size().width(), form.size().height() );
 
-		if( s.width() > page.width() - 5 || s.height() > page.height() - 5 )
-			s = s.scaled( page.adjusted( 0, 0, -5, -5 ).size(),
-				Qt::KeepAspectRatio );
-
-		image.setHeight( s.height() );
-		image.setWidth( s.width() );
 		image.setName( d->m_images.at( i )->fileName() );
 
 		c.insertImage( image );
 
-		++i;
+		c.movePosition( QTextCursor::End );
+
+		c.insertText( QLatin1String( "\n" ) );
 	}
 
-	doc.print( &pdf );
+	doc.documentLayout()->setPaintDevice( &pdf );
+
+	doc.setPageSize( body.size() );
+
+	QTextBlock block = doc.begin();
+
+	QPainter p;
+	p.begin( &pdf );
+
+	qreal y = 0.0;
+
+	while( block.isValid() )
+	{
+		QTextBlock::Iterator it = block.begin();
+
+		QTextImageFormat imageFormat;
+		bool isImage = false;
+
+		for( ; !it.atEnd(); ++it )
+		{
+			const QString txt = it.fragment().text();
+			const bool isObject = txt.contains(
+				QChar::ObjectReplacementCharacter );
+			isImage = isObject &&
+				it.fragment().charFormat().isImageFormat();
+
+			if( isImage )
+				imageFormat = it.fragment().charFormat().toImageFormat();
+		}
+
+		if( isImage )
+		{
+			QSvgRenderer svg( imageFormat.name() );
+			const QSize s =
+				svg.viewBox().size().scaled( QSize( body.size().width(),
+					body.size().height() ), Qt::KeepAspectRatio );
+
+			if( ( y + s.height() ) > body.height() )
+			{
+				pdf.newPage();
+
+				y = 0.0;
+			}
+
+			p.save();
+
+			p.translate( 0, y );
+
+			svg.render( &p, QRectF( 0, 0, s.width(), s.height() ) );
+
+			y += s.height();
+
+			p.restore();
+		}
+		else
+		{
+			const QRectF r = block.layout()->boundingRect();
+
+			block.layout()->setPosition( QPointF( 0.0, 0.0 ) );
+
+			if( ( y + r.height() ) > body.height() )
+			{
+				pdf.newPage();
+
+				y = 0.0;
+			}
+
+			block.layout()->draw( &p, QPointF( 0.0, y ) );
+
+			y += r.height();
+		}
+
+		block = block.next();
+	}
+
+	p.end();
 }
 
 } /* namespace Core */

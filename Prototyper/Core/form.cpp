@@ -559,6 +559,8 @@ void
 FormPrivate::setText( const QSharedPointer< QTextDocument > & doc,
 	const QList< Cfg::TextStyle > & text )
 {
+	doc->clear();
+
 	Cfg::fillTextDocument( doc.data(), text );
 }
 

@@ -176,11 +176,10 @@ QBrush fromBrush( const Cfg::Brush & b )
 //
 
 void fillTextDocument( QTextDocument * doc,
-	const QList< Cfg::TextStyle > & text )
+	const QList< Cfg::TextStyle > & text, qreal scale )
 {
-	doc->clear();
-
 	QTextCursor c( doc );
+
 	QTextCharFormat fmt = c.charFormat();
 
 	foreach( const Cfg::TextStyle & s, text )
@@ -209,7 +208,7 @@ void fillTextDocument( QTextDocument * doc,
 				fmt.setFontUnderline( false );
 		}
 
-		fmt.setFontPointSize( s.fontSize() );
+		fmt.setFontPointSize( s.fontSize() * scale );
 
 		c.setCharFormat( fmt );
 

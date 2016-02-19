@@ -932,11 +932,14 @@ ProjectWindow::p_exportToPDf()
 			p_saveProjectImpl();
 	}
 
-	const QString fileName = QFileDialog::getSaveFileName( this,
+	QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select file to export project..." ),
 		QStandardPaths::standardLocations(
 			QStandardPaths::DocumentsLocation ).first(),
 		tr( "PDF (*.pdf)" ) );
+
+	if( !fileName.endsWith( QLatin1String( ".pdf" ), Qt::CaseInsensitive ) )
+		fileName.append( QLatin1String( ".pdf" ) );
 
 	if( !fileName.isEmpty() )
 	{
@@ -962,11 +965,15 @@ ProjectWindow::p_exportToHtml()
 			p_saveProjectImpl();
 	}
 
-	const QString fileName = QFileDialog::getSaveFileName( this,
+	QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select file to export project..." ),
 		QStandardPaths::standardLocations(
 			QStandardPaths::DocumentsLocation ).first(),
 		tr( "HTML (*.htm *.html)" ) );
+
+	if( !fileName.endsWith( QLatin1String( ".htm" ), Qt::CaseInsensitive ) &&
+		!fileName.endsWith( QLatin1String( ".html" ), Qt::CaseInsensitive ) )
+		fileName.append( QLatin1String( ".html" ) );
 
 	if( !fileName.isEmpty() )
 	{

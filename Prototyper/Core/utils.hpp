@@ -105,7 +105,7 @@ QBrush fromBrush( const Cfg::Brush & b );
 //
 
 void fillTextDocument( QTextDocument * doc,
-	const QList< Cfg::TextStyle > & text );
+	const QList< Cfg::TextStyle > & text, qreal scale = 1.0 );
 
 } /* namespace Cfg */
 
