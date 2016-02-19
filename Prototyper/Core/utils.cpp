@@ -180,6 +180,8 @@ void fillTextDocument( QTextDocument * doc,
 {
 	QTextCursor c( doc );
 
+	c.movePosition( QTextCursor::End );
+
 	QTextCharFormat fmt = c.charFormat();
 
 	foreach( const Cfg::TextStyle & s, text )

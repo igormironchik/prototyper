@@ -41,6 +41,9 @@
 #include <QBuffer>
 #include <QByteArray>
 
+// C++ include.
+#include <algorithm>
+
 
 namespace Prototyper {
 
@@ -62,18 +65,9 @@ public:
 	//! Create tmp images.
 	void createImages();
 
-	//! Init.
-	void init() Q_DECL_OVERRIDE;
-
 	//! Images' files.
 	QList< QSharedPointer< QTemporaryFile > > m_images;
 }; // class PdfExporterPrivate
-
-void
-PdfExporterPrivate::init()
-{
-	ExporterPrivate::init();
-}
 
 void
 PdfExporterPrivate::createImages()
@@ -108,6 +102,8 @@ PdfExporter::~PdfExporter()
 {
 }
 
+static const int c_pageBreakType = QTextFormat::UserFormat + 1;
+
 void
 PdfExporter::exportToDoc( const QString & fileName )
 {
@@ -135,11 +131,31 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 	QTextCursor c( &doc );
 
-	for( int i = 0; i < d->m_cfg.form().size(); ++i )
+	int i = 0;
+
+	foreach( const Cfg::Form & form, d->m_cfg.form() )
 	{
 		c.movePosition( QTextCursor::End );
 
-		c.insertText( QLatin1String( "\n" ) );
+		c.insertText( QString( "\n" ) );
+
+		c.movePosition( QTextCursor::End );
+
+		QTextCharFormat fmt;
+		fmt.setObjectType( c_pageBreakType );
+
+		c.insertText( QString( QChar::ObjectReplacementCharacter ) +
+			QString( "\n" ), fmt );
+
+		c.movePosition( QTextCursor::End );
+
+		QTextCharFormat header;
+		header.setFontWeight( QFont::Bold );
+		header.setFontPointSize( 20.0 );
+
+		c.setCharFormat( header );
+
+		c.insertText( form.tabName() + QLatin1String( "\n\n" ) );
 
 		c.movePosition( QTextCursor::End );
 
@@ -147,11 +163,64 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 		image.setName( d->m_images.at( i )->fileName() );
 
+		++i;
+
 		c.insertImage( image );
 
 		c.movePosition( QTextCursor::End );
 
 		c.insertText( QLatin1String( "\n" ) );
+
+		c.movePosition( QTextCursor::End );
+
+		auto formIt = std::find_if( form.desc().constBegin(),
+			form.desc().constEnd(),
+			[&form] ( const Cfg::Description & desc ) -> bool
+				{
+					return ( form.tabName() == desc.id() );
+				}
+		);
+
+		if( formIt != form.desc().constEnd() )
+		{
+			c.insertText( QLatin1String( "\n\n" ) );
+
+			c.movePosition( QTextCursor::End );
+
+			Cfg::fillTextDocument( &doc, formIt->text() );
+
+			c.movePosition( QTextCursor::End );
+
+			c.insertText( QLatin1String( "\n\n" ) );
+
+			c.movePosition( QTextCursor::End );
+		}
+
+		for( auto it = form.desc().constBegin(), last = form.desc().constEnd();
+			it != last; ++it )
+		{
+			if( it != formIt )
+			{
+				QTextCharFormat h2;
+				h2.setFontWeight( QFont::Bold );
+				h2.setFontItalic( true );
+				h2.setFontPointSize( 15.0 );
+
+				c.setCharFormat( h2 );
+
+				c.insertText( it->id() + QLatin1String( "\n\n" ) );
+
+				c.movePosition( QTextCursor::End );
+
+				Cfg::fillTextDocument( &doc, it->text() );
+
+				c.movePosition( QTextCursor::End );
+
+				c.insertText( QLatin1String( "\n\n" ) );
+
+				c.movePosition( QTextCursor::End );
+			}
+		}
 	}
 
 	doc.documentLayout()->setPaintDevice( &pdf );
@@ -170,21 +239,32 @@ PdfExporter::exportToDoc( const QString & fileName )
 		QTextBlock::Iterator it = block.begin();
 
 		QTextImageFormat imageFormat;
+
+		bool isObject = false;
 		bool isImage = false;
+		bool isBreak = false;
 
 		for( ; !it.atEnd(); ++it )
 		{
 			const QString txt = it.fragment().text();
-			const bool isObject = txt.contains(
+			isObject = txt.contains(
 				QChar::ObjectReplacementCharacter );
 			isImage = isObject &&
 				it.fragment().charFormat().isImageFormat();
+			isBreak = isObject &&
+				( it.fragment().charFormat().objectType() == c_pageBreakType );
 
 			if( isImage )
 				imageFormat = it.fragment().charFormat().toImageFormat();
 		}
 
-		if( isImage )
+		if( isBreak )
+		{
+			pdf.newPage();
+
+			y = 0.0;
+		}
+		else if( isImage )
 		{
 			QSvgRenderer svg( imageFormat.name() );
 			const QSize s =
