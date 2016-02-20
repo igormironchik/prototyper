@@ -359,6 +359,8 @@ PdfExporter::exportToDoc( const QString & fileName )
 {
 	PdfExporterPrivate * d = d_ptr();
 
+	d->m_images.clear();
+
 	QPdfWriter pdf( fileName );
 
 	pdf.setResolution( 150 );
