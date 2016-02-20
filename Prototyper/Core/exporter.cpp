@@ -114,7 +114,6 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 void
 ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 {
-	svg.setSize( QSize( form.size().width(), form.size().height() ) );
 	svg.setViewBox( QRect( 0, 0, form.size().width(), form.size().height() ) );
 
 	QPainter p;
