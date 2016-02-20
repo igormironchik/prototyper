@@ -37,9 +37,6 @@
 #include <QTextBlock>
 #include <QAbstractTextDocumentLayout>
 #include <QPainter>
-#include <QPageSize>
-#include <QBuffer>
-#include <QByteArray>
 
 // C++ include.
 #include <algorithm>
@@ -48,6 +45,8 @@
 namespace Prototyper {
 
 namespace Core {
+
+static const int c_pageBreakType = QTextFormat::UserFormat + 1;
 
 //
 // PdfExporterPrivate
@@ -64,6 +63,11 @@ public:
 
 	//! Create tmp images.
 	void createImages();
+	//! Fill document.
+	void fillDocument( QTextDocument & doc );
+	//! Print document.
+	void printDocument( const QTextDocument & doc, QPdfWriter & pdf,
+		const QRectF & body );
 
 	//! Images' files.
 	QList< QSharedPointer< QTemporaryFile > > m_images;
@@ -87,55 +91,18 @@ PdfExporterPrivate::createImages()
 	}
 }
 
-
-//
-// PdfExporter
-//
-
-PdfExporter::PdfExporter( const Cfg::Project & project )
-	:	Exporter( QScopedPointer< ExporterPrivate >
-			( new PdfExporterPrivate( project, this ) ) )
-{
-}
-
-PdfExporter::~PdfExporter()
-{
-}
-
-static const int c_pageBreakType = QTextFormat::UserFormat + 1;
-
 void
-PdfExporter::exportToDoc( const QString & fileName )
+PdfExporterPrivate::fillDocument( QTextDocument & doc )
 {
-	PdfExporterPrivate * d = d_ptr();
-
-	QPdfWriter pdf( fileName );
-
-	pdf.setResolution( 150 );
-
-	QPageLayout layout = pdf.pageLayout();
-	layout.setUnits( QPageLayout::Point );
-	const qreal margin = ( 2.0 / 2.54 ) * 72;
-	layout.setMargins( QMarginsF( margin, margin,
-		margin, margin ) );
-	pdf.setPageLayout( layout );
-
-	const QRectF body( 0, 0, pdf.width(), pdf.height() );
-
-	d->createImages();
-
-	QTextDocument doc;
-	doc.setPageSize( body.size() );
-
-	Cfg::fillTextDocument( &doc, d->m_cfg.description().text() );
+	Cfg::fillTextDocument( &doc, m_cfg.description().text() );
 
 	QTextCursor c( &doc );
 
 	int i = 0;
 
-	foreach( const Cfg::Form & form, d->m_cfg.form() )
+	foreach( const Cfg::Form & form, m_cfg.form() )
 	{
-		QMap< QString, QString > links = d->links( form );
+		QMap< QString, QString > lnks = links( form );
 
 		c.movePosition( QTextCursor::End );
 
@@ -163,7 +130,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 		QTextImageFormat image;
 
-		image.setName( d->m_images.at( i )->fileName() );
+		image.setName( m_images.at( i )->fileName() );
 
 		++i;
 
@@ -197,7 +164,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 			c.movePosition( QTextCursor::End );
 
-			if( links.contains( formIt->id() ) )
+			if( lnks.contains( formIt->id() ) )
 			{
 				QTextCharFormat fmt;
 				fmt.setFontItalic( true );
@@ -205,9 +172,9 @@ PdfExporter::exportToDoc( const QString & fileName )
 				fmt.setFontPointSize( 8.0 );
 
 				c.insertText( QString( "Linked to: " ) +
-					links[ formIt->id() ] + QLatin1String( "\n\n" ), fmt );
+					lnks[ formIt->id() ] + QLatin1String( "\n\n" ), fmt );
 
-				links.remove( formIt->id() );
+				lnks.remove( formIt->id() );
 
 				c.movePosition( QTextCursor::End );
 			}
@@ -237,7 +204,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 				c.movePosition( QTextCursor::End );
 
-				if( links.contains( it->id() ) )
+				if( lnks.contains( it->id() ) )
 				{
 					QTextCharFormat fmt;
 					fmt.setFontItalic( true );
@@ -245,16 +212,16 @@ PdfExporter::exportToDoc( const QString & fileName )
 					fmt.setFontPointSize( 8.0 );
 
 					c.insertText( QString( "Linked to: " ) +
-						links[ it->id() ] + QLatin1String( "\n\n" ), fmt );
+						lnks[ it->id() ] + QLatin1String( "\n\n" ), fmt );
 
-					links.remove( it->id() );
+					lnks.remove( it->id() );
 
 					c.movePosition( QTextCursor::End );
 				}
 			}
 		}
 
-		if( !links.isEmpty() )
+		if( !lnks.isEmpty() )
 		{
 			QTextCharFormat fmt;
 			fmt.setFontWeight( QFont::Bold );
@@ -267,7 +234,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 			fmt.setFontUnderline( true );
 			fmt.setFontPointSize( 8.0 );
 
-			QMapIterator< QString, QString > it( links );
+			QMapIterator< QString, QString > it( lnks );
 
 			while( it.hasNext() )
 			{
@@ -278,11 +245,12 @@ PdfExporter::exportToDoc( const QString & fileName )
 			}
 		}
 	}
+}
 
-	doc.documentLayout()->setPaintDevice( &pdf );
-
-	doc.setPageSize( body.size() );
-
+void
+PdfExporterPrivate::printDocument( const QTextDocument & doc, QPdfWriter & pdf,
+	const QRectF & body )
+{
 	QTextBlock block = doc.begin();
 
 	QPainter p;
@@ -369,6 +337,53 @@ PdfExporter::exportToDoc( const QString & fileName )
 	}
 
 	p.end();
+}
+
+
+//
+// PdfExporter
+//
+
+PdfExporter::PdfExporter( const Cfg::Project & project )
+	:	Exporter( QScopedPointer< ExporterPrivate >
+			( new PdfExporterPrivate( project, this ) ) )
+{
+}
+
+PdfExporter::~PdfExporter()
+{
+}
+
+void
+PdfExporter::exportToDoc( const QString & fileName )
+{
+	PdfExporterPrivate * d = d_ptr();
+
+	QPdfWriter pdf( fileName );
+
+	pdf.setResolution( 150 );
+
+	QPageLayout layout = pdf.pageLayout();
+	layout.setUnits( QPageLayout::Point );
+	const qreal margin = ( 2.0 / 2.54 ) * 72;
+	layout.setMargins( QMarginsF( margin, margin,
+		margin, margin ) );
+	pdf.setPageLayout( layout );
+
+	const QRectF body( 0, 0, pdf.width(), pdf.height() );
+
+	d->createImages();
+
+	QTextDocument doc;
+	doc.setPageSize( body.size() );
+
+	d->fillDocument( doc );
+
+	doc.documentLayout()->setPaintDevice( &pdf );
+
+	doc.setPageSize( body.size() );
+
+	d->printDocument( doc, pdf, body );
 }
 
 } /* namespace Core */
