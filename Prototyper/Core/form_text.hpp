@@ -90,6 +90,12 @@ public slots:
 	void changeTextColor();
 	//! Clear format.
 	void clearFormat();
+	//! Align left.
+	void alignLeft();
+	//! Align center.
+	void alignCenter();
+	//! Align right.
+	void alignRight();
 
 private slots:
 	void p_cursorChanged( const QTextCursor & cursor );

@@ -59,6 +59,12 @@ signals:
 	void textColor();
 	//! Clear format.
 	void clearFormat();
+	//! Align left.
+	void alignLeft();
+	//! Align center.
+	void alignCenter();
+	//! Align right.
+	void alignRight();
 
 public:
 	explicit FormTextOpts( QGraphicsItem * parent );

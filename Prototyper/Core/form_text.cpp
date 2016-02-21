@@ -124,6 +124,12 @@ FormTextPrivate::init()
 		q, &FormText::changeTextColor );
 	FormText::connect( m_opts, &FormTextOpts::clearFormat,
 		q, &FormText::clearFormat );
+	FormText::connect( m_opts, &FormTextOpts::alignLeft,
+		q, &FormText::alignLeft );
+	FormText::connect( m_opts, &FormTextOpts::alignCenter,
+		q, &FormText::alignCenter );
+	FormText::connect( m_opts, &FormTextOpts::alignRight,
+		q, &FormText::alignRight );
 }
 
 void
@@ -539,6 +545,36 @@ FormText::clearFormat()
 	r.moveTo( pos() );
 
 	d->m_proxy->setRect( r );
+}
+
+void
+FormText::alignLeft()
+{
+	QTextCursor c = textCursor();
+	QTextBlockFormat b = c.blockFormat();
+	b.setAlignment( Qt::AlignLeft );
+	c.setBlockFormat( b );
+	setTextCursor( c );
+}
+
+void
+FormText::alignCenter()
+{
+	QTextCursor c = textCursor();
+	QTextBlockFormat b = c.blockFormat();
+	b.setAlignment( Qt::AlignCenter );
+	c.setBlockFormat( b );
+	setTextCursor( c );
+}
+
+void
+FormText::alignRight()
+{
+	QTextCursor c = textCursor();
+	QTextBlockFormat b = c.blockFormat();
+	b.setAlignment( Qt::AlignRight );
+	c.setBlockFormat( b );
+	setTextCursor( c );
 }
 
 void

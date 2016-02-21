@@ -71,6 +71,12 @@ FormTextOptsPrivate::init()
 		q, &FormTextOpts::textColor );
 	FormTextOpts::connect( m_bar, &TextOptsBar::clearFormat,
 		q, &FormTextOpts::clearFormat );
+	FormTextOpts::connect( m_bar, &TextOptsBar::alignLeft,
+		q, &FormTextOpts::alignLeft );
+	FormTextOpts::connect( m_bar, &TextOptsBar::alignCenter,
+		q, &FormTextOpts::alignCenter );
+	FormTextOpts::connect( m_bar, &TextOptsBar::alignRight,
+		q, &FormTextOpts::alignRight );
 }
 
 
