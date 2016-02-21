@@ -170,7 +170,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 				}
 		);
 
-		if( formIt != form.desc().constEnd() )
+		if( formIt != form.desc().constEnd() && !formIt->text().isEmpty() )
 		{
 			stream << QLatin1String( "<br><br>" ) << endl;
 
@@ -189,7 +189,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 		for( auto it = form.desc().constBegin(), last = form.desc().constEnd();
 			it != last; ++it )
 		{
-			if( it != formIt )
+			if( it != formIt && !it->text().isEmpty() )
 			{
 				QList< Cfg::TextStyle > headList;
 				Cfg::TextStyle head;

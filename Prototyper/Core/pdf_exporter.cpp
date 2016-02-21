@@ -150,7 +150,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 				}
 		);
 
-		if( formIt != form.desc().constEnd() )
+		if( formIt != form.desc().constEnd() && !formIt->text().isEmpty() )
 		{
 			c.insertText( QLatin1String( "\n\n" ) );
 
@@ -183,7 +183,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 		for( auto it = form.desc().constBegin(), last = form.desc().constEnd();
 			it != last; ++it )
 		{
-			if( it != formIt )
+			if( it != formIt && !it->text().isEmpty() )
 			{
 				QTextCharFormat h2;
 				h2.setFontWeight( QFont::Bold );
