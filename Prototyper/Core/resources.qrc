@@ -44,5 +44,11 @@
 		<file>img/text-html.png</file>
 		<file>img/document-export.png</file>
 		<file>img/draw-rectangle.png</file>
+		<file>img/align-horizontal-center.png</file>
+		<file>img/align-horizontal-left.png</file>
+		<file>img/align-horizontal-right.png</file>
+		<file>img/align-horizontal-center-small.png</file>
+		<file>img/align-horizontal-left-small.png</file>
+		<file>img/align-horizontal-right-small.png</file>
 	</qresource>
 </RCC>
