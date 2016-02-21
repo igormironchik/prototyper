@@ -231,6 +231,7 @@ TopGui::saveCfg( QWidget * parent )
 		desc.setY( d->m_projectWindow->descWindow()->y() );
 		desc.setWidth( d->m_projectWindow->descWindow()->width() );
 		desc.setHeight( d->m_projectWindow->descWindow()->height() );
+		desc.setIsShown( true );
 
 		cfg.setDescWindow( desc );
 

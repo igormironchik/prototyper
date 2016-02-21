@@ -1319,6 +1319,14 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				d->m_current = rect;
 
+				const QString id = d->id();
+
+				rect->setObjectId( id );
+
+				d->m_ids.append( id );
+
+				d->m_model->addObject( rect, this );
+
 				QPointF p = mouseEvent->pos();
 
 				if( FormAction::instance()->isSnapEnabled() )

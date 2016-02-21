@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Installer>
+    <Name>Prototyper</Name>
+    <Version>1.0.0</Version>
+    <Title>Prototyper Installer</Title>
+    <Publisher>Igor Mironchik</Publisher>
+    <StartMenuDir>Prototyper</StartMenuDir>
+    <TargetDir>@HomeDir@/Prototyper</TargetDir>
+</Installer>
