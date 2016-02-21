@@ -62,6 +62,8 @@ public:
 	bool checkConstraint( const QSizeF & s );
 	//! Set min size.
 	void setMinSize( const QSizeF & min );
+	//! Set additional space to zero point.
+	void setDeltaToZero( qreal delta );
 
 	//! Top-left resize.
 	FormResizeHandle * m_topLeft;

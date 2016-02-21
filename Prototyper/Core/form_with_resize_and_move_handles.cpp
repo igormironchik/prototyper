@@ -136,6 +136,19 @@ WithResizeAndMoveHandles::setMinSize( const QSizeF & min )
 	m_min = min;
 }
 
+void
+WithResizeAndMoveHandles::setDeltaToZero( qreal delta )
+{
+	m_topLeft->setDeltaToZero( QPointF( delta, delta ) );
+	m_top->setDeltaToZero( QPointF( 0.0, delta ) );
+	m_topRight->setDeltaToZero( QPointF( -delta, delta ) );
+	m_left->setDeltaToZero( QPointF( delta, 0.0 ) );
+	m_bottomLeft->setDeltaToZero( QPointF( delta, -delta ) );
+	m_bottom->setDeltaToZero( QPointF( 0.0, -delta ) );
+	m_bottomRight->setDeltaToZero( QPointF( -delta, -delta ) );
+	m_right->setDeltaToZero( QPointF( -delta, 0.0 ) );
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

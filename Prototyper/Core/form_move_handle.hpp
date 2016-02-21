@@ -92,6 +92,8 @@ public:
 	bool m_ignoreMouse;
 	//! Zero point.
 	QPointF m_zero;
+	//! Additional delta to zero.
+	QPointF m_addToZero;
 	//! Touch delta.
 	QPointF m_touchDelta;
 	//! Cursor.
@@ -134,6 +136,9 @@ public:
 
 	//! \return Cursor.
 	const QCursor & handleCursor() const;
+
+	//! Set additional space to zero point.
+	void setDeltaToZero( const QPointF & delta );
 
 protected:
 	//! Handle was moved.

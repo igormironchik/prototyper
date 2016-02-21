@@ -60,6 +60,8 @@ FormRectPrivate::init()
 {
 	m_handles.reset( new WithResizeAndMoveHandles( q, q, q->form() ) );
 
+	m_handles->setDeltaToZero( 1.0 );
+
 	m_handles->hide();
 
 	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
