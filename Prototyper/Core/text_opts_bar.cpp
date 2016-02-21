@@ -27,6 +27,7 @@
 #include <QAction>
 #include <QTextCursor>
 #include <QTextCharFormat>
+#include <QActionGroup>
 
 
 namespace Prototyper {
@@ -44,6 +45,9 @@ public:
 		,	m_fontBold( 0 )
 		,	m_fontItalic( 0 )
 		,	m_fontUnderline( 0 )
+		,	m_alignLeft( 0 )
+		,	m_alignCenter( 0 )
+		,	m_alignRight( 0 )
 		,	m_iconSize( s )
 	{
 	}
@@ -59,6 +63,12 @@ public:
 	QAction * m_fontItalic;
 	//! Underline action.
 	QAction * m_fontUnderline;
+	//! Align left.
+	QAction * m_alignLeft;
+	//! Align center.
+	QAction * m_alignCenter;
+	//! Align right.
+	QAction * m_alignRight;
 	//! Icon size.
 	TextOptsBar::IconSize m_iconSize;
 }; // class TextOptsBarPrivate;
@@ -124,16 +134,53 @@ TextOptsBarPrivate::init()
 	m_fontUnderline->setStatusTip( fontUnderlineTip );
 	m_fontUnderline->setCheckable( true );
 
+	QActionGroup * alignGroup = new QActionGroup( q );
+
 	q->addSeparator();
 
-	const QString fontColorTip = TextOptsBar::tr( "Color of the Text" );
-	QAction * fontColor = q->addAction(
+	const QString alignLeftTip = TextOptsBar::tr( "Align Left" );
+	m_alignLeft = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/format-text-color.png" ) :
-			QIcon( ":/Core/img/format-text-color-small.png" ) ),
-		fontColorTip );
-	fontColor->setToolTip( fontColorTip );
-	fontColor->setStatusTip( fontColorTip );
+			QIcon( ":/Core/img/align-horizontal-left.png" ) :
+			QIcon( ":/Core/img/align-horizontal-left-small.png" ) ),
+		alignLeftTip );
+	m_alignLeft->setToolTip( alignLeftTip );
+	m_alignLeft->setStatusTip( alignLeftTip );
+	m_alignLeft->setCheckable( true );
+	alignGroup->addAction( m_alignLeft );
+
+	const QString alignCenterTip = TextOptsBar::tr( "Align Center" );
+	m_alignCenter = q->addAction(
+		( m_iconSize == TextOptsBar::Large ?
+			QIcon( ":/Core/img/align-horizontal-center.png" ) :
+			QIcon( ":/Core/img/align-horizontal-center-small.png" ) ),
+		alignCenterTip );
+	m_alignCenter->setToolTip( alignCenterTip );
+	m_alignCenter->setStatusTip( alignCenterTip );
+	m_alignCenter->setCheckable( true );
+	alignGroup->addAction( m_alignCenter );
+
+	const QString alignRightTip = TextOptsBar::tr( "Align Right" );
+	m_alignRight = q->addAction(
+		( m_iconSize == TextOptsBar::Large ?
+			QIcon( ":/Core/img/align-horizontal-right.png" ) :
+			QIcon( ":/Core/img/align-horizontal-right-small.png" ) ),
+		alignRightTip );
+	m_alignRight->setToolTip( alignRightTip );
+	m_alignRight->setStatusTip( alignRightTip );
+	m_alignRight->setCheckable( true );
+	alignGroup->addAction( m_alignRight );
+
+//	q->addSeparator();
+
+//	const QString fontColorTip = TextOptsBar::tr( "Color of the Text" );
+//	QAction * fontColor = q->addAction(
+//		( m_iconSize == TextOptsBar::Large ?
+//			QIcon( ":/Core/img/format-text-color.png" ) :
+//			QIcon( ":/Core/img/format-text-color-small.png" ) ),
+//		fontColorTip );
+//	fontColor->setToolTip( fontColorTip );
+//	fontColor->setStatusTip( fontColorTip );
 
 	q->addSeparator();
 
@@ -156,10 +203,16 @@ TextOptsBarPrivate::init()
 		q, &TextOptsBar::italic );
 	TextOptsBar::connect( m_fontUnderline, &QAction::triggered,
 		q, &TextOptsBar::underline );
-	TextOptsBar::connect( fontColor, &QAction::triggered,
-		q, &TextOptsBar::textColor );
+//	TextOptsBar::connect( fontColor, &QAction::triggered,
+//		q, &TextOptsBar::textColor );
 	TextOptsBar::connect( clearFormat, &QAction::triggered,
 		q, &TextOptsBar::slotClearFormat );
+	TextOptsBar::connect( m_alignLeft, &QAction::triggered,
+		q, &TextOptsBar::alignLeft );
+	TextOptsBar::connect( m_alignCenter, &QAction::triggered,
+		q, &TextOptsBar::alignCenter );
+	TextOptsBar::connect( m_alignRight, &QAction::triggered,
+		q, &TextOptsBar::alignRight );
 }
 
 
@@ -196,6 +249,32 @@ TextOptsBar::updateState( const QTextCursor & cursor )
 	d->m_fontBold->setChecked( fmt.fontWeight() == QFont::Bold );
 	d->m_fontItalic->setChecked( fmt.fontItalic() );
 	d->m_fontUnderline->setChecked( fmt.fontUnderline() );
+
+	QTextBlockFormat b = cursor.blockFormat();
+
+	switch( b.alignment() )
+	{
+		case Qt::AlignLeft :
+		{
+			d->m_alignLeft->setChecked( true );
+		}
+			break;
+
+		case Qt::AlignCenter :
+		{
+			d->m_alignCenter->setChecked( true );
+		}
+			break;
+
+		case Qt::AlignRight :
+		{
+			d->m_alignRight->setChecked( true );
+		}
+			break;
+
+		default :
+			break;
+	}
 }
 
 void
@@ -204,6 +283,8 @@ TextOptsBar::slotClearFormat()
 	d->m_fontBold->setChecked( false );
 	d->m_fontItalic->setChecked( false );
 	d->m_fontUnderline->setChecked( false );
+
+	d->m_alignLeft->setChecked( true );
 
 	emit clearFormat();
 }
