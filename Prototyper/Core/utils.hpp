@@ -34,6 +34,7 @@ QT_BEGIN_NAMESPACE
 class QTextCharFormat;
 class QTextCursor;
 class QTextDocument;
+class QTextBlockFormat;
 QT_END_NAMESPACE
 
 
@@ -41,19 +42,15 @@ namespace Prototyper {
 
 namespace Core {
 
-//
-// operator != for QTextCharFormat
-//
-
-bool operator != ( const QTextCharFormat & f1, const QTextCharFormat & f2 );
-
-
 namespace Cfg {
 
 static const QString c_boldStyle = QLatin1String( "bold" );
 static const QString c_italicStyle = QLatin1String( "italic" );
 static const QString c_underlineStyle = QLatin1String( "underline" );
 static const QString c_normalStyle = QLatin1String( "normal" );
+static const QString c_left = QLatin1String( "left" );
+static const QString c_right = QLatin1String( "right" );
+static const QString c_center = QLatin1String( "center" );
 
 
 //
@@ -61,7 +58,8 @@ static const QString c_normalStyle = QLatin1String( "normal" );
 //
 
 //! \return Text style for the configuration.
-QList< QString > textStyle( const QTextCharFormat & f );
+QList< QString > textStyle( const QTextCharFormat & f,
+	const QTextBlockFormat & b );
 
 
 //
@@ -98,6 +96,14 @@ Cfg::Brush brush( const QBrush & b );
 //
 
 QBrush fromBrush( const Cfg::Brush & b );
+
+
+//
+// initBlockFormat
+//
+
+void initBlockFormat( QTextBlockFormat & b,
+	const Cfg::TextStyle & style );
 
 
 //

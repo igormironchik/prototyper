@@ -27,6 +27,7 @@
 #include <QTextCharFormat>
 #include <QTextCursor>
 #include <QTextDocument>
+#include <QTextBlockFormat>
 
 
 namespace Prototyper {
@@ -41,6 +42,11 @@ bool operator != ( const QTextCharFormat & f1, const QTextCharFormat & f2 )
 		f1.fontUnderline() != f2.fontUnderline() );
 }
 
+bool operator != ( QTextBlockFormat & f1, const QTextBlockFormat & f2 )
+{
+	return ( f1.alignment() != f2.alignment() );
+}
+
 
 namespace Cfg {
 
@@ -48,7 +54,8 @@ namespace Cfg {
 // textStyle
 //
 
-QList< QString > textStyle( const QTextCharFormat & f )
+QList< QString > textStyle( const QTextCharFormat & f,
+	const QTextBlockFormat & b )
 {
 	QList< QString > res;
 
@@ -63,6 +70,28 @@ QList< QString > textStyle( const QTextCharFormat & f )
 
 	if( res.isEmpty() )
 		res.append( c_normalStyle );
+
+	switch( b.alignment() )
+	{
+		case Qt::AlignCenter :
+		case Qt::AlignHCenter :
+		{
+			res.append( c_center );
+		}
+			break;
+
+		case Qt::AlignRight :
+		{
+			res.append( c_right );
+		}
+			break;
+
+		default :
+		{
+			res.append( c_left );
+		}
+			break;
+	}
 
 	return res;
 } // textStyle
@@ -81,6 +110,7 @@ QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 	c.setPosition( pos );
 
 	QTextCharFormat f = c.charFormat();
+	QTextBlockFormat b = c.blockFormat();
 
 	if( f.fontPointSize() < 1.0 )
 		f.setFontPointSize( 10.0 );
@@ -89,10 +119,10 @@ QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 
 	while( c.movePosition( QTextCursor::NextCharacter ) )
 	{
-		if( f != c.charFormat() )
+		if( f != c.charFormat() || b != c.blockFormat() )
 		{
 			Cfg::TextStyle style;
-			style.setStyle( textStyle( f ) );
+			style.setStyle( textStyle( f, b ) );
 			style.setFontSize( f.fontPointSize() );
 			style.setText( t );
 
@@ -111,7 +141,7 @@ QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 	if( !t.isEmpty() )
 	{
 		Cfg::TextStyle style;
-		style.setStyle( textStyle( f ) );
+		style.setStyle( textStyle( f, b ) );
 		style.setFontSize( f.fontPointSize() );
 		style.setText( t );
 
@@ -172,6 +202,22 @@ QBrush fromBrush( const Cfg::Brush & b )
 
 
 //
+// initBlockFormat
+//
+
+void initBlockFormat( QTextBlockFormat & b,
+	const Cfg::TextStyle & style )
+{
+	if( style.style().contains( c_left ) )
+		b.setAlignment( Qt::AlignLeft );
+	else if( style.style().contains( c_right ) )
+		b.setAlignment( Qt::AlignRight );
+	else if( style.style().contains( c_center ) )
+		b.setAlignment( Qt::AlignCenter );
+}
+
+
+//
 // fillTextDocument
 //
 
@@ -183,6 +229,7 @@ void fillTextDocument( QTextDocument * doc,
 	c.movePosition( QTextCursor::End );
 
 	QTextCharFormat fmt = c.charFormat();
+	QTextBlockFormat b = c.blockFormat();
 
 	foreach( const Cfg::TextStyle & s, text )
 	{
@@ -210,9 +257,13 @@ void fillTextDocument( QTextDocument * doc,
 				fmt.setFontUnderline( false );
 		}
 
+		initBlockFormat( b, s );
+
 		fmt.setFontPointSize( s.fontSize() * scale );
 
 		c.setCharFormat( fmt );
+
+		c.setBlockFormat( b );
 
 		c.insertText( s.text() );
 

@@ -16,6 +16,9 @@
 							"QLatin1String( \"italic\" )"
 							"QLatin1String( \"underline\" )"
 							"QLatin1String( \"normal\" )"
+							"QLatin1String( \"left\" )"
+							"QLatin1String( \"right\" )"
+							"QLatin1String( \"center\" )"
 						}
 						{valueType QString}
 						{name style}

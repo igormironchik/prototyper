@@ -34,6 +34,7 @@
 #include <QTextCursor>
 #include <QFontMetrics>
 #include <QFont>
+#include <QTextBlockFormat>
 
 
 namespace Prototyper {
@@ -186,6 +187,7 @@ FormText::setCfg( const Cfg::Text & c )
 
 	QFont f = font();
 	QTextCharFormat fmt = textCursor().charFormat();
+	QTextBlockFormat b = textCursor().blockFormat();
 
 	foreach( const Cfg::TextStyle & s, c.text() )
 	{
@@ -235,6 +237,8 @@ FormText::setCfg( const Cfg::Text & c )
 			}
 		}
 
+		Cfg::initBlockFormat( b, s );
+
 		f.setPointSize( s.fontSize() );
 
 		fmt.setFontPointSize( s.fontSize() );
@@ -244,6 +248,7 @@ FormText::setCfg( const Cfg::Text & c )
 		QTextCursor cursor = textCursor();
 		cursor.movePosition( QTextCursor::End );
 		cursor.setCharFormat( fmt );
+		cursor.setBlockFormat( b );
 		cursor.insertText( s.text() );
 		setTextCursor( cursor );
 	}

@@ -27,6 +27,7 @@
 #include <QTextCursor>
 #include <QTextDocumentFragment>
 #include <QTextDocument>
+#include <QTextBlockFormat>
 
 
 namespace Prototyper {
@@ -128,6 +129,13 @@ TextEditor::setText( const QList< Cfg::TextStyle > & blocks )
 			else
 				setFontUnderline( false );
 		}
+
+		if( s.style().contains( Cfg::c_left ) )
+			setAlignment( Qt::AlignLeft );
+		else if( s.style().contains( Cfg::c_right ) )
+			setAlignment( Qt::AlignRight );
+		else if( s.style().contains( Cfg::c_center ) )
+			setAlignment( Qt::AlignCenter );
 
 		setFontPointSize( s.fontSize() );
 
