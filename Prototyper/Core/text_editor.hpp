@@ -79,6 +79,12 @@ public slots:
 	void clearFormat();
 	//! Reset state.
 	void reset();
+	//! Align left.
+	void alignLeft();
+	//! Align center.
+	void alignCenter();
+	//! Align right.
+	void alignRight();
 
 private slots:
 	//! Cursor changed.

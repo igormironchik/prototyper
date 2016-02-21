@@ -86,6 +86,12 @@ ProjectDescTabPrivate::init()
 		m_editor, &TextEditor::changeTextColor );
 	ProjectDescTab::connect( m_bar, &TextOptsBar::clearFormat,
 		m_editor, &TextEditor::clearFormat );
+	ProjectDescTab::connect( m_bar, &TextOptsBar::alignLeft,
+		m_editor, &TextEditor::alignLeft );
+	ProjectDescTab::connect( m_bar, &TextOptsBar::alignCenter,
+		m_editor, &TextEditor::alignCenter );
+	ProjectDescTab::connect( m_bar, &TextOptsBar::alignRight,
+		m_editor, &TextEditor::alignRight );
 }
 
 

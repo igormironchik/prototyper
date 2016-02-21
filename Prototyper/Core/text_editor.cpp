@@ -336,6 +336,54 @@ TextEditor::reset()
 	clearFormat();
 }
 
+void
+TextEditor::alignLeft()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		QTextBlockFormat b = c.blockFormat();
+		b.setAlignment( Qt::AlignLeft );
+		c.setBlockFormat( b );
+		setTextCursor( c );
+	}
+	else
+		setAlignment( Qt::AlignLeft );
+}
+
+void
+TextEditor::alignCenter()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		QTextBlockFormat b = c.blockFormat();
+		b.setAlignment( Qt::AlignCenter );
+		c.setBlockFormat( b );
+		setTextCursor( c );
+	}
+	else
+		setAlignment( Qt::AlignCenter );
+}
+
+void
+TextEditor::alignRight()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		QTextBlockFormat b = c.blockFormat();
+		b.setAlignment( Qt::AlignRight );
+		c.setBlockFormat( b );
+		setTextCursor( c );
+	}
+	else
+		setAlignment( Qt::AlignRight );
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */
