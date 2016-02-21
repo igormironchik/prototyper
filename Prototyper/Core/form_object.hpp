@@ -46,26 +46,26 @@ public:
 	//! Type of the object.
 	enum ObjectType {
 		//! Line.
-		LineType,
+		LineType = 1,
 		//! Polyline.
-		PolylineType,
+		PolylineType  = 2,
 		//! Text.
-		TextType,
+		TextType = 3,
 		//! Image.
-		ImageType,
+		ImageType = 4,
 		//! Rect.
-		RectType,
+		RectType = 5,
 		//! Group.
-		GroupType,
+		GroupType = 6,
 		//! Form.
-		FormType
+		FormType = 7
 	}; // enum ObjectType
 
 	FormObject( ObjectType t, Form * parent );
 	virtual ~FormObject();
 
 	//! \return Type.
-	ObjectType type() const;
+	ObjectType objectType() const;
 
 	//! \return ID.
 	const QString & objectId() const;

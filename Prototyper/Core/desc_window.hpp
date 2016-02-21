@@ -66,6 +66,8 @@ public slots:
 		Form * form );
 	//! Rename item.
 	void renameItem( Form * form, const QString & old, const QString & name );
+	//! Delete item.
+	void deleteItem( Form * form, const QString & name );
 
 protected:
 	void closeEvent( QCloseEvent * event )

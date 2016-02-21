@@ -249,7 +249,7 @@ FormHierarchyModel::columnCount( const QModelIndex & parent ) const
 
 static inline QString objectType( FormObject * obj )
 {
-	switch( obj->type() )
+	switch( obj->objectType() )
 	{
 		case FormObject::LineType :
 		{

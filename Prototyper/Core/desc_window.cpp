@@ -216,6 +216,27 @@ DescWindow::renameItem( Form * form, const QString & old,
 }
 
 void
+DescWindow::deleteItem( Form * form, const QString & name )
+{
+	if( d->m_form == form )
+	{
+		for( int i = 0; i < d->m_box->count(); ++i )
+		{
+			if( d->m_box->itemText( i ) == name )
+			{
+				d->m_box->removeItem( i );
+
+				DescWindow::disconnect( d->m_editors.at( i ), 0, 0, 0 );
+
+				delete d->m_editors.at( i );
+
+				return;
+			}
+		}
+	}
+}
+
+void
 DescWindow::closeEvent( QCloseEvent * event )
 {
 	event->ignore();

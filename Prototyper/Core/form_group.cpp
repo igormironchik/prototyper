@@ -137,7 +137,7 @@ FormGroup::cfg() const
 
 		if( obj )
 		{
-			switch( obj->type() )
+			switch( obj->objectType() )
 			{
 				case FormObject::LineType :
 				{

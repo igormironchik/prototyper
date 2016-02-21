@@ -62,6 +62,8 @@
 #include <QTextDocument>
 #include <QSharedPointer>
 
+#include <QDebug>
+
 // C++ include.
 #include <algorithm>
 
@@ -140,6 +142,10 @@ public:
 	//! Update link.
 	void updateLink( const QList< QGraphicsItem* > & childItems,
 		const QString & oldName, const QString & name );
+	//! Hide handles of current item.
+	void hideHandlesOfCurrent();
+	//! Remove descriptions of the object.
+	void removeDescriptions( FormObject * obj );
 
 	//! Parent.
 	Form * q;
@@ -312,6 +318,14 @@ FormPrivate::ungroup( QGraphicsItem * group )
 		m_model->removeObject( tmp, q );
 
 		q->scene()->removeItem( tmp );
+
+		if( m_desc.contains( tmp->objectId() ) )
+		{
+			TopGui::instance()->projectWindow()->descWindow()->deleteItem(
+				q, tmp->objectId() );
+
+			m_desc.remove( tmp->objectId() );
+		}
 
 		m_model->endRemoveObject();
 
@@ -603,8 +617,72 @@ FormPrivate::updateLink( const QList< QGraphicsItem* > & childItems,
 				m_model->update( obj );
 			}
 
-			if( obj->type() == FormObject::GroupType )
+			if( obj->objectType() == FormObject::GroupType )
 				updateLink( item->childItems(), oldName, name );
+		}
+	}
+}
+
+void
+FormPrivate::hideHandlesOfCurrent()
+{
+	if( m_current )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( m_current );
+
+		if( obj )
+		{
+			switch( obj->objectType() )
+			{
+				case FormObject::LineType :
+				{
+					FormLine * line = dynamic_cast< FormLine* > ( m_current );
+
+					if( line )
+						line->showHandles( false );
+				}
+					break;
+
+				case FormObject::PolylineType :
+				{
+					FormPolyline * line = dynamic_cast< FormPolyline* > ( m_current );
+
+					if( line )
+						line->showHandles( false );
+				}
+					break;
+
+				default :
+					break;
+			}
+		}
+	}
+}
+
+void
+FormPrivate::removeDescriptions( FormObject * obj )
+{
+	if( m_desc.contains( obj->objectId() ) )
+	{
+		TopGui::instance()->projectWindow()->descWindow()->deleteItem(
+			q, obj->objectId() );
+
+		m_desc.remove( obj->objectId() );
+	}
+
+	if( obj->objectType() == FormObject::GroupType )
+	{
+		FormGroup * group = dynamic_cast< FormGroup* > ( obj );
+
+		if( group )
+		{
+			foreach( QGraphicsItem * item, group->childItems() )
+			{
+				FormObject * tmp = dynamic_cast< FormObject* > ( item );
+
+				if( tmp )
+					removeDescriptions( tmp );
+			}
 		}
 	}
 }
@@ -695,7 +773,7 @@ Form::cfg() const
 
 		if( obj )
 		{
-			switch( obj->type() )
+			switch( obj->objectType() )
 			{
 				case FormObject::LineType :
 				{
@@ -805,6 +883,8 @@ Form::switchToSelectMode()
 void
 Form::switchToLineDrawingMode()
 {
+	d->hideHandlesOfCurrent();
+
 	d->m_currentLines.clear();
 	d->m_current = 0;
 	d->m_currentPoly = 0;
@@ -934,10 +1014,17 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 {
 	foreach( QGraphicsItem * item, items )
 	{
+		if( item == d->m_current )
+			d->m_current = 0;
+
 		FormObject * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
+		{
 			d->m_model->removeObject( obj, this );
+
+			d->removeDescriptions( obj );
+		}
 
 		scene()->removeItem( item );
 
@@ -947,7 +1034,7 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 
 			d->m_ids.removeOne( obj->objectId() );
 
-			switch( obj->type() )
+			switch( obj->objectType() )
 			{
 				case FormObject::GroupType :
 				{
@@ -1061,12 +1148,15 @@ Form::renameObject( FormObject * obj )
 			{
 				const QString old = obj->objectId();
 
-				QSharedPointer< QTextDocument > doc =
-					d->m_desc[ obj->objectId() ];
+				if( d->m_desc.contains( old ) )
+				{
+					QSharedPointer< QTextDocument > doc =
+						d->m_desc[ obj->objectId() ];
 
-				d->m_desc.remove( obj->objectId() );
+					d->m_desc.remove( obj->objectId() );
 
-				d->m_desc[ dlg.name() ] = doc;
+					d->m_desc[ dlg.name() ] = doc;
+				}
 
 				TopGui::instance()->projectWindow()->descWindow()->renameItem(
 					this, obj->objectId(), dlg.name() );
@@ -1240,6 +1330,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 		{
 			case FormAction::DrawLine :
 			{
+				d->hideHandlesOfCurrent();
+
 				d->m_pressed = true;
 
 				FormLine * line = new FormLine( this, this );
@@ -1292,6 +1384,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::InsertText :
 			{
+				d->hideHandlesOfCurrent();
+
 				d->m_pressed = true;
 
 				FormRectPlacer * rect = new FormRectPlacer( this );
@@ -1313,6 +1407,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawRect :
 			{
+				d->hideHandlesOfCurrent();
+
 				d->m_pressed = true;
 
 				FormRect * rect = new FormRect( this, this );
@@ -1524,8 +1620,6 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			default :
 				break;
 		}
-
-		d->m_current = 0;
 	}
 
 	mouseEvent->ignore();
@@ -1574,6 +1668,8 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 {
 	if( event->mimeData()->hasImage() )
 	{
+		d->hideHandlesOfCurrent();
+
 		FormImage * image = new FormImage( this, this );
 
 		const QString id = d->id();

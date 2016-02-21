@@ -354,6 +354,11 @@ FormText::lessFontSize()
 
 		setFont( f );
 	}
+
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 void
@@ -387,6 +392,11 @@ FormText::moreFontSize()
 
 		setFont( f );
 	}
+
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 void
@@ -413,6 +423,11 @@ FormText::bold( bool on )
 
 		setFont( f );
 	}
+
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 void
@@ -439,6 +454,11 @@ FormText::italic( bool on )
 
 		setFont( f );
 	}
+
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 void
@@ -465,6 +485,11 @@ FormText::underline( bool on )
 
 		setFont( f );
 	}
+
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 void
@@ -504,6 +529,11 @@ FormText::clearFormat()
 
 		setFont( f );
 	}
+
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 void

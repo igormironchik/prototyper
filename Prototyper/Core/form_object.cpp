@@ -44,7 +44,7 @@ FormObject::~FormObject()
 }
 
 FormObject::ObjectType
-FormObject::type() const
+FormObject::objectType() const
 {
 	return m_type;
 }
