@@ -313,7 +313,8 @@ FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	}
 	else
 	{
-		setCursor( Qt::IBeamCursor );
+		if( !isSelected() && !group() )
+			setCursor( Qt::IBeamCursor );
 
 		if( !group() && hasFocus() )
 		{

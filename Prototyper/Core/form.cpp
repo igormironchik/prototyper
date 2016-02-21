@@ -312,6 +312,11 @@ FormPrivate::ungroup( QGraphicsItem * group )
 				item->setFlag( QGraphicsItem::ItemIsSelectable, true );
 
 				item->setSelected( true );
+
+				FormText * text = dynamic_cast< FormText* > ( item );
+
+				if( text )
+					text->enableEditing( false );
 			}
 		}
 
