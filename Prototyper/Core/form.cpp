@@ -1177,11 +1177,26 @@ Form::renameObject( FormObject * obj )
 void
 Form::renameForm( const QString & name )
 {
-	d->m_ids.removeOne( objectId() );
+	const QString old = objectId();
 
-	d->m_ids.append( name );
+	if( d->m_desc.contains( old ) )
+	{
+		QSharedPointer< QTextDocument > doc =
+			d->m_desc[ old ];
+
+		d->m_desc.remove( old );
+
+		d->m_desc[ name ] = doc;
+	}
+
+	TopGui::instance()->projectWindow()->descWindow()->renameItem(
+		this, old, name );
 
 	setObjectId( name );
+
+	d->m_ids.removeOne( old );
+
+	d->m_ids.append( name );
 }
 
 void
