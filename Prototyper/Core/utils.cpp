@@ -131,7 +131,7 @@ Cfg::Pen pen( const QPen & p )
 	Cfg::Pen res;
 
 	res.setWidth( p.widthF() );
-	res.setColor( p.color().name() );
+	res.setColor( p.color().name( QColor::HexArgb ) );
 
 	return res;
 } // pen
@@ -155,7 +155,7 @@ Cfg::Brush brush( const QBrush & b )
 {
 	Cfg::Brush res;
 
-	res.setColor( b.color().name() );
+	res.setColor( b.color().name( QColor::HexArgb ) );
 
 	return res;
 } // brush

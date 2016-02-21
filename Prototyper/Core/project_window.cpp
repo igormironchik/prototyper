@@ -245,6 +245,14 @@ ProjectWindowPrivate::init()
 	drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
 	drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
 
+	QAction * drawRect = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-rectangle.png" ),
+		ProjectWindow::tr( "Draw Rect" ) );
+	drawRect->setCheckable( true );
+	m_formToolBarGroup->addAction( drawRect );
+	drawRect->setShortcutContext( Qt::ApplicationShortcut );
+	drawRect->setShortcut( ProjectWindow::tr( "Alt+R" ) );
+
 	QAction * insertText = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-text.png" ),
 		ProjectWindow::tr( "Insert Text" ) );
@@ -314,6 +322,8 @@ ProjectWindowPrivate::init()
 
 	form->addAction( m_select );
 	form->addAction( m_drawLine );
+	form->addAction( drawPolyLine );
+	form->addAction( drawRect );
 	form->addAction( insertText );
 	form->addAction( insertImage );
 
@@ -350,6 +360,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_select );
 	ProjectWindow::connect( m_drawLine, &QAction::triggered,
 		q, &ProjectWindow::p_drawLine );
+	ProjectWindow::connect( drawRect, &QAction::triggered,
+		q, &ProjectWindow::p_drawRect );
 	ProjectWindow::connect( drawPolyLine, &QAction::toggled,
 		q, &ProjectWindow::p_drawPolyline );
 	ProjectWindow::connect( insertText, &QAction::triggered,
@@ -717,6 +729,23 @@ void
 ProjectWindow::p_drawLine()
 {
 	FormAction::instance()->setMode( FormAction::DrawLine );
+
+	foreach( FormView * v, d->m_widget->forms() )
+	{
+		v->form()->setCursor( Qt::CrossCursor );
+
+		v->form()->switchToLineDrawingMode();
+
+		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+
+		d->enableEditing( v, false );
+	}
+}
+
+void
+ProjectWindow::p_drawRect()
+{
+	FormAction::instance()->setMode( FormAction::DrawRect );
 
 	foreach( FormView * v, d->m_widget->forms() )
 	{

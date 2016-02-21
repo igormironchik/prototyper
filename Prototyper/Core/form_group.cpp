@@ -27,6 +27,7 @@
 #include "form_polyline.hpp"
 #include "form_text.hpp"
 #include "form_image.hpp"
+#include "form_rectangle.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -174,6 +175,15 @@ FormGroup::cfg() const
 				}
 					break;
 
+				case FormObject::RectType :
+				{
+					FormRect * rect = dynamic_cast< FormRect* > ( item );
+
+					if( rect )
+						c.rect().append( rect->cfg() );
+				}
+					break;
+
 				case FormObject::GroupType :
 				{
 					FormGroup * group = dynamic_cast< FormGroup* > ( item );
@@ -241,6 +251,15 @@ FormGroup::setCfg( const Cfg::Group & c )
 		image->setCfg( cfg );
 
 		addToGroup( image );
+	}
+
+	foreach( const Cfg::Rect & cfg, c.rect() )
+	{
+		FormRect * rect = new FormRect( form(), this );
+
+		rect->setCfg( cfg );
+
+		addToGroup( rect );
 	}
 
 	foreach( const Cfg::Group & cfg, c.group() )

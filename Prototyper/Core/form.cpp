@@ -42,6 +42,7 @@
 #include "form_size_dlg.hpp"
 #include "desc_window.hpp"
 #include "utils.hpp"
+#include "form_rectangle.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -123,6 +124,8 @@ public:
 	FormText * createText( const Cfg::Text & cfg );
 	//! Create image.
 	FormImage * createImage( const Cfg::Image & cfg );
+	//! Create rect.
+	FormRect * createRect( const Cfg::Rect & cfg );
 	//! Create group.
 	FormGroup * createGroup( const Cfg::Group & cfg );
 	//! Clear IDs.
@@ -372,6 +375,13 @@ FormPrivate::updateFromCfg()
 		m_model->addObject( image, q );
 	}
 
+	foreach( const Cfg::Rect & c, m_cfg.rect() )
+	{
+		FormRect * rect = createRect( c );
+
+		m_model->addObject( rect, q );
+	}
+
 	foreach( const Cfg::Group & c, m_cfg.group() )
 	{
 		FormGroup * group = createGroup( c );
@@ -483,6 +493,18 @@ FormPrivate::createImage( const Cfg::Image & cfg )
 	m_ids.append( image->objectId() );
 
 	return image;
+}
+
+FormRect *
+FormPrivate::createRect( const Cfg::Rect & cfg )
+{
+	FormRect * rect = new FormRect( q, q );
+
+	rect->setCfg( cfg );
+
+	m_ids.append( rect->objectId() );
+
+	return rect;
 }
 
 FormGroup *
@@ -665,6 +687,7 @@ Form::cfg() const
 	c.image().clear();
 	c.group().clear();
 	c.desc().clear();
+	c.rect().clear();
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
@@ -707,6 +730,15 @@ Form::cfg() const
 
 					if( image )
 						c.image().append( image->cfg() );
+				}
+					break;
+
+				case FormObject::RectType :
+				{
+					FormRect * rect = dynamic_cast< FormRect* > ( item );
+
+					if( rect )
+						c.rect().append( rect->cfg() );
 				}
 					break;
 
@@ -1167,6 +1199,26 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
+			case FormAction::DrawRect :
+			{
+				FormRect * rect = dynamic_cast< FormRect* > ( d->m_current );
+
+				if( rect )
+				{
+					QRectF r = rect->rect();
+					r.setBottomRight( mouseEvent->pos() );
+
+					rect->setRect( r );
+				}
+
+				mouseEvent->accept();
+
+				update();
+
+				return;
+			}
+				break;
+
 			default :
 				break;
 		}
@@ -1252,6 +1304,27 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				rect->setStartPos( p );
 
 				d->m_current = rect;
+
+				mouseEvent->accept();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawRect :
+			{
+				d->m_pressed = true;
+
+				FormRect * rect = new FormRect( this, this );
+
+				d->m_current = rect;
+
+				QPointF p = mouseEvent->pos();
+
+				if( FormAction::instance()->isSnapEnabled() )
+					p = d->m_snap->snapPos();
+
+				rect->setRect( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
 
 				mouseEvent->accept();
 
@@ -1404,6 +1477,35 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				mouseEvent->accept();
 
 				d->m_pressed = false;
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawRect :
+			{
+				FormRect * rect = dynamic_cast< FormRect* > ( d->m_current );
+
+				if( rect )
+				{
+					QPointF p = mouseEvent->pos();
+
+					if( FormAction::instance()->isSnapEnabled() )
+						p = d->m_snap->snapPos();
+
+					QRectF r = rect->rect();
+					r.setBottomRight( p );
+
+					rect->setRect( r );
+				}
+
+				update();
+
+				d->m_pressed = false;
+
+				mouseEvent->accept();
 
 				emit changed();
 

@@ -43,5 +43,6 @@
 		<file>img/application-pdf.png</file>
 		<file>img/text-html.png</file>
 		<file>img/document-export.png</file>
+		<file>img/draw-rectangle.png</file>
 	</qresource>
 </RCC>

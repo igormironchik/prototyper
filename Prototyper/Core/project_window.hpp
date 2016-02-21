@@ -106,6 +106,8 @@ private slots:
 	void p_projectChanged();
 	//! Draw line.
 	void p_drawLine();
+	//! Draw rect.
+	void p_drawRect();
 	//! Draw polyline.
 	void p_drawPolyline( bool on );
 	//! Insert text.

@@ -66,6 +66,22 @@ static inline void drawLine( const Cfg::Line & line, QPainter & p )
 	p.restore();
 }
 
+static inline void drawRect( const Cfg::Rect & rect, QPainter & p )
+{
+	p.save();
+
+	const QRectF r( rect.topLeft().x(), rect.topLeft().y(),
+		rect.size().width(), rect.size().height() );
+
+	p.setPen( QPen( QColor( rect.pen().color() ), rect.pen().width() ) );
+
+	p.setBrush( Qt::NoBrush );
+
+	p.drawRect( r );
+
+	p.restore();
+}
+
 static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 {
 	foreach( const Cfg::Group & group, group.group() )
@@ -109,6 +125,9 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 					Qt::IgnoreAspectRatio ),
 				Qt::SmoothTransformation ) );
 	}
+
+	foreach( const Cfg::Rect & rect, group.rect() )
+		drawRect( rect, p );
 }
 
 void
@@ -165,6 +184,9 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 					Qt::IgnoreAspectRatio ),
 				Qt::SmoothTransformation ) );
 	}
+
+	foreach( const Cfg::Rect & rect, form.rect() )
+		drawRect( rect, p );
 
 	p.end();
 }

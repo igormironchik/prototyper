@@ -53,6 +53,8 @@ public:
 		TextType,
 		//! Image.
 		ImageType,
+		//! Rect.
+		RectType,
 		//! Group.
 		GroupType,
 		//! Form.

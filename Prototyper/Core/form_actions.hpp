@@ -64,12 +64,12 @@ public:
 	enum Mode {
 		//! Select.
 		Select,
-		//! Move.
-		Move,
 		//! Insert text.
 		InsertText,
 		//! Draw line.
-		DrawLine
+		DrawLine,
+		//! Draw rectangle.
+		DrawRect
 	}; // enum Mode
 
 	//! Falgs.

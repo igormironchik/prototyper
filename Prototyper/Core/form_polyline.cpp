@@ -266,16 +266,16 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 		appendLine( line );
 	}
 
+	setObjectPen( Cfg::fromPen( c.pen() ) );
+
+	setObjectBrush( Cfg::fromBrush( c.brush() ) );
+
 	const qreal w = (qreal) objectPen().width() / 2.0;
 
 	d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
 		12.0 + w, 12.0 + w ) );
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
-
-	setObjectPen( Cfg::fromPen( c.pen() ) );
-
-	setObjectBrush( Cfg::fromBrush( c.brush() ) );
 
 	setLink( c.link() );
 }

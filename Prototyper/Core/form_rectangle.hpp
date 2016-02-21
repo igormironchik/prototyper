@@ -20,11 +20,11 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__FORM_LINE_HPP__INCLUDED
-#define PROTOTYPER__CORE__FORM_LINE_HPP__INCLUDED
+#ifndef PROTOTYPER__CORE__FORM_RECTANGLE_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_RECTANGLE_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsLineItem>
+#include <QGraphicsRectItem>
 #include <QScopedPointer>
 
 // Prototyper include.
@@ -38,29 +38,28 @@ namespace Prototyper {
 namespace Core {
 
 class Form;
-class FormLineMoveHandle;
 
 
 //
-// FormLine
+// FormRect
 //
 
-class FormLinePrivate;
+class FormRectPrivate;
 
-//! Line on the form.
-class FormLine
-	:	public QGraphicsLineItem
+//! Rect on the form.
+class FormRect
+	:	public QGraphicsRectItem
 	,	public FormObject
 	,	public FormWithHandle
 {
 public:
-	explicit FormLine( Form * form, QGraphicsItem * parent = 0 );
-	~FormLine();
+	explicit FormRect( Form * form, QGraphicsItem * parent = 0 );
+	~FormRect();
 
 	//! \return Cfg.
-	Cfg::Line cfg() const;
+	Cfg::Rect cfg() const;
 	//! Set cfg.
-	void setCfg( const Cfg::Line & c );
+	void setCfg( const Cfg::Rect & c );
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
@@ -70,38 +69,22 @@ public:
 	//! Set pen.
 	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
 
-	//! Show handles.
-	void showHandles( bool show = true );
-
-	//! \return Point in the middle of handle if
-	//! given point contained by handle.
-	QPointF pointUnderHandle( const QPointF & point,
-		bool & intersected, bool & intersectedEnds ) const;
-
-	//! Handle mouse move in handles.
-	bool handleMouseMoveInHandles( const QPointF & point );
+	//! Set brush.
+	void setObjectBrush( const QBrush & b ) Q_DECL_OVERRIDE;
 
 protected:
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		Q_DECL_OVERRIDE;
 
-protected:
-	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mousePressEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-
 private:
-	Q_DISABLE_COPY( FormLine )
+	Q_DISABLE_COPY( FormRect )
 
-	QScopedPointer< FormLinePrivate > d;
-}; // class FormLine
+	QScopedPointer< FormRectPrivate > d;
+}; // class FormRect
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__FORM_LINE_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_RECTANGLE_HPP__INCLUDED

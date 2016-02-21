@@ -279,6 +279,51 @@
 
 
 				|#
+					Rect on the form.
+				#|
+				{class Rect
+					{tag
+						{valueType Point}
+						{name topLeft}
+						{required}
+					}
+
+					{tag
+						{valueType Size}
+						{name size}
+						{required}
+					}
+
+					{tag
+						{valueType Point}
+						{name pos}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
+
+					{tag
+						{valueType Pen}
+						{name pen}
+					}
+
+					{tag
+						{valueType Brush}
+						{name brush}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
+				} || class Rect
+
+
+				|#
 					Group on the form.
 				#|
 				{class Group
@@ -306,6 +351,11 @@
 					{tagVectorOfTags
 						{valueType Image}
 						{name image}
+					}
+
+					{tagVectorOfTags
+						{valueType Rect}
+						{name rect}
 					}
 
 					{tagVectorOfTags
@@ -384,6 +434,11 @@
 					{tagVectorOfTags
 						{valueType Image}
 						{name image}
+					}
+
+					{tagVectorOfTags
+						{valueType Rect}
+						{name rect}
 					}
 
 					{tagVectorOfTags

@@ -275,6 +275,12 @@ static inline QString objectType( FormObject * obj )
 		}
 			break;
 
+		case FormObject::RectType :
+		{
+			return FormHierarchyModel::tr( "Rect" );
+		}
+			break;
+
 		case FormObject::GroupType :
 		{
 			return FormHierarchyModel::tr( "Group" );
