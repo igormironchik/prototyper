@@ -36,25 +36,25 @@ namespace Core {
 //
 
 WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormWithHandle * object,
-	QGraphicsItem * parent )
+	QGraphicsItem * parent, Form * form )
 	:	m_topLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 12.0 ), -45.0,
-			object, parent, Qt::SizeFDiagCursor ) )
+			object, parent, form, Qt::SizeFDiagCursor ) )
 	,	m_top( new FormResizeHandle( 6.0, QPointF( 6.0, 12.0 ), 0.0,
-			object, parent, Qt::SizeVerCursor ) )
+			object, parent, form, Qt::SizeVerCursor ) )
 	,	m_topRight( new FormResizeHandle( 6.0, QPointF( 0.0, 12.0 ), 45.0,
-			object, parent, Qt::SizeBDiagCursor ) )
+			object, parent, form, Qt::SizeBDiagCursor ) )
 	,	m_left( new FormResizeHandle( 6.0, QPointF( 12.0, 6.0 ), -90.0,
-			object, parent, Qt::SizeHorCursor ) )
+			object, parent, form, Qt::SizeHorCursor ) )
 	,	m_bottomLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 0.0 ), 45.0,
-			object, parent, Qt::SizeBDiagCursor ) )
+			object, parent, form, Qt::SizeBDiagCursor ) )
 	,	m_bottom( new FormResizeHandle( 6.0, QPointF( 6.0, 0.0 ), 0.0,
-			object, parent, Qt::SizeVerCursor ) )
+			object, parent, form, Qt::SizeVerCursor ) )
 	,	m_bottomRight( new FormResizeHandle( 6.0, QPointF( 0.0, 0.0 ), -45.0,
-			object, parent, Qt::SizeFDiagCursor ) )
+			object, parent, form, Qt::SizeFDiagCursor ) )
 	,	m_right( new FormResizeHandle( 6.0, QPointF( 0.0, 6.0 ), 90,
-			object, parent, Qt::SizeHorCursor ) )
+			object, parent, form, Qt::SizeHorCursor ) )
 	,	m_move( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),
-			object, parent, Qt::SizeAllCursor ) )
+			object, parent, form, Qt::SizeAllCursor ) )
 	,	q( parent )
 	,	m_min( 25.0, 25.0 )
 {

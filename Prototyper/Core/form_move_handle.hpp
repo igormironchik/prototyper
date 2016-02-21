@@ -24,7 +24,7 @@
 #define PROTOTYPER__CORE__FORM_MOVE_HANDLER_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsItem>
+#include <QGraphicsObject>
 #include <QScopedPointer>
 #include <QCursor>
 
@@ -59,6 +59,9 @@ private:
 }; // class FormWithHandle
 
 
+class Form;
+
+
 //
 // FormMoveHandlePrivate
 //
@@ -66,7 +69,8 @@ private:
 class FormMoveHandlePrivate {
 public:
 	FormMoveHandlePrivate( qreal halfSize, const QPointF & zero,
-		FormWithHandle * object, FormMoveHandle * parent, const QCursor & c );
+		FormWithHandle * object, FormMoveHandle * parent, Form * form,
+		const QCursor & c );
 	virtual ~FormMoveHandlePrivate();
 
 	//! Init.
@@ -92,6 +96,8 @@ public:
 	QPointF m_touchDelta;
 	//! Cursor.
 	QCursor m_cursor;
+	//! Form.
+	Form * m_form;
 }; // class FormMoveHandlerPrivate
 
 
@@ -101,12 +107,12 @@ public:
 
 //! Move handler on the form.
 class FormMoveHandle
-	:	public QGraphicsItem
+	:	public QGraphicsObject
 {
 public:
 	FormMoveHandle( qreal halfSize, const QPointF & zero,
 		FormWithHandle * object, QGraphicsItem * parent,
-		const QCursor & c = QCursor() );
+		Form * form, const QCursor & c = QCursor() );
 	~FormMoveHandle();
 
 	//! \return Half of the size of the edge.
@@ -138,6 +144,8 @@ protected:
 protected:
 	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 		Q_DECL_OVERRIDE;
+	void hoverMoveEvent( QGraphicsSceneHoverEvent * event )
+		Q_DECL_OVERRIDE;
 	void hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 		Q_DECL_OVERRIDE;
 	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )
@@ -145,6 +153,8 @@ protected:
 	void mousePressEvent( QGraphicsSceneMouseEvent * event )
 		Q_DECL_OVERRIDE;
 	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
+		Q_DECL_OVERRIDE;
+	bool eventFilter( QObject * watched, QEvent * event )
 		Q_DECL_OVERRIDE;
 
 protected:

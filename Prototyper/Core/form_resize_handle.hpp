@@ -44,7 +44,7 @@ class FormResizeHandle
 public:
 	FormResizeHandle( qreal halfSize, const QPointF & zero,
 		qreal angle, FormWithHandle * object, QGraphicsItem * parent,
-		const QCursor & c = Qt::SizeAllCursor );
+		Form * form, const QCursor & c = Qt::SizeAllCursor );
 	~FormResizeHandle();
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

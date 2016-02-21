@@ -30,6 +30,8 @@
 #include <QPainter>
 #include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
+#include <QEvent>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -68,7 +70,7 @@ FormWithHandle::handleReleased( FormMoveHandle * handle )
 
 FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
 	const QPointF & zero, FormWithHandle * object, FormMoveHandle * parent,
-	const QCursor & c )
+	Form * form, const QCursor & c )
 	:	q( parent )
 	,	m_object( object )
 	,	m_size( halfSize )
@@ -77,6 +79,7 @@ FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
 	,	m_ignoreMouse( false )
 	,	m_zero( zero )
 	,	m_cursor( c )
+	,	m_form( form )
 {
 }
 
@@ -90,6 +93,8 @@ FormMoveHandlePrivate::init()
 	q->setAcceptHoverEvents( true );
 
 	q->setCursor( m_cursor );
+
+	q->setZValue( 999 );
 }
 
 
@@ -98,12 +103,13 @@ FormMoveHandlePrivate::init()
 //
 
 FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
-	FormWithHandle * object, QGraphicsItem * parent, const QCursor & c )
-	:	QGraphicsItem( parent )
+	FormWithHandle * object, QGraphicsItem * parent, Form * form,
+	const QCursor & c )
+	:	QGraphicsObject( parent )
 	,	d( 0 )
 {
 	QScopedPointer< FormMoveHandlePrivate > tmp(
-		new FormMoveHandlePrivate( halfSize, zero, object, this, c ) );
+		new FormMoveHandlePrivate( halfSize, zero, object, this, form, c ) );
 
 	tmp->init();
 
@@ -112,7 +118,7 @@ FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
 
 FormMoveHandle::FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > && dd,
 	QGraphicsItem * parent )
-	:	QGraphicsItem( parent )
+	:	QGraphicsObject( parent )
 	,	d( 0 )
 {
 	QScopedPointer< FormMoveHandlePrivate > tmp( 0 );
@@ -224,6 +230,11 @@ FormMoveHandle::handleCursor() const
 void
 FormMoveHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
+	d->m_form->scene()->installEventFilter( this );
+
+	FormAction::instance()->form()->snapItem()->setSnapPos(
+		mapToScene( event->pos() ) );
+
 	d->m_hovered = true;
 
 	update();
@@ -232,8 +243,22 @@ FormMoveHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 }
 
 void
+FormMoveHandle::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
+{
+	FormAction::instance()->form()->snapItem()->setSnapPos(
+		mapToScene( event->pos() ) );
+
+	QGraphicsItem::hoverMoveEvent( event );
+}
+
+void
 FormMoveHandle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 {
+	d->m_form->scene()->removeEventFilter( this );
+
+	FormAction::instance()->form()->snapItem()->setSnapPos(
+		mapToScene( event->pos() ) );
+
 	d->m_hovered = false;
 
 	update();
@@ -245,11 +270,11 @@ void
 FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 {
 	FormAction::instance()->form()->snapItem()->setSnapPos(
-		mapToScene( event->pos() ) );
+		event->scenePos() );
 
 	if( d->m_pressed && !d->m_ignoreMouse )
 	{
-		const QPointF delta = event->pos() - d->m_pos;
+		const QPointF delta = mapFromScene( event->scenePos() ) - d->m_pos;
 
 		moved( delta );
 
@@ -263,13 +288,14 @@ void
 FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
 	FormAction::instance()->form()->snapItem()->setSnapPos(
-		mapToScene( event->pos() ) );
+		event->scenePos() );
 
 	if( event->button() == Qt::LeftButton && !d->m_ignoreMouse )
 	{
 		d->m_pressed = true;
-		d->m_pos = event->pos();
-		d->m_touchDelta = event->pos() - d->m_zero;
+		d->m_pos = mapFromScene( event->scenePos() );
+
+		d->m_touchDelta = d->m_pos - d->m_zero;
 
 		event->accept();
 	}
@@ -281,7 +307,7 @@ void
 FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
 	FormAction::instance()->form()->snapItem()->setSnapPos(
-		mapToScene( event->pos() ) );
+		event->scenePos() );
 
 	if( event->button() == Qt::LeftButton )
 	{
@@ -305,6 +331,64 @@ FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		event->accept();
 	else
 		event->ignore();
+}
+
+bool
+FormMoveHandle::eventFilter( QObject * watched, QEvent * event )
+{
+	if( watched == d->m_form->scene() )
+	{
+		switch( event->type() )
+		{
+			case QEvent::GraphicsSceneMouseMove :
+			{
+				if( d->m_pressed )
+				{
+					QGraphicsSceneMouseEvent * me =
+						static_cast< QGraphicsSceneMouseEvent* > ( event );
+
+					mouseMoveEvent( me );
+
+					return true;
+				}
+				else
+					return false;
+			}
+				break;
+
+			case QEvent::GraphicsSceneMousePress :
+			{
+				QGraphicsSceneMouseEvent * me =
+					static_cast< QGraphicsSceneMouseEvent* > ( event );
+
+				mousePressEvent( me );
+
+				return true;
+			}
+				break;
+
+			case QEvent::GraphicsSceneMouseRelease :
+			{
+				if( d->m_pressed )
+				{
+					QGraphicsSceneMouseEvent * me =
+						static_cast< QGraphicsSceneMouseEvent* > ( event );
+
+					mouseReleaseEvent( me );
+
+					return true;
+				}
+				else
+					return false;
+			}
+				break;
+
+			default :
+				return false;
+		}
+	}
+	else
+		return false;
 }
 
 } /* namespace Core */

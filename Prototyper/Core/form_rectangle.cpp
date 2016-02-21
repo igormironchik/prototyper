@@ -58,7 +58,7 @@ public:
 void
 FormRectPrivate::init()
 {
-	m_handles.reset( new WithResizeAndMoveHandles( q, q ) );
+	m_handles.reset( new WithResizeAndMoveHandles( q, q, q->form() ) );
 
 	m_handles->hide();
 
@@ -70,9 +70,9 @@ FormRectPrivate::init()
 void
 FormRectPrivate::updateRect( const QRectF & r )
 {
-	m_handles->place( r );
+	q->setRect( r );
 
-	q->setRect( r.adjusted( 12.0, 12.0, -12.0, -12.0 ) );
+	m_handles->place( q->boundingRect() );
 
 	q->update();
 }
@@ -142,10 +142,7 @@ FormRect::setCfg( const Cfg::Rect & c )
 
 	setRect( r );
 
-	const qreal w = (qreal) objectPen().width() / 2.0;
-
-	d->m_handles->place( boundingRect().adjusted( -12.0 - w, -12.0 - w,
-		12.0 + w, 12.0 + w ) );
+	d->m_handles->place( boundingRect() );
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
@@ -155,8 +152,10 @@ FormRect::setCfg( const Cfg::Rect & c )
 QRectF
 FormRect::boundingRect() const
 {
+	const qreal w = (qreal) objectPen().width() / 2.0;
+
 	return QGraphicsRectItem::boundingRect().adjusted(
-		-12.0, -12.0, 12.0, 12.0 );
+		-12.0 - w, -12.0 - w, 12.0 + w, 12.0 + w );
 }
 
 void
@@ -167,9 +166,7 @@ FormRect::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 
 	if( isSelected() && !group() )
 	{
-		const qreal w = (qreal) objectPen().width() / 2.0;
-
-		d->m_handles->place( boundingRect().adjusted( -w, -w, w, w ) );
+		d->m_handles->place( boundingRect() );
 
 		d->m_handles->show();
 	}
@@ -201,7 +198,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_topLeft )
 	{
 		const QRectF r =
-			boundingRect().adjusted( delta.x(), delta.y(), 0.0, 0.0 );
+			rect().adjusted( delta.x(), delta.y(), 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -209,7 +206,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_top )
 	{
 		const QRectF r =
-			boundingRect().adjusted( 0.0, delta.y(), 0.0, 0.0 );
+			rect().adjusted( 0.0, delta.y(), 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -217,7 +214,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_topRight )
 	{
 		const QRectF r =
-			boundingRect().adjusted( 0.0, delta.y(), delta.x(), 0.0 );
+			rect().adjusted( 0.0, delta.y(), delta.x(), 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -225,7 +222,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_right )
 	{
 		const QRectF r =
-			boundingRect().adjusted( 0.0, 0.0, delta.x(), 0.0 );
+			rect().adjusted( 0.0, 0.0, delta.x(), 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -233,7 +230,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_bottomRight )
 	{
 		const QRectF r =
-			boundingRect().adjusted( 0.0, 0.0, delta.x(), delta.y() );
+			rect().adjusted( 0.0, 0.0, delta.x(), delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -241,7 +238,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_bottom )
 	{
 		const QRectF r =
-			boundingRect().adjusted( 0.0, 0.0, 0.0, delta.y() );
+			rect().adjusted( 0.0, 0.0, 0.0, delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -249,7 +246,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_bottomLeft )
 	{
 		const QRectF r =
-			boundingRect().adjusted( delta.x(), 0.0, 0.0, delta.y() );
+			rect().adjusted( delta.x(), 0.0, 0.0, delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -257,7 +254,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_left )
 	{
 		const QRectF r =
-			boundingRect().adjusted( delta.x(), 0.0, 0.0, 0.0 );
+			rect().adjusted( delta.x(), 0.0, 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );

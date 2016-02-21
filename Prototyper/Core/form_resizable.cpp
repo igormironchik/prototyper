@@ -64,11 +64,12 @@ FormResizable::moveResizable( const QPointF & delta )
 //
 
 FormResizableProxyPrivate::FormResizableProxyPrivate( FormResizable * resizable,
-	FormResizableProxy * parent )
+	FormResizableProxy * parent, Form * form )
 	:	q( parent )
 	,	m_object( resizable )
 	,	m_rect( 0.0, 0.0, 24.0, 24.0 )
 	,	m_handles( 0 )
+	,	m_form( form )
 {
 }
 
@@ -80,7 +81,7 @@ void
 FormResizableProxyPrivate::init()
 {
 	QScopedPointer< WithResizeAndMoveHandles > tmp(
-		new WithResizeAndMoveHandles( q, q ) );
+		new WithResizeAndMoveHandles( q, q, m_form ) );
 
 	m_handles.swap( tmp );
 
@@ -103,12 +104,12 @@ FormResizableProxyPrivate::place( const QRectF & rect )
 //
 
 FormResizableProxy::FormResizableProxy( FormResizable * resizable,
-	QGraphicsItem * parent )
+	QGraphicsItem * parent, Form * form )
 	:	QGraphicsItem( parent )
 	,	d( 0 )
 {
 	QScopedPointer< FormResizableProxyPrivate > tmp(
-		new FormResizableProxyPrivate( resizable, this ) );
+		new FormResizableProxyPrivate( resizable, this, form ) );
 
 	tmp->init();
 

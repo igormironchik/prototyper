@@ -74,7 +74,7 @@ FormTextPrivate::init()
 {
 	q->enableEditing( true );
 
-	m_proxy = new FormResizableProxy( q, q->parentItem() );
+	m_proxy = new FormResizableProxy( q, q->parentItem(), q->form());
 
 	m_opts = new FormTextOpts( q->parentItem() );
 

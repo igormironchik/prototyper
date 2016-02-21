@@ -84,27 +84,27 @@ void
 FormGroupPrivate::init()
 {
 	m_center = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
-		q->parentItem(), Qt::SizeAllCursor );
+		q->parentItem(), q->form(), Qt::SizeAllCursor );
 	m_center->setZValue( 999 );
 	m_center->hide();
 
 	m_topLeft = new FormMoveHandle( 3.0, QPointF( 6.0, 6.0 ), q,
-		q->parentItem(), Qt::SizeAllCursor );
+		q->parentItem(), q->form(), Qt::SizeAllCursor );
 	m_topLeft->setZValue( 999 );
 	m_topLeft->hide();
 
 	m_topRight = new FormMoveHandle( 3.0, QPointF( 0.0, 6.0 ), q,
-		q->parentItem(), Qt::SizeAllCursor );
+		q->parentItem(), q->form(), Qt::SizeAllCursor );
 	m_topRight->setZValue( 999 );
 	m_topRight->hide();
 
 	m_bottomRight = new FormMoveHandle( 3.0, QPointF( 0.0, 0.0 ), q,
-		q->parentItem(), Qt::SizeAllCursor );
+		q->parentItem(), q->form(), Qt::SizeAllCursor );
 	m_bottomRight->setZValue( 999 );
 	m_bottomRight->hide();
 
 	m_bottomLeft = new FormMoveHandle( 3.0, QPointF( 6.0, 0.0 ), q,
-		q->parentItem(), Qt::SizeAllCursor );
+		q->parentItem(), q->form(), Qt::SizeAllCursor );
 	m_bottomLeft->setZValue( 999 );
 	m_bottomLeft->hide();
 }

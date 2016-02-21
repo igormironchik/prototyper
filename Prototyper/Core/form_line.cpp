@@ -106,13 +106,13 @@ void
 FormLinePrivate::createHandles()
 {
 	m_h1 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q,
-		Qt::CrossCursor );
+		q->form(), Qt::CrossCursor );
 
 	m_h2 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q,
-		Qt::CrossCursor );
+		q->form(), Qt::CrossCursor );
 
 	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q,
-		Qt::SizeAllCursor );
+		q->form(), Qt::SizeAllCursor );
 }
 
 

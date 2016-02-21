@@ -83,11 +83,11 @@ public:
 void
 FormPolylinePrivate::init()
 {
-	m_start = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
+	m_start = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q, q->form() );
 	m_start->ignoreMouseEvents( true );
 	m_start->unsetCursor();
 
-	m_end = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q );
+	m_end = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q, q->form() );
 	m_end->ignoreMouseEvents( true );
 	m_end->unsetCursor();
 
@@ -95,7 +95,7 @@ FormPolylinePrivate::init()
 	m_end->hide();
 
 	QScopedPointer< WithResizeAndMoveHandles > tmp(
-		new WithResizeAndMoveHandles( q, q ) );
+		new WithResizeAndMoveHandles( q, q, q->form() ) );
 
 	m_handles.swap( tmp );
 

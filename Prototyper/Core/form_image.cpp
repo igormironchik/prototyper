@@ -61,7 +61,7 @@ public:
 void
 FormImagePrivate::init()
 {
-	m_handles = new FormImageHandles( q, q->parentItem() );
+	m_handles = new FormImageHandles( q, q->parentItem(), q->form() );
 }
 
 

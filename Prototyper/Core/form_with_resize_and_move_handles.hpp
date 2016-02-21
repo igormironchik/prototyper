@@ -39,6 +39,7 @@ namespace Core {
 class FormWithHandle;
 class FormMoveHandle;
 class FormResizeHandle;
+class Form;
 
 //
 // WithResizeAndMoveHandles
@@ -48,7 +49,7 @@ class FormResizeHandle;
 class WithResizeAndMoveHandles {
 public:
 	WithResizeAndMoveHandles( FormWithHandle * object,
-		QGraphicsItem * parent );
+		QGraphicsItem * parent, Form * form );
 	~WithResizeAndMoveHandles();
 
 	//! Place handles.
