@@ -65,6 +65,9 @@ FormHierarchyView::FormHierarchyView( FormHierarchyModel * model, QWidget * pare
 	connect( this, &QTreeView::doubleClicked,
 		this, &FormHierarchyView::p_doubleClicked );
 
+	connect( this, &QTreeView::clicked,
+		this, &FormHierarchyView::p_rowCLicked );
+
 	setModel( model );
 }
 
@@ -254,7 +257,19 @@ FormHierarchyView::p_doubleClicked( const QModelIndex & index )
 {
 	Q_UNUSED( index )
 
+	p_rowCLicked( index );
+
 	editDesc();
+}
+
+void
+FormHierarchyView::p_rowCLicked( const QModelIndex & index )
+{
+	FormObject * obj = static_cast< FormObject* >
+		( index.internalPointer() );
+
+	TopGui::instance()->projectWindow()->projectWidget()->activateTab(
+		obj->form()->objectId() );
 }
 
 

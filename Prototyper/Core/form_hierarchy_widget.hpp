@@ -76,6 +76,8 @@ protected:
 private slots:
 	//! Double clicked.
 	void p_doubleClicked( const QModelIndex & index );
+	//! Row clicked.
+	void p_rowCLicked( const QModelIndex & index );
 
 private:
 	Q_DISABLE_COPY( FormHierarchyView )
