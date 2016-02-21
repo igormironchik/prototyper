@@ -336,6 +336,10 @@ ProjectWindowPrivate::init()
 
 	form->addAction( newForm );
 
+	QMenu * help = q->menuBar()->addMenu( ProjectWindow::tr( "&Help" ) );
+	QAction * about = help->addAction( ProjectWindow::tr( "About" ) );
+	QAction * aboutQt = help->addAction( ProjectWindow::tr( "About Qt" ) );
+
 	ProjectWindow::connect( quitAction, &QAction::triggered,
 		q, &ProjectWindow::p_quit );
 	ProjectWindow::connect( m_grid, &QAction::toggled,
@@ -386,6 +390,10 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_exportToPDf );
 	ProjectWindow::connect( exportToHtml, &QAction::triggered,
 		q, &ProjectWindow::p_exportToHtml );
+	ProjectWindow::connect( about, &QAction::triggered,
+		q, &ProjectWindow::p_about );
+	ProjectWindow::connect( aboutQt, &QAction::triggered,
+		q, &ProjectWindow::p_aboutQt );
 }
 
 void
@@ -1012,6 +1020,22 @@ ProjectWindow::p_exportToHtml()
 
 		exporter.exportToDoc( fileName );
 	}
+}
+
+void
+ProjectWindow::p_about()
+{
+	QMessageBox::about( this, tr( "About Prototyper" ),
+		tr( "Prototyper - Simple UI prototyping software.\n\n"
+			"Author - Igor Mironchik (igor.mironchik at gmail dot com).\n\n"
+			"Copyright (c) 2016 Igor Mironchik.\n\n"
+			"Licensed under GNU GPL 3.0." ) );
+}
+
+void
+ProjectWindow::p_aboutQt()
+{
+	QMessageBox::aboutQt( this );
 }
 
 } /* namespace Core */

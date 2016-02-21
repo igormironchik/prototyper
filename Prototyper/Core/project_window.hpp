@@ -130,6 +130,10 @@ private slots:
 	void p_exportToPDf();
 	//! Export to HTML.
 	void p_exportToHtml();
+	//! Show about dialog.
+	void p_about();
+	//! Show about Qt dialog.
+	void p_aboutQt();
 
 private:
 	friend class ProjectWindowPrivate;
