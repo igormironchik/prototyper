@@ -215,6 +215,10 @@ static inline void findLinksInGroup( QMap< QString, QString > & lnks,
 	foreach( const Cfg::Image & image, group.image() )
 		if( !image.link().isEmpty() )
 			lnks.insert( image.objectId(), image.link() );
+
+	foreach( const Cfg::Rect & rect, group.rect() )
+		if( !rect.link().isEmpty() )
+			lnks.insert( rect.objectId(), rect.link() );
 }
 
 QMap< QString, QString >
@@ -243,6 +247,10 @@ ExporterPrivate::links( const Cfg::Form & form )
 	foreach( const Cfg::Image & image, form.image() )
 		if( !image.link().isEmpty() )
 			lnks.insert( image.objectId(), image.link() );
+
+	foreach( const Cfg::Rect & rect, form.rect() )
+		if( !rect.link().isEmpty() )
+			lnks.insert( rect.objectId(), rect.link() );
 
 	return lnks;
 }
