@@ -13,6 +13,8 @@ win32 {
     RC_FILE = Prototyper.rc
 }
 
+QMAKE_RPATHDIR += ${ORIGIN}
+
 unix|win32: LIBS += -L$$OUT_PWD/../../ -lPrototyper.Core
 
 INCLUDEPATH += $$PWD/../..

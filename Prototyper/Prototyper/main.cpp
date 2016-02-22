@@ -46,6 +46,6 @@ int main( int argc, char ** argv )
 	app.setWindowIcon( appIcon );
 
 	TopGui::instance()->projectWindow()->show();
-	
+
 	return app.exec();
 }

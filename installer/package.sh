@@ -1,0 +1,1 @@
+../../../../Qt/QtIFW2.0.1/bin/binarycreator -c config/config.xml -p packages Prototyper.Installer
