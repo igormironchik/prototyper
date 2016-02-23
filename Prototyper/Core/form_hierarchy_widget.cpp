@@ -62,6 +62,10 @@ FormHierarchyView::FormHierarchyView( FormHierarchyModel * model, QWidget * pare
 
 	setAlternatingRowColors( true );
 
+	setWordWrap( true );
+
+	setRootIsDecorated( true );
+
 	connect( this, &QTreeView::doubleClicked,
 		this, &FormHierarchyView::p_doubleClicked );
 

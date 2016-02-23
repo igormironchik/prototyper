@@ -865,6 +865,9 @@ Form::setCfg( const Cfg::Form & c )
 	d->m_cfg = c;
 
 	d->updateFromCfg();
+
+	TopGui::instance()->projectWindow()->formHierarchy()->view()->
+		resizeColumnToContents( 1 );
 }
 
 void
