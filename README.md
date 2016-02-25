@@ -19,4 +19,4 @@ git submodule update --init --recursive
 
 # Home Page
 
-http://igor-mironchik.besaba.com/projects/draft_ui_prototyper.php
+http://igor-mironchik.besaba.com/projects/prototyper.php
