@@ -79,6 +79,12 @@ private slots:
 	//! Row clicked.
 	void p_rowCLicked( const QModelIndex & index );
 
+protected:
+	friend class FormHierarchyWidget;
+
+	//! Do post construction init.
+	void postConstruction();
+
 private:
 	Q_DISABLE_COPY( FormHierarchyView )
 
@@ -113,6 +119,12 @@ public:
 
 	//! \return Model.
 	FormHierarchyModel * model() const;
+
+protected:
+	friend class ProjectWindow;
+
+	//! Do post construction init.
+	void postConstruction();
 
 private:
 	Q_DISABLE_COPY( FormHierarchyWidget )

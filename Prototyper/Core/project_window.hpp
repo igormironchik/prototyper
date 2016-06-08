@@ -83,6 +83,12 @@ public slots:
 protected:
 	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
 
+protected:
+	friend class TopGuiPrivate;
+
+	//! Do post construction init.
+	void postConstruction();
+
 private slots:
 	//! Quit.
 	void p_quit();

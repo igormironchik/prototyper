@@ -96,7 +96,6 @@ public slots:
 	//! Activate tabe.
 	void activateTab( const QString & tabName );
 
-
 private:
 	Q_DISABLE_COPY( ProjectWidget )
 

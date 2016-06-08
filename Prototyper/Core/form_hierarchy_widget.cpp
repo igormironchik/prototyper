@@ -71,8 +71,6 @@ FormHierarchyView::FormHierarchyView( FormHierarchyModel * model, QWidget * pare
 
 	connect( this, &QTreeView::clicked,
 		this, &FormHierarchyView::p_rowCLicked );
-
-	setModel( model );
 }
 
 FormHierarchyView::~FormHierarchyView()
@@ -276,6 +274,12 @@ FormHierarchyView::p_rowCLicked( const QModelIndex & index )
 		obj->form()->objectId() );
 }
 
+void
+FormHierarchyView::postConstruction()
+{
+	setModel( m_model );
+}
+
 
 //
 // FormHierarchyWidgetPrivate
@@ -342,6 +346,12 @@ FormHierarchyModel *
 FormHierarchyWidget::model() const
 {
 	return d->m_model;
+}
+
+void
+FormHierarchyWidget::postConstruction()
+{
+	d->m_view->postConstruction();
 }
 
 } /* namespace Core */

@@ -547,6 +547,12 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 }
 
 void
+ProjectWindow::postConstruction()
+{
+	d->m_formHierarchy->postConstruction();
+}
+
+void
 ProjectWindow::p_quit()
 {
 	if( isWindowModified() )
