@@ -237,7 +237,7 @@ FormMoveHandle::setDeltaToZero( const QPointF & delta )
 void
 FormMoveHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
-	d->m_form->scene()->installEventFilter( this );
+	//d->m_form->scene()->installEventFilter( this );
 
 	FormAction::instance()->form()->snapItem()->setSnapPos(
 		mapToScene( event->pos() ) );
@@ -261,7 +261,7 @@ FormMoveHandle::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 void
 FormMoveHandle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 {
-	d->m_form->scene()->removeEventFilter( this );
+	//d->m_form->scene()->removeEventFilter( this );
 
 	FormAction::instance()->form()->snapItem()->setSnapPos(
 		mapToScene( event->pos() ) );

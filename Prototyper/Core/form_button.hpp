@@ -20,60 +20,15 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__FORM_VIEW_HPP__INCLUDED
-#define PROTOTYPER__CORE__FORM_VIEW_HPP__INCLUDED
-
-// Qt include.
-#include <QGraphicsView>
-#include <QScopedPointer>
-
+#ifndef PROTOTYPER__CORE__FORM_BUTTON_HPP__INCLUDED
+#define PROTOTYPER__CORE__FORM_BUTTON_HPP__INCLUDED
 
 namespace Prototyper {
 
 namespace Core {
 
-namespace Cfg {
-
-class Form;
-
-} /* namespace Cfg */
-
-class FormScene;
-class Form;
-
-//
-// FormView
-//
-
-class FormViewPrivate;
-
-//! Form view.
-class FormView
-	:	public QGraphicsView
-{
-	Q_OBJECT
-
-public:
-	FormView( Cfg::Form & cfg, QWidget * parent = 0 );
-	~FormView();
-
-	//! \return Form scene.
-	FormScene * formScene() const;
-
-	//! \return Form.
-	Form * form() const;
-
-	//! Enable/disable selection.
-	void enableSelection( bool on = true );
-
-private:
-	Q_DISABLE_COPY( FormView )
-
-	QScopedPointer< FormViewPrivate > d;
-}; // class FormView
-
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__FORM_VIEW_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__FORM_BUTTON_HPP__INCLUDED

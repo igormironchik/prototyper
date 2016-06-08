@@ -79,7 +79,7 @@ FormViewPrivate::init()
 
 	q->setRubberBandSelectionMode( Qt::ContainsItemShape );
 
-	q->setDragMode( QGraphicsView::RubberBandDrag );
+	q->enableSelection( true );
 
 	q->setRenderHints( QPainter::Antialiasing );
 
@@ -112,6 +112,15 @@ Form *
 FormView::form() const
 {
 	return d->m_form;
+}
+
+void
+FormView::enableSelection( bool on )
+{
+	if( on )
+		setDragMode( QGraphicsView::RubberBandDrag );
+	else
+		setDragMode( QGraphicsView::NoDrag );
 }
 
 } /* namespace Core */

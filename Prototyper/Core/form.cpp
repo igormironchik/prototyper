@@ -62,8 +62,6 @@
 #include <QTextDocument>
 #include <QSharedPointer>
 
-#include <QDebug>
-
 // C++ include.
 #include <algorithm>
 
@@ -1353,7 +1351,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 		{
 			case FormAction::DrawLine :
 			{
-				d->hideHandlesOfCurrent();
+				if( d->m_current != d->m_currentPoly )
+					d->hideHandlesOfCurrent();
 
 				d->m_pressed = true;
 
@@ -1538,7 +1537,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 						delete line;
 
-						d->m_current = 0;
+						d->m_current = d->m_currentPoly;
 
 						if( d->m_currentPoly->isClosed() )
 						{

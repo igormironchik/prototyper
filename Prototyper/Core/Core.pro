@@ -34,6 +34,9 @@ HEADERS +=	desc_window.hpp \
 			export.hpp \
 			form_actions.hpp \
 			form_aspect_ratio_handle.hpp \
+			form_button.hpp \
+			form_checkbox.hpp \
+			form_combobox.hpp \
 			form.hpp \
 			form_grid_snap.hpp \
 			form_group.hpp \
@@ -45,6 +48,7 @@ HEADERS +=	desc_window.hpp \
 			form_move_handle.hpp \
 			form_object.hpp \
 			form_polyline.hpp \
+			form_radio_button.hpp \
 			form_rectangle.hpp \
 			form_rect_placer.hpp \
 			form_resizable.hpp \
@@ -54,6 +58,7 @@ HEADERS +=	desc_window.hpp \
 			form_text.hpp \
 			form_text_opts.hpp \
 			form_view.hpp \
+			form_window_header.hpp \
 			form_with_resize_and_move_handles.hpp \
 			grid_step_dlg.hpp \
 			html_exporter.hpp \
@@ -76,6 +81,9 @@ SOURCES +=	desc_window.cpp \
 			exporter.cpp \
 			form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
+			form_button.cpp \
+			form_checkbox.cpp \
+			form_combobox.cpp \
 			form.cpp \
 			form_grid_snap.cpp \
 			form_group.cpp \
@@ -87,6 +95,7 @@ SOURCES +=	desc_window.cpp \
 			form_move_handle.cpp \
 			form_object.cpp \
 			form_polyline.cpp \
+			form_radio_button.cpp \
 			form_rectangle.cpp \
 			form_rect_placer.cpp \
 			form_resizable.cpp \
@@ -96,6 +105,7 @@ SOURCES +=	desc_window.cpp \
 			form_text.cpp \
 			form_text_opts.cpp \
 			form_view.cpp \
+			form_window_header.cpp \
 			form_with_resize_and_move_handles.cpp \
 			grid_step_dlg.cpp \
 			html_exporter.cpp \

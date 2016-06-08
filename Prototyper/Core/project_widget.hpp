@@ -69,6 +69,9 @@ public:
 	//! \return Forms.
 	const QList< FormView* > & forms() const;
 
+	//! Enable/disable selection.
+	void enableSelection( bool on = true );
+
 	//! \return Forms' names.
 	QStringList formsNames() const;
 

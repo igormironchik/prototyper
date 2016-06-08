@@ -218,6 +218,13 @@ ProjectWidget::forms() const
 	return d->m_forms;
 }
 
+void
+ProjectWidget::enableSelection( bool on )
+{
+	foreach( FormView * view, d->m_forms )
+		view->enableSelection( on );
+}
+
 QStringList
 ProjectWidget::formsNames() const
 {

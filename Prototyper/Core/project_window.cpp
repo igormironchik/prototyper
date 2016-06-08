@@ -262,6 +262,7 @@ ProjectWindowPrivate::init()
 	insertText->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
 	m_select->setChecked( true );
+	m_widget->enableSelection( true );
 
 	QAction * insertImage = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-image.png" ),
@@ -738,6 +739,8 @@ ProjectWindow::p_drawLine()
 {
 	FormAction::instance()->setMode( FormAction::DrawLine );
 
+	d->m_widget->enableSelection( false );
+
 	foreach( FormView * v, d->m_widget->forms() )
 	{
 		v->form()->setCursor( Qt::CrossCursor );
@@ -754,6 +757,8 @@ void
 ProjectWindow::p_drawRect()
 {
 	FormAction::instance()->setMode( FormAction::DrawRect );
+
+	d->m_widget->enableSelection( false );
 
 	foreach( FormView * v, d->m_widget->forms() )
 	{
@@ -784,6 +789,8 @@ void
 ProjectWindow::p_insertText()
 {
 	FormAction::instance()->setMode( FormAction::InsertText );
+
+	d->m_widget->enableSelection( false );
 
 	foreach( FormView * v, d->m_widget->forms() )
 	{
@@ -860,6 +867,8 @@ void
 ProjectWindow::p_select()
 {
 	FormAction::instance()->setMode( FormAction::Select );
+
+	d->m_widget->enableSelection( true );
 
 	foreach( FormView * v, d->m_widget->forms() )
 	{
