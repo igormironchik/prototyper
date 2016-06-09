@@ -50,5 +50,13 @@
 		<file>img/align-horizontal-center-small.png</file>
 		<file>img/align-horizontal-left-small.png</file>
 		<file>img/align-horizontal-right-small.png</file>
+		<file>img/draw-checkbox.png</file>
+		<file>img/draw-combobox.png</file>
+		<file>img/draw-hslider.png</file>
+		<file>img/draw-pushbutton.png</file>
+		<file>img/draw-radiobutton.png</file>
+		<file>img/draw-spinbox.png</file>
+		<file>img/draw-vslider.png</file>
+		<file>img/configure.png</file>
 	</qresource>
 </RCC>

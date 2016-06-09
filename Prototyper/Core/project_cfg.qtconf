@@ -494,6 +494,11 @@
 						{name desc}
 					}
 
+					{tagVectorOfTags
+						{valueType Button}
+						{name button}
+					}
+
 					{tagScalar
 						{valueType QString}
 						{name link}

@@ -140,6 +140,20 @@ private slots:
 	void p_about();
 	//! Show about Qt dialog.
 	void p_aboutQt();
+	//! Draw button.
+	void p_drawButton();
+	//! Draw combobox.
+	void p_drawComboBox();
+	//! Draw radio button.
+	void p_drawRadioButton();
+	//! Draw check box.
+	void p_drawCheckBox();
+	//! Draw horizontal slider.
+	void p_drawHSlider();
+	//! Draw vertical slider.
+	void p_drawVSlider();
+	//! Draw spinbox.
+	void p_drawSpinbox();
 
 private:
 	friend class ProjectWindowPrivate;

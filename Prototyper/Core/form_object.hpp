@@ -63,12 +63,16 @@ public:
 		ButtonType = 8,
 		//! Combobox.
 		ComboBoxType = 9,
-		//! Window header.
-		WindowHeaderType = 10,
 		//! Radio button.
-		RadioButtonType = 11,
+		RadioButtonType = 10,
 		//! Checkbox.
-		CheckBoxType = 12
+		CheckBoxType = 11,
+		//! Horizontal slider.
+		HSliderType = 12,
+		//! Vertical slider.
+		VSliderType = 13,
+		//! Spinbox.
+		SpinBoxType = 14
 	}; // enum ObjectType
 
 	FormObject( ObjectType t, Form * parent );

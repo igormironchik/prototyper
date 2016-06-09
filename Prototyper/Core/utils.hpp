@@ -113,6 +113,13 @@ void initBlockFormat( QTextBlockFormat & b,
 void fillTextDocument( QTextDocument * doc,
 	const QList< Cfg::TextStyle > & text, qreal scale = 1.0 );
 
+
+//
+// textStyleFromFont
+//
+
+TextStyle textStyleFromFont( const QFont & f );
+
 } /* namespace Cfg */
 
 } /* namespace Core */

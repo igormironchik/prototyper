@@ -34,6 +34,7 @@ HEADERS +=	desc_window.hpp \
 			export.hpp \
 			form_actions.hpp \
 			form_aspect_ratio_handle.hpp \
+			form_button_properties.hpp \
 			form_button.hpp \
 			form_checkbox.hpp \
 			form_combobox.hpp \
@@ -42,6 +43,7 @@ HEADERS +=	desc_window.hpp \
 			form_group.hpp \
 			form_hierarchy_model.hpp \
 			form_hierarchy_widget.hpp \
+			form_hslider.hpp \
 			form_image_handles.hpp \
 			form_image.hpp \
 			form_line.hpp \
@@ -55,10 +57,11 @@ HEADERS +=	desc_window.hpp \
 			form_resize_handle.hpp \
 			form_scene.hpp \
 			form_size_dlg.hpp \
+			form_spinbox.hpp \
 			form_text.hpp \
 			form_text_opts.hpp \
 			form_view.hpp \
-			form_window_header.hpp \
+			form_vslider.hpp \
 			form_with_resize_and_move_handles.hpp \
 			grid_step_dlg.hpp \
 			html_exporter.hpp \
@@ -81,6 +84,7 @@ SOURCES +=	desc_window.cpp \
 			exporter.cpp \
 			form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
+			form_button_properties.cpp \
 			form_button.cpp \
 			form_checkbox.cpp \
 			form_combobox.cpp \
@@ -89,6 +93,7 @@ SOURCES +=	desc_window.cpp \
 			form_group.cpp \
 			form_hierarchy_model.cpp \
 			form_hierarchy_widget.cpp \
+			form_hslider.cpp \
 			form_image_handles.cpp \
 			form_image.cpp \
 			form_line.cpp \
@@ -102,10 +107,11 @@ SOURCES +=	desc_window.cpp \
 			form_resize_handle.cpp \
 			form_scene.cpp \
 			form_size_dlg.cpp \
+			form_spinbox.cpp \
 			form_text.cpp \
 			form_text_opts.cpp \
 			form_view.cpp \
-			form_window_header.cpp \
+			form_vslider.cpp \
 			form_with_resize_and_move_handles.cpp \
 			grid_step_dlg.cpp \
 			html_exporter.cpp \
@@ -127,7 +133,8 @@ FORMS +=	form_size_dlg.ui \
 			grid_step_dlg.ui \
 			link_dlg.ui \
 			name_dlg.ui \
-			new_form_dlg.ui
+			new_form_dlg.ui \
+    form_button_properties.ui
 
 unix|win32: LIBS += -L$$OUT_PWD/../../3rdparty/QtConfFile/lib/ -lQtConfFile
 

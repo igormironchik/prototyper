@@ -69,7 +69,21 @@ public:
 		//! Draw line.
 		DrawLine,
 		//! Draw rectangle.
-		DrawRect
+		DrawRect,
+		//! Draw button.
+		DrawButton,
+		//! Draw combobox.
+		DrawComboBox,
+		//! Draw radio button.
+		DrawRadioButton,
+		//! Draw check box.
+		DrawCheckBox,
+		//! Draw horizontal slider.
+		DrawHSlider,
+		//! Draw vertical slider.
+		DrawVSlider,
+		//! Draw spinbox.
+		DrawSpinBox
 	}; // enum Mode
 
 	//! Falgs.

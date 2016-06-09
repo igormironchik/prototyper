@@ -293,6 +293,48 @@ static inline QString objectType( FormObject * obj )
 		}
 			break;
 
+		case FormObject::ButtonType :
+		{
+			return FormHierarchyModel::tr( "Button" );
+		}
+			break;
+
+		case FormObject::ComboBoxType :
+		{
+			return FormHierarchyModel::tr( "ComboBox" );
+		}
+			break;
+
+		case FormObject::RadioButtonType :
+		{
+			return FormHierarchyModel::tr( "Radio Button" );
+		}
+			break;
+
+		case FormObject::CheckBoxType :
+		{
+			return FormHierarchyModel::tr( "CheckBox" );
+		}
+			break;
+
+		case FormObject::HSliderType :
+		{
+			return FormHierarchyModel::tr( "Horizontal Slider" );
+		}
+			break;
+
+		case FormObject::VSliderType :
+		{
+			return FormHierarchyModel::tr( "Vertical Slider" );
+		}
+			break;
+
+		case FormObject::SpinBoxType :
+		{
+			return FormHierarchyModel::tr( "SpinBox" );
+		}
+			break;
+
 		default :
 			return QString();
 	}

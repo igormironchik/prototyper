@@ -24,7 +24,7 @@
 #define PROTOTYPER__CORE__FORM_BUTTON_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsTextItem>
+#include <QGraphicsObject>
 #include <QScopedPointer>
 
 // Prototyper include.
@@ -46,7 +46,7 @@ class FormButtonPrivate;
 
 //! Button on the form.
 class FormButton
-	:	public QGraphicsTextItem
+	:	public QGraphicsObject
 	,	public FormObject
 	,	public FormResizable
 {
@@ -70,11 +70,25 @@ public:
 	//! Set cfg.
 	void setCfg( const Cfg::Button & c );
 
+	//! \return Text.
+	Cfg::TextStyle text() const;
+	//! Set text.
+	void setText( const Cfg::TextStyle & c );
+
+	QRectF boundingRect() const Q_DECL_OVERRIDE;
+
 protected:
 	//! Resize.
 	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
 	//! Move resizable.
 	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
+
+	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+		Q_DECL_OVERRIDE;
+
+private slots:
+	//! Properties.
+	void properties();
 
 private:
 	friend class FormButtonPrivate;

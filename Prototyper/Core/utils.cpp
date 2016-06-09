@@ -271,6 +271,36 @@ void fillTextDocument( QTextDocument * doc,
 	}
 }
 
+
+//
+// textStyleFromFont
+//
+
+TextStyle
+textStyleFromFont( const QFont & f )
+{
+	Cfg::TextStyle textStyle;
+
+	QList< QString > style;
+
+	if( f.weight() == QFont::Bold )
+		style.append( Cfg::c_boldStyle );
+
+	if( f.italic() )
+		style.append( Cfg::c_italicStyle );
+
+	if( f.underline() )
+		style.append( Cfg::c_underlineStyle );
+
+	if( style.isEmpty() )
+		style.append( Cfg::c_normalStyle );
+
+	textStyle.setStyle( style );
+	textStyle.setFontSize( f.pointSize() );
+
+	return textStyle;
+}
+
 } /* namespace Cfg */
 
 } /* namespace Core */

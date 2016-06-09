@@ -294,6 +294,64 @@ ProjectWindowPrivate::init()
 //		QIcon( ":/Core/img/fill-color.png" ),
 //		ProjectWindow::tr( "Fill Color" ) );
 
+	m_formToolBar->addSeparator();
+
+	QAction * drawButton = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-pushbutton.png" ),
+		ProjectWindow::tr( "Draw Button" ) );
+	drawButton->setCheckable( true );
+	m_formToolBarGroup->addAction( drawButton );
+	drawButton->setShortcutContext( Qt::ApplicationShortcut );
+	drawButton->setShortcut( ProjectWindow::tr( "Alt+B" ) );
+
+	QAction * drawComboBox = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-combobox.png" ),
+		ProjectWindow::tr( "Draw ComboBox" ) );
+	drawComboBox->setCheckable( true );
+	m_formToolBarGroup->addAction( drawComboBox );
+	drawComboBox->setShortcutContext( Qt::ApplicationShortcut );
+	drawComboBox->setShortcut( ProjectWindow::tr( "Alt+C" ) );
+
+	QAction * drawRadioButton = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-radiobutton.png" ),
+		ProjectWindow::tr( "Draw Radio Button" ) );
+	drawRadioButton->setCheckable( true );
+	m_formToolBarGroup->addAction( drawRadioButton );
+	drawRadioButton->setShortcutContext( Qt::ApplicationShortcut );
+	drawRadioButton->setShortcut( ProjectWindow::tr( "Alt+R" ) );
+
+	QAction * drawCheckBox = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-checkbox.png" ),
+		ProjectWindow::tr( "Draw Check Box" ) );
+	drawCheckBox->setCheckable( true );
+	m_formToolBarGroup->addAction( drawCheckBox );
+	drawCheckBox->setShortcutContext( Qt::ApplicationShortcut );
+	drawCheckBox->setShortcut( ProjectWindow::tr( "Alt+K" ) );
+
+	QAction * drawHSlider = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-hslider.png" ),
+		ProjectWindow::tr( "Draw Horizontal Slider" ) );
+	drawHSlider->setCheckable( true );
+	m_formToolBarGroup->addAction( drawHSlider );
+	drawHSlider->setShortcutContext( Qt::ApplicationShortcut );
+	drawHSlider->setShortcut( ProjectWindow::tr( "Alt+H" ) );
+
+	QAction * drawVSlider = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-vslider.png" ),
+		ProjectWindow::tr( "Draw Vertical Slider" ) );
+	drawVSlider->setCheckable( true );
+	m_formToolBarGroup->addAction( drawVSlider );
+	drawVSlider->setShortcutContext( Qt::ApplicationShortcut );
+	drawVSlider->setShortcut( ProjectWindow::tr( "Alt+V" ) );
+
+	QAction * drawSpinbox = m_formToolBar->addAction(
+		QIcon( ":/Core/img/draw-spinbox.png" ),
+		ProjectWindow::tr( "Draw Spinbox" ) );
+	drawSpinbox->setCheckable( true );
+	m_formToolBarGroup->addAction( drawSpinbox );
+	drawSpinbox->setShortcutContext( Qt::ApplicationShortcut );
+	drawSpinbox->setShortcut( ProjectWindow::tr( "Alt+S" ) );
+
 	q->addToolBar( Qt::LeftToolBarArea, m_formToolBar );
 
 	m_formToolBar->hide();
@@ -395,6 +453,20 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_about );
 	ProjectWindow::connect( aboutQt, &QAction::triggered,
 		q, &ProjectWindow::p_aboutQt );
+	ProjectWindow::connect( drawButton, &QAction::triggered,
+		q, &ProjectWindow::p_drawButton );
+	ProjectWindow::connect( drawComboBox, &QAction::triggered,
+		q, &ProjectWindow::p_drawComboBox );
+	ProjectWindow::connect( drawRadioButton, &QAction::triggered,
+		q, &ProjectWindow::p_drawRadioButton );
+	ProjectWindow::connect( drawCheckBox, &QAction::triggered,
+		q, &ProjectWindow::p_drawCheckBox );
+	ProjectWindow::connect( drawHSlider, &QAction::triggered,
+		q, &ProjectWindow::p_drawHSlider );
+	ProjectWindow::connect( drawVSlider, &QAction::triggered,
+		q, &ProjectWindow::p_drawVSlider );
+	ProjectWindow::connect( drawSpinbox, &QAction::triggered,
+		q, &ProjectWindow::p_drawSpinbox );
 }
 
 void
@@ -802,6 +874,8 @@ ProjectWindow::p_insertText()
 	{
 		v->form()->setCursor( Qt::CrossCursor );
 
+		v->form()->switchToLineDrawingMode();
+
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
 
 		d->enableEditing( v, true );
@@ -1051,6 +1125,61 @@ void
 ProjectWindow::p_aboutQt()
 {
 	QMessageBox::aboutQt( this );
+}
+
+void
+ProjectWindow::p_drawButton()
+{
+	FormAction::instance()->setMode( FormAction::DrawButton );
+
+	d->m_widget->enableSelection( false );
+
+	foreach( FormView * v, d->m_widget->forms() )
+	{
+		v->form()->setCursor( Qt::CrossCursor );
+
+		v->form()->switchToLineDrawingMode();
+
+		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+
+		d->enableEditing( v, false );
+	}
+}
+
+void
+ProjectWindow::p_drawComboBox()
+{
+
+}
+
+void
+ProjectWindow::p_drawRadioButton()
+{
+
+}
+
+void
+ProjectWindow::p_drawCheckBox()
+{
+
+}
+
+void
+ProjectWindow::p_drawHSlider()
+{
+
+}
+
+void
+ProjectWindow::p_drawVSlider()
+{
+
+}
+
+void
+ProjectWindow::p_drawSpinbox()
+{
+
 }
 
 } /* namespace Core */

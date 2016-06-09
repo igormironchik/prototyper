@@ -23,14 +23,16 @@
 // Prototyper include.
 #include "form_button.hpp"
 #include "utils.hpp"
+#include "form_button_properties.hpp"
 
 // Qt include.
-#include <QTextDocument>
-#include <QTextCursor>
 #include <QFontMetrics>
 #include <QFont>
 #include <QPainter>
-#include <QTextBlockFormat>
+#include <QApplication>
+#include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QAction>
 
 
 namespace Prototyper {
@@ -47,6 +49,7 @@ public:
 		:	q( parent )
 		,	m_rect( rect )
 		,	m_proxy( 0 )
+		,	m_text( QLatin1String( "OK" ) )
 	{
 	}
 
@@ -61,6 +64,10 @@ public:
 	QRectF m_rect;
 	//! Resizable proxy.
 	FormResizableProxy * m_proxy;
+	//! Text.
+	QString m_text;
+	//! Font.
+	QFont m_font;
 }; // class FormButtonPrivate
 
 void
@@ -70,30 +77,11 @@ FormButtonPrivate::init()
 
 	setRect( m_rect );
 
-	QFont f = q->font();
+	m_font = QApplication::font();
 
-	f.setPointSize( 10.0 );
+	m_font.setPointSize( 10.0 );
 
-	q->setFont( f );
-
-	q->document()->setDefaultFont( f );
-
-	QTextCursor c = q->textCursor();
-
-	QTextCharFormat fmt = c.charFormat();
-	fmt.setFontPointSize( 10.0 );
-
-	c.setCharFormat( fmt );
-
-	QTextBlockFormat b = c.blockFormat();
-	b.setAlignment( Qt::AlignCenter );
-	c.setBlockFormat( b );
-
-	q->setTextCursor( c );
-
-	q->setPlainText( FormButton::tr( "OK" ) );
-
-	QFontMetrics m( f );
+	QFontMetrics m( m_font );
 	m_proxy->setMinSize(
 		QSizeF( m.boundingRect( QLatin1Char( 'a' ) ).size() ) );
 }
@@ -105,12 +93,9 @@ FormButtonPrivate::setRect( const QRectF & rect )
 
 	q->setPos( m_rect.topLeft() );
 
-	q->setTextWidth( m_rect.width() );
+	m_proxy->setRect( m_rect );
 
-	QRectF r = q->boundingRect();
-	r.moveTo( q->pos() );
-
-	m_proxy->setRect( r );
+	m_rect.moveTopLeft( QPointF( 0.0, 0.0 ) );
 }
 
 
@@ -120,7 +105,7 @@ FormButtonPrivate::setRect( const QRectF & rect )
 
 FormButton::FormButton( const QRectF & rect, Form * form,
 	QGraphicsItem * parent )
-	:	QGraphicsTextItem( parent )
+	:	QGraphicsObject( parent )
 	,	FormObject( FormObject::ButtonType, form )
 	,	d( new FormButtonPrivate( this, rect ) )
 {
@@ -141,11 +126,14 @@ void
 FormButton::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
-	QGraphicsTextItem::paint( painter, option, widget );
+	Q_UNUSED( widget )
+	Q_UNUSED( option )
 
 	painter->setPen( objectPen() );
+	painter->setFont( d->m_font );
 
 	painter->drawRect( d->m_rect );
+	painter->drawText( d->m_rect, Qt::AlignCenter, d->m_text );
 
 	if( isSelected() && !group() )
 		d->m_proxy->show();
@@ -158,7 +146,7 @@ FormButton::setObjectPen( const QPen & p )
 {
 	FormObject::setObjectPen( p );
 
-	setDefaultTextColor( p.color() );
+	update();
 }
 
 Cfg::Button
@@ -180,7 +168,7 @@ FormButton::cfg() const
 
 	c.setSize( s );
 
-	c.setText( Cfg::text( textCursor(), toPlainText() ).first() );
+	c.setText( text() );
 
 	c.setPen( Cfg::pen( objectPen() ) );
 
@@ -197,72 +185,58 @@ FormButton::setCfg( const Cfg::Button & c )
 	setObjectPen( Cfg::fromPen( c.pen() ) );
 	d->setRect( QRectF( c.pos().x(), c.pos().y(),
 		c.size().width(), c.size().height() ) );
-	setPlainText( QString() );
 
-	QFont f = font();
-	QTextCharFormat fmt = textCursor().charFormat();
-	QTextBlockFormat b = textCursor().blockFormat();
+	setText( c.text() );
 
-	if( c.text().style().contains( Cfg::c_normalStyle ) )
+	update();
+}
+
+Cfg::TextStyle
+FormButton::text() const
+{
+	Cfg::TextStyle textStyle = Cfg::textStyleFromFont( d->m_font );
+	textStyle.style().append( Cfg::c_center );
+	textStyle.setText( d->m_text );
+
+	return textStyle;
+}
+
+void
+FormButton::setText( const Cfg::TextStyle & c )
+{
+	if( c.style().contains( Cfg::c_normalStyle ) )
 	{
-		f.setWeight( QFont::Normal );
-		f.setItalic( false );
-		f.setUnderline( false );
-
-		fmt.setFontWeight( QFont::Normal );
-		fmt.setFontItalic( false );
-		fmt.setFontUnderline( false );
+		d->m_font.setWeight( QFont::Normal );
+		d->m_font.setItalic( false );
+		d->m_font.setUnderline( false );
 	}
 	else
 	{
-		if( c.text().style().contains( Cfg::c_boldStyle ) )
-		{
-			f.setWeight( QFont::Bold );
-			fmt.setFontWeight( QFont::Bold );
-		}
+		if( c.style().contains( Cfg::c_boldStyle ) )
+			d->m_font.setWeight( QFont::Bold );
 		else
-		{
-			f.setWeight( QFont::Normal );
-			fmt.setFontWeight( QFont::Normal );
-		}
+			d->m_font.setWeight( QFont::Normal );
 
-		if( c.text().style().contains( Cfg::c_italicStyle ) )
-		{
-			f.setItalic( true );
-			fmt.setFontItalic( true );
-		}
+		if( c.style().contains( Cfg::c_italicStyle ) )
+			d->m_font.setItalic( true );
 		else
-		{
-			f.setItalic( false );
-			fmt.setFontItalic( false );
-		}
+			d->m_font.setItalic( false );
 
-		if( c.text().style().contains( Cfg::c_underlineStyle ) )
-		{
-			f.setUnderline( true );
-			fmt.setFontUnderline( true );
-		}
+		if( c.style().contains( Cfg::c_underlineStyle ) )
+			d->m_font.setUnderline( true );
 		else
-		{
-			f.setUnderline( false );
-			fmt.setFontUnderline( false );
-		}
+			d->m_font.setUnderline( false );
 	}
 
-	Cfg::initBlockFormat( b, c.text() );
+	d->m_font.setPointSize( c.fontSize() );
 
-	f.setPointSize( c.text().fontSize() );
+	d->m_text = c.text();
+}
 
-	fmt.setFontPointSize( c.text().fontSize() );
-
-	setFont( f );
-
-	QTextCursor cursor = textCursor();
-	cursor.movePosition( QTextCursor::End );
-	cursor.setCharFormat( fmt );
-	cursor.setBlockFormat( b );
-	cursor.insertText( c.text().text() );
-	setTextCursor( cursor );
+QRectF
+FormButton::boundingRect() const
+{
+	return d->m_rect;
 }
 
 void
@@ -275,6 +249,32 @@ void
 FormButton::moveResizable( const QPointF & delta )
 {
 	moveBy( delta.x(), delta.y() );
+}
+
+void
+FormButton::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+{
+	QMenu menu;
+
+	menu.addAction( QIcon( ":/Core/img/configure.png" ),
+		QObject::tr( "Properties" ), this, &FormButton::properties );
+
+	menu.exec( event->screenPos() );
+}
+
+void
+FormButton::properties()
+{
+	ButtonProperties dlg;
+
+	dlg.setCfg( text() );
+
+	if( dlg.exec() == QDialog::Accepted )
+	{
+		setText( dlg.cfg() );
+
+		update();
+	}
 }
 
 } /* namespace Core */

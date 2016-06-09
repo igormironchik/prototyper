@@ -130,6 +130,37 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 		drawRect( rect, p );
 }
 
+static inline void drawButton( const Cfg::Button & btn, QPainter & p )
+{
+	p.save();
+
+	p.setPen( QPen( QColor( btn.pen().color() ), btn.pen().width() ) );
+
+	QFont f = p.font();
+
+	if( btn.text().style().contains( Cfg::c_boldStyle ) )
+		f.setBold( true );
+
+	if( btn.text().style().contains( Cfg::c_italicStyle ) )
+		f.setItalic( true );
+
+	if( btn.text().style().contains( Cfg::c_underlineStyle ) )
+		f.setUnderline( true );
+
+	f.setPointSize( btn.text().fontSize() );
+
+	p.setFont( f );
+
+	const QRect r( btn.pos().x(), btn.pos().y(),
+		btn.size().width(), btn.size().height() );
+
+	p.drawRect( r );
+
+	p.drawText( r, Qt::AlignCenter, btn.text().text() );
+
+	p.restore();
+}
+
 void
 ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 {
@@ -154,6 +185,9 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 		foreach( const Cfg::Line & line, poly.line() )
 			drawLine( line, p );
 	}
+
+	foreach( const Cfg::Button & btn, form.button() )
+		drawButton( btn, p );
 
 	foreach( const Cfg::Text & text, form.text() )
 	{

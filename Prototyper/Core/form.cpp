@@ -43,6 +43,7 @@
 #include "desc_window.hpp"
 #include "utils.hpp"
 #include "form_rectangle.hpp"
+#include "form_button.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -1330,6 +1331,22 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
+			case FormAction::DrawButton :
+			{
+				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+					( d->m_current );
+
+				if( rect )
+					rect->setEndPos( mouseEvent->pos() );
+
+				mouseEvent->accept();
+
+				update();
+
+				return;
+			}
+				break;
+
 			default :
 				break;
 		}
@@ -1451,6 +1468,29 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					p = d->m_snap->snapPos();
 
 				rect->setRect( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
+
+				mouseEvent->accept();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawButton :
+			{
+				d->hideHandlesOfCurrent();
+
+				d->m_pressed = true;
+
+				FormRectPlacer * rect = new FormRectPlacer( this );
+
+				QPointF p = mouseEvent->pos();
+
+				if( FormAction::instance()->isSnapEnabled() )
+					p = d->m_snap->snapPos();
+
+				rect->setStartPos( p );
+
+				d->m_current = rect;
 
 				mouseEvent->accept();
 
@@ -1632,6 +1672,50 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				d->m_pressed = false;
 
 				mouseEvent->accept();
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawButton :
+			{
+				scene()->removeItem( d->m_current );
+
+				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+					( d->m_current );
+
+				FormButton * btn = 0;
+
+				if( rect )
+				{
+					QPointF p = mouseEvent->pos();
+
+					if( FormAction::instance()->isSnapEnabled() )
+						p = d->m_snap->snapPos();
+
+					QRectF r = rect->rect();
+					r.setBottomRight( p );
+
+					btn = new FormButton( r, this, this );
+
+					const QString id = d->id();
+
+					btn->setObjectId( id );
+
+					d->m_ids.append( id );
+
+					d->m_model->addObject( btn, this );
+				}
+
+				delete d->m_current;
+
+				d->m_current = btn;
+
+				mouseEvent->accept();
+
+				d->m_pressed = false;
 
 				emit changed();
 
