@@ -58,7 +58,17 @@ public:
 		//! Group.
 		GroupType = 6,
 		//! Form.
-		FormType = 7
+		FormType = 7,
+		//! Button.
+		ButtonType = 8,
+		//! Combobox.
+		ComboBoxType = 9,
+		//! Window header.
+		WindowHeaderType = 10,
+		//! Radio button.
+		RadioButtonType = 11,
+		//! Checkbox.
+		CheckBoxType = 12
 	}; // enum ObjectType
 
 	FormObject( ObjectType t, Form * parent );

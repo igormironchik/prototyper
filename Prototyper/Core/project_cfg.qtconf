@@ -380,6 +380,46 @@
 
 
 				|#
+					Button.
+				#|
+				{class Button
+					{tag
+						{valueType TextStyle}
+						{name text}
+						{required}
+					}
+
+					{tag
+						{valueType Point}
+						{name pos}
+						{required}
+					}
+
+					{tag
+						{valueType Size}
+						{name size}
+						{required}
+					}
+
+					{tag
+						{valueType Pen}
+						{name pen}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
+				} || class Button
+
+
+				|#
 					Description of the form's item.
 				#|
 				{class Description

@@ -23,9 +23,66 @@
 #ifndef PROTOTYPER__CORE__FORM_BUTTON_HPP__INCLUDED
 #define PROTOTYPER__CORE__FORM_BUTTON_HPP__INCLUDED
 
+// Qt include.
+#include <QGraphicsTextItem>
+#include <QScopedPointer>
+
+// Prototyper include.
+#include "form_object.hpp"
+#include "form_resizable.hpp"
+#include "project_cfg.hpp"
+#include "project_cfg.hpp"
+
+
 namespace Prototyper {
 
 namespace Core {
+
+//
+// FormButton
+//
+
+class FormButtonPrivate;
+
+//! Button on the form.
+class FormButton
+	:	public QGraphicsTextItem
+	,	public FormObject
+	,	public FormResizable
+{
+	Q_OBJECT
+
+public:
+	FormButton( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
+	~FormButton();
+
+	//! Destroy handles.
+	void destroyHandles();
+
+	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
+		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+
+	//! Set pen.
+	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
+
+	//! \return Cfg.
+	Cfg::Button cfg() const;
+	//! Set cfg.
+	void setCfg( const Cfg::Button & c );
+
+protected:
+	//! Resize.
+	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
+	//! Move resizable.
+	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
+
+private:
+	friend class FormButtonPrivate;
+
+	Q_DISABLE_COPY( FormButton )
+
+	QScopedPointer< FormButtonPrivate > d;
+}; // class FormButton
 
 } /* namespace Core */
 
