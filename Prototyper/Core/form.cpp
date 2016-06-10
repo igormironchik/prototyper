@@ -1248,6 +1248,11 @@ Form::resizeForm()
 void
 Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
+	FormRectPlacer * placer = dynamic_cast< FormRectPlacer* > ( d->m_current );
+
+	if( placer )
+		delete placer;
+
 	QMenu menu;
 	menu.addAction( TopGui::instance()->projectWindow()->showHideGridAction() );
 	menu.addAction( d->m_gridStepAction );

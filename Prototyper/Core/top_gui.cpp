@@ -82,6 +82,8 @@ TopGuiPrivate::init()
 {
 	m_projectWindow = new ProjectWindow;
 
+	m_projectWindow->postConstruction();
+
 	static const QString cfgFolder =
 		QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation );
 
