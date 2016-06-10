@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "exporter.hpp"
 #include "utils.hpp"
+#include "form_checkbox.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -188,6 +189,18 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 
 	foreach( const Cfg::Button & btn, form.button() )
 		drawButton( btn, p );
+
+	foreach( const Cfg::CheckBox & chk, form.checkbox() )
+	{
+		p.save();
+
+		FormCheckBox::draw( &p, Cfg::fromPen( chk.pen() ),
+			QRectF( chk.pos().x(), chk.pos().y(),
+				chk.size().width(), chk.size().height() ),
+			chk.isChecked() );
+
+		p.restore();
+	}
 
 	foreach( const Cfg::Text & text, form.text() )
 	{

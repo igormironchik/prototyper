@@ -103,6 +103,11 @@ FormObject::setLink( const QString & l )
 	m_link = l;
 }
 
+void
+FormObject::postDeletion()
+{
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

@@ -351,7 +351,7 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormGroup::destroyHandles()
+FormGroup::postDeletion()
 {
 	delete d->m_center;
 	delete d->m_topLeft;

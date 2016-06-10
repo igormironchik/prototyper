@@ -420,6 +420,46 @@
 
 
 				|#
+					CheckBox.
+				#|
+				{class CheckBox
+					{tag
+						{valueType Point}
+						{name pos}
+						{required}
+					}
+
+					{tag
+						{valueType Size}
+						{name size}
+						{required}
+					}
+
+					{tag
+						{valueType Pen}
+						{name pen}
+					}
+
+					{tagScalar
+						{valueType bool}
+						{name isChecked}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
+				} || class CheckBox
+
+
+				|#
 					Description of the form's item.
 				#|
 				{class Description
@@ -497,6 +537,11 @@
 					{tagVectorOfTags
 						{valueType Button}
 						{name button}
+					}
+
+					{tagVectorOfTags
+						{valueType CheckBox}
+						{name checkbox}
 					}
 
 					{tagScalar

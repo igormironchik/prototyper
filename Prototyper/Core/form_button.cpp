@@ -117,7 +117,7 @@ FormButton::~FormButton()
 }
 
 void
-FormButton::destroyHandles()
+FormButton::postDeletion()
 {
 	delete d->m_proxy;
 }

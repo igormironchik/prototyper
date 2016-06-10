@@ -66,8 +66,8 @@ public:
 	//! Set image.
 	void setImage( const QImage & img );
 
-	//! Destroy handles.
-	void destroyHandles();
+	//! Post deletion.
+	void postDeletion() Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;

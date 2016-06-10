@@ -65,8 +65,8 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
-	//! Destroy handles.
-	void destroyHandles();
+	//! Post deletion.
+	void postDeletion() Q_DECL_OVERRIDE;
 
 protected:
 	//! Handle moved.

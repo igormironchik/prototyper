@@ -44,6 +44,8 @@
 #include "utils.hpp"
 #include "form_rectangle.hpp"
 #include "form_button.hpp"
+#include "form_button.hpp"
+#include "form_checkbox.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -333,7 +335,7 @@ FormPrivate::ungroup( QGraphicsItem * group )
 
 		m_model->endRemoveObject();
 
-		tmp->destroyHandles();
+		tmp->postDeletion();
 
 		delete tmp;
 	}
@@ -770,6 +772,7 @@ Form::cfg() const
 	c.group().clear();
 	c.desc().clear();
 	c.rect().clear();
+	c.button().clear();
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
@@ -830,6 +833,24 @@ Form::cfg() const
 
 					if( group )
 						c.group().append( group->cfg() );
+				}
+					break;
+
+				case FormObject::ButtonType :
+				{
+					FormButton * btn = dynamic_cast< FormButton* > ( item );
+
+					if( btn )
+						c.button().append( btn->cfg() );
+				}
+					break;
+
+				case FormObject::CheckBoxType :
+				{
+					FormCheckBox * chk = dynamic_cast< FormCheckBox* > ( item );
+
+					if( chk )
+						c.checkbox().append( chk->cfg() );
 				}
 					break;
 
@@ -1051,30 +1072,15 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 					{
 						d->clearIds( group );
 
-						group->destroyHandles();
+						group->postDeletion();
 					}
 				}
 					break;
 
-				case FormObject::TextType :
-				{
-					FormText * text = dynamic_cast< FormText* > ( item );
-
-					if( text )
-						text->destroyHandles();
-				}
-					break;
-
-				case FormObject::ImageType :
-				{
-					FormImage * image = dynamic_cast< FormImage* > ( item );
-
-					if( image )
-						image->destroyHandles();
-				}
-					break;
-
 				default :
+				{
+					obj->postDeletion();
+				}
 					break;
 			}
 		}
@@ -1301,6 +1307,8 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				break;
 
 			case FormAction::InsertText :
+			case FormAction::DrawButton :
+			case FormAction::DrawCheckBox :
 			{
 				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
 					( d->m_current );
@@ -1327,22 +1335,6 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					rect->setRect( r );
 				}
-
-				mouseEvent->accept();
-
-				update();
-
-				return;
-			}
-				break;
-
-			case FormAction::DrawButton :
-			{
-				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
-					( d->m_current );
-
-				if( rect )
-					rect->setEndPos( mouseEvent->pos() );
 
 				mouseEvent->accept();
 
@@ -1427,6 +1419,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				break;
 
 			case FormAction::InsertText :
+			case FormAction::DrawButton :
+			case FormAction::DrawCheckBox :
 			{
 				d->hideHandlesOfCurrent();
 
@@ -1473,29 +1467,6 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					p = d->m_snap->snapPos();
 
 				rect->setRect( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
-
-				mouseEvent->accept();
-
-				return;
-			}
-				break;
-
-			case FormAction::DrawButton :
-			{
-				d->hideHandlesOfCurrent();
-
-				d->m_pressed = true;
-
-				FormRectPlacer * rect = new FormRectPlacer( this );
-
-				QPointF p = mouseEvent->pos();
-
-				if( FormAction::instance()->isSnapEnabled() )
-					p = d->m_snap->snapPos();
-
-				rect->setStartPos( p );
-
-				d->m_current = rect;
 
 				mouseEvent->accept();
 
@@ -1717,6 +1688,50 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				delete d->m_current;
 
 				d->m_current = btn;
+
+				mouseEvent->accept();
+
+				d->m_pressed = false;
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawCheckBox :
+			{
+				scene()->removeItem( d->m_current );
+
+				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+					( d->m_current );
+
+				FormCheckBox * chk = 0;
+
+				if( rect )
+				{
+					QPointF p = mouseEvent->pos();
+
+					if( FormAction::instance()->isSnapEnabled() )
+						p = d->m_snap->snapPos();
+
+					QRectF r = rect->rect();
+					r.setBottomRight( p );
+
+					chk = new FormCheckBox( r, this, this );
+
+					const QString id = d->id();
+
+					chk->setObjectId( id );
+
+					d->m_ids.append( id );
+
+					d->m_model->addObject( chk, this );
+				}
+
+				delete d->m_current;
+
+				d->m_current = chk;
 
 				mouseEvent->accept();
 

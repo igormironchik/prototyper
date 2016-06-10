@@ -291,7 +291,7 @@ FormText::clearSelection()
 }
 
 void
-FormText::destroyHandles()
+FormText::postDeletion()
 {
 	delete d->m_proxy;
 	delete d->m_opts;

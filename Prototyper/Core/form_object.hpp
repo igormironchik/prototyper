@@ -104,6 +104,9 @@ public:
 	//! \return Form.
 	Form * form() const;
 
+	//! Post deletion.
+	virtual void postDeletion();
+
 private:
 	Q_DISABLE_COPY( FormObject )
 

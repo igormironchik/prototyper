@@ -31,7 +31,6 @@
 #include "form_object.hpp"
 #include "form_resizable.hpp"
 #include "project_cfg.hpp"
-#include "project_cfg.hpp"
 
 
 namespace Prototyper {
@@ -56,8 +55,8 @@ public:
 	FormButton( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
 	~FormButton();
 
-	//! Destroy handles.
-	void destroyHandles();
+	//! Post deletion.
+	void postDeletion() Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;

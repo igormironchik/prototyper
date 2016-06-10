@@ -162,7 +162,7 @@ FormImage::setImage( const QImage & img )
 }
 
 void
-FormImage::destroyHandles()
+FormImage::postDeletion()
 {
 	delete d->m_handles;
 }

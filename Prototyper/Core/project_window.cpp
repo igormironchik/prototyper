@@ -1161,7 +1161,20 @@ ProjectWindow::p_drawRadioButton()
 void
 ProjectWindow::p_drawCheckBox()
 {
+	FormAction::instance()->setMode( FormAction::DrawCheckBox );
 
+	d->m_widget->enableSelection( false );
+
+	foreach( FormView * v, d->m_widget->forms() )
+	{
+		v->form()->setCursor( Qt::CrossCursor );
+
+		v->form()->switchToLineDrawingMode();
+
+		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+
+		d->enableEditing( v, false );
+	}
 }
 
 void
