@@ -194,10 +194,25 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 	{
 		p.save();
 
-		FormCheckBox::draw( &p, Cfg::fromPen( chk.pen() ),
+		QFont f = p.font();
+
+		if( chk.text().style().contains( Cfg::c_boldStyle ) )
+			f.setBold( true );
+
+		if( chk.text().style().contains( Cfg::c_italicStyle ) )
+			f.setItalic( true );
+
+		if( chk.text().style().contains( Cfg::c_underlineStyle ) )
+			f.setUnderline( true );
+
+		f.setPointSize( chk.text().fontSize() );
+
+		FormCheckBox::draw( &p, Cfg::fromPen( chk.pen() ), f,
 			QRectF( chk.pos().x(), chk.pos().y(),
 				chk.size().width(), chk.size().height() ),
-			chk.isChecked() );
+			chk.width(),
+			chk.isChecked(),
+			chk.text().text() );
 
 		p.restore();
 	}

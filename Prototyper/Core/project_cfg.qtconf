@@ -424,6 +424,12 @@
 				#|
 				{class CheckBox
 					{tag
+						{valueType TextStyle}
+						{name text}
+						{required}
+					}
+
+					{tag
 						{valueType Point}
 						{name pos}
 						{required}
@@ -438,6 +444,12 @@
 					{tag
 						{valueType Pen}
 						{name pen}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name width}
+						{required}
 					}
 
 					{tagScalar

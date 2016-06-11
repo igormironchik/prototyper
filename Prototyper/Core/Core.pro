@@ -78,7 +78,8 @@ HEADERS +=	desc_window.hpp \
 			text_opts_bar.hpp \
 			top_gui.hpp \
 			utils.hpp \
-			$$GENERATED
+			$$GENERATED \
+    form_checkbox_properties.hpp
 
 SOURCES +=	desc_window.cpp \
 			exporter.cpp \
@@ -127,14 +128,16 @@ SOURCES +=	desc_window.cpp \
 			text_editor.cpp \
 			text_opts_bar.cpp \
 			top_gui.cpp \
-			utils.cpp
+			utils.cpp \
+    form_checkbox_properties.cpp
 
 FORMS +=	form_size_dlg.ui \
 			grid_step_dlg.ui \
 			link_dlg.ui \
 			name_dlg.ui \
 			new_form_dlg.ui \
-    form_button_properties.ui
+    form_button_properties.ui \
+    form_checkbox_properties.ui
 
 unix|win32: LIBS += -L$$OUT_PWD/../../3rdparty/QtConfFile/lib/ -lQtConfFile
 

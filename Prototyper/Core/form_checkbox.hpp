@@ -62,8 +62,8 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 	//! Draw checkbox.
-	static void draw( QPainter * painter, const QPen & pen,
-		const QRectF & rect, bool isChecked );
+	static void draw( QPainter * painter, const QPen & pen, const QFont & font,
+		const QRectF & rect, qreal width, bool isChecked, const QString & text );
 
 	//! Set pen.
 	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
@@ -72,6 +72,11 @@ public:
 	Cfg::CheckBox cfg() const;
 	//! Set cfg.
 	void setCfg( const Cfg::CheckBox & c );
+
+	//! \return Text.
+	Cfg::TextStyle text() const;
+	//! Set text.
+	void setText( const Cfg::TextStyle & c );
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

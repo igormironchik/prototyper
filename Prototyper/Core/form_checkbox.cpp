@@ -24,9 +24,14 @@
 #include "form_checkbox.hpp"
 #include "utils.hpp"
 #include "form_image_handles.hpp"
+#include "form_checkbox_properties.hpp"
 
 // Qt include.
 #include <QPainter>
+#include <QApplication>
+#include <QMenu>
+#include <QAction>
+#include <QGraphicsSceneContextMenuEvent>
 
 
 namespace Prototyper {
@@ -45,6 +50,8 @@ public:
 				20.0, 20.0 ) )
 		,	m_checked( true )
 		,	m_handles( 0 )
+		,	m_text( QObject::tr( "Text" ) )
+		,	m_width( rect.width() )
 	{
 	}
 
@@ -59,6 +66,12 @@ public:
 	bool m_checked;
 	//! Handles.
 	FormImageHandles * m_handles;
+	//! Font.
+	QFont m_font;
+	//! Text.
+	QString m_text;
+	//! Width.
+	qreal m_width;
 }; // class FormCheckBoxPrivate;
 
 void
@@ -72,7 +85,18 @@ FormCheckBoxPrivate::init()
 
 	m_handles->hide();
 
+	const QPointF p = m_rect.topLeft();
+
 	m_rect.moveTopLeft( QPointF( 0.0, 0.0 ) );
+
+	m_font = QApplication::font();
+
+	m_font.setPointSize( 10.0 );
+
+	QRectF r = q->boundingRect();
+	r.moveTopLeft( p );
+
+	m_handles->setRect( r );
 }
 
 
@@ -108,8 +132,11 @@ FormCheckBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 	draw( painter,
 		objectPen(),
+		d->m_font,
 		QRectF( 0.0, 0.0, d->m_rect.width(), d->m_rect.height() ),
-		d->m_checked );
+		d->m_width,
+		d->m_checked,
+		d->m_text );
 
 	if( isSelected() && !group() )
 		d->m_handles->show();
@@ -118,8 +145,8 @@ FormCheckBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 }
 
 void
-FormCheckBox::draw( QPainter * painter, const QPen & pen,
-	const QRectF & rect, bool isChecked )
+FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
+	const QRectF & rect, qreal width, bool isChecked, const QString & text )
 {
 	painter->setPen( pen );
 
@@ -138,6 +165,15 @@ FormCheckBox::draw( QPainter * painter, const QPen & pen,
 			rect.topRight().x() - 4.0,
 			rect.topRight().y() + 4.0 ) );
 	}
+
+	painter->setFont( font );
+
+	QRectF r = rect;
+
+	r.setRight( rect.x() + width );
+	r.moveLeft( rect.x() + rect.height() + 4.0 );
+
+	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
 }
 
 void
@@ -170,6 +206,8 @@ FormCheckBox::cfg() const
 
 	c.setSize( s );
 
+	c.setText( text() );
+
 	return c;
 }
 
@@ -185,13 +223,58 @@ FormCheckBox::setCfg( const Cfg::CheckBox & c )
 	d->m_rect = QRectF( c.pos().x(), c.pos().y(),
 		c.size().width(), c.size().height() );
 
+	setText( c.text() );
+
 	update();
+}
+
+Cfg::TextStyle
+FormCheckBox::text() const
+{
+	Cfg::TextStyle textStyle = Cfg::textStyleFromFont( d->m_font );
+	textStyle.style().append( Cfg::c_left );
+	textStyle.setText( d->m_text );
+
+	return textStyle;
+}
+
+void
+FormCheckBox::setText( const Cfg::TextStyle & c )
+{
+	if( c.style().contains( Cfg::c_normalStyle ) )
+	{
+		d->m_font.setWeight( QFont::Normal );
+		d->m_font.setItalic( false );
+		d->m_font.setUnderline( false );
+	}
+	else
+	{
+		if( c.style().contains( Cfg::c_boldStyle ) )
+			d->m_font.setWeight( QFont::Bold );
+		else
+			d->m_font.setWeight( QFont::Normal );
+
+		if( c.style().contains( Cfg::c_italicStyle ) )
+			d->m_font.setItalic( true );
+		else
+			d->m_font.setItalic( false );
+
+		if( c.style().contains( Cfg::c_underlineStyle ) )
+			d->m_font.setUnderline( true );
+		else
+			d->m_font.setUnderline( false );
+	}
+
+	d->m_font.setPointSize( c.fontSize() );
+
+	d->m_text = c.text();
 }
 
 QRectF
 FormCheckBox::boundingRect() const
 {
-	return d->m_rect;
+	return QRectF( d->m_rect.topLeft().x(), d->m_rect.topLeft().y(),
+		d->m_width, d->m_rect.height() );
 }
 
 void
@@ -205,7 +288,12 @@ FormCheckBox::resize( const QRectF & rect )
 
 	d->m_rect = QRectF( 0.0, 0.0, s.width(), s.height() );
 
-	d->m_handles->setRect( d->m_rect );
+	d->m_width = rect.width();
+
+	QRectF r = boundingRect();
+	r.moveTopLeft( rect.topLeft() );
+
+	d->m_handles->setRect( r );
 
 	update();
 }
@@ -219,13 +307,31 @@ FormCheckBox::moveResizable( const QPointF & delta )
 void
 FormCheckBox::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
+	QMenu menu;
 
+	menu.addAction( QIcon( ":/Core/img/configure.png" ),
+		QObject::tr( "Properties" ), this, &FormCheckBox::properties );
+
+	menu.exec( event->screenPos() );
 }
 
 void
 FormCheckBox::properties()
 {
+	CheckBoxProperties dlg;
 
+	dlg.setCfg( cfg() );
+
+	if( dlg.exec() == QDialog::Accepted )
+	{
+		Cfg::CheckBox c = dlg.cfg();
+
+		setText( c.text() );
+
+		d->m_checked = c.isChecked();
+
+		update();
+	}
 }
 
 } /* namespace Core */

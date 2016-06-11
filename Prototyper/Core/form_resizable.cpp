@@ -142,7 +142,7 @@ FormResizableProxy::setRect( const QRectF & rect )
 
 	d->m_rect = rect;
 
-	d->place( boundingRect() );
+	d->place( FormResizableProxy::boundingRect() );
 
 	update();
 
