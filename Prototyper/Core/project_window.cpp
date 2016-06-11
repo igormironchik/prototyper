@@ -98,6 +98,8 @@ public:
 		bool on );
 	//! Update cfg.
 	void updateCfg();
+	//! Prepare to draw with rect placer.
+	void prepareDrawingWithRectPlacer( bool editable = false );
 
 	//! Parent.
 	ProjectWindow * q;
@@ -523,6 +525,23 @@ ProjectWindowPrivate::updateCfg()
 		m_cfg.form()[ i ] = m_widget->forms().at( i )->form()->cfg();
 }
 
+void
+ProjectWindowPrivate::prepareDrawingWithRectPlacer( bool editable )
+{
+	m_widget->enableSelection( false );
+
+	foreach( FormView * v, m_widget->forms() )
+	{
+		v->form()->setCursor( Qt::CrossCursor );
+
+		v->form()->switchToLineDrawingMode();
+
+		setFlag( v, QGraphicsItem::ItemIsSelectable, false );
+
+		enableEditing( v, editable );
+	}
+}
+
 
 //
 // ProjectWindow
@@ -817,18 +836,7 @@ ProjectWindow::p_drawLine()
 {
 	FormAction::instance()->setMode( FormAction::DrawLine );
 
-	d->m_widget->enableSelection( false );
-
-	foreach( FormView * v, d->m_widget->forms() )
-	{
-		v->form()->setCursor( Qt::CrossCursor );
-
-		v->form()->switchToLineDrawingMode();
-
-		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
-
-		d->enableEditing( v, false );
-	}
+	d->prepareDrawingWithRectPlacer();
 }
 
 void
@@ -836,18 +844,7 @@ ProjectWindow::p_drawRect()
 {
 	FormAction::instance()->setMode( FormAction::DrawRect );
 
-	d->m_widget->enableSelection( false );
-
-	foreach( FormView * v, d->m_widget->forms() )
-	{
-		v->form()->setCursor( Qt::CrossCursor );
-
-		v->form()->switchToLineDrawingMode();
-
-		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
-
-		d->enableEditing( v, false );
-	}
+	d->prepareDrawingWithRectPlacer();
 }
 
 void
@@ -868,18 +865,7 @@ ProjectWindow::p_insertText()
 {
 	FormAction::instance()->setMode( FormAction::InsertText );
 
-	d->m_widget->enableSelection( false );
-
-	foreach( FormView * v, d->m_widget->forms() )
-	{
-		v->form()->setCursor( Qt::CrossCursor );
-
-		v->form()->switchToLineDrawingMode();
-
-		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
-
-		d->enableEditing( v, true );
-	}
+	d->prepareDrawingWithRectPlacer( true );
 }
 
 void
@@ -1132,18 +1118,7 @@ ProjectWindow::p_drawButton()
 {
 	FormAction::instance()->setMode( FormAction::DrawButton );
 
-	d->m_widget->enableSelection( false );
-
-	foreach( FormView * v, d->m_widget->forms() )
-	{
-		v->form()->setCursor( Qt::CrossCursor );
-
-		v->form()->switchToLineDrawingMode();
-
-		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
-
-		d->enableEditing( v, false );
-	}
+	d->prepareDrawingWithRectPlacer();
 }
 
 void
@@ -1155,7 +1130,9 @@ ProjectWindow::p_drawComboBox()
 void
 ProjectWindow::p_drawRadioButton()
 {
+	FormAction::instance()->setMode( FormAction::DrawRadioButton );
 
+	d->prepareDrawingWithRectPlacer();
 }
 
 void
@@ -1163,18 +1140,7 @@ ProjectWindow::p_drawCheckBox()
 {
 	FormAction::instance()->setMode( FormAction::DrawCheckBox );
 
-	d->m_widget->enableSelection( false );
-
-	foreach( FormView * v, d->m_widget->forms() )
-	{
-		v->form()->setCursor( Qt::CrossCursor );
-
-		v->form()->switchToLineDrawingMode();
-
-		d->setFlag( v, QGraphicsItem::ItemIsSelectable, false );
-
-		d->enableEditing( v, false );
-	}
+	d->prepareDrawingWithRectPlacer();
 }
 
 void

@@ -26,6 +26,7 @@
 // Qt include.
 #include <QGraphicsObject>
 #include <QScopedPointer>
+#include <QFont>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -37,11 +38,43 @@ namespace Prototyper {
 
 namespace Core {
 
+class FormCheckBox;
+class FormImageHandles;
+
+
+//
+// FormCheckBoxPrivate
+//
+
+class FormCheckBoxPrivate {
+public:
+	FormCheckBoxPrivate( FormCheckBox * parent, const QRectF & rect,
+		qreal defaultSize = 20.0 );
+	virtual ~FormCheckBoxPrivate();
+
+	//! Init.
+	void init();
+
+	//! Parent.
+	FormCheckBox * q;
+	//! Rect.
+	QRectF m_rect;
+	//! Checked?
+	bool m_checked;
+	//! Handles.
+	FormImageHandles * m_handles;
+	//! Font.
+	QFont m_font;
+	//! Text.
+	QString m_text;
+	//! Width.
+	qreal m_width;
+}; // class FormCheckBoxPrivate
+
+
 //
 // FormCheckBox
 //
-
-class FormCheckBoxPrivate;
 
 //! Checkbox on the form.
 class FormCheckBox
@@ -93,12 +126,17 @@ private slots:
 	//! Properties.
 	void properties();
 
+protected:
+	FormCheckBox( const QRectF & rect, Form * form, qreal defaultSize,
+		FormObject::ObjectType type, QGraphicsItem * parent = 0 );
+
+protected:
+	QScopedPointer< FormCheckBoxPrivate > d;
+
 private:
 	friend class FormButtonPrivate;
 
 	Q_DISABLE_COPY( FormCheckBox )
-
-	QScopedPointer< FormCheckBoxPrivate > d;
 }; // class FormCheckBox
 
 } /* namespace Core */

@@ -46,6 +46,7 @@
 #include "form_button.hpp"
 #include "form_button.hpp"
 #include "form_checkbox.hpp"
+#include "form_radio_button.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -854,6 +855,15 @@ Form::cfg() const
 				}
 					break;
 
+				case FormObject::RadioButtonType :
+				{
+					FormRadioButton * r = dynamic_cast< FormRadioButton* > ( item );
+
+					if( r )
+						c.radiobutton().append( r->cfg() );
+				}
+					break;
+
 				default :
 					break;
 			}
@@ -1309,6 +1319,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::InsertText :
 			case FormAction::DrawButton :
 			case FormAction::DrawCheckBox :
+			case FormAction::DrawRadioButton :
 			{
 				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
 					( d->m_current );
@@ -1421,6 +1432,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::InsertText :
 			case FormAction::DrawButton :
 			case FormAction::DrawCheckBox :
+			case FormAction::DrawRadioButton :
 			{
 				d->hideHandlesOfCurrent();
 
@@ -1480,6 +1492,49 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 	}
 
 	mouseEvent->ignore();
+}
+
+template< class Elem >
+Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, FormPrivate * d,
+	QGraphicsSceneMouseEvent * mouseEvent, Form * form )
+{
+	scene->removeItem( d->m_current );
+
+	FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+		( d->m_current );
+
+	Elem * elem = 0;
+
+	if( rect )
+	{
+		QPointF p = mouseEvent->pos();
+
+		if( FormAction::instance()->isSnapEnabled() )
+			p = d->m_snap->snapPos();
+
+		QRectF r = rect->rect();
+		r.setBottomRight( p );
+
+		elem = new Elem( r, form, form );
+
+		const QString id = d->id();
+
+		elem->setObjectId( id );
+
+		d->m_ids.append( id );
+
+		d->m_model->addObject( elem, form );
+	}
+
+	delete d->m_current;
+
+	d->m_current = elem;
+
+	mouseEvent->accept();
+
+	d->m_pressed = false;
+
+	return elem;
 }
 
 void
@@ -1586,39 +1641,18 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::InsertText :
 			{
-				scene()->removeItem( d->m_current );
+				FormText * text =
+					onReleaseWithRectPlacer< FormText >(
+						scene(), d.data(), mouseEvent, this );
 
-				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
-					( d->m_current );
-
-				FormText * text = 0;
-
-				if( rect )
+				if( text )
 				{
-					text = new FormText( rect->rect(), this, this );
-
-					const QString id = d->id();
-
-					text->setObjectId( id );
-
-					d->m_ids.append( id );
-
-					d->m_model->addObject( text, this );
-
 					text->setFocus();
 
 					QTextCursor c = text->textCursor();
 					c.select( QTextCursor::Document );
 					text->setTextCursor( c );
 				}
-
-				delete d->m_current;
-
-				d->m_current = text;
-
-				mouseEvent->accept();
-
-				d->m_pressed = false;
 
 				emit changed();
 
@@ -1657,41 +1691,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawButton :
 			{
-				scene()->removeItem( d->m_current );
-
-				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
-					( d->m_current );
-
-				FormButton * btn = 0;
-
-				if( rect )
-				{
-					QPointF p = mouseEvent->pos();
-
-					if( FormAction::instance()->isSnapEnabled() )
-						p = d->m_snap->snapPos();
-
-					QRectF r = rect->rect();
-					r.setBottomRight( p );
-
-					btn = new FormButton( r, this, this );
-
-					const QString id = d->id();
-
-					btn->setObjectId( id );
-
-					d->m_ids.append( id );
-
-					d->m_model->addObject( btn, this );
-				}
-
-				delete d->m_current;
-
-				d->m_current = btn;
-
-				mouseEvent->accept();
-
-				d->m_pressed = false;
+				onReleaseWithRectPlacer< FormButton > (
+					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
 
@@ -1701,41 +1702,19 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawCheckBox :
 			{
-				scene()->removeItem( d->m_current );
+				onReleaseWithRectPlacer< FormCheckBox > (
+					scene(), d.data(), mouseEvent, this );
 
-				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
-					( d->m_current );
+				emit changed();
 
-				FormCheckBox * chk = 0;
+				return;
+			}
+				break;
 
-				if( rect )
-				{
-					QPointF p = mouseEvent->pos();
-
-					if( FormAction::instance()->isSnapEnabled() )
-						p = d->m_snap->snapPos();
-
-					QRectF r = rect->rect();
-					r.setBottomRight( p );
-
-					chk = new FormCheckBox( r, this, this );
-
-					const QString id = d->id();
-
-					chk->setObjectId( id );
-
-					d->m_ids.append( id );
-
-					d->m_model->addObject( chk, this );
-				}
-
-				delete d->m_current;
-
-				d->m_current = chk;
-
-				mouseEvent->accept();
-
-				d->m_pressed = false;
+			case FormAction::DrawRadioButton :
+			{
+				onReleaseWithRectPlacer< FormRadioButton > (
+					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
 

@@ -24,6 +24,7 @@
 #include "exporter.hpp"
 #include "utils.hpp"
 #include "form_checkbox.hpp"
+#include "form_radio_button.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -208,6 +209,33 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 		f.setPointSize( chk.text().fontSize() );
 
 		FormCheckBox::draw( &p, Cfg::fromPen( chk.pen() ), f,
+			QRectF( chk.pos().x(), chk.pos().y(),
+				chk.size().width(), chk.size().height() ),
+			chk.width(),
+			chk.isChecked(),
+			chk.text().text() );
+
+		p.restore();
+	}
+
+	foreach( const Cfg::CheckBox & chk, form.radiobutton() )
+	{
+		p.save();
+
+		QFont f = p.font();
+
+		if( chk.text().style().contains( Cfg::c_boldStyle ) )
+			f.setBold( true );
+
+		if( chk.text().style().contains( Cfg::c_italicStyle ) )
+			f.setItalic( true );
+
+		if( chk.text().style().contains( Cfg::c_underlineStyle ) )
+			f.setUnderline( true );
+
+		f.setPointSize( chk.text().fontSize() );
+
+		FormRadioButton::draw( &p, Cfg::fromPen( chk.pen() ), f,
 			QRectF( chk.pos().x(), chk.pos().y(),
 				chk.size().width(), chk.size().height() ),
 			chk.width(),

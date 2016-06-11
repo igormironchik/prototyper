@@ -42,37 +42,21 @@ namespace Core {
 // FormCheckBoxPrivate
 //
 
-class FormCheckBoxPrivate {
-public:
-	FormCheckBoxPrivate( FormCheckBox * parent, const QRectF & rect )
-		:	q( parent )
-		,	m_rect( QRectF( rect.topLeft().x(), rect.topLeft().y(),
-				20.0, 20.0 ) )
-		,	m_checked( true )
-		,	m_handles( 0 )
-		,	m_text( QObject::tr( "Text" ) )
-		,	m_width( rect.width() )
-	{
-	}
+FormCheckBoxPrivate::FormCheckBoxPrivate( FormCheckBox * parent,
+	const QRectF & rect, qreal defaultSize )
+	:	q( parent )
+	,	m_rect( QRectF( rect.topLeft().x(), rect.topLeft().y(),
+			defaultSize, defaultSize ) )
+	,	m_checked( true )
+	,	m_handles( 0 )
+	,	m_text( FormCheckBox::tr( "Text" ) )
+	,	m_width( rect.width() )
+{
+}
 
-	//! Init.
-	void init();
-
-	//! Parent.
-	FormCheckBox * q;
-	//! Rect.
-	QRectF m_rect;
-	//! Checked?
-	bool m_checked;
-	//! Handles.
-	FormImageHandles * m_handles;
-	//! Font.
-	QFont m_font;
-	//! Text.
-	QString m_text;
-	//! Width.
-	qreal m_width;
-}; // class FormCheckBoxPrivate;
+FormCheckBoxPrivate::~FormCheckBoxPrivate()
+{
+}
 
 void
 FormCheckBoxPrivate::init()
@@ -109,6 +93,15 @@ FormCheckBox::FormCheckBox( const QRectF & rect, Form * form,
 	:	QGraphicsObject( parent )
 	,	FormObject( FormObject::CheckBoxType, form )
 	,	d( new FormCheckBoxPrivate( this, rect ) )
+{
+	d->init();
+}
+
+FormCheckBox::FormCheckBox( const QRectF & rect, Form * form, qreal defaultSize,
+	FormObject::ObjectType type, QGraphicsItem * parent )
+	:	QGraphicsObject( parent )
+	,	FormObject( type, form )
+	,	d( new FormCheckBoxPrivate( this, rect, defaultSize ) )
 {
 	d->init();
 }
@@ -310,7 +303,7 @@ FormCheckBox::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	QMenu menu;
 
 	menu.addAction( QIcon( ":/Core/img/configure.png" ),
-		QObject::tr( "Properties" ), this, &FormCheckBox::properties );
+		tr( "Properties" ), this, &FormCheckBox::properties );
 
 	menu.exec( event->screenPos() );
 }

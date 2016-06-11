@@ -257,7 +257,7 @@ FormButton::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	QMenu menu;
 
 	menu.addAction( QIcon( ":/Core/img/configure.png" ),
-		QObject::tr( "Properties" ), this, &FormButton::properties );
+		tr( "Properties" ), this, &FormButton::properties );
 
 	menu.exec( event->screenPos() );
 }

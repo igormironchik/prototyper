@@ -556,6 +556,11 @@
 						{name checkbox}
 					}
 
+					{tagVectorOfTags
+						{valueType CheckBox}
+						{name radiobutton}
+					}
+
 					{tagScalar
 						{valueType QString}
 						{name link}
