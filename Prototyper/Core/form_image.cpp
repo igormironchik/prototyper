@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "form_image.hpp"
 #include "form_image_handles.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QGraphicsSceneHoverEvent>
@@ -194,6 +195,8 @@ FormImage::resize( const QRectF & rect )
 	r.moveLeft( pos().x() );
 
 	d->m_handles->setRect( r );
+
+	form()->update();
 }
 
 void

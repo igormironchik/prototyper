@@ -27,6 +27,7 @@
 #include "form_resize_handle.hpp"
 #include "form_with_resize_and_move_handles.hpp"
 #include "utils.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -493,6 +494,8 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
+
+	form()->update();
 }
 
 } /* namespace Core */

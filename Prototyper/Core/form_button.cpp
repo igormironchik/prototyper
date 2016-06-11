@@ -24,6 +24,7 @@
 #include "form_button.hpp"
 #include "utils.hpp"
 #include "form_button_properties.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QFontMetrics>
@@ -243,6 +244,8 @@ void
 FormButton::resize( const QRectF & rect )
 {
 	d->setRect( rect );
+
+	form()->update();
 }
 
 void

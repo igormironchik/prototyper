@@ -26,6 +26,7 @@
 #include "form_actions.hpp"
 #include "form_resize_handle.hpp"
 #include "utils.hpp"
+#include "form.hpp"
 
 
 namespace Prototyper {
@@ -261,6 +262,8 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
+
+	form()->update();
 }
 
 } /* namespace Core */

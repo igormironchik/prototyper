@@ -26,6 +26,7 @@
 #include "form_resizable.hpp"
 #include "form_text_opts.hpp"
 #include "utils.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -582,6 +583,8 @@ void
 FormText::resize( const QRectF & rect )
 {
 	d->setRect( rect );
+
+	form()->update();
 }
 
 void

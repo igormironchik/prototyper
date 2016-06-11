@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "form_combobox.hpp"
 #include "utils.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -199,6 +200,8 @@ void
 FormComboBox::resize( const QRectF & rect )
 {
 	d->setRect( rect );
+
+	form()->update();
 }
 
 void

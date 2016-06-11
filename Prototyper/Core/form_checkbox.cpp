@@ -25,6 +25,7 @@
 #include "utils.hpp"
 #include "form_image_handles.hpp"
 #include "form_checkbox_properties.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -289,6 +290,8 @@ FormCheckBox::resize( const QRectF & rect )
 	d->m_handles->setRect( r );
 
 	update();
+
+	form()->update();
 }
 
 void
