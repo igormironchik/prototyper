@@ -1124,7 +1124,9 @@ ProjectWindow::p_drawButton()
 void
 ProjectWindow::p_drawComboBox()
 {
+	FormAction::instance()->setMode( FormAction::DrawComboBox );
 
+	d->prepareDrawingWithRectPlacer();
 }
 
 void

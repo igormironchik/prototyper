@@ -47,6 +47,7 @@
 #include "form_button.hpp"
 #include "form_checkbox.hpp"
 #include "form_radio_button.hpp"
+#include "form_combobox.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -864,6 +865,15 @@ Form::cfg() const
 				}
 					break;
 
+				case FormObject::ComboBoxType :
+				{
+					FormComboBox * cb = dynamic_cast< FormComboBox* > ( item );
+
+					if( cb )
+						c.combobox().append( cb->cfg() );
+				}
+					break;
+
 				default :
 					break;
 			}
@@ -1320,6 +1330,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawButton :
 			case FormAction::DrawCheckBox :
 			case FormAction::DrawRadioButton :
+			case FormAction::DrawComboBox :
 			{
 				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
 					( d->m_current );
@@ -1433,6 +1444,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawButton :
 			case FormAction::DrawCheckBox :
 			case FormAction::DrawRadioButton :
+			case FormAction::DrawComboBox :
 			{
 				d->hideHandlesOfCurrent();
 
@@ -1714,6 +1726,17 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawRadioButton :
 			{
 				onReleaseWithRectPlacer< FormRadioButton > (
+					scene(), d.data(), mouseEvent, this );
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawComboBox :
+			{
+				onReleaseWithRectPlacer< FormComboBox > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();

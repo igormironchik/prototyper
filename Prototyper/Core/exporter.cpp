@@ -25,6 +25,7 @@
 #include "utils.hpp"
 #include "form_checkbox.hpp"
 #include "form_radio_button.hpp"
+#include "form_combobox.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -241,6 +242,18 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 			chk.width(),
 			chk.isChecked(),
 			chk.text().text() );
+
+		p.restore();
+	}
+
+	foreach( const Cfg::ComboBox & cb, form.combobox() )
+	{
+		p.save();
+
+		FormComboBox::draw( &p,
+			QRectF( cb.pos().x(), cb.pos().y(),
+				cb.size().width(), cb.size().height() ),
+			Cfg::fromPen( cb.pen() ) );
 
 		p.restore();
 	}
