@@ -43,7 +43,7 @@ namespace Core {
 
 class FormComboBoxPrivate;
 
-//! Button on the form.
+//! Combobox on the form.
 class FormComboBox
 	:	public QGraphicsItem
 	,	public FormObject

@@ -35,7 +35,7 @@ namespace Core {
 // FormRadioButton
 //
 
-//! Checkbox on the form.
+//! Radio button on the form.
 class FormRadioButton
 	:	public FormCheckBox
 {
