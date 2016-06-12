@@ -24,12 +24,15 @@
 #include "form_spinbox.hpp"
 #include "utils.hpp"
 #include "form.hpp"
+#include "form_spinbox_properties.hpp"
 
 // Qt include.
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QMenu>
+#include <QAction>
 
 
 namespace Prototyper {
@@ -288,13 +291,27 @@ FormSpinBox::moveResizable( const QPointF & delta )
 void
 FormSpinBox::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
+	QMenu menu;
 
+	menu.addAction( QIcon( ":/Core/img/configure.png" ),
+		tr( "Properties" ), this, &FormSpinBox::properties );
+
+	menu.exec( event->screenPos() );
 }
 
 void
 FormSpinBox::properties()
 {
+	SpinBoxProperties dlg;
 
+	dlg.setCfg( cfg() );
+
+	if( dlg.exec() == QDialog::Accepted )
+	{
+		setText( dlg.cfg().text() );
+
+		update();
+	}
 }
 
 } /* namespace Core */
