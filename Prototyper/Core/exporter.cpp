@@ -26,6 +26,7 @@
 #include "form_checkbox.hpp"
 #include "form_radio_button.hpp"
 #include "form_combobox.hpp"
+#include "form_spinbox.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -254,6 +255,32 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 			QRectF( cb.pos().x(), cb.pos().y(),
 				cb.size().width(), cb.size().height() ),
 			Cfg::fromPen( cb.pen() ) );
+
+		p.restore();
+	}
+
+	foreach( const Cfg::SpinBox & s, form.spinbox() )
+	{
+		p.save();
+
+		QFont f = p.font();
+
+		if( s.text().style().contains( Cfg::c_boldStyle ) )
+			f.setBold( true );
+
+		if( s.text().style().contains( Cfg::c_italicStyle ) )
+			f.setItalic( true );
+
+		if( s.text().style().contains( Cfg::c_underlineStyle ) )
+			f.setUnderline( true );
+
+		f.setPointSize( s.text().fontSize() );
+
+		FormSpinBox::draw( &p,
+			QRectF( s.pos().x(), s.pos().y(),
+				s.size().width(), s.size().height() ),
+			Cfg::fromPen( s.pen() ), f,
+			s.text().text() );
 
 		p.restore();
 	}

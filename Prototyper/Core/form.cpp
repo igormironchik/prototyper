@@ -48,6 +48,7 @@
 #include "form_checkbox.hpp"
 #include "form_radio_button.hpp"
 #include "form_combobox.hpp"
+#include "form_spinbox.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -874,6 +875,15 @@ Form::cfg() const
 				}
 					break;
 
+				case FormObject::SpinBoxType :
+				{
+					FormSpinBox * sb = dynamic_cast< FormSpinBox* > ( item );
+
+					if( sb )
+						c.spinbox().append( sb->cfg() );
+				}
+					break;
+
 				default :
 					break;
 			}
@@ -1331,6 +1341,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawCheckBox :
 			case FormAction::DrawRadioButton :
 			case FormAction::DrawComboBox :
+			case FormAction::DrawSpinBox :
 			{
 				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
 					( d->m_current );
@@ -1445,6 +1456,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawCheckBox :
 			case FormAction::DrawRadioButton :
 			case FormAction::DrawComboBox :
+			case FormAction::DrawSpinBox :
 			{
 				d->hideHandlesOfCurrent();
 
@@ -1737,6 +1749,17 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawComboBox :
 			{
 				onReleaseWithRectPlacer< FormComboBox > (
+					scene(), d.data(), mouseEvent, this );
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawSpinBox :
+			{
+				onReleaseWithRectPlacer< FormSpinBox > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();

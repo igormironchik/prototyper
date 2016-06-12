@@ -85,6 +85,13 @@ protected:
 	//! Move resizable.
 	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
 
+	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+		Q_DECL_OVERRIDE;
+
+private slots:
+	//! Properties.
+	void properties();
+
 private:
 	friend class FormSpinBoxPrivate;
 

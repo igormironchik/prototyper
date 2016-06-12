@@ -29,6 +29,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QApplication>
+#include <QGraphicsSceneContextMenuEvent>
 
 
 namespace Prototyper {
@@ -45,6 +46,7 @@ public:
 		:	q( parent )
 		,	m_rect( QRectF( rect.x(), rect.y(), rect.width(), 25.0 ) )
 		,	m_proxy( 0 )
+		,	m_text( FormSpinBox::tr( "1" ) )
 	{
 	}
 
@@ -281,6 +283,18 @@ void
 FormSpinBox::moveResizable( const QPointF & delta )
 {
 	moveBy( delta.x(), delta.y() );
+}
+
+void
+FormSpinBox::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+{
+
+}
+
+void
+FormSpinBox::properties()
+{
+
 }
 
 } /* namespace Core */

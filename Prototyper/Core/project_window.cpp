@@ -1160,7 +1160,9 @@ ProjectWindow::p_drawVSlider()
 void
 ProjectWindow::p_drawSpinbox()
 {
+	FormAction::instance()->setMode( FormAction::DrawSpinBox );
 
+	d->prepareDrawingWithRectPlacer();
 }
 
 } /* namespace Core */
