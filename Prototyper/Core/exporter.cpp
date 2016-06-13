@@ -89,8 +89,128 @@ static inline void drawRect( const Cfg::Rect & rect, QPainter & p )
 	p.restore();
 }
 
+static inline QFont font( const Cfg::TextStyle & s, QPainter & p )
+{
+	QFont f = p.font();
+
+	if( s.style().contains( Cfg::c_boldStyle ) )
+		f.setBold( true );
+
+	if( s.style().contains( Cfg::c_italicStyle ) )
+		f.setItalic( true );
+
+	if( s.style().contains( Cfg::c_underlineStyle ) )
+		f.setUnderline( true );
+
+	f.setPointSize( s.fontSize() );
+
+	return f;
+}
+
+static inline void drawButton( const Cfg::Button & btn, QPainter & p )
+{
+	p.save();
+
+	p.setPen( QPen( QColor( btn.pen().color() ), btn.pen().width() ) );
+
+	p.setFont( font( btn.text(), p ) );
+
+	const QRect r( btn.pos().x(), btn.pos().y(),
+		btn.size().width(), btn.size().height() );
+
+	p.drawRect( r );
+
+	p.drawText( r, Qt::AlignCenter, btn.text().text() );
+
+	p.restore();
+}
+
+static inline void drawCheckBox( const Cfg::CheckBox & chk, QPainter & p )
+{
+	p.save();
+
+	FormCheckBox::draw( &p, Cfg::fromPen( chk.pen() ),
+		font( chk.text(), p ),
+		QRectF( chk.pos().x(), chk.pos().y(),
+			chk.size().width(), chk.size().height() ),
+		chk.width(),
+		chk.isChecked(),
+		chk.text().text() );
+
+	p.restore();
+}
+
+static inline void drawRadioButton( const Cfg::CheckBox & chk, QPainter & p )
+{
+	p.save();
+
+	FormRadioButton::draw( &p, Cfg::fromPen( chk.pen() ),
+		font( chk.text(), p ),
+		QRectF( chk.pos().x(), chk.pos().y(),
+			chk.size().width(), chk.size().height() ),
+		chk.width(),
+		chk.isChecked(),
+		chk.text().text() );
+
+	p.restore();
+}
+
+static inline void drawComboBox( const Cfg::ComboBox & cb, QPainter & p )
+{
+	p.save();
+
+	FormComboBox::draw( &p,
+		QRectF( cb.pos().x(), cb.pos().y(),
+			cb.size().width(), cb.size().height() ),
+		Cfg::fromPen( cb.pen() ) );
+
+	p.restore();
+}
+
+static inline void drawSpinBox( const Cfg::SpinBox & s, QPainter & p )
+{
+	p.save();
+
+	FormSpinBox::draw( &p,
+		QRectF( s.pos().x(), s.pos().y(),
+			s.size().width(), s.size().height() ),
+		Cfg::fromPen( s.pen() ),
+		font( s.text(), p ),
+		s.text().text() );
+
+	p.restore();
+}
+
+static inline void drawHSlider( const Cfg::HSlider & hs, QPainter & p )
+{
+	p.save();
+
+	FormHSlider::draw( &p,
+		QRectF( hs.pos().x(), hs.pos().y(),
+			hs.size().width(), hs.size().height() ),
+		Cfg::fromPen( hs.pen() ) );
+
+	p.restore();
+}
+
+static inline void drawVSlider( const Cfg::VSlider & vs, QPainter & p )
+{
+	p.save();
+
+	FormVSlider::draw( &p,
+		QRectF( vs.pos().x(), vs.pos().y(),
+			vs.size().width(), vs.size().height() ),
+		Cfg::fromPen( vs.pen() ) );
+
+	p.restore();
+}
+
 static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 {
+	p.save();
+
+	p.translate( group.pos().x(), group.pos().y() );
+
 	foreach( const Cfg::Group & group, group.group() )
 		drawGroup( group, p );
 
@@ -135,35 +255,27 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 
 	foreach( const Cfg::Rect & rect, group.rect() )
 		drawRect( rect, p );
-}
 
-static inline void drawButton( const Cfg::Button & btn, QPainter & p )
-{
-	p.save();
+	foreach( const Cfg::Button & btn, group.button() )
+		drawButton( btn, p );
 
-	p.setPen( QPen( QColor( btn.pen().color() ), btn.pen().width() ) );
+	foreach( const Cfg::CheckBox & chk, group.checkbox() )
+		drawCheckBox( chk, p );
 
-	QFont f = p.font();
+	foreach( const Cfg::CheckBox & chk, group.radiobutton() )
+		drawRadioButton( chk, p );
 
-	if( btn.text().style().contains( Cfg::c_boldStyle ) )
-		f.setBold( true );
+	foreach( const Cfg::ComboBox & cb, group.combobox() )
+		drawComboBox( cb, p );
 
-	if( btn.text().style().contains( Cfg::c_italicStyle ) )
-		f.setItalic( true );
+	foreach( const Cfg::SpinBox & s, group.spinbox() )
+		drawSpinBox( s, p );
 
-	if( btn.text().style().contains( Cfg::c_underlineStyle ) )
-		f.setUnderline( true );
+	foreach( const Cfg::HSlider & hs, group.hslider() )
+		drawHSlider( hs, p );
 
-	f.setPointSize( btn.text().fontSize() );
-
-	p.setFont( f );
-
-	const QRect r( btn.pos().x(), btn.pos().y(),
-		btn.size().width(), btn.size().height() );
-
-	p.drawRect( r );
-
-	p.drawText( r, Qt::AlignCenter, btn.text().text() );
+	foreach( const Cfg::VSlider & vs, group.vslider() )
+		drawVSlider( vs, p );
 
 	p.restore();
 }
@@ -210,120 +322,22 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 		drawButton( btn, p );
 
 	foreach( const Cfg::CheckBox & chk, form.checkbox() )
-	{
-		p.save();
-
-		QFont f = p.font();
-
-		if( chk.text().style().contains( Cfg::c_boldStyle ) )
-			f.setBold( true );
-
-		if( chk.text().style().contains( Cfg::c_italicStyle ) )
-			f.setItalic( true );
-
-		if( chk.text().style().contains( Cfg::c_underlineStyle ) )
-			f.setUnderline( true );
-
-		f.setPointSize( chk.text().fontSize() );
-
-		FormCheckBox::draw( &p, Cfg::fromPen( chk.pen() ), f,
-			QRectF( chk.pos().x(), chk.pos().y(),
-				chk.size().width(), chk.size().height() ),
-			chk.width(),
-			chk.isChecked(),
-			chk.text().text() );
-
-		p.restore();
-	}
+		drawCheckBox( chk, p );
 
 	foreach( const Cfg::CheckBox & chk, form.radiobutton() )
-	{
-		p.save();
-
-		QFont f = p.font();
-
-		if( chk.text().style().contains( Cfg::c_boldStyle ) )
-			f.setBold( true );
-
-		if( chk.text().style().contains( Cfg::c_italicStyle ) )
-			f.setItalic( true );
-
-		if( chk.text().style().contains( Cfg::c_underlineStyle ) )
-			f.setUnderline( true );
-
-		f.setPointSize( chk.text().fontSize() );
-
-		FormRadioButton::draw( &p, Cfg::fromPen( chk.pen() ), f,
-			QRectF( chk.pos().x(), chk.pos().y(),
-				chk.size().width(), chk.size().height() ),
-			chk.width(),
-			chk.isChecked(),
-			chk.text().text() );
-
-		p.restore();
-	}
+		drawRadioButton( chk, p );
 
 	foreach( const Cfg::ComboBox & cb, form.combobox() )
-	{
-		p.save();
-
-		FormComboBox::draw( &p,
-			QRectF( cb.pos().x(), cb.pos().y(),
-				cb.size().width(), cb.size().height() ),
-			Cfg::fromPen( cb.pen() ) );
-
-		p.restore();
-	}
+		drawComboBox( cb, p );
 
 	foreach( const Cfg::SpinBox & s, form.spinbox() )
-	{
-		p.save();
-
-		QFont f = p.font();
-
-		if( s.text().style().contains( Cfg::c_boldStyle ) )
-			f.setBold( true );
-
-		if( s.text().style().contains( Cfg::c_italicStyle ) )
-			f.setItalic( true );
-
-		if( s.text().style().contains( Cfg::c_underlineStyle ) )
-			f.setUnderline( true );
-
-		f.setPointSize( s.text().fontSize() );
-
-		FormSpinBox::draw( &p,
-			QRectF( s.pos().x(), s.pos().y(),
-				s.size().width(), s.size().height() ),
-			Cfg::fromPen( s.pen() ), f,
-			s.text().text() );
-
-		p.restore();
-	}
+		drawSpinBox( s, p );
 
 	foreach( const Cfg::HSlider & hs, form.hslider() )
-	{
-		p.save();
-
-		FormHSlider::draw( &p,
-			QRectF( hs.pos().x(), hs.pos().y(),
-				hs.size().width(), hs.size().height() ),
-			Cfg::fromPen( hs.pen() ) );
-
-		p.restore();
-	}
+		drawHSlider( hs, p );
 
 	foreach( const Cfg::VSlider & vs, form.vslider() )
-	{
-		p.save();
-
-		FormVSlider::draw( &p,
-			QRectF( vs.pos().x(), vs.pos().y(),
-				vs.size().width(), vs.size().height() ),
-			Cfg::fromPen( vs.pen() ) );
-
-		p.restore();
-	}
+		drawVSlider( vs, p );
 
 	foreach( const Cfg::Text & text, form.text() )
 	{
