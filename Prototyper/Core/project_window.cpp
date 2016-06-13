@@ -1148,7 +1148,9 @@ ProjectWindow::p_drawCheckBox()
 void
 ProjectWindow::p_drawHSlider()
 {
+	FormAction::instance()->setMode( FormAction::DrawHSlider );
 
+	d->prepareDrawingWithRectPlacer();
 }
 
 void

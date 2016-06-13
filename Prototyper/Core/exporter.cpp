@@ -27,6 +27,7 @@
 #include "form_radio_button.hpp"
 #include "form_combobox.hpp"
 #include "form_spinbox.hpp"
+#include "form_hslider.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -281,6 +282,18 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 				s.size().width(), s.size().height() ),
 			Cfg::fromPen( s.pen() ), f,
 			s.text().text() );
+
+		p.restore();
+	}
+
+	foreach( const Cfg::HSlider & hs, form.hslider() )
+	{
+		p.save();
+
+		FormHSlider::draw( &p,
+			QRectF( hs.pos().x(), hs.pos().y(),
+				hs.size().width(), hs.size().height() ),
+			Cfg::fromPen( hs.pen() ) );
 
 		p.restore();
 	}

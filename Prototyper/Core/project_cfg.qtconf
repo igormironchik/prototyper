@@ -547,6 +547,74 @@
 
 
 				|#
+					HSlider.
+				#|
+				{class HSlider
+					{tag
+						{valueType Point}
+						{name pos}
+						{required}
+					}
+
+					{tag
+						{valueType Size}
+						{name size}
+						{required}
+					}
+
+					{tag
+						{valueType Pen}
+						{name pen}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
+				} || class HSlider
+
+
+				|#
+					VSlider.
+				#|
+				{class VSlider
+					{tag
+						{valueType Point}
+						{name pos}
+						{required}
+					}
+
+					{tag
+						{valueType Size}
+						{name size}
+						{required}
+					}
+
+					{tag
+						{valueType Pen}
+						{name pen}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
+				} || class VSlider
+
+
+				|#
 					Description of the form's item.
 				#|
 				{class Description
@@ -644,6 +712,16 @@
 					{tagVectorOfTags
 						{valueType SpinBox}
 						{name spinbox}
+					}
+
+					{tagVectorOfTags
+						{valueType HSlider}
+						{name hslider}
+					}
+
+					{tagVectorOfTags
+						{valueType VSlider}
+						{name vslider}
 					}
 
 					{tagScalar

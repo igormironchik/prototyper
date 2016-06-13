@@ -49,6 +49,7 @@
 #include "form_radio_button.hpp"
 #include "form_combobox.hpp"
 #include "form_spinbox.hpp"
+#include "form_hslider.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -884,6 +885,15 @@ Form::cfg() const
 				}
 					break;
 
+				case FormObject::HSliderType :
+				{
+					FormHSlider * hs = dynamic_cast< FormHSlider* > ( item );
+
+					if( hs )
+						c.hslider().append( hs->cfg() );
+				}
+					break;
+
 				default :
 					break;
 			}
@@ -1342,6 +1352,8 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawRadioButton :
 			case FormAction::DrawComboBox :
 			case FormAction::DrawSpinBox :
+			case FormAction::DrawHSlider :
+			case FormAction::DrawVSlider :
 			{
 				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
 					( d->m_current );
@@ -1457,6 +1469,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawRadioButton :
 			case FormAction::DrawComboBox :
 			case FormAction::DrawSpinBox :
+			case FormAction::DrawHSlider :
+			case FormAction::DrawVSlider :
 			{
 				d->hideHandlesOfCurrent();
 
@@ -1760,6 +1774,17 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawSpinBox :
 			{
 				onReleaseWithRectPlacer< FormSpinBox > (
+					scene(), d.data(), mouseEvent, this );
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawHSlider :
+			{
+				onReleaseWithRectPlacer< FormHSlider > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();

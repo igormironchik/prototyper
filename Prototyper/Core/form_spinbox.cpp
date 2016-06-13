@@ -104,7 +104,7 @@ FormSpinBoxPrivate::setRect( const QRectF & rect )
 FormSpinBox::FormSpinBox( const QRectF & rect, Form * form,
 	QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	FormObject( FormObject::ComboBoxType, form )
+	,	FormObject( FormObject::SpinBoxType, form )
 	,	d( new FormSpinBoxPrivate( this, rect ) )
 {
 	d->init();
