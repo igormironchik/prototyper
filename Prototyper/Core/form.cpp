@@ -346,6 +346,8 @@ FormPrivate::ungroup( QGraphicsItem * group )
 		tmp->postDeletion();
 
 		delete tmp;
+
+		emit q->changed();
 	}
 }
 
@@ -1128,6 +1130,8 @@ Form::group()
 
 			group->setSelected( true );
 		}
+
+		emit changed();
 	}
 }
 
