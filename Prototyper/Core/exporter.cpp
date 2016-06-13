@@ -403,6 +403,34 @@ static inline void findLinksInGroup( QMap< QString, QString > & lnks,
 	foreach( const Cfg::Rect & rect, group.rect() )
 		if( !rect.link().isEmpty() )
 			lnks.insert( rect.objectId(), rect.link() );
+
+	foreach( const Cfg::Button & btn, group.button() )
+		if( !btn.link().isEmpty() )
+			lnks.insert( btn.objectId(), btn.link() );
+
+	foreach( const Cfg::CheckBox & chk, group.checkbox() )
+		if( !chk.link().isEmpty() )
+			lnks.insert( chk.objectId(), chk.link() );
+
+	foreach( const Cfg::CheckBox & chk, group.radiobutton() )
+		if( !chk.link().isEmpty() )
+			lnks.insert( chk.objectId(), chk.link() );
+
+	foreach( const Cfg::ComboBox & cb, group.combobox() )
+		if( !cb.link().isEmpty() )
+			lnks.insert( cb.objectId(), cb.link() );
+
+	foreach( const Cfg::SpinBox & s, group.spinbox() )
+		if( !s.link().isEmpty() )
+			lnks.insert( s.objectId(), s.link() );
+
+	foreach( const Cfg::HSlider & hs, group.hslider() )
+		if( !hs.link().isEmpty() )
+			lnks.insert( hs.objectId(), hs.link() );
+
+	foreach( const Cfg::VSlider & vs, group.vslider() )
+		if( !vs.link().isEmpty() )
+			lnks.insert( vs.objectId(), vs.link() );
 }
 
 QMap< QString, QString >
@@ -435,6 +463,34 @@ ExporterPrivate::links( const Cfg::Form & form )
 	foreach( const Cfg::Rect & rect, form.rect() )
 		if( !rect.link().isEmpty() )
 			lnks.insert( rect.objectId(), rect.link() );
+
+	foreach( const Cfg::Button & btn, form.button() )
+		if( !btn.link().isEmpty() )
+			lnks.insert( btn.objectId(), btn.link() );
+
+	foreach( const Cfg::CheckBox & chk, form.checkbox() )
+		if( !chk.link().isEmpty() )
+			lnks.insert( chk.objectId(), chk.link() );
+
+	foreach( const Cfg::CheckBox & chk, form.radiobutton() )
+		if( !chk.link().isEmpty() )
+			lnks.insert( chk.objectId(), chk.link() );
+
+	foreach( const Cfg::ComboBox & cb, form.combobox() )
+		if( !cb.link().isEmpty() )
+			lnks.insert( cb.objectId(), cb.link() );
+
+	foreach( const Cfg::SpinBox & s, form.spinbox() )
+		if( !s.link().isEmpty() )
+			lnks.insert( s.objectId(), s.link() );
+
+	foreach( const Cfg::HSlider & hs, form.hslider() )
+		if( !hs.link().isEmpty() )
+			lnks.insert( hs.objectId(), hs.link() );
+
+	foreach( const Cfg::VSlider & vs, form.vslider() )
+		if( !vs.link().isEmpty() )
+			lnks.insert( vs.objectId(), vs.link() );
 
 	return lnks;
 }
