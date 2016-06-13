@@ -50,6 +50,7 @@
 #include "form_combobox.hpp"
 #include "form_spinbox.hpp"
 #include "form_hslider.hpp"
+#include "form_vslider.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -891,6 +892,15 @@ Form::cfg() const
 
 					if( hs )
 						c.hslider().append( hs->cfg() );
+				}
+					break;
+
+				case FormObject::VSliderType :
+				{
+					FormVSlider * vs = dynamic_cast< FormVSlider* > ( item );
+
+					if( vs )
+						c.vslider().append( vs->cfg() );
 				}
 					break;
 
@@ -1785,6 +1795,17 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::DrawHSlider :
 			{
 				onReleaseWithRectPlacer< FormHSlider > (
+					scene(), d.data(), mouseEvent, this );
+
+				emit changed();
+
+				return;
+			}
+				break;
+
+			case FormAction::DrawVSlider :
+			{
+				onReleaseWithRectPlacer< FormVSlider > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();

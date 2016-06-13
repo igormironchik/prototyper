@@ -1156,7 +1156,9 @@ ProjectWindow::p_drawHSlider()
 void
 ProjectWindow::p_drawVSlider()
 {
+	FormAction::instance()->setMode( FormAction::DrawVSlider );
 
+	d->prepareDrawingWithRectPlacer();
 }
 
 void

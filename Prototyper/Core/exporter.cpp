@@ -28,6 +28,7 @@
 #include "form_combobox.hpp"
 #include "form_spinbox.hpp"
 #include "form_hslider.hpp"
+#include "form_vslider.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -294,6 +295,18 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 			QRectF( hs.pos().x(), hs.pos().y(),
 				hs.size().width(), hs.size().height() ),
 			Cfg::fromPen( hs.pen() ) );
+
+		p.restore();
+	}
+
+	foreach( const Cfg::VSlider & vs, form.vslider() )
+	{
+		p.save();
+
+		FormVSlider::draw( &p,
+			QRectF( vs.pos().x(), vs.pos().y(),
+				vs.size().width(), vs.size().height() ),
+			Cfg::fromPen( vs.pen() ) );
 
 		p.restore();
 	}
