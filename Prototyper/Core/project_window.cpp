@@ -39,6 +39,7 @@
 #include "desc_window.hpp"
 #include "pdf_exporter.hpp"
 #include "html_exporter.hpp"
+#include "svg_exporter.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -183,6 +184,10 @@ ProjectWindowPrivate::init()
 	QAction * exportToHtml = exportMenu->addAction(
 		QIcon( ":/Core/img/text-html.png" ),
 		ProjectWindow::tr( "HTML" ) );
+
+	QAction * exportToSvg = exportMenu->addAction(
+		QIcon( ":/Core/img/image-svg+xml.png" ),
+		ProjectWindow::tr( "SVG Images" ) );
 
 	file->addSeparator();
 
@@ -451,6 +456,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_exportToPDf );
 	ProjectWindow::connect( exportToHtml, &QAction::triggered,
 		q, &ProjectWindow::p_exportToHtml );
+	ProjectWindow::connect( exportToSvg, &QAction::triggered,
+		q, &ProjectWindow::p_exportToSvg );
 	ProjectWindow::connect( about, &QAction::triggered,
 		q, &ProjectWindow::p_about );
 	ProjectWindow::connect( aboutQt, &QAction::triggered,
@@ -1094,6 +1101,35 @@ ProjectWindow::p_exportToHtml()
 		HtmlExporter exporter( d->m_cfg );
 
 		exporter.exportToDoc( fileName );
+	}
+}
+
+void
+ProjectWindow::p_exportToSvg()
+{
+	if( isWindowModified() )
+	{
+		QMessageBox::StandardButton btn =
+			QMessageBox::question( this, tr( "Project Modified..." ),
+				tr( "Project modified.\nDo you want to save it?" ),
+				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
+
+		if( btn == QMessageBox::Yes )
+			p_saveProjectImpl();
+	}
+
+	QString dirName = QFileDialog::getExistingDirectory( this,
+		tr( "Select directory to export project..." ),
+		QStandardPaths::standardLocations(
+			QStandardPaths::DocumentsLocation ).first() );
+
+	if( !dirName.isEmpty() )
+	{
+		d->updateCfg();
+
+		SvgExporter exporter( d->m_cfg );
+
+		exporter.exportToDoc( dirName );
 	}
 }
 

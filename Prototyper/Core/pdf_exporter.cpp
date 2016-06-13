@@ -88,6 +88,8 @@ PdfExporterPrivate::createImages()
 		svg.setResolution( 72 );
 
 		drawForm( svg, form );
+
+		m_images.last()->close();
 	}
 }
 

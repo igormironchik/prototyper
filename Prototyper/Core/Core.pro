@@ -81,7 +81,8 @@ HEADERS +=	desc_window.hpp \
 			$$GENERATED \
     form_checkbox_properties.hpp \
     form_spinbox_properties.hpp \
-    form_properties.hpp
+    form_properties.hpp \
+    svg_exporter.hpp
 
 SOURCES +=	desc_window.cpp \
 			exporter.cpp \
@@ -133,7 +134,8 @@ SOURCES +=	desc_window.cpp \
 			utils.cpp \
     form_checkbox_properties.cpp \
     form_spinbox_properties.cpp \
-    form_properties.cpp
+    form_properties.cpp \
+    svg_exporter.cpp
 
 FORMS +=	form_size_dlg.ui \
 			grid_step_dlg.ui \

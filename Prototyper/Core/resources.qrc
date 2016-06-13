@@ -58,5 +58,6 @@
 		<file>img/draw-spinbox.png</file>
 		<file>img/draw-vslider.png</file>
 		<file>img/configure.png</file>
+		<file>img/image-svg+xml.png</file>
 	</qresource>
 </RCC>
