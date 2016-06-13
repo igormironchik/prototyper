@@ -54,6 +54,8 @@ public:
 
 	//! Init.
 	void init();
+	//! Set rect.
+	void setRect( const QRectF & rect );
 
 	//! Parent.
 	FormCheckBox * q;

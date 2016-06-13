@@ -28,6 +28,13 @@
 #include "form_text.hpp"
 #include "form_image.hpp"
 #include "form_rectangle.hpp"
+#include "form_button.hpp"
+#include "form_combobox.hpp"
+#include "form_radio_button.hpp"
+#include "form_checkbox.hpp"
+#include "form_hslider.hpp"
+#include "form_vslider.hpp"
+#include "form_spinbox.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -193,6 +200,69 @@ FormGroup::cfg() const
 				}
 					break;
 
+				case FormObject::ButtonType :
+				{
+					FormButton * e = dynamic_cast< FormButton* > ( item );
+
+					if( e )
+						c.button().append( e->cfg() );
+				}
+					break;
+
+				case FormObject::ComboBoxType :
+				{
+					FormComboBox * e = dynamic_cast< FormComboBox* > ( item );
+
+					if( e )
+						c.combobox().append( e->cfg() );
+				}
+					break;
+
+				case FormObject::RadioButtonType :
+				{
+					FormRadioButton * e = dynamic_cast< FormRadioButton* > ( item );
+
+					if( e )
+						c.radiobutton().append( e->cfg() );
+				}
+					break;
+
+				case FormObject::CheckBoxType :
+				{
+					FormCheckBox * e = dynamic_cast< FormCheckBox* > ( item );
+
+					if( e )
+						c.checkbox().append( e->cfg() );
+				}
+					break;
+
+				case FormObject::HSliderType :
+				{
+					FormHSlider * e = dynamic_cast< FormHSlider* > ( item );
+
+					if( e )
+						c.hslider().append( e->cfg() );
+				}
+					break;
+
+				case FormObject::VSliderType :
+				{
+					FormVSlider * e = dynamic_cast< FormVSlider* > ( item );
+
+					if( e )
+						c.vslider().append( e->cfg() );
+				}
+					break;
+
+				case FormObject::SpinBoxType :
+				{
+					FormSpinBox * e = dynamic_cast< FormSpinBox* > ( item );
+
+					if( e )
+						c.spinbox().append( e->cfg() );
+				}
+					break;
+
 				default :
 					break;
 			}
@@ -270,6 +340,27 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 		addToGroup( group );
 	}
+
+	foreach( const Cfg::Button & cfg, c.button() )
+		createElemWithRect< FormButton > ( cfg );
+
+	foreach( const Cfg::ComboBox & cfg, c.combobox() )
+		createElemWithRect< FormComboBox > ( cfg );
+
+	foreach( const Cfg::CheckBox & cfg, c.radiobutton() )
+		createElemWithRect< FormRadioButton > ( cfg );
+
+	foreach( const Cfg::CheckBox & cfg, c.checkbox() )
+		createElemWithRect< FormCheckBox > ( cfg );
+
+	foreach( const Cfg::HSlider & cfg, c.hslider() )
+		createElemWithRect< FormHSlider > ( cfg );
+
+	foreach( const Cfg::VSlider & cfg, c.vslider() )
+		createElemWithRect< FormVSlider > ( cfg );
+
+	foreach( const Cfg::SpinBox & cfg, c.spinbox() )
+		createElemWithRect< FormSpinBox > ( cfg );
 
 	setObjectId( c.objectId() );
 
@@ -375,6 +466,18 @@ FormGroup::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		handle == d->m_bottomRight ||
 		handle == d->m_bottomLeft )
 			moveBy( delta.x(), delta.y() );
+}
+
+template< class Elem, class Config >
+inline
+void
+FormGroup::createElemWithRect( const Config & cfg )
+{
+	Elem * e = new Elem( QRectF(), form(), this );
+
+	e->setCfg( cfg );
+
+	addToGroup( e );
 }
 
 } /* namespace Core */

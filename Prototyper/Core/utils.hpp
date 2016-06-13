@@ -52,6 +52,10 @@ static const QString c_left = QLatin1String( "left" );
 static const QString c_right = QLatin1String( "right" );
 static const QString c_center = QLatin1String( "center" );
 
+static const QString c_minimize = QLatin1String( "minimize" );
+static const QString c_maximize = QLatin1String( "maximize" );
+static const QString c_close = QLatin1String( "close" );
+
 
 //
 // textStyle

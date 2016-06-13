@@ -96,6 +96,9 @@ public:
 		,	m_polyline( false )
 		,	m_currentPoly( 0 )
 		,	m_model( 0 )
+		,	m_btns( FormProperties::MinimizeButton |
+				FormProperties::MaximizeButton |
+				FormProperties::CloseButton )
 	{
 	}
 
@@ -124,18 +127,16 @@ public:
 	void updateFromCfg();
 	//! Clear form.
 	void clear();
-	//! Create line.
-	FormLine * createLine( const Cfg::Line & cfg );
-	//! Create polyline.
-	FormPolyline * createPolyline( const Cfg::Polyline & cfg );
 	//! Create text.
 	FormText * createText( const Cfg::Text & cfg );
-	//! Create image.
-	FormImage * createImage( const Cfg::Image & cfg );
-	//! Create rect.
-	FormRect * createRect( const Cfg::Rect & cfg );
 	//! Create group.
 	FormGroup * createGroup( const Cfg::Group & cfg );
+	//! Create element.
+	template< class Elem, class Config >
+	Elem * createElem( const Config & cfg );
+	//! Create element with rect.
+	template< class Elem, class Config >
+	Elem * createElemWithRect( const Config & cfg, const QRectF & rect );
 	//! Clear IDs.
 	void clearIds( FormGroup * group );
 	//! Add IDs.
@@ -183,6 +184,8 @@ public:
 	QStringList m_ids;
 	//! Descriptions.
 	QMap< QString, QSharedPointer< QTextDocument > > m_desc;
+	//! Buttons.
+	FormProperties::Buttons m_btns;
 }; // class FormPrivate
 
 void
@@ -369,19 +372,30 @@ FormPrivate::updateFromCfg()
 
 	q->setObjectId( m_cfg.tabName() );
 
+	m_btns = FormProperties::Buttons();
+
+	if( m_cfg.windowButtons().contains( Cfg::c_minimize ) )
+		m_btns |= FormProperties::MinimizeButton;
+
+	if( m_cfg.windowButtons().contains( Cfg::c_maximize ) )
+		m_btns |= FormProperties::MaximizeButton;
+
+	if( m_cfg.windowButtons().contains( Cfg::c_close ) )
+		m_btns |= FormProperties::CloseButton;
+
 	TopGui::instance()->projectWindow()->formHierarchy()->view()->update(
 		m_model->index( q ) );
 
 	foreach( const Cfg::Line & c, m_cfg.line() )
 	{
-		FormLine * line = createLine( c );
+		FormLine * line = createElem< FormLine > ( c );
 
 		m_model->addObject( line, q );
 	}
 
 	foreach( const Cfg::Polyline & c, m_cfg.polyline() )
 	{
-		FormPolyline * line = createPolyline( c );
+		FormPolyline * line = createElem< FormPolyline > ( c );
 
 		m_model->addObject( line, q );
 	}
@@ -395,14 +409,14 @@ FormPrivate::updateFromCfg()
 
 	foreach( const Cfg::Image & c, m_cfg.image() )
 	{
-		FormImage * image = createImage( c );
+		FormImage * image = createElem< FormImage > ( c );
 
 		m_model->addObject( image, q );
 	}
 
 	foreach( const Cfg::Rect & c, m_cfg.rect() )
 	{
-		FormRect * rect = createRect( c );
+		FormRect * rect = createElem< FormRect > ( c );
 
 		m_model->addObject( rect, q );
 	}
@@ -421,7 +435,58 @@ FormPrivate::updateFromCfg()
 		setText( m_desc[ c.id() ], c.text() );
 	}
 
+	foreach( const Cfg::Button & c, m_cfg.button() )
+	{
+		FormButton * e = createElemWithRect< FormButton > ( c, QRectF() );
+
+		m_model->addObject( e, q );
+	}
+
+	foreach( const Cfg::ComboBox & c, m_cfg.combobox() )
+	{
+		FormComboBox * e = createElemWithRect< FormComboBox > ( c, QRectF() );
+
+		m_model->addObject( e, q );
+	}
+
+	foreach( const Cfg::CheckBox & c, m_cfg.radiobutton() )
+	{
+		FormRadioButton * e = createElemWithRect< FormRadioButton > ( c, QRectF() );
+
+		m_model->addObject( e, q );
+	}
+
+	foreach( const Cfg::CheckBox & c, m_cfg.checkbox() )
+	{
+		FormCheckBox * e = createElemWithRect< FormCheckBox > ( c, QRectF() );
+
+		m_model->addObject( e, q );
+	}
+
+	foreach( const Cfg::HSlider & c, m_cfg.hslider() )
+	{
+		FormHSlider * e = createElemWithRect< FormHSlider > ( c, QRectF() );
+
+		m_model->addObject( e, q );
+	}
+
+	foreach( const Cfg::VSlider & c, m_cfg.vslider() )
+	{
+		FormVSlider * e = createElemWithRect< FormVSlider > ( c, QRectF() );
+
+		m_model->addObject( e, q );
+	}
+
+	foreach( const Cfg::SpinBox & c, m_cfg.spinbox() )
+	{
+		FormSpinBox * e = createElemWithRect< FormSpinBox > ( c, QRectF() );
+
+		m_model->addObject( e, q );
+	}
+
 	q->setLink( m_cfg.link() );
+
+	q->update();
 }
 
 void
@@ -470,28 +535,32 @@ FormPrivate::clear()
 		delete item;
 }
 
-FormLine *
-FormPrivate::createLine( const Cfg::Line & cfg )
+template< class Elem, class Config >
+inline
+Elem *
+FormPrivate::createElem( const Config & cfg )
 {
-	FormLine * line = new FormLine( q, q );
+	Elem * e = new Elem( q, q );
 
-	line->setCfg( cfg );
+	e->setCfg( cfg );
 
-	m_ids.append( line->objectId() );
+	m_ids.append( e->objectId() );
 
-	return line;
+	return e;
 }
 
-FormPolyline *
-FormPrivate::createPolyline( const Cfg::Polyline & cfg )
+template< class Elem, class Config >
+inline
+Elem *
+FormPrivate::createElemWithRect( const Config & cfg, const QRectF & rect )
 {
-	FormPolyline * poly = new FormPolyline( q, q );
+	Elem * e = new Elem( rect, q, q );
 
-	poly->setCfg( cfg );
+	e->setCfg( cfg );
 
-	m_ids.append( poly->objectId() );
+	m_ids.append( e->objectId() );
 
-	return poly;
+	return e;
 }
 
 FormText *
@@ -506,30 +575,6 @@ FormPrivate::createText( const Cfg::Text & cfg )
 	m_ids.append( text->objectId() );
 
 	return text;
-}
-
-FormImage *
-FormPrivate::createImage( const Cfg::Image & cfg )
-{
-	FormImage * image = new FormImage( q, q );
-
-	image->setCfg( cfg );
-
-	m_ids.append( image->objectId() );
-
-	return image;
-}
-
-FormRect *
-FormPrivate::createRect( const Cfg::Rect & cfg )
-{
-	FormRect * rect = new FormRect( q, q );
-
-	rect->setCfg( cfg );
-
-	m_ids.append( rect->objectId() );
-
-	return rect;
 }
 
 FormGroup *
@@ -770,6 +815,15 @@ Form::cfg() const
 {
 	Cfg::Form c = d->m_cfg;
 
+	if( d->m_btns.testFlag( FormProperties::MinimizeButton ) )
+		c.windowButtons().append( Cfg::c_minimize );
+
+	if( d->m_btns.testFlag( FormProperties::MaximizeButton ) )
+		c.windowButtons().append( Cfg::c_maximize );
+
+	if( d->m_btns.testFlag( FormProperties::CloseButton ) )
+		c.windowButtons().append( Cfg::c_close );
+
 	c.line().clear();
 	c.polyline().clear();
 	c.text().clear();
@@ -778,6 +832,12 @@ Form::cfg() const
 	c.desc().clear();
 	c.rect().clear();
 	c.button().clear();
+	c.checkbox().clear();
+	c.combobox().clear();
+	c.radiobutton().clear();
+	c.hslider().clear();
+	c.vslider().clear();
+	c.spinbox().clear();
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
@@ -1156,8 +1216,15 @@ QRectF
 Form::boundingRect() const
 {
 	if( !d.isNull() )
+	{
+		const qreal wh = ( d->m_btns.testFlag( FormProperties::MinimizeButton ) ?
+			25.0 : ( d->m_btns.testFlag( FormProperties::MaximizeButton ) ?
+				25.0 : ( d->m_btns.testFlag( FormProperties::CloseButton ) ?
+					25.0 : 0.0 ) ) );
+
 		return QRectF( 0, 0, d->m_cfg.size().width(),
-			d->m_cfg.size().height() );
+			d->m_cfg.size().height() + wh );
+	}
 	else
 		return QRectF();
 }
@@ -1169,32 +1236,114 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	Q_UNUSED( option )
 	Q_UNUSED( widget )
 
-	const int w = d->m_cfg.size().width();
-	const int h = d->m_cfg.size().height();
+	draw( painter, d->m_cfg.size().width(),
+		d->m_cfg.size().height(), d->m_btns, d->m_cfg.gridStep(),
+		d->m_gridMode == ShowGrid );
+}
 
-	painter->save();
-
-	painter->setRenderHint( QPainter::Antialiasing, false );
-
-	QRect r( 0, 0, w, h );
+void
+Form::draw( QPainter * painter, int width, int height,
+	FormProperties::Buttons btns, int gridStep, bool drawGrid )
+{
+	const int wh = ( btns.testFlag( FormProperties::MinimizeButton ) ?
+		30 : ( btns.testFlag( FormProperties::MaximizeButton ) ?
+			30 : ( btns.testFlag( FormProperties::CloseButton ) ?
+				30 : 0 ) ) );
 
 	static const QColor gridColor = Qt::gray;
 
 	painter->setPen( gridColor );
+
+	painter->setRenderHint( QPainter::Antialiasing, false );
+
+	if( wh )
+	{
+		painter->setBrush( QBrush( gridColor ) );
+
+		painter->drawRect( QRect( 0, 0, width, wh ) );
+
+		painter->setBrush( Qt::white );
+
+		const int w = 20;
+		const int o = 5;
+
+		const int trd = qRound( (qreal) w / 3.5 );
+		const int half = qRound( (qreal) w / 2.0 );
+
+		int i = 1;
+
+		if( btns.testFlag( FormProperties::CloseButton ) )
+		{
+			const QRect b( width - o * i - w * i, o, w, w );
+
+			painter->drawEllipse( b );
+
+			painter->drawLine( b.x() + trd, b.y() + trd,
+				b.x() + w - trd, b.y() + w - trd );
+
+			painter->drawLine( b.x() + trd, b.y() + w - trd,
+				b.x() + w - trd, b.y() + trd );
+
+			++i;
+		}
+
+		if( btns.testFlag( FormProperties::MaximizeButton ) )
+		{
+			const QRect b( width - o * i - w * i, o, w, w );
+
+			painter->save();
+
+			painter->setPen( Qt::white );
+
+			painter->drawLine( b.x() + half, b.y() + trd,
+				b.x() + w - trd, b.y() + half );
+
+			painter->drawLine( b.x() + w - trd, b.y() + half,
+				b.x() + half, b.y() + w - trd );
+
+			painter->drawLine( b.x() + half, b.y() + w - trd,
+				b.x() + trd, b.y() + half );
+
+			painter->drawLine( b.x() + trd, b.y() + half,
+				b.x() + half, b.y() + trd );
+
+			painter->restore();
+
+			++i;
+		}
+
+		if( btns.testFlag( FormProperties::MinimizeButton ) )
+		{
+			const QRect b( width - o * i - w * i, o, w, w );
+
+			painter->save();
+
+			painter->setPen( Qt::white );
+
+			painter->drawLine( b.x() + trd, b.y() + half,
+				b.x() + half, b.y() + w - trd );
+
+			painter->drawLine( b.x() + half, b.y() + w - trd,
+				b.x() + w - trd, b.y() + half );
+
+			painter->restore();
+		}
+	}
+
 	painter->setBrush( Qt::white );
+
+	QRect r( 0, wh, width, height );
 
 	painter->drawRect( r );
 
-	if( d->m_gridMode == ShowGrid )
+	if( drawGrid )
 	{
-		for( int x = d->m_cfg.gridStep(); x < w; x += d->m_cfg.gridStep() )
-			painter->drawLine( x, 0, x, h );
+		for( int x = gridStep; x < width; x += gridStep )
+			painter->drawLine( x, wh, x, height + wh );
 
-		for( int y = d->m_cfg.gridStep(); y < h; y += d->m_cfg.gridStep() )
-			painter->drawLine( 0, y, w, y );
+		for( int y = gridStep + wh; y < height + wh; y += gridStep )
+			painter->drawLine( 0, y, width, y );
 	}
-
-	painter->restore();
 }
 
 void
@@ -1302,6 +1451,23 @@ Form::resizeForm()
 }
 
 void
+Form::properties()
+{
+	FormProperties dlg;
+
+	dlg.setButtons( d->m_btns );
+
+	if( dlg.exec() == QDialog::Accepted )
+	{
+		d->m_btns = dlg.buttons();
+
+		emit changed();
+
+		update();
+	}
+}
+
+void
 Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
 	FormRectPlacer * placer = dynamic_cast< FormRectPlacer* > ( d->m_current );
@@ -1314,6 +1480,11 @@ Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	menu.addAction( d->m_gridStepAction );
 	menu.addAction( QIcon( ":/Core/img/transform-scale.png" ),
 		tr( "Resize" ), this, SLOT( resizeForm() ) );
+
+	menu.addSeparator();
+
+	menu.addAction( QIcon( ":/Core/img/configure.png" ),
+		tr( "Properties" ), this, &Form::properties );
 
 	menu.exec( event->screenPos() );
 

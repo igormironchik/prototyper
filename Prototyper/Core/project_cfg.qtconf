@@ -327,59 +327,6 @@
 
 
 				|#
-					Group on the form.
-				#|
-				{class Group
-					{tagScalar
-						{valueType QString}
-						{name objectId}
-						{required}
-					}
-
-					{tagVectorOfTags
-						{valueType Line}
-						{name line}
-					}
-
-					{tagVectorOfTags
-						{valueType Polyline}
-						{name polyline}
-					}
-
-					{tagVectorOfTags
-						{valueType Text}
-						{name text}
-					}
-
-					{tagVectorOfTags
-						{valueType Image}
-						{name image}
-					}
-
-					{tagVectorOfTags
-						{valueType Rect}
-						{name rect}
-					}
-
-					{tagVectorOfTags
-						{valueType Group}
-						{name group}
-					}
-
-					{tag
-						{valueType Point}
-						{name pos}
-						{required}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
-					}
-				} || class Group
-
-
-				|#
 					Button.
 				#|
 				{class Button
@@ -615,6 +562,94 @@
 
 
 				|#
+					Group on the form.
+				#|
+				{class Group
+					{tagScalar
+						{valueType QString}
+						{name objectId}
+						{required}
+					}
+
+					{tagVectorOfTags
+						{valueType Line}
+						{name line}
+					}
+
+					{tagVectorOfTags
+						{valueType Polyline}
+						{name polyline}
+					}
+
+					{tagVectorOfTags
+						{valueType Text}
+						{name text}
+					}
+
+					{tagVectorOfTags
+						{valueType Image}
+						{name image}
+					}
+
+					{tagVectorOfTags
+						{valueType Rect}
+						{name rect}
+					}
+
+					{tagVectorOfTags
+						{valueType Button}
+						{name button}
+					}
+
+					{tagVectorOfTags
+						{valueType CheckBox}
+						{name checkbox}
+					}
+
+					{tagVectorOfTags
+						{valueType CheckBox}
+						{name radiobutton}
+					}
+
+					{tagVectorOfTags
+						{valueType ComboBox}
+						{name combobox}
+					}
+
+					{tagVectorOfTags
+						{valueType SpinBox}
+						{name spinbox}
+					}
+
+					{tagVectorOfTags
+						{valueType HSlider}
+						{name hslider}
+					}
+
+					{tagVectorOfTags
+						{valueType VSlider}
+						{name vslider}
+					}
+
+					{tagVectorOfTags
+						{valueType Group}
+						{name group}
+					}
+
+					{tag
+						{valueType Point}
+						{name pos}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
+					}
+				} || class Group
+
+
+				|#
 					Description of the form's item.
 				#|
 				{class Description
@@ -635,6 +670,14 @@
 					Form.
 				#|
 				{class Form
+					{tagScalarVector
+						{valueType QString}
+						{name windowButtons}
+						{oneOfConstraint "QLatin1String( \"minimize\" )"
+							"QLatin1String( \"maximize\" )"
+							"QLatin1String( \"close\" )" }
+					}
+
 					{tag
 						{valueType Size}
 						{name size}

@@ -74,6 +74,11 @@ protected:
 		Q_DECL_OVERRIDE;
 
 private:
+	//! Create elem with rect.
+	template< class Elem, class Config >
+	void createElemWithRect( const Config & cfg );
+
+private:
 	Q_DISABLE_COPY( FormGroup )
 
 	QScopedPointer< FormGroupPrivate > d;

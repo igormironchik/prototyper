@@ -29,6 +29,7 @@
 
 // Prototyper include.
 #include "form_object.hpp"
+#include "form_properties.hpp"
 
 
 namespace Prototyper {
@@ -123,6 +124,9 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget ) Q_DECL_OVERRIDE;
 
+	static void draw( QPainter * painter, int width, int height,
+		FormProperties::Buttons btns, int gridStep, bool drawGrid = true );
+
 public slots:
 	//! Rename object.
 	void renameObject( FormObject * obj );
@@ -136,6 +140,8 @@ private slots:
 	void slotSetGridStep();
 	//! Resize form.
 	void resizeForm();
+	//! Properties.
+	void properties();
 
 protected:
 	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )

@@ -29,6 +29,7 @@
 #include "form_spinbox.hpp"
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -170,15 +171,28 @@ static inline void drawButton( const Cfg::Button & btn, QPainter & p )
 void
 ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 {
-	svg.setViewBox( QRect( 0, 0, form.size().width(), form.size().height() ) );
+	const int wh = ( form.windowButtons().isEmpty() ? 0 : 30 );
+
+	svg.setViewBox( QRect( 0, 0,
+		form.size().width(), form.size().height() + wh ) );
 
 	QPainter p;
 	p.begin( &svg );
 
 	p.setPen( Qt::gray );
 
-	p.drawRect( QRect( 0, 0, form.size().width(),
-		form.size().height() ) );
+	FormProperties::Buttons btns;
+
+	if( form.windowButtons().contains( Cfg::c_maximize ) )
+		btns |= FormProperties::MaximizeButton;
+
+	if( form.windowButtons().contains( Cfg::c_minimize ) )
+		btns |= FormProperties::MinimizeButton;
+
+	if( form.windowButtons().contains( Cfg::c_close ) )
+		btns |= FormProperties::CloseButton;
+
+	Form::draw( &p, form.size().width(), form.size().height(), btns, 0, false );
 
 	foreach( const Cfg::Group & group, form.group() )
 		drawGroup( group, p );
