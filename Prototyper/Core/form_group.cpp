@@ -75,15 +75,15 @@ public:
 	//! Parent.
 	FormGroup * q;
 	//! Center handle.
-	FormMoveHandle * m_center;
+	QScopedPointer< FormMoveHandle > m_center;
 	//! Top-left handle.
-	FormMoveHandle * m_topLeft;
+	QScopedPointer< FormMoveHandle > m_topLeft;
 	//! Top-right handle.
-	FormMoveHandle * m_topRight;
+	QScopedPointer< FormMoveHandle > m_topRight;
 	//! Bottom-right handle.
-	FormMoveHandle * m_bottomRight;
+	QScopedPointer< FormMoveHandle > m_bottomRight;
 	//! Bottom-left handle.
-	FormMoveHandle * m_bottomLeft;
+	QScopedPointer< FormMoveHandle > m_bottomLeft;
 	//! Child.
 	QList< FormObject* > m_child;
 }; // class FormGroupPrivate
@@ -91,28 +91,28 @@ public:
 void
 FormGroupPrivate::init()
 {
-	m_center = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor );
+	m_center.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
+		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
 	m_center->setZValue( 999 );
 	m_center->hide();
 
-	m_topLeft = new FormMoveHandle( 3.0, QPointF( 6.0, 6.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor );
+	m_topLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 6.0 ), q,
+		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
 	m_topLeft->setZValue( 999 );
 	m_topLeft->hide();
 
-	m_topRight = new FormMoveHandle( 3.0, QPointF( 0.0, 6.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor );
+	m_topRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 6.0 ), q,
+		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
 	m_topRight->setZValue( 999 );
 	m_topRight->hide();
 
-	m_bottomRight = new FormMoveHandle( 3.0, QPointF( 0.0, 0.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor );
+	m_bottomRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 0.0 ), q,
+		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
 	m_bottomRight->setZValue( 999 );
 	m_bottomRight->hide();
 
-	m_bottomLeft = new FormMoveHandle( 3.0, QPointF( 6.0, 0.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor );
+	m_bottomLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 0.0 ), q,
+		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
 	m_bottomLeft->setZValue( 999 );
 	m_bottomLeft->hide();
 }
@@ -443,22 +443,6 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormGroup::postDeletion()
-{
-	delete d->m_center;
-	delete d->m_topLeft;
-	delete d->m_topRight;
-	delete d->m_bottomRight;
-	delete d->m_bottomLeft;
-
-	d->m_center = 0;
-	d->m_topLeft = 0;
-	d->m_topRight = 0;
-	d->m_bottomRight = 0;
-	d->m_bottomLeft = 0;
-}
-
-void
 FormGroup::positionElements( const QPointF & pos )
 {
 	setPos( pos );
@@ -475,11 +459,11 @@ FormGroup::position() const
 void
 FormGroup::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
-	if( handle == d->m_center ||
-		handle == d->m_topLeft ||
-		handle == d->m_topRight ||
-		handle == d->m_bottomRight ||
-		handle == d->m_bottomLeft )
+	if( handle == d->m_center.data() ||
+		handle == d->m_topLeft.data() ||
+		handle == d->m_topRight.data() ||
+		handle == d->m_bottomRight.data() ||
+		handle == d->m_bottomLeft.data() )
 			moveBy( delta.x(), delta.y() );
 }
 

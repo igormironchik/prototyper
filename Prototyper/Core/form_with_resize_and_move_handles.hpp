@@ -25,6 +25,7 @@
 
 // Qt include.
 #include <QtGlobal>
+#include <QScopedPointer>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsItem;
@@ -66,23 +67,23 @@ public:
 	void setDeltaToZero( qreal delta );
 
 	//! Top-left resize.
-	FormResizeHandle * m_topLeft;
+	QScopedPointer< FormResizeHandle > m_topLeft;
 	//! Top resize.
-	FormResizeHandle * m_top;
+	QScopedPointer< FormResizeHandle > m_top;
 	//! Top-right resize.
-	FormResizeHandle * m_topRight;
+	QScopedPointer< FormResizeHandle > m_topRight;
 	//! Left resize.
-	FormResizeHandle * m_left;
+	QScopedPointer< FormResizeHandle > m_left;
 	//! Left-bottom resize.
-	FormResizeHandle * m_bottomLeft;
+	QScopedPointer< FormResizeHandle > m_bottomLeft;
 	//! Bottom resize.
-	FormResizeHandle * m_bottom;
+	QScopedPointer< FormResizeHandle > m_bottom;
 	//! Right-bottom resize.
-	FormResizeHandle * m_bottomRight;
+	QScopedPointer< FormResizeHandle > m_bottomRight;
 	//! Right resize.
-	FormResizeHandle * m_right;
+	QScopedPointer< FormResizeHandle > m_right;
 	//! Move handle.
-	FormMoveHandle * m_move;
+	QScopedPointer< FormMoveHandle > m_move;
 	//! Parent.
 	QGraphicsItem * q;
 	//! Min size.

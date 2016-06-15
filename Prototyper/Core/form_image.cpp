@@ -56,13 +56,13 @@ public:
 	//! Image.
 	QImage m_image;
 	//! Handles.
-	FormImageHandles * m_handles;
+	QScopedPointer< FormImageHandles > m_handles;
 }; // class FormImagePrivate
 
 void
 FormImagePrivate::init()
 {
-	m_handles = new FormImageHandles( q, q->parentItem(), q->form() );
+	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->form() ) );
 }
 
 
@@ -160,12 +160,6 @@ FormImage::setImage( const QImage & img )
 	r.moveLeft( pos().x() );
 
 	d->m_handles->setRect( r );
-}
-
-void
-FormImage::postDeletion()
-{
-	delete d->m_handles;
 }
 
 void

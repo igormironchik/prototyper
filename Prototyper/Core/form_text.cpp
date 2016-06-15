@@ -66,9 +66,9 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Resizable proxy.
-	FormResizableProxy * m_proxy;
+	QScopedPointer< FormResizableProxy > m_proxy;
 	//! Text options.
-	FormTextOpts * m_opts;
+	QScopedPointer< FormTextOpts > m_opts;
 }; // class FormTextPrivate
 
 void
@@ -76,9 +76,9 @@ FormTextPrivate::init()
 {
 	q->enableEditing( true );
 
-	m_proxy = new FormResizableProxy( q, q->parentItem(), q->form());
+	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
 
-	m_opts = new FormTextOpts( q->parentItem() );
+	m_opts.reset( new FormTextOpts( q->parentItem() ) );
 
 	m_opts->setFocusProxy( q );
 
@@ -111,25 +111,25 @@ FormTextPrivate::init()
 
 	FormText::connect( q->document(), &QTextDocument::cursorPositionChanged,
 		q, &FormText::p_cursorChanged );
-	FormText::connect( m_opts, &FormTextOpts::lessFontSize,
+	FormText::connect( m_opts.data(), &FormTextOpts::lessFontSize,
 		q, &FormText::lessFontSize );
-	FormText::connect( m_opts, &FormTextOpts::moreFontSize,
+	FormText::connect( m_opts.data(), &FormTextOpts::moreFontSize,
 		q, &FormText::moreFontSize );
-	FormText::connect( m_opts, &FormTextOpts::bold,
+	FormText::connect( m_opts.data(), &FormTextOpts::bold,
 		q, &FormText::bold );
-	FormText::connect( m_opts, &FormTextOpts::italic,
+	FormText::connect( m_opts.data(), &FormTextOpts::italic,
 		q, &FormText::italic );
-	FormText::connect( m_opts, &FormTextOpts::underline,
+	FormText::connect( m_opts.data(), &FormTextOpts::underline,
 		q, &FormText::underline );
-	FormText::connect( m_opts, &FormTextOpts::textColor,
+	FormText::connect( m_opts.data(), &FormTextOpts::textColor,
 		q, &FormText::changeTextColor );
-	FormText::connect( m_opts, &FormTextOpts::clearFormat,
+	FormText::connect( m_opts.data(), &FormTextOpts::clearFormat,
 		q, &FormText::clearFormat );
-	FormText::connect( m_opts, &FormTextOpts::alignLeft,
+	FormText::connect( m_opts.data(), &FormTextOpts::alignLeft,
 		q, &FormText::alignLeft );
-	FormText::connect( m_opts, &FormTextOpts::alignCenter,
+	FormText::connect( m_opts.data(), &FormTextOpts::alignCenter,
 		q, &FormText::alignCenter );
-	FormText::connect( m_opts, &FormTextOpts::alignRight,
+	FormText::connect( m_opts.data(), &FormTextOpts::alignRight,
 		q, &FormText::alignRight );
 }
 
@@ -289,13 +289,6 @@ FormText::clearSelection()
 	QTextCursor c = textCursor();
 	c.clearSelection();
 	setTextCursor( c );
-}
-
-void
-FormText::postDeletion()
-{
-	delete d->m_proxy;
-	delete d->m_opts;
 }
 
 void

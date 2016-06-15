@@ -62,7 +62,7 @@ FormCheckBoxPrivate::~FormCheckBoxPrivate()
 void
 FormCheckBoxPrivate::init()
 {
-	m_handles = new FormImageHandles( q, q->parentItem(), q->form() );
+	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->form() ) );
 
 	m_handles->setMinSize( QSizeF( 20.0, 20.0 ) );
 
@@ -113,12 +113,6 @@ FormCheckBox::FormCheckBox( const QRectF & rect, Form * form, qreal defaultSize,
 
 FormCheckBox::~FormCheckBox()
 {
-}
-
-void
-FormCheckBox::postDeletion()
-{
-	delete d->m_handles;
 }
 
 void

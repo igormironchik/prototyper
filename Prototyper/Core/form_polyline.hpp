@@ -61,6 +61,9 @@ public:
 	//! Set cfg.
 	void setCfg( const Cfg::Polyline & c );
 
+	//! Draw polyline.
+	static void draw( QPainter * painter, const Cfg::Polyline & cfg );
+
 	//! \return Lines.
 	const QList< QLineF > & lines() const;
 	//! Set lines.

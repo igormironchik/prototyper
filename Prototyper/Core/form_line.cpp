@@ -65,11 +65,11 @@ public:
 	//! Parent.
 	FormLine * q;
 	//! First handle.
-	FormMoveHandle * m_h1;
+	QScopedPointer< FormMoveHandle > m_h1;
 	//! Second handle.
-	FormMoveHandle * m_h2;
+	QScopedPointer< FormMoveHandle > m_h2;
 	//! Move handler.
-	FormMoveHandle * m_move;
+	QScopedPointer< FormMoveHandle > m_move;
 	//! Show handles?
 	bool m_showHandles;
 }; // class FormLinePrivate
@@ -107,14 +107,14 @@ FormLinePrivate::placeChild()
 void
 FormLinePrivate::createHandles()
 {
-	m_h1 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
-		q->form(), Qt::CrossCursor );
+	m_h1.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
+		q->form(), Qt::CrossCursor ) );
 
-	m_h2 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q->parentItem(),
-		q->form(), Qt::CrossCursor );
+	m_h2.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q->parentItem(),
+		q->form(), Qt::CrossCursor ) );
 
-	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
-		q->form(), Qt::SizeAllCursor );
+	m_move.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
+		q->form(), Qt::SizeAllCursor ) );
 }
 
 
@@ -334,11 +334,11 @@ FormLine::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	{
 		const QLineF l = line();
 
-		if( handle == d->m_h1 )
+		if( handle == d->m_h1.data() )
 			setLine( QLineF( l.p1() + delta, l.p2() ) );
-		else if( handle == d->m_h2 )
+		else if( handle == d->m_h2.data() )
 			setLine( QLineF( l.p1(), l.p2() + delta ) );
-		else if( handle == d->m_move )
+		else if( handle == d->m_move.data() )
 			moveBy( delta.x(), delta.y() );
 	}
 }

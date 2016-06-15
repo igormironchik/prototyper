@@ -53,7 +53,7 @@ public:
 	void place( const QRectF & rect ) Q_DECL_OVERRIDE;
 
 	//! Aspect ratio handle.
-	AspectRatioHandle * m_aspectRatioHandle;
+	QScopedPointer< AspectRatioHandle > m_aspectRatioHandle;
 }; // class FormImageHandlesPrivate
 
 void
@@ -61,7 +61,7 @@ FormImageHandlesPrivate::init()
 {
 	FormResizableProxyPrivate::init();
 
-	m_aspectRatioHandle = new AspectRatioHandle( q );
+	m_aspectRatioHandle.reset( new AspectRatioHandle( q ) );
 }
 
 void

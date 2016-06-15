@@ -56,13 +56,13 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Resizable proxy.
-	FormResizableProxy * m_proxy;
+	QScopedPointer< FormResizableProxy > m_proxy;
 }; // class FormHSliderPrivate
 
 void
 FormHSliderPrivate::init()
 {
-	m_proxy = new FormResizableProxy( q, q->parentItem(), q->form());
+	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
 
 	setRect( m_rect );
 
@@ -97,12 +97,6 @@ FormHSlider::FormHSlider( const QRectF & rect, Form * form,
 
 FormHSlider::~FormHSlider()
 {
-}
-
-void
-FormHSlider::postDeletion()
-{
-	delete d->m_proxy;
 }
 
 void

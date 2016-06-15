@@ -64,7 +64,7 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Resizable proxy.
-	FormResizableProxy * m_proxy;
+	QScopedPointer< FormResizableProxy > m_proxy;
 	//! Text.
 	QString m_text;
 	//! Font.
@@ -74,7 +74,7 @@ public:
 void
 FormButtonPrivate::init()
 {
-	m_proxy = new FormResizableProxy( q, q->parentItem(), q->form());
+	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
 
 	setRect( m_rect );
 
@@ -115,12 +115,6 @@ FormButton::FormButton( const QRectF & rect, Form * form,
 
 FormButton::~FormButton()
 {
-}
-
-void
-FormButton::postDeletion()
-{
-	delete d->m_proxy;
 }
 
 void

@@ -64,7 +64,7 @@ public:
 	//! Checked?
 	bool m_checked;
 	//! Handles.
-	FormImageHandles * m_handles;
+	QScopedPointer< FormImageHandles > m_handles;
 	//! Font.
 	QFont m_font;
 	//! Text.
@@ -89,9 +89,6 @@ class FormCheckBox
 public:
 	FormCheckBox( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
 	~FormCheckBox();
-
-	//! Post deletion.
-	void postDeletion() Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;

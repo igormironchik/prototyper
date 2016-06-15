@@ -63,7 +63,7 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Resizable proxy.
-	FormResizableProxy * m_proxy;
+	QScopedPointer< FormResizableProxy > m_proxy;
 	//! Font.
 	QFont m_font;
 	//! Text.
@@ -73,7 +73,7 @@ public:
 void
 FormSpinBoxPrivate::init()
 {
-	m_proxy = new FormResizableProxy( q, q->parentItem(), q->form());
+	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
 
 	setRect( m_rect );
 
@@ -112,12 +112,6 @@ FormSpinBox::FormSpinBox( const QRectF & rect, Form * form,
 
 FormSpinBox::~FormSpinBox()
 {
-}
-
-void
-FormSpinBox::postDeletion()
-{
-	delete d->m_proxy;
 }
 
 void

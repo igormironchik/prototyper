@@ -66,9 +66,6 @@ public:
 	//! Set image.
 	void setImage( const QImage & img );
 
-	//! Post deletion.
-	void postDeletion() Q_DECL_OVERRIDE;
-
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 

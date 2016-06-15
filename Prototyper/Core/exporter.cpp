@@ -30,6 +30,7 @@
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
 #include "form.hpp"
+#include "form_polyline.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -67,8 +68,17 @@ static inline void drawLine( const Cfg::Line & line, QPainter & p )
 
 	p.setPen( QPen( QColor( line.pen().color() ), line.pen().width() ) );
 
-	p.drawLine( line.p1().x(), line.p1().y(),
-		line.p2().x(), line.p2().y() );
+	p.drawLine( line.p1().x() + line.pos().x(), line.p1().y() + line.pos().y(),
+		line.p2().x() + line.pos().x(), line.p2().y() + line.pos().y() );
+
+	p.restore();
+}
+
+static inline void drawPolyline( const Cfg::Polyline & cfg, QPainter & p )
+{
+	p.save();
+
+	FormPolyline::draw( &p, cfg );
 
 	p.restore();
 }
@@ -77,7 +87,8 @@ static inline void drawRect( const Cfg::Rect & rect, QPainter & p )
 {
 	p.save();
 
-	const QRectF r( rect.topLeft().x(), rect.topLeft().y(),
+	const QRectF r( rect.topLeft().x() + rect.pos().x(),
+		rect.topLeft().y() + rect.pos().y(),
 		rect.size().width(), rect.size().height() );
 
 	p.setPen( QPen( QColor( rect.pen().color() ), rect.pen().width() ) );
@@ -218,10 +229,7 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 		drawLine( line, p );
 
 	foreach( const Cfg::Polyline & poly, group.polyline() )
-	{
-		foreach( const Cfg::Line & line, poly.line() )
-			drawLine( line, p );
-	}
+		drawPolyline( poly, p );
 
 	foreach( const Cfg::Text & text, group.text() )
 	{
@@ -313,10 +321,7 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 		drawLine( line, p );
 
 	foreach( const Cfg::Polyline & poly, form.polyline() )
-	{
-		foreach( const Cfg::Line & line, poly.line() )
-			drawLine( line, p );
-	}
+		drawPolyline( poly, p );
 
 	foreach( const Cfg::Button & btn, form.button() )
 		drawButton( btn, p );

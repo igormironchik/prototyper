@@ -53,9 +53,6 @@ public:
 	FormHSlider( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
 	~FormHSlider();
 
-	//! Post deletion.
-	void postDeletion() Q_DECL_OVERRIDE;
-
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
