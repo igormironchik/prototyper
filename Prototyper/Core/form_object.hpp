@@ -96,6 +96,12 @@ public:
 	//! Set brush.
 	virtual void setObjectBrush( const QBrush & b );
 
+	//! Position elements.
+	virtual void positionElements( const QPointF & pos ) = 0;
+
+	//! \return Position of the element.
+	virtual QPointF position() const = 0;
+
 	//! \return Link.
 	const QString & link() const;
 	//! Set link.

@@ -197,6 +197,21 @@ FormComboBox::boundingRect() const
 }
 
 void
+FormComboBox::positionElements( const QPointF & pos )
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos );
+
+	d->setRect( r );
+}
+
+QPointF
+FormComboBox::position() const
+{
+	return pos();
+}
+
+void
 FormComboBox::resize( const QRectF & rect )
 {
 	d->setRect( rect );

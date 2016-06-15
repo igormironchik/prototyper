@@ -241,6 +241,21 @@ FormButton::boundingRect() const
 }
 
 void
+FormButton::positionElements( const QPointF & pos )
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos );
+
+	d->setRect( r );
+}
+
+QPointF
+FormButton::position() const
+{
+	return pos();
+}
+
+void
 FormButton::resize( const QRectF & rect )
 {
 	d->setRect( rect );

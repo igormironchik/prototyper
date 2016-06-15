@@ -153,6 +153,28 @@ public:
 	void hideHandlesOfCurrent();
 	//! Remove descriptions of the object.
 	void removeDescriptions( FormObject * obj );
+	//! Selection.
+	QList< QGraphicsItem* > selection();
+
+	//! AlignPoint.
+	enum AlignPoint {
+		//! Align Horizontal Left.
+		AlignHorLeftPoint,
+		//! Align Horizontal Center.
+		AlignHorCenterPoint,
+		//! Align Horizontal Right.
+		AlignHorRightPoint,
+		//! Align Vertical Top.
+		AlignVertTopPoint,
+		//! Align Vertical Center.
+		AlignVertCenterPoint,
+		//! Align Vertical Bottom.
+		AlignVertBottomPoint
+	}; // enum AlignPoint
+
+	//! Search align point.
+	qreal searchAlignPoint( const QList< QGraphicsItem* > & items,
+		AlignPoint point );
 
 	//! Parent.
 	Form * q;
@@ -314,6 +336,8 @@ FormPrivate::ungroup( QGraphicsItem * group )
 				QApplication::processEvents();
 
 				m_model->addObject( obj, q );
+
+				obj->positionElements( item->pos() );
 			}
 
 			if( FormAction::instance()->mode() == FormAction::Select )
@@ -346,6 +370,8 @@ FormPrivate::ungroup( QGraphicsItem * group )
 		tmp->postDeletion();
 
 		delete tmp;
+
+		q->scene()->setSceneRect( q->scene()->itemsBoundingRect() );
 
 		emit q->changed();
 	}
@@ -742,6 +768,135 @@ FormPrivate::removeDescriptions( FormObject * obj )
 					removeDescriptions( tmp );
 			}
 		}
+	}
+}
+
+QList< QGraphicsItem* >
+FormPrivate::selection()
+{
+	QList< QGraphicsItem* > items =
+		q->scene()->selectedItems();
+
+	QList< QGraphicsItem* > res;
+
+	foreach( QGraphicsItem * i, items )
+	{
+		if( dynamic_cast< FormObject* > ( i ) )
+			res.append( i );
+	}
+
+	return res;
+}
+
+qreal
+FormPrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
+	AlignPoint point )
+{
+	qreal pos = 0.0;
+
+	if( !items.isEmpty() )
+	{
+		switch( point )
+		{
+			case AlignHorLeftPoint :
+			case AlignHorCenterPoint :
+			case AlignHorRightPoint :
+			{
+				pos = dynamic_cast< FormObject* > ( items.first() )->
+					position().x();
+			}
+				break;
+
+			case AlignVertTopPoint :
+			case AlignVertCenterPoint :
+			case AlignVertBottomPoint :
+			{
+				pos = dynamic_cast< FormObject* > ( items.first() )->
+					position().y();
+			}
+				break;
+
+			default :
+				break;
+		}
+	}
+
+	int count = 0;
+	QList< qreal > points;
+
+	foreach( QGraphicsItem * item, items )
+	{
+		switch( point )
+		{
+			case AlignHorLeftPoint :
+			{
+				if( dynamic_cast< FormObject* > ( item )->position().x() < pos )
+					pos = dynamic_cast< FormObject* > ( item )->position().x();
+			}
+				break;
+
+			case AlignHorCenterPoint :
+			{
+				++count;
+
+				points.append( dynamic_cast< FormObject* > ( item )->position().x() +
+					item->boundingRect().width() / 2.0 );
+			}
+				break;
+
+			case AlignHorRightPoint :
+			{
+				if( dynamic_cast< FormObject* > ( item )->position().x() +
+					item->boundingRect().width() > pos )
+						pos = dynamic_cast< FormObject* > ( item )->position().x() +
+							item->boundingRect().width();
+			}
+				break;
+
+			case AlignVertTopPoint :
+			{
+				if( dynamic_cast< FormObject* > ( item )->position().y() > pos )
+					pos = dynamic_cast< FormObject* > ( item )->position().y();
+			}
+				break;
+
+			case AlignVertCenterPoint :
+			{
+				++count;
+
+				points.append( dynamic_cast< FormObject* > ( item )->position().y() +
+					item->boundingRect().height() / 2.0 );
+			}
+				break;
+
+			case AlignVertBottomPoint :
+			{
+				if( dynamic_cast< FormObject* > ( item )->position().y() +
+					item->boundingRect().height() < pos )
+						pos = dynamic_cast< FormObject* > ( item )->position().y() +
+							item->boundingRect().height();
+			}
+				break;
+
+			default :
+				break;
+		}
+	}
+
+	switch( point )
+	{
+		case AlignVertCenterPoint :
+		case AlignHorCenterPoint :
+		{
+			const qreal total = std::accumulate( points.constBegin(),
+				points.constEnd(), 0.0 );
+
+			return total / count;
+		}
+			break;
+
+		default :
+			return pos;
 	}
 }
 
@@ -1152,6 +1307,130 @@ Form::ungroup()
 }
 
 void
+Form::alignVerticalTop()
+{
+	QList< QGraphicsItem* > items = d->selection();
+
+	if( items.size() > 1 )
+	{
+		const qreal y = d->searchAlignPoint( items,
+			FormPrivate::AlignVertTopPoint );
+
+		foreach( QGraphicsItem * item, items )
+		{
+			dynamic_cast< FormObject* > ( item )->positionElements(
+				QPointF( dynamic_cast< FormObject* > ( item )->
+					position().x(), y ) );
+		}
+	}
+}
+
+void
+Form::alignVerticalCenter()
+{
+	QList< QGraphicsItem* > items = d->selection();
+
+	if( items.size() > 1 )
+	{
+		const qreal y = d->searchAlignPoint( items,
+			FormPrivate::AlignVertCenterPoint );
+
+		foreach( QGraphicsItem * item, items )
+		{
+			dynamic_cast< FormObject* > ( item )->positionElements(
+				QPointF( dynamic_cast< FormObject* > ( item )->
+						position().x(),
+					dynamic_cast< FormObject* > ( item )->
+						position().y() + y -
+					( dynamic_cast< FormObject* > ( item )->
+						position().y() + item->boundingRect().height() ) / 2.0 ) );
+		}
+	}
+}
+
+void
+Form::alignVerticalBottom()
+{
+	QList< QGraphicsItem* > items = d->selection();
+
+	if( items.size() > 1 )
+	{
+		const qreal y = d->searchAlignPoint( items,
+			FormPrivate::AlignVertBottomPoint );
+
+		foreach( QGraphicsItem * item, items )
+		{
+			dynamic_cast< FormObject* > ( item )->positionElements(
+				QPointF( dynamic_cast< FormObject* > ( item )->
+					position().x(), dynamic_cast< FormObject* > ( item )->
+						position().y() + y -
+					( dynamic_cast< FormObject* > ( item )->
+						position().y() + item->boundingRect().height() ) ) );
+		}
+	}
+}
+
+void
+Form::alignHorizontalLeft()
+{
+	QList< QGraphicsItem* > items = d->selection();
+
+	if( items.size() > 1 )
+	{
+		const qreal x = d->searchAlignPoint( items,
+			FormPrivate::AlignHorLeftPoint );
+
+		foreach( QGraphicsItem * item, items )
+		{
+			dynamic_cast< FormObject* > ( item )->positionElements(
+				QPointF( x, dynamic_cast< FormObject* > ( item )->position().y() ) );
+		}
+	}
+}
+
+void
+Form::alignHorizontalCenter()
+{
+	QList< QGraphicsItem* > items = d->selection();
+
+	if( items.size() > 1 )
+	{
+		const qreal x = d->searchAlignPoint( items,
+			FormPrivate::AlignHorCenterPoint );
+
+		foreach( QGraphicsItem * item, items )
+		{
+			dynamic_cast< FormObject* > ( item )->positionElements(
+				QPointF( dynamic_cast< FormObject* > ( item )->
+					position().x() + x -
+					( dynamic_cast< FormObject* > ( item )->
+						position().x() + item->boundingRect().width() ) / 2.0,
+					dynamic_cast< FormObject* > ( item )->position().y() ) );
+		}
+	}
+}
+
+void
+Form::alignHorizontalRight()
+{
+	QList< QGraphicsItem* > items = d->selection();
+
+	if( items.size() > 1 )
+	{
+		const qreal x = d->searchAlignPoint( items,
+			FormPrivate::AlignHorRightPoint );
+
+		foreach( QGraphicsItem * item, items )
+		{
+			dynamic_cast< FormObject* > ( item )->positionElements(
+				QPointF( dynamic_cast< FormObject* > ( item )->position().x() + x -
+						( dynamic_cast< FormObject* > ( item )->position().x() + item->boundingRect().width() ),
+					dynamic_cast< FormObject* > ( item )->position().y() ) );
+		}
+	}
+}
+
+void
 Form::deleteItems( const QList< QGraphicsItem* > & items )
 {
 	foreach( QGraphicsItem * item, items )
@@ -1222,11 +1501,11 @@ Form::boundingRect() const
 	if( !d.isNull() )
 	{
 		const qreal wh = ( d->m_btns.testFlag( FormProperties::MinimizeButton ) ?
-			25.0 : ( d->m_btns.testFlag( FormProperties::MaximizeButton ) ?
-				25.0 : ( d->m_btns.testFlag( FormProperties::CloseButton ) ?
-					25.0 : 0.0 ) ) );
+			30.0 : ( d->m_btns.testFlag( FormProperties::MaximizeButton ) ?
+				30.0 : ( d->m_btns.testFlag( FormProperties::CloseButton ) ?
+					30.0 : 0.0 ) ) );
 
-		return QRectF( 0, 0, d->m_cfg.size().width(),
+		return QRectF( 0.0, 0.0, d->m_cfg.size().width(),
 			d->m_cfg.size().height() + wh );
 	}
 	else
@@ -1348,6 +1627,18 @@ Form::draw( QPainter * painter, int width, int height,
 		for( int y = gridStep + wh; y < height + wh; y += gridStep )
 			painter->drawLine( 0, y, width, y );
 	}
+}
+
+void
+Form::positionElements( const QPointF & pos )
+{
+	Q_UNUSED( pos )
+}
+
+QPointF
+Form::position() const
+{
+	return pos();
 }
 
 void
@@ -1563,7 +1854,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QRectF r = rect->rect();
 					r.setBottomRight( mouseEvent->pos() );
 
-					rect->setRect( r );
+					rect->setObjectRect( r );
 				}
 
 				mouseEvent->accept();
@@ -1701,7 +1992,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				if( FormAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
 
-				rect->setRect( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
+				rect->setObjectRect( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
 
 				mouseEvent->accept();
 
@@ -1897,7 +2188,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QRectF r = rect->rect();
 					r.setBottomRight( p );
 
-					rect->setRect( r );
+					rect->setObjectRect( r );
 				}
 
 				update();

@@ -359,6 +359,44 @@ ProjectWindowPrivate::init()
 	drawSpinbox->setShortcutContext( Qt::ApplicationShortcut );
 	drawSpinbox->setShortcut( ProjectWindow::tr( "Alt+S" ) );
 
+	m_formToolBar->addSeparator();
+
+	QAction * alignHorizLeft = m_formToolBar->addAction(
+		QIcon( ":/Core/img/align-horizontal-left.png" ),
+		ProjectWindow::tr( "Align Horizontal Left" ) );
+	alignHorizLeft->setShortcutContext( Qt::ApplicationShortcut );
+	alignHorizLeft->setShortcut( ProjectWindow::tr( "Ctrl+Alt+L" ) );
+
+	QAction * alignHorizCenter = m_formToolBar->addAction(
+		QIcon( ":/Core/img/align-horizontal-center.png" ),
+		ProjectWindow::tr( "Align Horizontal Center" ) );
+	alignHorizCenter->setShortcutContext( Qt::ApplicationShortcut );
+	alignHorizCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+C" ) );
+
+	QAction * alignHorizRight = m_formToolBar->addAction(
+		QIcon( ":/Core/img/align-horizontal-right.png" ),
+		ProjectWindow::tr( "Align Horizontal Right" ) );
+	alignHorizRight->setShortcutContext( Qt::ApplicationShortcut );
+	alignHorizRight->setShortcut( ProjectWindow::tr( "Ctrl+Alt+R" ) );
+
+	QAction * alignVertTop = m_formToolBar->addAction(
+		QIcon( ":/Core/img/align-vertical-top.png" ),
+		ProjectWindow::tr( "Align Vertical Top" ) );
+	alignVertTop->setShortcutContext( Qt::ApplicationShortcut );
+	alignVertTop->setShortcut( ProjectWindow::tr( "Ctrl+Alt+T" ) );
+
+	QAction * alignVertCenter = m_formToolBar->addAction(
+		QIcon( ":/Core/img/align-vertical-center.png" ),
+		ProjectWindow::tr( "Align Vertical Center" ) );
+	alignVertCenter->setShortcutContext( Qt::ApplicationShortcut );
+	alignVertCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+V" ) );
+
+	QAction * alignVertBottom = m_formToolBar->addAction(
+		QIcon( ":/Core/img/align-vertical-bottom.png" ),
+		ProjectWindow::tr( "Align Vertical Bottom" ) );
+	alignVertBottom->setShortcutContext( Qt::ApplicationShortcut );
+	alignVertBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+B" ) );
+
 	q->addToolBar( Qt::LeftToolBarArea, m_formToolBar );
 
 	m_formToolBar->hide();
@@ -476,6 +514,18 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_drawVSlider );
 	ProjectWindow::connect( drawSpinbox, &QAction::triggered,
 		q, &ProjectWindow::p_drawSpinbox );
+	ProjectWindow::connect( alignHorizLeft, &QAction::triggered,
+		q, &ProjectWindow::p_alignHorizontalLeft );
+	ProjectWindow::connect( alignHorizCenter, &QAction::triggered,
+		q, &ProjectWindow::p_alignHorizontalCenter );
+	ProjectWindow::connect( alignHorizRight, &QAction::triggered,
+		q, &ProjectWindow::p_alignHorizontalRight );
+	ProjectWindow::connect( alignVertTop, &QAction::triggered,
+		q, &ProjectWindow::p_alignVerticalTop );
+	ProjectWindow::connect( alignVertCenter, &QAction::triggered,
+		q, &ProjectWindow::p_alignVerticalCenter );
+	ProjectWindow::connect( alignVertBottom, &QAction::triggered,
+		q, &ProjectWindow::p_alignVerticalBottom );
 }
 
 void
@@ -1203,6 +1253,42 @@ ProjectWindow::p_drawSpinbox()
 	FormAction::instance()->setMode( FormAction::DrawSpinBox );
 
 	d->prepareDrawingWithRectPlacer();
+}
+
+void
+ProjectWindow::p_alignVerticalTop()
+{
+	FormAction::instance()->form()->alignVerticalTop();
+}
+
+void
+ProjectWindow::p_alignVerticalCenter()
+{
+	FormAction::instance()->form()->alignVerticalCenter();
+}
+
+void
+ProjectWindow::p_alignVerticalBottom()
+{
+	FormAction::instance()->form()->alignVerticalBottom();
+}
+
+void
+ProjectWindow::p_alignHorizontalLeft()
+{
+	FormAction::instance()->form()->alignHorizontalLeft();
+}
+
+void
+ProjectWindow::p_alignHorizontalCenter()
+{
+	FormAction::instance()->form()->alignHorizontalCenter();
+}
+
+void
+ProjectWindow::p_alignHorizontalRight()
+{
+	FormAction::instance()->form()->alignHorizontalRight();
 }
 
 } /* namespace Core */

@@ -59,7 +59,8 @@ public:
 void
 FormRectPrivate::init()
 {
-	m_handles.reset( new WithResizeAndMoveHandles( q, q, q->form() ) );
+	m_handles.reset( new WithResizeAndMoveHandles( q, q->parentItem(),
+		q->form() ) );
 
 	m_handles->setDeltaToZero( 1.0 );
 
@@ -75,7 +76,12 @@ FormRectPrivate::updateRect( const QRectF & r )
 {
 	q->setRect( r );
 
-	m_handles->place( q->boundingRect() );
+	QRectF hr = q->boundingRect();
+
+	hr.moveTopLeft( q->pos() + hr.topLeft() );
+	hr.adjust( -12.0, -12.0, 12.0, 12.0 );
+
+	m_handles->place( hr );
 
 	q->update();
 }
@@ -143,11 +149,9 @@ FormRect::setCfg( const Cfg::Rect & c )
 	const QRectF r( c.topLeft().x(), c.topLeft().y(),
 		c.size().width(), c.size().height() );
 
-	setRect( r );
-
-	d->m_handles->place( boundingRect() );
-
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+
+	setObjectRect( r );
 
 	setLink( c.link() );
 }
@@ -155,10 +159,7 @@ FormRect::setCfg( const Cfg::Rect & c )
 QRectF
 FormRect::boundingRect() const
 {
-	const qreal w = (qreal) objectPen().width() / 2.0;
-
-	return QGraphicsRectItem::boundingRect().adjusted(
-		-12.0 - w, -12.0 - w, 12.0 + w, 12.0 + w );
+	return QGraphicsRectItem::boundingRect();
 }
 
 void
@@ -168,11 +169,7 @@ FormRect::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QGraphicsRectItem::paint( painter, option, widget );
 
 	if( isSelected() && !group() )
-	{
-		d->m_handles->place( boundingRect() );
-
 		d->m_handles->show();
-	}
 	else
 		d->m_handles->hide();
 }
@@ -194,10 +191,32 @@ FormRect::setObjectBrush( const QBrush & b )
 }
 
 void
+FormRect::positionElements( const QPointF & pos )
+{
+	setPos( pos - rect().topLeft() );
+}
+
+QPointF
+FormRect::position() const
+{
+	return pos() + rect().topLeft();
+}
+
+void
+FormRect::setObjectRect( const QRectF & r )
+{
+	d->updateRect( r );
+}
+
+void
 FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	if( handle == d->m_handles->m_move )
+	{
 		moveBy( delta.x(), delta.y() );
+
+		d->updateRect( rect() );
+	}
 	else if( handle == d->m_handles->m_topLeft )
 	{
 		const QRectF r =

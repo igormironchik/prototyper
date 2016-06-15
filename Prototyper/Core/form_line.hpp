@@ -81,6 +81,12 @@ public:
 	//! Handle mouse move in handles.
 	bool handleMouseMoveInHandles( const QPointF & point );
 
+	//! Position elements.
+	void positionElements( const QPointF & pos ) Q_DECL_OVERRIDE;
+
+	//! \return Position of the element.
+	QPointF position() const Q_DECL_OVERRIDE;
+
 protected:
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle )

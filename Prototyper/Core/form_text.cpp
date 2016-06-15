@@ -332,6 +332,21 @@ FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
+FormText::positionElements( const QPointF & pos )
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos );
+
+	d->setRect( r );
+}
+
+QPointF
+FormText::position() const
+{
+	return pos();
+}
+
+void
 FormText::lessFontSize()
 {
 	QTextCursor c = textCursor();

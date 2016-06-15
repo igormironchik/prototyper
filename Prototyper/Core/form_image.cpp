@@ -181,6 +181,23 @@ FormImage::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
+FormImage::positionElements( const QPointF & pos )
+{
+	setPos( pos );
+
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos );
+
+	d->m_handles->setRect( r );
+}
+
+QPointF
+FormImage::position() const
+{
+	return pos();
+}
+
+void
 FormImage::resize( const QRectF & rect )
 {
 	setPos( rect.topLeft() );

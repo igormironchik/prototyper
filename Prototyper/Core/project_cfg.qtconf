@@ -199,6 +199,12 @@
 						{name brush}
 					}
 
+					{tag
+						{valueType Size}
+						{name size}
+						{required}
+					}
+
 					{tagScalar
 						{valueType QString}
 						{name link}

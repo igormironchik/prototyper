@@ -59,5 +59,8 @@
 		<file>img/draw-vslider.png</file>
 		<file>img/configure.png</file>
 		<file>img/image-svg+xml.png</file>
+		<file>img/align-vertical-top.png</file>
+		<file>img/align-vertical-center.png</file>
+		<file>img/align-vertical-bottom.png</file>
 	</qresource>
 </RCC>

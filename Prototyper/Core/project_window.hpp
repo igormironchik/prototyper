@@ -156,6 +156,18 @@ private slots:
 	void p_drawVSlider();
 	//! Draw spinbox.
 	void p_drawSpinbox();
+	//! Align vertical top.
+	void p_alignVerticalTop();
+	//! Align vertical center.
+	void p_alignVerticalCenter();
+	//! Align vertical bottom.
+	void p_alignVerticalBottom();
+	//! Align horizontal left.
+	void p_alignHorizontalLeft();
+	//! Align horizontal center.
+	void p_alignHorizontalCenter();
+	//! Align horizontal right.
+	void p_alignHorizontalRight();
 
 private:
 	friend class ProjectWindowPrivate;

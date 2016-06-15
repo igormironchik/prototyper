@@ -84,11 +84,13 @@ public:
 void
 FormPolylinePrivate::init()
 {
-	m_start = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q, q->form() );
+	m_start = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
+		q->parentItem(), q->form() );
 	m_start->ignoreMouseEvents( true );
 	m_start->unsetCursor();
 
-	m_end = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q, q->form() );
+	m_end = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
+		q->parentItem(), q->form() );
 	m_end->ignoreMouseEvents( true );
 	m_end->unsetCursor();
 
@@ -96,7 +98,7 @@ FormPolylinePrivate::init()
 	m_end->hide();
 
 	QScopedPointer< WithResizeAndMoveHandles > tmp(
-		new WithResizeAndMoveHandles( q, q, q->form() ) );
+		new WithResizeAndMoveHandles( q, q->parentItem(), q->form() ) );
 
 	m_handles.swap( tmp );
 
@@ -144,7 +146,10 @@ FormPolylinePrivate::makePath()
 
 	q->setPath( path );
 
-	m_resized = boundingRect();
+	QRectF r = boundingRect();
+	r.moveTopLeft( r.topLeft() + q->pos() );
+
+	m_resized = r;
 
 	if( m_closed )
 	{
@@ -159,6 +164,8 @@ FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
 {
 	Q_UNUSED( oldR )
 
+	const QRectF b = boundingRect();
+
 	m_resized = newR;
 
 	const qreal w = (qreal) q->objectPen().width() / 2.0;
@@ -166,9 +173,10 @@ FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
 	m_handles->place( m_resized.adjusted( -12.0 - w, -12.0 - w,
 		12.0 + w, 12.0 + w ) );
 
-	const QRectF b = boundingRect();
 	const qreal mx = b.width() / m_resized.width();
 	const qreal my = b.height() / m_resized.height();
+
+	const QPointF p = q->pos();
 
 	QPainterPath path;
 
@@ -178,15 +186,19 @@ FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
 
 		if( i == 0 )
 		{
-			path.moveTo( QPointF( ( line.p1().x() - b.x() ) / mx + m_resized.x(),
-				( line.p1().y() - b.y() ) / my + m_resized.y() ) );
+			path.moveTo( QPointF(
+				( line.p1().x() - b.x() ) / mx + m_resized.x() - p.x(),
+				( line.p1().y() - b.y() ) / my + m_resized.y() - p.y() ) );
 		}
 
-		path.lineTo( QPointF( ( line.p2().x() - b.x() ) / mx + m_resized.x(),
-			( line.p2().y() - b.y() ) / my + m_resized.y() ) );
+		path.lineTo( QPointF(
+			( line.p2().x() -b.x() ) / mx + m_resized.x() - p.x(),
+			( line.p2().y() - b.y() ) / my + m_resized.y() - p.y() ) );
 	}
 
 	q->setPath( path );
+
+	//q->setPos( 0.0, 0.0 );
 }
 
 QRectF
@@ -250,6 +262,12 @@ FormPolyline::cfg() const
 
 	c.setLink( link() );
 
+	Cfg::Size s;
+	s.setWidth( d->m_resized.width() );
+	s.setHeight( d->m_resized.height() );
+
+	c.setSize( s );
+
 	return c;
 }
 
@@ -259,6 +277,8 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 	setObjectId( c.objectId() );
 
 	d->m_lines.clear();
+
+	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
 	foreach( const Cfg::Line & l, c.line() )
 	{
@@ -273,12 +293,17 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 
 	setObjectBrush( Cfg::fromBrush( c.brush() ) );
 
+	const QRectF b = d->boundingRect();
+
+	d->m_resized = QRectF( c.pos().x() + b.x(), c.pos().y() + b.y(),
+		c.size().width(), c.size().height() );
+
 	const qreal w = (qreal) objectPen().width() / 2.0;
 
 	d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
 		12.0 + w, 12.0 + w ) );
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+	d->updateLines( QRectF(), d->m_resized );
 
 	setLink( c.link() );
 }
@@ -305,7 +330,8 @@ FormPolyline::appendLine( const QLineF & line )
 {
 	if( d->m_lines.isEmpty() )
 		d->m_start->setPos( line.p1() -
-			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) );
+			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) +
+			pos() );
 
 	if( d->m_lines.isEmpty() || d->m_lines.last().p2() == line.p1() )
 	{
@@ -314,7 +340,7 @@ FormPolyline::appendLine( const QLineF & line )
 		d->makePath();
 
 		d->m_end->setPos( line.p2() -
-			QPointF( d->m_end->halfOfSize(), d->m_end->halfOfSize() ) );
+			QPointF( d->m_end->halfOfSize(), d->m_end->halfOfSize() ) + pos() );
 	}
 	else
 	{
@@ -323,7 +349,8 @@ FormPolyline::appendLine( const QLineF & line )
 		d->makePath();
 
 		d->m_start->setPos( line.p2() -
-			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) );
+			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) +
+			pos() );
 	}
 }
 
@@ -356,14 +383,15 @@ FormPolyline::pointUnderHandle( const QPointF & p, bool & intersected ) const
 		intersected = true;
 
 		return d->m_start->pos() +
-			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() );
+			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) +
+			pos();
 	}
 	else if( d->m_end->contains( d->m_end->mapFromScene( p ) ) )
 	{
 		intersected = true;
 
 		return d->m_end->pos() +
-			QPointF( d->m_end->halfOfSize(), d->m_end->halfOfSize() );
+			QPointF( d->m_end->halfOfSize(), d->m_end->halfOfSize() ) + pos();
 	}
 	else
 	{
@@ -393,8 +421,7 @@ FormPolyline::setObjectBrush( const QBrush & b )
 QRectF
 FormPolyline::boundingRect() const
 {
-	return QGraphicsPathItem::boundingRect().adjusted(
-		-12.0, -12.0, 12.0, 12.0 );
+	return QGraphicsPathItem::boundingRect();
 }
 
 void
@@ -426,10 +453,41 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 }
 
 void
+FormPolyline::positionElements( const QPointF & p )
+{
+	setPos( p - d->boundingRect().topLeft() );
+
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos() + r.topLeft() );
+
+	d->m_resized.moveTopLeft( r.topLeft() );
+
+	const qreal w = (qreal) objectPen().width() / 2.0;
+	r.adjust( -12.0 - w, -12.0 - w, 12.0 + w, 12.0 + w );
+
+	d->m_handles->place( r );
+}
+
+QPointF
+FormPolyline::position() const
+{
+	return pos() + QGraphicsPathItem::boundingRect().topLeft();
+}
+
+void
 FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	if( handle == d->m_handles->m_move )
+	{
 		moveBy( delta.x(), delta.y() );
+
+		d->m_resized.moveTopLeft( d->m_resized.topLeft() + delta );
+
+		const qreal w = (qreal) objectPen().width() / 2.0;
+
+		d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
+			12.0 + w, 12.0 + w ) );
+	}
 	else if( handle == d->m_handles->m_topLeft )
 	{
 		const QRectF r =

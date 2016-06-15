@@ -196,6 +196,21 @@ FormHSlider::boundingRect() const
 }
 
 void
+FormHSlider::positionElements( const QPointF & pos )
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos );
+
+	d->setRect( r );
+}
+
+QPointF
+FormHSlider::position() const
+{
+	return pos();
+}
+
+void
 FormHSlider::resize( const QRectF & rect )
 {
 	d->setRect( rect );

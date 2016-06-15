@@ -113,6 +113,19 @@ public:
 	//! Ungroup.
 	void ungroup();
 
+	//! Align vertical top.
+	void alignVerticalTop();
+	//! Align vertical center.
+	void alignVerticalCenter();
+	//! Align vertical bottom.
+	void alignVerticalBottom();
+	//! Align horizontal left.
+	void alignHorizontalLeft();
+	//! Align horizontal center.
+	void alignHorizontalCenter();
+	//! Align horizontal right.
+	void alignHorizontalRight();
+
 	//! Delete items.
 	void deleteItems( const QList< QGraphicsItem* > & items );
 
@@ -126,6 +139,12 @@ public:
 
 	static void draw( QPainter * painter, int width, int height,
 		FormProperties::Buttons btns, int gridStep, bool drawGrid = true );
+
+	//! Position elements.
+	void positionElements( const QPointF & pos ) Q_DECL_OVERRIDE;
+
+	//! \return Position of the element.
+	QPointF position() const Q_DECL_OVERRIDE;
 
 public slots:
 	//! Rename object.

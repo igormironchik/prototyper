@@ -31,7 +31,6 @@
 #include <QTextDocument>
 #include <QList>
 
-#include <QDebug>
 #include <QApplication>
 
 

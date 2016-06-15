@@ -142,6 +142,8 @@ FormResizableProxy::setRect( const QRectF & rect )
 
 	d->m_rect = rect;
 
+	setPos( d->m_rect.topLeft() );
+
 	d->place( FormResizableProxy::boundingRect() );
 
 	update();
@@ -159,7 +161,12 @@ QRectF
 FormResizableProxy::boundingRect() const
 {
 	if( !d.isNull() )
-		return d->m_rect.adjusted( -12.0, -12.0, 12.0, 12.0 );
+	{
+		QRectF r = d->m_rect;
+		r.moveTopLeft( QPointF( 0.0, 0.0 ) );
+
+		return r.adjusted( -12.0, -12.0, 12.0, 12.0 );
+	}
 	else
 		return QRectF();
 }

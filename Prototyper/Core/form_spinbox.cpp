@@ -275,6 +275,21 @@ FormSpinBox::boundingRect() const
 }
 
 void
+FormSpinBox::positionElements( const QPointF & pos )
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos );
+
+	d->setRect( r );
+}
+
+QPointF
+FormSpinBox::position() const
+{
+	return pos();
+}
+
+void
 FormSpinBox::resize( const QRectF & rect )
 {
 	d->setRect( rect );

@@ -91,27 +91,29 @@ FormLinePrivate::placeChild()
 {
 	const QLineF l = q->line();
 
-	m_h1->setPos( l.p1().x() - m_h1->halfOfSize(),
-		l.p1().y() - m_h1->halfOfSize() );
+	const QPointF p = q->pos();
 
-	m_h2->setPos( l.p2().x() - m_h2->halfOfSize(),
-		l.p2().y() - m_h2->halfOfSize() );
+	m_h1->setPos( l.p1().x() - m_h1->halfOfSize() + p.x(),
+		l.p1().y() - m_h1->halfOfSize() + p.y() );
+
+	m_h2->setPos( l.p2().x() - m_h2->halfOfSize() + p.x(),
+		l.p2().y() - m_h2->halfOfSize() + p.y() );
 
 	m_move->setPos(
-		( l.p1().x() + l.p2().x() ) / 2.0 - m_move->halfOfSize(),
-		( l.p1().y() + l.p2().y() ) / 2.0 - m_move->halfOfSize() );
+		( l.p1().x() + l.p2().x() ) / 2.0 - m_move->halfOfSize() + p.x(),
+		( l.p1().y() + l.p2().y() ) / 2.0 - m_move->halfOfSize() + p.y() );
 }
 
 void
 FormLinePrivate::createHandles()
 {
-	m_h1 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q,
+	m_h1 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
 		q->form(), Qt::CrossCursor );
 
-	m_h2 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q,
+	m_h2 = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q->parentItem(),
 		q->form(), Qt::CrossCursor );
 
-	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q,
+	m_move = new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
 		q->form(), Qt::SizeAllCursor );
 }
 
@@ -188,8 +190,7 @@ FormLine::setCfg( const Cfg::Line & c )
 QRectF
 FormLine::boundingRect() const
 {
-	return QGraphicsLineItem::boundingRect()
-		.adjusted( -3.0, -3.0, 3.0, 3.0 );
+	return QGraphicsLineItem::boundingRect();
 }
 
 void
@@ -272,7 +273,7 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 
 		intersectedEnds = true;
 
-		return line().p1();
+		return line().p1() + pos();
 	}
 	else if( d->m_h2->contains( d->m_h2->mapFromScene( point ) ) )
 	{
@@ -280,7 +281,7 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 
 		intersectedEnds = true;
 
-		return line().p2();
+		return line().p2() + pos();
 	}
 	else if( d->m_move->contains( d->m_move->mapFromScene( point ) ) )
 	{
@@ -289,7 +290,7 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 		intersected = true;
 
 		return QPointF( ( l.p1().x() + l.p2().x() ) / 2.0,
-			( l.p1().y() + l.p2().y() ) / 2.0 );
+			( l.p1().y() + l.p2().y() ) / 2.0 ) + pos();
 	}
 	else
 	{
@@ -310,6 +311,20 @@ FormLine::handleMouseMoveInHandles( const QPointF & point )
 		return true;
 	else
 		return false;
+}
+
+void
+FormLine::positionElements( const QPointF & pos )
+{
+	setPos( pos - QGraphicsLineItem::boundingRect().topLeft() );
+
+	d->placeChild();
+}
+
+QPointF
+FormLine::position() const
+{
+	return pos() + QGraphicsLineItem::boundingRect().topLeft();
 }
 
 void

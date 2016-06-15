@@ -35,6 +35,7 @@
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
 #include "form_spinbox.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -287,7 +288,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 {
 	foreach( const Cfg::Line & cfg, c.line() )
 	{
-		FormLine * line = new FormLine( form(), this );
+		FormLine * line = new FormLine( form(), form() );
 
 		line->setCfg( cfg );
 
@@ -296,7 +297,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Polyline & cfg, c.polyline() )
 	{
-		FormPolyline * poly = new FormPolyline( form(), this );
+		FormPolyline * poly = new FormPolyline( form(), form() );
 
 		poly->setCfg( cfg );
 
@@ -307,7 +308,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 	{
 		const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
 
-		FormText * text = new FormText( r, form(), this );
+		FormText * text = new FormText( r, form(), form() );
 
 		text->setCfg( cfg );
 
@@ -316,7 +317,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Image & cfg, c.image() )
 	{
-		FormImage * image = new FormImage( form(), this );
+		FormImage * image = new FormImage( form(), form() );
 
 		image->setCfg( cfg );
 
@@ -325,7 +326,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Rect & cfg, c.rect() )
 	{
-		FormRect * rect = new FormRect( form(), this );
+		FormRect * rect = new FormRect( form(), form() );
 
 		rect->setCfg( cfg );
 
@@ -334,7 +335,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Group & cfg, c.group() )
 	{
-		FormGroup * group = new FormGroup( form(), this );
+		FormGroup * group = new FormGroup( form(), form() );
 
 		group->setCfg( cfg );
 
@@ -458,6 +459,20 @@ FormGroup::postDeletion()
 }
 
 void
+FormGroup::positionElements( const QPointF & pos )
+{
+	setPos( pos );
+
+	update();
+}
+
+QPointF
+FormGroup::position() const
+{
+	return pos() + QGraphicsItemGroup::boundingRect().topLeft();
+}
+
+void
 FormGroup::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	if( handle == d->m_center ||
@@ -473,7 +488,7 @@ inline
 void
 FormGroup::createElemWithRect( const Config & cfg )
 {
-	Elem * e = new Elem( QRectF(), form(), this );
+	Elem * e = new Elem( QRectF(), form(), form() );
 
 	e->setCfg( cfg );
 

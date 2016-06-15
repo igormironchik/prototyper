@@ -47,7 +47,7 @@ FormCheckBoxPrivate::FormCheckBoxPrivate( FormCheckBox * parent,
 	const QRectF & rect, qreal defaultSize )
 	:	q( parent )
 	,	m_rect( QRectF( rect.topLeft().x(), rect.topLeft().y(),
-			defaultSize, defaultSize ) )
+			rect.width(), defaultSize ) )
 	,	m_checked( true )
 	,	m_handles( 0 )
 	,	m_text( FormCheckBox::tr( "Text" ) )
@@ -74,18 +74,18 @@ FormCheckBoxPrivate::init()
 void
 FormCheckBoxPrivate::setRect( const QRectF & rect )
 {
-	m_rect = rect;
+	const QRectF r = rect;
 
-	q->setPos( m_rect.topLeft() );
+	m_rect = QRectF( 0.0, 0.0, r.height(), r.height() );
 
-	const QPointF p = m_rect.topLeft();
+	m_width = r.width();
 
-	m_rect.moveTopLeft( QPointF( 0.0, 0.0 ) );
+	q->setPos( r.topLeft() );
 
-	QRectF r = q->boundingRect();
-	r.moveTopLeft( p );
+	QRectF hr = q->boundingRect();
+	hr.moveTopLeft( r.topLeft() );
 
-	m_handles->setRect( r );
+	m_handles->setRect( hr );
 }
 
 
@@ -220,10 +220,8 @@ FormCheckBox::setCfg( const Cfg::CheckBox & c )
 	setLink( c.link() );
 	setObjectPen( Cfg::fromPen( c.pen() ) );
 
-	d->m_width = c.width();
-
 	d->setRect( QRectF( c.pos().x(), c.pos().y(),
-		c.size().width(), c.size().height() ) );
+		c.width(), c.size().height() ) );
 
 	setText( c.text() );
 
@@ -277,6 +275,21 @@ FormCheckBox::boundingRect() const
 {
 	return QRectF( d->m_rect.topLeft().x(), d->m_rect.topLeft().y(),
 		d->m_width, d->m_rect.height() );
+}
+
+void
+FormCheckBox::positionElements( const QPointF & pos )
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( pos );
+
+	d->setRect( r );
+}
+
+QPointF
+FormCheckBox::position() const
+{
+	return pos();
 }
 
 void
