@@ -1322,6 +1322,8 @@ Form::alignVerticalTop()
 				QPointF( dynamic_cast< FormObject* > ( item )->
 					position().x(), y ) );
 		}
+
+		emit changed();
 	}
 }
 
@@ -1337,14 +1339,18 @@ Form::alignVerticalCenter()
 
 		foreach( QGraphicsItem * item, items )
 		{
+			const qreal iy = dynamic_cast< FormObject* > ( item )->
+				position().y();
+
+			const qreal cy = iy + item->boundingRect().height() / 2.0;
+
 			dynamic_cast< FormObject* > ( item )->positionElements(
 				QPointF( dynamic_cast< FormObject* > ( item )->
 						position().x(),
-					dynamic_cast< FormObject* > ( item )->
-						position().y() + y -
-					( dynamic_cast< FormObject* > ( item )->
-						position().y() + item->boundingRect().height() ) / 2.0 ) );
+					 iy + y - cy ) );
 		}
+
+		emit changed();
 	}
 }
 
@@ -1367,6 +1373,8 @@ Form::alignVerticalBottom()
 					( dynamic_cast< FormObject* > ( item )->
 						position().y() + item->boundingRect().height() ) ) );
 		}
+
+		emit changed();
 	}
 }
 
@@ -1385,6 +1393,8 @@ Form::alignHorizontalLeft()
 			dynamic_cast< FormObject* > ( item )->positionElements(
 				QPointF( x, dynamic_cast< FormObject* > ( item )->position().y() ) );
 		}
+
+		emit changed();
 	}
 }
 
@@ -1400,13 +1410,18 @@ Form::alignHorizontalCenter()
 
 		foreach( QGraphicsItem * item, items )
 		{
+			const qreal ix = dynamic_cast< FormObject* > ( item )->
+				position().x();
+
+			const qreal cx = ix +
+				item->boundingRect().width() / 2.0;
+
 			dynamic_cast< FormObject* > ( item )->positionElements(
-				QPointF( dynamic_cast< FormObject* > ( item )->
-					position().x() + x -
-					( dynamic_cast< FormObject* > ( item )->
-						position().x() + item->boundingRect().width() ) / 2.0,
+				QPointF( ix + x - cx,
 					dynamic_cast< FormObject* > ( item )->position().y() ) );
 		}
+
+		emit changed();
 	}
 }
 
@@ -1427,6 +1442,8 @@ Form::alignHorizontalRight()
 						( dynamic_cast< FormObject* > ( item )->position().x() + item->boundingRect().width() ),
 					dynamic_cast< FormObject* > ( item )->position().y() ) );
 		}
+
+		emit changed();
 	}
 }
 

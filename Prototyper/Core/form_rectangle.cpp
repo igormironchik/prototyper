@@ -194,6 +194,8 @@ void
 FormRect::positionElements( const QPointF & pos )
 {
 	setPos( pos - rect().topLeft() );
+
+	d->updateRect( rect() );
 }
 
 QPointF
