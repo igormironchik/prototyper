@@ -77,7 +77,12 @@ void
 FormScenePrivate::moveBy( const QPointF & delta )
 {
 	foreach( QGraphicsItem * item, q->selectedItems() )
-		item->moveBy( delta.x(), delta.y() );
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj )
+			obj->positionElements( obj->position() + delta );
+	}
 }
 
 
