@@ -1756,6 +1756,8 @@ Form::resizeForm()
 
 		emit changed();
 
+		scene()->setSceneRect( scene()->itemsBoundingRect() );
+
 		update();
 
 		scene()->update();
