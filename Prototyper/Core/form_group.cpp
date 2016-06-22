@@ -44,6 +44,9 @@
 #include <QEvent>
 #include <QGraphicsSceneMouseEvent>
 
+// C++ include.
+#include <algorithm>
+
 
 namespace Prototyper {
 
@@ -370,6 +373,17 @@ FormGroup::setCfg( const Cfg::Group & c )
 	setLink( c.link() );
 }
 
+QList< QGraphicsItem* >
+FormGroup::children() const
+{
+	QList< QGraphicsItem* > items = childItems();
+
+	std::remove_if( items.begin(), items.end(), [] ( QGraphicsItem * item )
+		{ return ( dynamic_cast< FormObject* > ( item ) == 0 ); } );
+
+	return items;
+}
+
 QRectF
 FormGroup::boundingRect() const
 {
@@ -443,7 +457,7 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormGroup::positionElements( const QPointF & pos )
+FormGroup::setPosition( const QPointF & pos )
 {
 	setPos( pos );
 
@@ -454,6 +468,21 @@ QPointF
 FormGroup::position() const
 {
 	return pos() + QGraphicsItemGroup::boundingRect().topLeft();
+}
+
+QRectF
+FormGroup::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
+}
+
+void
+FormGroup::setRectangle( const QRectF & rect )
+{
+	Q_UNUSED( rect )
 }
 
 void

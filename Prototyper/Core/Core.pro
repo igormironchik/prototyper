@@ -82,7 +82,8 @@ HEADERS +=	desc_window.hpp \
     form_checkbox_properties.hpp \
     form_spinbox_properties.hpp \
     form_properties.hpp \
-    svg_exporter.hpp
+    svg_exporter.hpp \
+    form_undo_commands.hpp
 
 SOURCES +=	desc_window.cpp \
 			exporter.cpp \
@@ -135,7 +136,8 @@ SOURCES +=	desc_window.cpp \
     form_checkbox_properties.cpp \
     form_spinbox_properties.cpp \
     form_properties.cpp \
-    svg_exporter.cpp
+    svg_exporter.cpp \
+    form_undo_commands.cpp
 
 FORMS +=	form_size_dlg.ui \
 			grid_step_dlg.ui \

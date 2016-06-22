@@ -272,7 +272,7 @@ FormCheckBox::boundingRect() const
 }
 
 void
-FormCheckBox::positionElements( const QPointF & pos )
+FormCheckBox::setPosition( const QPointF & pos )
 {
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -284,6 +284,21 @@ QPointF
 FormCheckBox::position() const
 {
 	return pos();
+}
+
+QRectF
+FormCheckBox::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
+}
+
+void
+FormCheckBox::setRectangle( const QRectF & rect )
+{
+	resize( rect );
 }
 
 void

@@ -46,6 +46,10 @@ public:
 		QGraphicsItem * parent = 0 );
 	~FormRadioButton();
 
+	//! \return Type.
+	static ObjectType staticObjectType()
+		{ return RadioButtonType; }
+
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 

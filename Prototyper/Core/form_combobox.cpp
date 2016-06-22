@@ -191,7 +191,7 @@ FormComboBox::boundingRect() const
 }
 
 void
-FormComboBox::positionElements( const QPointF & pos )
+FormComboBox::setPosition( const QPointF & pos )
 {
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -203,6 +203,21 @@ QPointF
 FormComboBox::position() const
 {
 	return pos();
+}
+
+QRectF
+FormComboBox::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
+}
+
+void
+FormComboBox::setRectangle( const QRectF & rect )
+{
+	resize( rect );
 }
 
 void

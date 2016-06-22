@@ -79,6 +79,10 @@ public slots:
 	void readProject( const QString & fileName );
 	//! Set grid step.
 	void setGridStep( int step, bool forAll );
+	//! Switch to polyline mode.
+	void switchToPolylineMode();
+	//! Switch to select mode.
+	void switchToSelectMode();
 
 protected:
 	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;

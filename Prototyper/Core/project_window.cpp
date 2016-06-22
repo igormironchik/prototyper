@@ -81,6 +81,7 @@ public:
 		,	m_drawLine( 0 )
 		,	m_select( 0 )
 		,	m_desc( 0 )
+		,	m_drawPolyLine( 0 )
 	{
 	}
 
@@ -130,6 +131,8 @@ public:
 	QAction * m_select;
 	//! Descriptions window.
 	QScopedPointer< DescWindow > m_desc;
+	//! Draw polyline action.
+	QAction * m_drawPolyLine;
 }; // class ProjectWindowPrivate
 
 void
@@ -245,12 +248,12 @@ ProjectWindowPrivate::init()
 	m_drawLine->setShortcutContext( Qt::ApplicationShortcut );
 	m_drawLine->setShortcut( ProjectWindow::tr( "Alt+L" ) );
 
-	QAction * drawPolyLine = m_formToolBar->addAction(
+	m_drawPolyLine = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-polyline.png" ),
 		ProjectWindow::tr( "Draw Line" ) );
-	drawPolyLine->setCheckable( true );
-	drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
-	drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
+	m_drawPolyLine->setCheckable( true );
+	m_drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
 
 	QAction * drawRect = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-rectangle.png" ),
@@ -426,7 +429,7 @@ ProjectWindowPrivate::init()
 
 	form->addAction( m_select );
 	form->addAction( m_drawLine );
-	form->addAction( drawPolyLine );
+	form->addAction( m_drawPolyLine );
 	form->addAction( drawRect );
 	form->addAction( insertText );
 	form->addAction( insertImage );
@@ -470,7 +473,7 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_drawLine );
 	ProjectWindow::connect( drawRect, &QAction::triggered,
 		q, &ProjectWindow::p_drawRect );
-	ProjectWindow::connect( drawPolyLine, &QAction::toggled,
+	ProjectWindow::connect( m_drawPolyLine, &QAction::toggled,
 		q, &ProjectWindow::p_drawPolyline );
 	ProjectWindow::connect( insertText, &QAction::triggered,
 		q, &ProjectWindow::p_insertText );
@@ -698,6 +701,18 @@ void
 ProjectWindow::postConstruction()
 {
 	d->m_formHierarchy->postConstruction();
+}
+
+void
+ProjectWindow::switchToPolylineMode()
+{
+	d->m_drawPolyLine->trigger();
+}
+
+void
+ProjectWindow::switchToSelectMode()
+{
+	d->m_select->trigger();
 }
 
 void

@@ -97,10 +97,16 @@ public:
 	virtual void setObjectBrush( const QBrush & b );
 
 	//! Position elements.
-	virtual void positionElements( const QPointF & pos ) = 0;
+	virtual void setPosition( const QPointF & pos ) = 0;
 
 	//! \return Position of the element.
 	virtual QPointF position() const = 0;
+
+	//! \return Rectangle of the element.
+	virtual QRectF rectangle() const = 0;
+
+	//! Set rectangle.
+	virtual void setRectangle( const QRectF & rect ) = 0;
 
 	//! \return Link.
 	const QString & link() const;

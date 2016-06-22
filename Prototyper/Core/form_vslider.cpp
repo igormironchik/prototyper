@@ -190,7 +190,7 @@ FormVSlider::boundingRect() const
 }
 
 void
-FormVSlider::positionElements( const QPointF & pos )
+FormVSlider::setPosition( const QPointF & pos )
 {
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -202,6 +202,21 @@ QPointF
 FormVSlider::position() const
 {
 	return pos();
+}
+
+QRectF
+FormVSlider::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
+}
+
+void
+FormVSlider::setRectangle( const QRectF & rect )
+{
+	resize( rect );
 }
 
 void

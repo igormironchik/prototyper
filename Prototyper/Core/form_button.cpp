@@ -235,7 +235,7 @@ FormButton::boundingRect() const
 }
 
 void
-FormButton::positionElements( const QPointF & pos )
+FormButton::setPosition( const QPointF & pos )
 {
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -247,6 +247,21 @@ QPointF
 FormButton::position() const
 {
 	return pos();
+}
+
+QRectF
+FormButton::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
+}
+
+void
+FormButton::setRectangle( const QRectF & rect )
+{
+	resize( rect );
 }
 
 void

@@ -337,7 +337,7 @@ FormPrivate::ungroup( QGraphicsItem * group )
 
 				m_model->addObject( obj, q );
 
-				obj->positionElements( item->pos() );
+				obj->setPosition( item->pos() );
 			}
 
 			if( FormAction::instance()->mode() == FormAction::Select )
@@ -1207,13 +1207,51 @@ Form::ids() const
 	return d->m_ids;
 }
 
+QGraphicsItem *
+Form::findItem( const QString & id )
+{
+	QList< QGraphicsItem* > items = childItems();
+
+	foreach( QGraphicsItem * item, items )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj && obj->objectId() == id )
+			return item;
+	}
+
+	return Q_NULLPTR;
+}
+
 void
 Form::group()
 {
 	QList< QGraphicsItem* > items =
 		scene()->selectedItems();
 
-	FormGroup * group = 0;
+	group( items );
+}
+
+void
+Form::ungroup()
+{
+	QList< QGraphicsItem* > items =
+		scene()->selectedItems();
+
+	if( !items.isEmpty() )
+	{
+		foreach( QGraphicsItem * item, items )
+			if( item->parentItem() == this )
+				d->ungroup( item );
+	}
+	else if( d->m_current )
+		d->ungroup( d->m_current );
+}
+
+FormGroup *
+Form::group( const QList< QGraphicsItem* > & items )
+{
+	FormGroup * group = Q_NULLPTR;
 
 	if( items.size() > 1 )
 	{
@@ -1288,22 +1326,14 @@ Form::group()
 
 		emit changed();
 	}
+
+	return group;
 }
 
 void
-Form::ungroup()
+Form::ungroup( FormGroup * g )
 {
-	QList< QGraphicsItem* > items =
-		scene()->selectedItems();
-
-	if( !items.isEmpty() )
-	{
-		foreach( QGraphicsItem * item, items )
-			if( item->parentItem() == this )
-				d->ungroup( item );
-	}
-	else if( d->m_current )
-		d->ungroup( d->m_current );
+	d->ungroup( g );
 }
 
 void
@@ -1318,7 +1348,7 @@ Form::alignVerticalTop()
 
 		foreach( QGraphicsItem * item, items )
 		{
-			dynamic_cast< FormObject* > ( item )->positionElements(
+			dynamic_cast< FormObject* > ( item )->setPosition(
 				QPointF( dynamic_cast< FormObject* > ( item )->
 					position().x(), y ) );
 		}
@@ -1344,7 +1374,7 @@ Form::alignVerticalCenter()
 
 			const qreal cy = iy + item->boundingRect().height() / 2.0;
 
-			dynamic_cast< FormObject* > ( item )->positionElements(
+			dynamic_cast< FormObject* > ( item )->setPosition(
 				QPointF( dynamic_cast< FormObject* > ( item )->
 						position().x(),
 					 iy + y - cy ) );
@@ -1366,7 +1396,7 @@ Form::alignVerticalBottom()
 
 		foreach( QGraphicsItem * item, items )
 		{
-			dynamic_cast< FormObject* > ( item )->positionElements(
+			dynamic_cast< FormObject* > ( item )->setPosition(
 				QPointF( dynamic_cast< FormObject* > ( item )->
 					position().x(), dynamic_cast< FormObject* > ( item )->
 						position().y() + y -
@@ -1390,7 +1420,7 @@ Form::alignHorizontalLeft()
 
 		foreach( QGraphicsItem * item, items )
 		{
-			dynamic_cast< FormObject* > ( item )->positionElements(
+			dynamic_cast< FormObject* > ( item )->setPosition(
 				QPointF( x, dynamic_cast< FormObject* > ( item )->position().y() ) );
 		}
 
@@ -1416,7 +1446,7 @@ Form::alignHorizontalCenter()
 			const qreal cx = ix +
 				item->boundingRect().width() / 2.0;
 
-			dynamic_cast< FormObject* > ( item )->positionElements(
+			dynamic_cast< FormObject* > ( item )->setPosition(
 				QPointF( ix + x - cx,
 					dynamic_cast< FormObject* > ( item )->position().y() ) );
 		}
@@ -1437,7 +1467,7 @@ Form::alignHorizontalRight()
 
 		foreach( QGraphicsItem * item, items )
 		{
-			dynamic_cast< FormObject* > ( item )->positionElements(
+			dynamic_cast< FormObject* > ( item )->setPosition(
 				QPointF( dynamic_cast< FormObject* > ( item )->position().x() + x -
 						( dynamic_cast< FormObject* > ( item )->position().x() + item->boundingRect().width() ),
 					dynamic_cast< FormObject* > ( item )->position().y() ) );
@@ -1647,7 +1677,7 @@ Form::draw( QPainter * painter, int width, int height,
 }
 
 void
-Form::positionElements( const QPointF & pos )
+Form::setPosition( const QPointF & pos )
 {
 	Q_UNUSED( pos )
 }
@@ -1656,6 +1686,18 @@ QPointF
 Form::position() const
 {
 	return pos();
+}
+
+QRectF
+Form::rectangle() const
+{
+	return boundingRect();
+}
+
+void
+Form::setRectangle( const QRectF & rect )
+{
+	Q_UNUSED( rect )
 }
 
 void
@@ -1669,33 +1711,37 @@ Form::renameObject( FormObject * obj )
 				scene()->views().first() );
 
 			if( dlg.exec() == QDialog::Accepted )
-			{
-				const QString old = obj->objectId();
-
-				if( d->m_desc.contains( old ) )
-				{
-					QSharedPointer< QTextDocument > doc =
-						d->m_desc[ obj->objectId() ];
-
-					d->m_desc.remove( obj->objectId() );
-
-					d->m_desc[ dlg.name() ] = doc;
-				}
-
-				TopGui::instance()->projectWindow()->descWindow()->renameItem(
-					this, obj->objectId(), dlg.name() );
-
-				obj->setObjectId( dlg.name() );
-
-				d->m_ids.removeOne( old );
-
-				d->m_ids.append( dlg.name() );
-			}
+				renameObject( obj, dlg.name() );
 		}
 		else
 			TopGui::instance()->projectWindow()->projectWidget()->renameTab(
 				obj->objectId() );
 	}
+}
+
+void
+Form::renameObject( FormObject * obj, const QString & newId )
+{
+	const QString old = obj->objectId();
+
+	if( d->m_desc.contains( old ) )
+	{
+		QSharedPointer< QTextDocument > doc =
+			d->m_desc[ obj->objectId() ];
+
+		d->m_desc.remove( obj->objectId() );
+
+		d->m_desc[ newId ] = doc;
+	}
+
+	TopGui::instance()->projectWindow()->descWindow()->renameItem(
+		this, obj->objectId(), newId );
+
+	obj->setObjectId( newId );
+
+	d->m_ids.removeOne( old );
+
+	d->m_ids.append( newId );
 }
 
 void
@@ -1873,7 +1919,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QRectF r = rect->rect();
 					r.setBottomRight( mouseEvent->pos() );
 
-					rect->setObjectRect( r );
+					rect->setRectangle( r );
 				}
 
 				mouseEvent->accept();
@@ -2011,7 +2057,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				if( FormAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
 
-				rect->setObjectRect( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
+				rect->setRectangle( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
 
 				mouseEvent->accept();
 
@@ -2207,7 +2253,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QRectF r = rect->rect();
 					r.setBottomRight( p );
 
-					rect->setObjectRect( r );
+					rect->setRectangle( r );
 				}
 
 				update();
@@ -2385,6 +2431,26 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 	}
 	else
 		QGraphicsObject::dropEvent( event );
+}
+
+void
+Form::setCurrentLine( FormLine * line )
+{
+	d->m_current = line;
+
+	d->m_currentLines.clear();
+
+	d->m_currentLines.append( line );
+}
+
+void
+Form::setCurrentPolyLine( FormPolyline * line )
+{
+	d->m_current = line;
+
+	d->m_currentLines.clear();
+
+	d->m_currentPoly = line;
 }
 
 } /* namespace Core */

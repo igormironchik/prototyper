@@ -57,6 +57,10 @@ public:
 	explicit FormLine( Form * form, QGraphicsItem * parent = 0 );
 	~FormLine();
 
+	//! \return Type.
+	static ObjectType staticObjectType()
+		{ return LineType; }
+
 	//! \return Cfg.
 	Cfg::Line cfg() const;
 	//! Set cfg.
@@ -82,10 +86,16 @@ public:
 	bool handleMouseMoveInHandles( const QPointF & point );
 
 	//! Position elements.
-	void positionElements( const QPointF & pos ) Q_DECL_OVERRIDE;
+	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;
 
 	//! \return Position of the element.
 	QPointF position() const Q_DECL_OVERRIDE;
+
+	//! \return Rectangle of the element.
+	QRectF rectangle() const Q_DECL_OVERRIDE;
+
+	//! Set rectangle.
+	void setRectangle( const QRectF & rect ) Q_DECL_OVERRIDE;
 
 protected:
 	//! Handle moved.

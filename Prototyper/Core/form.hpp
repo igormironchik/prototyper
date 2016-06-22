@@ -44,6 +44,10 @@ class Size;
 } /* namespace Cfg */
 
 class GridSnap;
+class FormGroup;
+class FormLine;
+class FormPolyline;
+
 
 //
 // Form
@@ -65,6 +69,10 @@ signals:
 public:
 	explicit Form( Cfg::Form & c, QGraphicsItem * parent = 0 );
 	~Form();
+
+	//! \return Type.
+	static ObjectType staticObjectType()
+		{ return FormType; }
 
 	//! Grid mode.
 	enum GridMode {
@@ -108,10 +116,18 @@ public:
 	//! \return IDs.
 	const QStringList & ids() const;
 
-	//! Group.
+	//! \return Item with the given id.
+	QGraphicsItem * findItem( const QString & id );
+
+	//! Group selection.
 	void group();
-	//! Ungroup.
+	//! Ungroup selection.
 	void ungroup();
+
+	//! Group items.
+	FormGroup * group( const QList< QGraphicsItem* > & items );
+	//! Ungroup group.
+	void ungroup( FormGroup * g );
 
 	//! Align vertical top.
 	void alignVerticalTop();
@@ -141,14 +157,22 @@ public:
 		FormProperties::Buttons btns, int gridStep, bool drawGrid = true );
 
 	//! Position elements.
-	void positionElements( const QPointF & pos ) Q_DECL_OVERRIDE;
+	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;
 
 	//! \return Position of the element.
 	QPointF position() const Q_DECL_OVERRIDE;
 
+	//! \return Rectangle of the element.
+	QRectF rectangle() const Q_DECL_OVERRIDE;
+
+	//! Set rectangle.
+	void setRectangle( const QRectF & rect ) Q_DECL_OVERRIDE;
+
 public slots:
 	//! Rename object.
 	void renameObject( FormObject * obj );
+	//! Rename object.
+	void renameObject( FormObject * obj, const QString & newId );
 	//! Rename form.
 	void renameForm( const QString & name );
 	//! Edit description.
@@ -181,6 +205,14 @@ protected:
 		Q_DECL_OVERRIDE;
 	void dropEvent( QGraphicsSceneDragDropEvent * event )
 		Q_DECL_OVERRIDE;
+
+protected:
+	friend class UndoAddLineToPoly;
+
+	//! Set current line.
+	void setCurrentLine( FormLine * line );
+	//! Set current polyline.
+	void setCurrentPolyLine( FormPolyline * line );
 
 private:
 	friend class FormPrivate;

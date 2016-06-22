@@ -10,3 +10,6 @@
 /**/ui_*.h
 /**/qrc_*.cpp
 /**/Globe.pro.user*
+/installer/packages/mironchik.igor.prototyper/data/bin/
+/installer/packages/mironchik.igor.prototyper/data/lib/
+/installer/packages/mironchik.igor.prototyper/data/plugins/

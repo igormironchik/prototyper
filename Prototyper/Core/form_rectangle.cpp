@@ -151,7 +151,7 @@ FormRect::setCfg( const Cfg::Rect & c )
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
-	setObjectRect( r );
+	setRectangle( r );
 
 	setLink( c.link() );
 }
@@ -191,7 +191,7 @@ FormRect::setObjectBrush( const QBrush & b )
 }
 
 void
-FormRect::positionElements( const QPointF & pos )
+FormRect::setPosition( const QPointF & pos )
 {
 	setPos( pos - rect().topLeft() );
 
@@ -205,9 +205,19 @@ FormRect::position() const
 }
 
 void
-FormRect::setObjectRect( const QRectF & r )
+FormRect::setRectangle( const QRectF & r )
 {
-	d->updateRect( r );
+	if( d->m_handles->checkConstraint( r.size() ) )
+		d->updateRect( r );
+}
+
+QRectF
+FormRect::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
 }
 
 void

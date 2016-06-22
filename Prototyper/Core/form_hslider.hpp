@@ -53,6 +53,10 @@ public:
 	FormHSlider( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
 	~FormHSlider();
 
+	//! \return Type.
+	static ObjectType staticObjectType()
+		{ return HSliderType; }
+
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
@@ -70,10 +74,16 @@ public:
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	//! Position elements.
-	void positionElements( const QPointF & pos ) Q_DECL_OVERRIDE;
+	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;
 
 	//! \return Position of the element.
 	QPointF position() const Q_DECL_OVERRIDE;
+
+	//! \return Rectangle of the element.
+	QRectF rectangle() const Q_DECL_OVERRIDE;
+
+	//! Set rectangle.
+	void setRectangle( const QRectF & rect ) Q_DECL_OVERRIDE;
 
 protected:
 	//! Resize.

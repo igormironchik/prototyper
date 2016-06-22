@@ -56,6 +56,10 @@ public:
 	explicit FormRect( Form * form, QGraphicsItem * parent = 0 );
 	~FormRect();
 
+	//! \return Type.
+	static ObjectType staticObjectType()
+		{ return RectType; }
+
 	//! \return Cfg.
 	Cfg::Rect cfg() const;
 	//! Set cfg.
@@ -73,13 +77,16 @@ public:
 	void setObjectBrush( const QBrush & b ) Q_DECL_OVERRIDE;
 
 	//! Position elements.
-	void positionElements( const QPointF & pos ) Q_DECL_OVERRIDE;
+	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;
 
 	//! \return Position of the element.
 	QPointF position() const Q_DECL_OVERRIDE;
 
 	//! Set rect.
-	void setObjectRect( const QRectF & r );
+	void setRectangle( const QRectF & r ) Q_DECL_OVERRIDE;
+
+	//! \return Rectangle of the element.
+	QRectF rectangle() const Q_DECL_OVERRIDE;
 
 protected:
 	//! Handle moved.

@@ -314,7 +314,7 @@ FormLine::handleMouseMoveInHandles( const QPointF & point )
 }
 
 void
-FormLine::positionElements( const QPointF & pos )
+FormLine::setPosition( const QPointF & pos )
 {
 	setPos( pos - QGraphicsLineItem::boundingRect().topLeft() );
 
@@ -325,6 +325,21 @@ QPointF
 FormLine::position() const
 {
 	return pos() + QGraphicsLineItem::boundingRect().topLeft();
+}
+
+QRectF
+FormLine::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
+}
+
+void
+FormLine::setRectangle( const QRectF & rect )
+{
+	Q_UNUSED( rect )
 }
 
 void

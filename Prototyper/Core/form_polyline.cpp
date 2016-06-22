@@ -417,6 +417,37 @@ FormPolyline::appendLine( const QLineF & line )
 }
 
 void
+FormPolyline::removeLine( const QLineF & line )
+{
+	if( d->m_lines.first() == line )
+	{
+		d->m_lines.removeFirst();
+
+		d->makePath();
+
+		d->m_start->setPos( d->m_lines.first().p1() -
+			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) +
+			pos() );
+	}
+	else if( d->m_lines.last() == line )
+	{
+		d->m_lines.removeLast();
+
+		d->makePath();
+
+		d->m_end->setPos( d->m_lines.last().p2() -
+			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) +
+			pos() );
+	}
+}
+
+int
+FormPolyline::countOfLines() const
+{
+	return d->m_lines.count();
+}
+
+void
 FormPolyline::showHandles( bool show )
 {
 	if( show )
@@ -515,7 +546,7 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 }
 
 void
-FormPolyline::positionElements( const QPointF & p )
+FormPolyline::setPosition( const QPointF & p )
 {
 	setPos( p - d->boundingRect().topLeft() );
 
@@ -534,6 +565,22 @@ QPointF
 FormPolyline::position() const
 {
 	return pos() + QGraphicsPathItem::boundingRect().topLeft();
+}
+
+QRectF
+FormPolyline::rectangle() const
+{
+	QRectF r = boundingRect();
+	r.moveTopLeft( position() );
+
+	return r;
+}
+
+void
+FormPolyline::setRectangle( const QRectF & rect )
+{
+	if( d->m_handles->checkConstraint( rect.size() ) )
+		d->updateLines( d->boundingRect(), rect );
 }
 
 void

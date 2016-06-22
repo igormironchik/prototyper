@@ -55,10 +55,17 @@ public:
 	explicit FormGroup( Form * form, QGraphicsItem * parent = 0 );
 	~FormGroup();
 
+	//! \return Type.
+	static ObjectType staticObjectType()
+		{ return GroupType; }
+
 	//! \return Cfg.
 	Cfg::Group cfg() const;
 	//! Set cfg. \warning This group must be empty.
 	void setCfg( const Cfg::Group & c );
+
+	//! \return List of children.
+	QList< QGraphicsItem* > children() const;
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
@@ -66,10 +73,16 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 	//! Position elements.
-	void positionElements( const QPointF & pos ) Q_DECL_OVERRIDE;
+	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;
 
 	//! \return Position of the element.
 	QPointF position() const Q_DECL_OVERRIDE;
+
+	//! \return Rectangle of the element.
+	QRectF rectangle() const Q_DECL_OVERRIDE;
+
+	//! Set rectangle.
+	void setRectangle( const QRectF & rect ) Q_DECL_OVERRIDE;
 
 protected:
 	//! Handle moved.

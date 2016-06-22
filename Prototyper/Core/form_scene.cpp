@@ -81,7 +81,7 @@ FormScenePrivate::moveBy( const QPointF & delta )
 		FormObject * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
-			obj->positionElements( obj->position() + delta );
+			obj->setPosition( obj->position() + delta );
 	}
 }
 
