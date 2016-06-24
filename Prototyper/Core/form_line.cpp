@@ -27,6 +27,7 @@
 #include "form.hpp"
 #include "form_grid_snap.hpp"
 #include "utils.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QGraphicsSceneMouseEvent>
@@ -34,6 +35,7 @@
 #include <QStyleOptionGraphicsItem>
 #include <QApplication>
 #include <QGraphicsScene>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -52,6 +54,7 @@ public:
 		,	m_h2( 0 )
 		,	m_move( 0 )
 		,	m_showHandles( false )
+		,	m_handleMoved( false )
 	{
 	}
 
@@ -72,6 +75,12 @@ public:
 	QScopedPointer< FormMoveHandle > m_move;
 	//! Show handles?
 	bool m_showHandles;
+	//! Old position.
+	QPointF m_oldPos;
+	//! Is handle moved?
+	bool m_handleMoved;
+	//! Old line.
+	QLineF m_oldLine;
 }; // class FormLinePrivate
 
 void
@@ -316,6 +325,9 @@ FormLine::handleMouseMoveInHandles( const QPointF & point )
 void
 FormLine::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormLine > ( form(),
+		objectId(), pos - position() ) );
+
 	setPos( pos - QGraphicsLineItem::boundingRect().topLeft() );
 
 	d->placeChild();
@@ -347,6 +359,15 @@ FormLine::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	if( isSelected() )
 	{
+		if( !d->m_handleMoved )
+		{
+			d->m_oldPos = position();
+
+			d->m_oldLine = line();
+
+			d->m_handleMoved = true;
+		}
+
 		const QLineF l = line();
 
 		if( handle == d->m_h1.data() )
@@ -355,6 +376,22 @@ FormLine::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 			setLine( QLineF( l.p1(), l.p2() + delta ) );
 		else if( handle == d->m_move.data() )
 			moveBy( delta.x(), delta.y() );
+	}
+}
+
+void
+FormLine::handleReleased( FormMoveHandle * handle )
+{
+	d->m_handleMoved = false;
+
+	if( isSelected() )
+	{
+		if( handle == d->m_move.data() )
+			form()->undoStack()->push( new UndoMove< FormLine > ( form(),
+				objectId(), position() - d->m_oldPos ) );
+		else
+			form()->undoStack()->push( new UndoChangeLine( form(), objectId(),
+				d->m_oldLine, line() ) );
 	}
 }
 
@@ -374,6 +411,12 @@ void
 FormLine::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
 	QGraphicsLineItem::mouseReleaseEvent( event );
+}
+
+void
+FormLine::placeHandles()
+{
+	d->placeChild();
 }
 
 } /* namespace Core */

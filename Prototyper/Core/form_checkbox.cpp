@@ -26,6 +26,7 @@
 #include "form_image_handles.hpp"
 #include "form_checkbox_properties.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -33,6 +34,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -274,6 +276,9 @@ FormCheckBox::boundingRect() const
 void
 FormCheckBox::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormCheckBox > ( form(), objectId(),
+		pos - position() ) );
+
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
 

@@ -25,6 +25,7 @@
 #include "utils.hpp"
 #include "form_button_properties.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QFontMetrics>
@@ -34,6 +35,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QAction>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -237,6 +239,9 @@ FormButton::boundingRect() const
 void
 FormButton::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormButton > ( form(), objectId(),
+		pos - position() ) );
+
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
 

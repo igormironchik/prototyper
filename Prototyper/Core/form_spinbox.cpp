@@ -25,6 +25,7 @@
 #include "utils.hpp"
 #include "form.hpp"
 #include "form_spinbox_properties.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -33,6 +34,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QMenu>
 #include <QAction>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -271,6 +273,9 @@ FormSpinBox::boundingRect() const
 void
 FormSpinBox::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormSpinBox > ( form(),
+		objectId(), pos - position() ) );
+
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
 

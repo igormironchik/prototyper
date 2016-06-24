@@ -92,6 +92,8 @@ protected:
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		Q_DECL_OVERRIDE;
+	//! Handle released.
+	void handleReleased( FormMoveHandle * handle ) Q_DECL_OVERRIDE;
 
 private:
 	Q_DISABLE_COPY( FormRect )

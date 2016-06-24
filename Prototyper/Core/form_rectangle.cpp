@@ -27,6 +27,10 @@
 #include "form_resize_handle.hpp"
 #include "utils.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
+
+// Qt include.
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -42,6 +46,7 @@ public:
 	FormRectPrivate( FormRect * parent )
 		:	q( parent )
 		,	m_handles( 0 )
+		,	m_isHandleMoved( false )
 	{
 	}
 
@@ -54,6 +59,10 @@ public:
 	FormRect * q;
 	//! Resize & move handles.
 	QScopedPointer< WithResizeAndMoveHandles > m_handles;
+	//! Sunsidiary rect.
+	QRectF m_subsidiaryRect;
+	//! Is handle moved?
+	bool m_isHandleMoved;
 }; // class FormRectPrivate
 
 void
@@ -193,6 +202,9 @@ FormRect::setObjectBrush( const QBrush & b )
 void
 FormRect::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormRect > ( form(),
+		objectId(), pos - position() ) );
+
 	setPos( pos - rect().topLeft() );
 
 	d->updateRect( rect() );
@@ -223,6 +235,13 @@ FormRect::rectangle() const
 void
 FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
+	if( !d->m_isHandleMoved )
+	{
+		d->m_subsidiaryRect = rect();
+
+		d->m_isHandleMoved = true;
+	}
+
 	if( handle == d->m_handles->m_move.data() )
 	{
 		moveBy( delta.x(), delta.y() );
@@ -295,6 +314,19 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	}
 
 	form()->update();
+}
+
+void
+FormRect::handleReleased( FormMoveHandle * handle )
+{
+	d->m_isHandleMoved = false;
+
+	if( handle == d->m_handles->m_move.data() )
+		form()->undoStack()->push( new UndoMove< FormRect > ( form(),
+			objectId(), rect().topLeft() - d->m_subsidiaryRect.topLeft() ) );
+	else
+		form()->undoStack()->push( new UndoResize< FormRect > ( form(),
+			objectId(), d->m_subsidiaryRect, rect() ) );
 }
 
 } /* namespace Core */

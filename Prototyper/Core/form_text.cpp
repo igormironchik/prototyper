@@ -27,6 +27,7 @@
 #include "form_text_opts.hpp"
 #include "utils.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -36,6 +37,7 @@
 #include <QFontMetrics>
 #include <QFont>
 #include <QTextBlockFormat>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -327,6 +329,9 @@ FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 void
 FormText::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormText > ( form(),
+		objectId(), pos - position() ) );
+
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
 

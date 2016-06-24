@@ -24,9 +24,11 @@
 #include "form_hslider.hpp"
 #include "utils.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QPainter>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -192,6 +194,9 @@ FormHSlider::boundingRect() const
 void
 FormHSlider::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormHSlider > ( form(),
+		objectId(), pos - position() ) );
+
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
 

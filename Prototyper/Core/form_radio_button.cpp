@@ -31,6 +31,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QGraphicsSceneContextMenuEvent>
+#include <QUndoStack>
 
 
 namespace Prototyper {

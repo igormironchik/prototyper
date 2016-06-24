@@ -24,10 +24,12 @@
 #include "form_combobox.hpp"
 #include "utils.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QPainter>
 #include <QPainterPath>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -193,6 +195,9 @@ FormComboBox::boundingRect() const
 void
 FormComboBox::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormComboBox > ( form(), objectId(),
+		pos - position() ) );
+
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
 

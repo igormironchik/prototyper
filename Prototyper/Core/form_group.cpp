@@ -36,6 +36,7 @@
 #include "form_vslider.hpp"
 #include "form_spinbox.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -43,6 +44,7 @@
 #include <QGraphicsScene>
 #include <QEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QUndoStack>
 
 // C++ include.
 #include <algorithm>
@@ -459,6 +461,9 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 void
 FormGroup::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormGroup > ( form(),
+		objectId(), pos - position() ) );
+
 	setPos( pos );
 
 	update();

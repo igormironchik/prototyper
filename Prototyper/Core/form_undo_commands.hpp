@@ -116,9 +116,9 @@ class UndoCreate
 	:	public QUndoCommand
 {
 public:
-	UndoCreate( Form * f, Elem * e )
-		:	m_elem( e )
-		,	m_form( f )
+	UndoCreate( Form * f, const QString & id )
+		:	m_form( f )
+		,	m_id( id )
 	{
 	}
 
@@ -130,27 +130,29 @@ public:
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_cfg = m_elem->cfg();
+		Elem * elem = dynamic_cast< Elem* > ( m_form->findItem( m_id ) );
 
-		m_form->deleteItems( QList< QGraphicsItem* > () << m_elem );
+		m_cfg = elem->cfg();
+
+		m_form->deleteItems( QList< QGraphicsItem* > () << elem );
 	}
 
 	void redo() Q_DECL_OVERRIDE
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_elem = dynamic_cast< Elem* > ( createElement< Elem >( m_form ) );
+		Elem * elem = dynamic_cast< Elem* > ( createElement< Elem >( m_form ) );
 
-		m_elem->setCfg( m_cfg );
+		elem->setCfg( m_cfg );
 	}
 
 private:
 	//! Configuration.
 	Config m_cfg;
-	//! Element.
-	Elem * m_elem;
 	//! Form.
 	Form * m_form;
+	//! Id.
+	QString m_id;
 }; // class UndoCreate
 
 
@@ -164,9 +166,10 @@ class UndoMove
 	:	public QUndoCommand
 {
 public:
-	UndoMove( Elem * e, const QPointF & delta )
-		:	m_elem( e )
+	UndoMove( Form * form, const QString & id, const QPointF & delta )
+		:	m_id( id )
 		,	m_delta( delta )
+		,	m_form( form )
 	{
 	}
 
@@ -178,21 +181,29 @@ public:
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_elem->positionElements( m_elem->position() - m_delta );
+		FormObject * elem = dynamic_cast< FormObject* > (
+			m_form->findItem( m_id ) );
+
+		elem->setPosition( elem->position() - m_delta );
 	}
 
 	void redo() Q_DECL_OVERRIDE
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_elem->positionElements( m_elem->position() + m_delta );
+		FormObject * elem = dynamic_cast< FormObject* > (
+			m_form->findItem( m_id ) );
+
+		elem->setPosition( elem->position() + m_delta );
 	}
 
 private:
-	//! Element.
-	Elem * m_elem;
+	//! Id.
+	QString m_id;
 	//! Delta.
 	QPointF m_delta;
+	//! Form.
+	Form * m_form;
 }; // class UndoMove
 
 
@@ -206,9 +217,10 @@ class UndoResize
 	:	public QUndoCommand
 {
 public:
-	UndoResize( Elem * e, const QRectF & oldR,
+	UndoResize( Form * form, const QString & id, const QRectF & oldR,
 		const QRectF & newR )
-		:	m_elem( e )
+		:	m_form( form )
+		,	m_id( id )
 		,	m_oldRect( oldR )
 		,	m_newRect( newR )
 	{
@@ -222,19 +234,27 @@ public:
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_elem->setRectangle( m_oldRect );
+		FormObject * elem = dynamic_cast< FormObject* > (
+			m_form->findItem( m_id ) );
+
+		elem->setRectangle( m_oldRect );
 	}
 
 	void redo() Q_DECL_OVERRIDE
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_elem->setRectangle( m_newRect );
+		FormObject * elem = dynamic_cast< FormObject* > (
+			m_form->findItem( m_id ) );
+
+		elem->setRectangle( m_newRect );
 	}
 
 private:
-	//! Element.
-	Elem * m_elem;
+	//! Form.
+	Form * m_form;
+	//! Id.
+	QString m_id;
 	//! Old rect.
 	QRectF m_oldRect;
 	//! New rect.
@@ -255,7 +275,6 @@ public:
 	UndoDelete( Form * form, const Config & c )
 		:	m_cfg( c )
 		,	m_form( form )
-		,	m_elem( Q_NULLPTR )
 	{
 	}
 
@@ -267,16 +286,18 @@ public:
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_elem = dynamic_cast< Elem* > ( createElement< Elem >( m_form ) );
+		Elem * elem = dynamic_cast< Elem* > ( createElement< Elem >( m_form ) );
 
-		m_elem->setCfg( m_cfg );
+		elem->setCfg( m_cfg );
 	}
 
 	void redo() Q_DECL_OVERRIDE
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		m_form->deleteItems( QList< QGraphicsItem* > () << m_elem );
+		QGraphicsItem * elem = m_form->findItem( m_cfg.objectId() );
+
+		m_form->deleteItems( QList< QGraphicsItem* > () << elem );
 	}
 
 private:
@@ -284,8 +305,6 @@ private:
 	Config m_cfg;
 	//! Form.
 	Form * m_form;
-	//! Element.
-	Elem * m_elem;
 }; // class UndoDelete
 
 
@@ -298,7 +317,7 @@ class UndoGroup
 	:	public QUndoCommand
 {
 public:
-	UndoGroup( Form * form, FormGroup * g );
+	UndoGroup( Form * form, const QString & id );
 	~UndoGroup();
 
 	void undo() Q_DECL_OVERRIDE;
@@ -306,8 +325,6 @@ public:
 	void redo() Q_DECL_OVERRIDE;
 
 private:
-	//! Group.
-	FormGroup * m_group;
 	//! Form.
 	Form * m_form;
 	//! Items.
@@ -326,7 +343,7 @@ class UndoUngroup
 	:	public QUndoCommand
 {
 public:
-	UndoUngroup( const QList< QGraphicsItem* > & items,
+	UndoUngroup( const QStringList & items,
 		const QString & groupId, Form * form );
 	~UndoUngroup();
 
@@ -336,9 +353,7 @@ public:
 
 private:
 	//! Items.
-	QList< QGraphicsItem* > m_items;
-	//! Group.
-	FormGroup * m_group;
+	QStringList m_items;
 	//! Id.
 	QString m_id;
 	//! Form.
@@ -364,16 +379,12 @@ public:
 	void redo() Q_DECL_OVERRIDE;
 
 private:
-	//! Polyline.
-	FormPolyline * m_poly;
 	//! Line.
 	QLineF m_line;
 	//! Form.
 	Form * m_form;
 	//! Id.
 	QString m_id;
-	//! First line.
-	FormLine * m_lineItem;
 }; // class UndoAddLineToPoly
 
 
@@ -386,7 +397,7 @@ class UndoRenameObject
 	:	public QUndoCommand
 {
 public:
-	UndoRenameObject( Form * form, FormObject * obj, const QString & oldName,
+	UndoRenameObject( Form * form, const QString & oldName,
 		const QString & newName );
 	~UndoRenameObject();
 
@@ -397,13 +408,40 @@ public:
 private:
 	//! Form.
 	Form * m_form;
-	//! Object.
-	FormObject * m_obj;
 	//! Old name.
 	QString m_oldName;
 	//! New name.
 	QString m_newName;
 }; // class UndoRenameObject
+
+
+//
+// UndoChangeLine
+//
+
+//! Undo change line.
+class UndoChangeLine
+	:	public QUndoCommand
+{
+public:
+	UndoChangeLine( Form * form, const QString & id, const QLineF & oldLine,
+		const QLineF & newLine );
+	~UndoChangeLine();
+
+	void undo() Q_DECL_OVERRIDE;
+
+	void redo() Q_DECL_OVERRIDE;
+
+private:
+	//! Form.
+	Form * m_form;
+	//! Id.
+	QString m_id;
+	//! Old line.
+	QLineF m_oldLine;
+	//! New line.
+	QLineF m_newLine;
+}; // class UndoChangeLine
 
 } /* namespace Core */
 

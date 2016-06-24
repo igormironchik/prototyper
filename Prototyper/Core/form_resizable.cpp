@@ -24,10 +24,14 @@
 #include "form_resizable.hpp"
 #include "form_with_resize_and_move_handles.hpp"
 #include "form_resize_handle.hpp"
+#include "form.hpp"
+#include "form_undo_commands.hpp"
+#include "form_object.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
 #include <QPainter>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -70,6 +74,7 @@ FormResizableProxyPrivate::FormResizableProxyPrivate( FormResizable * resizable,
 	,	m_rect( 0.0, 0.0, 24.0, 24.0 )
 	,	m_handles( 0 )
 	,	m_form( form )
+	,	m_handleMoved( false )
 {
 }
 
@@ -187,6 +192,13 @@ FormResizableProxy::paint( QPainter * painter,
 void
 FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
+	if( !d->m_handleMoved )
+	{
+		d->m_subsidiaryRect = d->m_rect;
+
+		d->m_handleMoved = true;
+	}
+
 	if( handle == d->m_handles->m_move.data() )
 	{
 		d->m_rect.moveTop( d->m_rect.top() + delta.y() );
@@ -258,7 +270,25 @@ void
 FormResizableProxy::handleReleased( FormMoveHandle * handle )
 {
 	if( handle != d->m_handles->m_move.data() )
+	{
 		d->m_object->resize( d->m_rect );
+
+		FormObject * obj = dynamic_cast< FormObject* > ( d->m_object );
+
+		if( obj )
+			d->m_form->undoStack()->push( new UndoResize< FormObject > (
+				obj->form(), obj->objectId(),
+				d->m_subsidiaryRect, d->m_rect ) );
+	}
+	else
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( d->m_object );
+
+		if( obj )
+			d->m_form->undoStack()->push( new UndoMove< FormObject > (
+				obj->form(), obj->objectId(),
+				d->m_rect.topLeft() - d->m_subsidiaryRect.topLeft() ) );
+	}
 }
 
 } /* namespace Core */

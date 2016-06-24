@@ -51,6 +51,7 @@
 #include "form_spinbox.hpp"
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -69,9 +70,11 @@
 #include <QGraphicsView>
 #include <QTextDocument>
 #include <QSharedPointer>
+#include <QUndoStack>
 
 // C++ include.
 #include <algorithm>
+#include <type_traits>
 
 
 namespace Prototyper {
@@ -99,6 +102,7 @@ public:
 		,	m_btns( FormProperties::MinimizeButton |
 				FormProperties::MaximizeButton |
 				FormProperties::CloseButton )
+		,	m_undoStack( 0 )
 	{
 	}
 
@@ -208,6 +212,8 @@ public:
 	QMap< QString, QSharedPointer< QTextDocument > > m_desc;
 	//! Buttons.
 	FormProperties::Buttons m_btns;
+	//! Undo stack.
+	QUndoStack * m_undoStack;
 }; // class FormPrivate
 
 void
@@ -227,6 +233,8 @@ FormPrivate::init()
 	q->setAcceptDrops( true );
 
 	m_model = TopGui::instance()->projectWindow()->formHierarchy()->model();
+
+	m_undoStack = new QUndoStack( q );
 }
 
 qreal
@@ -319,6 +327,14 @@ FormPrivate::ungroup( QGraphicsItem * group )
 	if( tmp )
 	{
 		QList< QGraphicsItem* > items = tmp->childItems();
+
+		QStringList ids;
+
+		foreach( QGraphicsItem * i, tmp->children() )
+			ids.append( dynamic_cast< FormObject* > ( i )->objectId() );
+
+		m_undoStack->push( new UndoUngroup( ids,
+			tmp->objectId(), q ) );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -923,6 +939,12 @@ Form::~Form()
 {
 }
 
+QUndoStack *
+Form::undoStack() const
+{
+	return d->m_undoStack;
+}
+
 const Cfg::Size &
 Form::size() const
 {
@@ -1210,6 +1232,9 @@ Form::ids() const
 QGraphicsItem *
 Form::findItem( const QString & id )
 {
+	if( id == objectId() )
+		return this;
+
 	QList< QGraphicsItem* > items = childItems();
 
 	foreach( QGraphicsItem * item, items )
@@ -1311,6 +1336,8 @@ Form::group( const QList< QGraphicsItem* > & items )
 	if( group )
 	{
 		d->m_current = group;
+
+		d->m_undoStack->push( new UndoGroup( this, group->objectId() ) );
 
 		if( FormAction::instance()->mode() == FormAction::Select )
 		{
@@ -1477,6 +1504,146 @@ Form::alignHorizontalRight()
 	}
 }
 
+static inline void pushUndoDeleteCommand( QUndoStack * stack,
+	FormObject * obj, Form * form )
+{
+	switch( obj->objectType() )
+	{
+		case FormObject::LineType :
+		{
+			FormLine * item = dynamic_cast< FormLine* > ( obj );
+			Cfg::Line cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::PolylineType :
+		{
+			FormPolyline * item = dynamic_cast< FormPolyline* > ( obj );
+			Cfg::Polyline cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::TextType :
+		{
+			FormText * item = dynamic_cast< FormText* > ( obj );
+			Cfg::Text cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::ImageType :
+		{
+			FormImage * item = dynamic_cast< FormImage* > ( obj );
+			Cfg::Image cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::RectType :
+		{
+			FormRect * item = dynamic_cast< FormRect* > ( obj );
+			Cfg::Rect cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::GroupType :
+		{
+			FormGroup * item = dynamic_cast< FormGroup* > ( obj );
+			Cfg::Group cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::ButtonType :
+		{
+			FormButton * item = dynamic_cast< FormButton* > ( obj );
+			Cfg::Button cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::ComboBoxType :
+		{
+			FormComboBox * item = dynamic_cast< FormComboBox* > ( obj );
+			Cfg::ComboBox cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::RadioButtonType :
+		{
+			FormRadioButton * item = dynamic_cast< FormRadioButton* > ( obj );
+			Cfg::CheckBox cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::CheckBoxType :
+		{
+			FormCheckBox * item = dynamic_cast< FormCheckBox* > ( obj );
+			Cfg::CheckBox cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::HSliderType :
+		{
+			FormHSlider * item = dynamic_cast< FormHSlider* > ( obj );
+			Cfg::HSlider cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::VSliderType :
+		{
+			FormVSlider * item = dynamic_cast< FormVSlider* > ( obj );
+			Cfg::VSlider cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		case FormObject::SpinBoxType :
+		{
+			FormSpinBox * item = dynamic_cast< FormSpinBox* > ( obj );
+			Cfg::SpinBox cfg = item->cfg();
+
+			stack->push( new UndoDelete< std::remove_pointer_t<
+				decltype( item ) >, decltype( cfg ) >( form, cfg ) );
+		}
+			break;
+
+		default :
+			break;
+	}
+}
+
 void
 Form::deleteItems( const QList< QGraphicsItem* > & items )
 {
@@ -1489,6 +1656,8 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 
 		if( obj )
 		{
+			pushUndoDeleteCommand( d->m_undoStack, obj, this );
+
 			d->m_model->removeObject( obj, this );
 
 			d->removeDescriptions( obj );
@@ -1697,7 +1866,20 @@ Form::rectangle() const
 void
 Form::setRectangle( const QRectF & rect )
 {
-	Q_UNUSED( rect )
+	d->m_undoStack->push( new UndoResize< Form >( this, objectId(),
+		QRectF( 0.0, 0.0, d->m_cfg.size().width(), d->m_cfg.size().height() ),
+		rect ) );
+
+	d->m_cfg.size().width() = rect.width();
+	d->m_cfg.size().height() = rect.height();
+
+	emit changed();
+
+	scene()->setSceneRect( scene()->itemsBoundingRect() );
+
+	update();
+
+	scene()->update();
 }
 
 void
@@ -1736,6 +1918,9 @@ Form::renameObject( FormObject * obj, const QString & newId )
 
 	TopGui::instance()->projectWindow()->descWindow()->renameItem(
 		this, obj->objectId(), newId );
+
+	d->m_undoStack->push( new UndoRenameObject( this, obj->objectId(),
+		newId ) );
 
 	obj->setObjectId( newId );
 
@@ -1797,16 +1982,8 @@ Form::resizeForm()
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
-		d->m_cfg.size().width() = dlg.size().width();
-		d->m_cfg.size().height() = dlg.size().height();
-
-		emit changed();
-
-		scene()->setSceneRect( scene()->itemsBoundingRect() );
-
-		update();
-
-		scene()->update();
+		setRectangle( QRectF( 0.0, 0.0,
+			dlg.size().width(), dlg.size().height() ) );
 	}
 }
 
@@ -2073,7 +2250,7 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 	mouseEvent->ignore();
 }
 
-template< class Elem >
+template< class Elem, class Config >
 Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, FormPrivate * d,
 	QGraphicsSceneMouseEvent * mouseEvent, Form * form )
 {
@@ -2103,6 +2280,9 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, FormPrivate * d,
 		d->m_ids.append( id );
 
 		d->m_model->addObject( elem, form );
+
+		d->m_undoStack->push( new UndoCreate< Elem, Config > ( form,
+			elem->objectId() ) );
 	}
 
 	delete d->m_current;
@@ -2133,6 +2313,11 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				if( line )
 				{
+					if( !d->m_polyline )
+						d->m_undoStack->push(
+							new UndoCreate< FormLine, Cfg::Line > (
+								this, line->objectId() ) );
+
 					bool intersected = false;
 					bool intersectedEnds = false;
 					FormLine * intersectedLine = 0;
@@ -2149,9 +2334,13 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					if( d->m_polyline )
 					{
+						bool created = false;
+
 						if( !d->m_currentLines.isEmpty() )
 						{
 							d->m_currentPoly = new FormPolyline( this, this );
+
+							created = true;
 
 							const QString id = d->id();
 
@@ -2164,6 +2353,10 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 							d->m_currentPoly->appendLine(
 								d->m_currentLines.first()->line() );
 							d->m_currentPoly->showHandles( true );
+
+							d->m_undoStack->push(
+								new UndoCreate< FormPolyline, Cfg::Polyline > (
+									this, d->m_currentPoly->objectId() ) );
 
 							d->m_model->removeObject( d->m_currentLines.first(),
 								this );
@@ -2178,6 +2371,11 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 						}
 
 						d->m_currentPoly->appendLine( line->line() );
+
+						if( !created )
+							d->m_undoStack->push( new UndoAddLineToPoly( this,
+								d->m_currentPoly->objectId(),
+								line->line() ) );
 
 						d->m_model->removeObject( line, this );
 
@@ -2221,7 +2419,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case FormAction::InsertText :
 			{
 				FormText * text =
-					onReleaseWithRectPlacer< FormText >(
+					onReleaseWithRectPlacer< FormText, Cfg::Text > (
 						scene(), d.data(), mouseEvent, this );
 
 				if( text )
@@ -2231,6 +2429,9 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QTextCursor c = text->textCursor();
 					c.select( QTextCursor::Document );
 					text->setTextCursor( c );
+
+					d->m_undoStack->push( new UndoCreate< FormText, Cfg::Text > (
+						this, text->objectId() ) );
 				}
 
 				emit changed();
@@ -2254,6 +2455,9 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					r.setBottomRight( p );
 
 					rect->setRectangle( r );
+
+					d->m_undoStack->push( new UndoCreate< FormRect, Cfg::Rect > (
+						this, rect->objectId() ) );
 				}
 
 				update();
@@ -2270,7 +2474,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawButton :
 			{
-				onReleaseWithRectPlacer< FormButton > (
+				onReleaseWithRectPlacer< FormButton, Cfg::Button > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
@@ -2281,7 +2485,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawCheckBox :
 			{
-				onReleaseWithRectPlacer< FormCheckBox > (
+				onReleaseWithRectPlacer< FormCheckBox, Cfg::CheckBox > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
@@ -2292,7 +2496,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawRadioButton :
 			{
-				onReleaseWithRectPlacer< FormRadioButton > (
+				onReleaseWithRectPlacer< FormRadioButton, Cfg::CheckBox > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
@@ -2303,7 +2507,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawComboBox :
 			{
-				onReleaseWithRectPlacer< FormComboBox > (
+				onReleaseWithRectPlacer< FormComboBox, Cfg::ComboBox > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
@@ -2314,7 +2518,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawSpinBox :
 			{
-				onReleaseWithRectPlacer< FormSpinBox > (
+				onReleaseWithRectPlacer< FormSpinBox, Cfg::SpinBox > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
@@ -2325,7 +2529,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawHSlider :
 			{
-				onReleaseWithRectPlacer< FormHSlider > (
+				onReleaseWithRectPlacer< FormHSlider, Cfg::HSlider > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
@@ -2336,7 +2540,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case FormAction::DrawVSlider :
 			{
-				onReleaseWithRectPlacer< FormVSlider > (
+				onReleaseWithRectPlacer< FormVSlider, Cfg::VSlider > (
 					scene(), d.data(), mouseEvent, this );
 
 				emit changed();
@@ -2403,6 +2607,9 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 		const QString id = d->id();
 
 		image->setObjectId( id );
+
+		d->m_undoStack->push( new UndoCreate< FormImage, Cfg::Image > (
+			this, image->objectId() ) );
 
 		d->m_ids.append( id );
 

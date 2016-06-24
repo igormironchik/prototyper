@@ -28,14 +28,14 @@
 #include "form_with_resize_and_move_handles.hpp"
 #include "utils.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
 #include <QPolygonF>
 #include <QApplication>
 #include <QPainter>
-
-#include <QDebug>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -54,6 +54,7 @@ public:
 		,	m_end( 0 )
 		,	m_closed( false )
 		,	m_handles( 0 )
+		,	m_handleMoved( false )
 	{
 	}
 
@@ -82,6 +83,10 @@ public:
 	QScopedPointer< WithResizeAndMoveHandles > m_handles;
 	//! Resized bounding rect.
 	QRectF m_resized;
+	//! Sunsidiary rect.
+	QRectF m_subsidiaryRect;
+	//! Handle moved?
+	bool m_handleMoved;
 }; // class FormPolylinePrivate
 
 void
@@ -548,6 +553,9 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 void
 FormPolyline::setPosition( const QPointF & p )
 {
+	form()->undoStack()->push( new UndoMove< FormPolyline > ( form(),
+		objectId(), p - position() ) );
+
 	setPos( p - d->boundingRect().topLeft() );
 
 	QRectF r = boundingRect();
@@ -586,6 +594,13 @@ FormPolyline::setRectangle( const QRectF & rect )
 void
 FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
+	if( !d->m_handleMoved )
+	{
+		d->m_subsidiaryRect = d->m_resized;
+
+		d->m_handleMoved = true;
+	}
+
 	if( handle == d->m_handles->m_move.data() )
 	{
 		moveBy( delta.x(), delta.y() );
@@ -663,6 +678,19 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	}
 
 	form()->update();
+}
+
+void
+FormPolyline::handleReleased( FormMoveHandle * handle )
+{
+	d->m_handleMoved = false;
+
+	if( handle == d->m_handles->m_move.data() )
+		form()->undoStack()->push( new UndoMove< FormPolyline > ( form(),
+			objectId(), d->m_resized.topLeft() - d->m_subsidiaryRect.topLeft() ) );
+	else
+		form()->undoStack()->push( new UndoResize< FormPolyline > ( form(),
+			objectId(), d->m_subsidiaryRect, d->m_resized ) );
 }
 
 } /* namespace Core */

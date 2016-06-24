@@ -32,9 +32,9 @@ namespace Core {
 // UndoGroup
 //
 
-UndoGroup::UndoGroup( Form * form, FormGroup * g )
-	:	m_group( g )
-	,	m_form( form )
+UndoGroup::UndoGroup( Form * form, const QString & id )
+	:	m_form( form )
+	,	m_id( id )
 {
 }
 
@@ -47,16 +47,16 @@ UndoGroup::undo()
 {
 	TopGui::instance()->projectWindow()->switchToSelectMode();
 
-	QList< QGraphicsItem* > items = m_group->children();
+	FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
 
-	m_id = m_group->objectId();
+	QList< QGraphicsItem* > items = group->children();
 
 	m_items.clear();
 
 	foreach( QGraphicsItem * item, items )
 		m_items.append( dynamic_cast< FormObject* > ( item )->objectId() );
 
-	m_form->ungroup( m_group );
+	m_form->ungroup( group );
 }
 
 void
@@ -74,9 +74,9 @@ UndoGroup::redo()
 			items.append( item );
 	}
 
-	m_group = m_form->group( items );
+	FormGroup * group = m_form->group( items );
 
-	m_form->renameObject( m_group, m_id );
+	m_form->renameObject( group, m_id );
 }
 
 
@@ -84,10 +84,9 @@ UndoGroup::redo()
 // UndoUngroup
 //
 
-UndoUngroup::UndoUngroup( const QList< QGraphicsItem* > & items,
+UndoUngroup::UndoUngroup( const QStringList & items,
 	const QString & groupId, Form * form )
 	:	m_items( items )
-	,	m_group( Q_NULLPTR )
 	,	m_id( groupId )
 	,	m_form( form )
 {
@@ -102,9 +101,14 @@ UndoUngroup::undo()
 {
 	TopGui::instance()->projectWindow()->switchToSelectMode();
 
-	m_group = m_form->group( m_items );
+	QList< QGraphicsItem* > items;
 
-	m_form->renameObject( m_group, m_id );
+	foreach( const QString & id, m_items )
+		items.append( m_form->findItem( id ) );
+
+	FormGroup * group = m_form->group( items );
+
+	m_form->renameObject( group, m_id );
 }
 
 void
@@ -112,7 +116,9 @@ UndoUngroup::redo()
 {
 	TopGui::instance()->projectWindow()->switchToSelectMode();
 
-	m_form->ungroup( m_group );
+	FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
+
+	m_form->ungroup( group );
 }
 
 
@@ -122,11 +128,9 @@ UndoUngroup::redo()
 
 UndoAddLineToPoly::UndoAddLineToPoly( Form * form,
 	const QString & id, const QLineF & line )
-	:	m_poly( Q_NULLPTR )
-	,	m_line( line )
+	:	m_line( line )
 	,	m_form( form )
 	,	m_id( id )
-	,	m_lineItem( Q_NULLPTR )
 {
 }
 
@@ -137,34 +141,35 @@ UndoAddLineToPoly::~UndoAddLineToPoly()
 void
 UndoAddLineToPoly::undo()
 {
-	m_poly = dynamic_cast< FormPolyline* > ( m_form->findItem( m_id ) );
+	FormPolyline * poly = dynamic_cast< FormPolyline* > (
+		m_form->findItem( m_id ) );
 
-	m_poly->removeLine( m_line );
+	poly->removeLine( m_line );
 
 	TopGui::instance()->projectWindow()->switchToPolylineMode();
 
-	if( m_poly->countOfLines() == 1 )
+	if( poly->countOfLines() == 1 )
 	{
-		const QLineF line = m_poly->lines().first();
+		const QLineF line = poly->lines().first();
 
-		m_form->deleteItems( QList< QGraphicsItem* > () << m_poly );
+		m_form->deleteItems( QList< QGraphicsItem* > () << poly );
 
-		m_lineItem = dynamic_cast< FormLine* > (
+		FormLine * lineItem = dynamic_cast< FormLine* > (
 			createElement< FormLine > ( m_form ) );
 
-		m_lineItem->setLine( line );
+		lineItem->setLine( line );
 
-		m_form->renameObject( m_lineItem, m_id );
+		m_form->renameObject( lineItem, m_id );
 
-		m_lineItem->showHandles( true );
+		lineItem->showHandles( true );
 
-		m_form->setCurrentLine( m_lineItem );
+		m_form->setCurrentLine( lineItem );
 	}
 	else
 	{
-		m_form->setCurrentPolyLine( m_poly );
+		m_form->setCurrentPolyLine( poly );
 
-		m_poly->showHandles( true );
+		poly->showHandles( true );
 	}
 }
 
@@ -173,35 +178,36 @@ UndoAddLineToPoly::redo()
 {
 	TopGui::instance()->projectWindow()->switchToPolylineMode();
 
-	if( m_lineItem )
+	FormLine * lineItem = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
+
+	if( lineItem )
 	{
-		const QLineF line = m_lineItem->line();
+		const QLineF line = lineItem->line();
 
-		m_form->deleteItems( QList< QGraphicsItem* > () << m_lineItem );
+		m_form->deleteItems( QList< QGraphicsItem* > () << lineItem );
 
-		m_lineItem = Q_NULLPTR;
-
-		m_poly = dynamic_cast< FormPolyline* > (
+		FormPolyline * poly = dynamic_cast< FormPolyline* > (
 			createElement< FormPolyline > ( m_form ) );
 
-		m_form->renameObject( m_poly, m_id );
+		m_form->renameObject( poly, m_id );
 
-		m_poly->appendLine( line );
+		poly->appendLine( line );
 
-		m_poly->appendLine( m_line );
+		poly->appendLine( m_line );
 
-		m_poly->showHandles( true );
+		poly->showHandles( true );
 	}
 	else
 	{
-		m_poly = dynamic_cast< FormPolyline* > ( m_form->findItem( m_id ) );
+		FormPolyline * poly = dynamic_cast< FormPolyline* > (
+			m_form->findItem( m_id ) );
 
-		m_poly->appendLine( m_line );
+		poly->appendLine( m_line );
 
-		if( m_poly->isClosed() )
-			m_poly->showHandles( false );
+		if( poly->isClosed() )
+			poly->showHandles( false );
 		else
-			m_poly->showHandles( true );
+			poly->showHandles( true );
 	}
 }
 
@@ -210,10 +216,9 @@ UndoAddLineToPoly::redo()
 // UndoRenameObject
 //
 
-UndoRenameObject::UndoRenameObject( Form * form, FormObject * obj,
+UndoRenameObject::UndoRenameObject( Form * form,
 	const QString & oldName, const QString & newName )
 	:	m_form( form )
-	,	m_obj( obj )
 	,	m_oldName( oldName )
 	,	m_newName( newName )
 {
@@ -226,13 +231,57 @@ UndoRenameObject::~UndoRenameObject()
 void
 UndoRenameObject::undo()
 {
-	m_form->renameObject( m_obj, m_oldName );
+	FormObject * obj = dynamic_cast< FormObject* > (
+		m_form->findItem( m_newName ) );
+
+	m_form->renameObject( obj, m_oldName );
 }
 
 void
 UndoRenameObject::redo()
 {
-	m_form->renameObject( m_obj, m_newName );
+	FormObject * obj = dynamic_cast< FormObject* > (
+		m_form->findItem( m_oldName ) );
+
+	m_form->renameObject( obj, m_newName );
+}
+
+
+//
+// UndoChangeLine
+//
+
+UndoChangeLine::UndoChangeLine( Form * form, const QString & id,
+	const QLineF & oldLine, const QLineF & newLine )
+	:	m_form( form )
+	,	m_id( id )
+	,	m_oldLine( oldLine )
+	,	m_newLine( newLine )
+{
+}
+
+UndoChangeLine::~UndoChangeLine()
+{
+}
+
+void
+UndoChangeLine::undo()
+{
+	FormLine * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
+
+	line->setLine( m_oldLine );
+
+	line->placeHandles();
+}
+
+void
+UndoChangeLine::redo()
+{
+	FormLine * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
+
+	line->setLine( m_newLine );
+
+	line->placeHandles();
 }
 
 } /* namespace Core */

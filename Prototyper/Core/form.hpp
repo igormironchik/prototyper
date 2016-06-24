@@ -31,6 +31,10 @@
 #include "form_object.hpp"
 #include "form_properties.hpp"
 
+QT_BEGIN_NAMESPACE
+class QUndoStack;
+QT_END_NAMESPACE
+
 
 namespace Prototyper {
 
@@ -81,6 +85,9 @@ public:
 		//! No grid.
 		NoGrid
 	}; // enum GridMode
+
+	//! \return Undo stack.
+	QUndoStack * undoStack() const;
 
 	//! \return Size.
 	const Cfg::Size & size() const;

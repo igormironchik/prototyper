@@ -87,6 +87,10 @@ public:
 	QScopedPointer< WithResizeAndMoveHandles > m_handles;
 	//! Form.
 	Form * m_form;
+	//! Subsidiary rect.
+	QRectF m_subsidiaryRect;
+	//! Is hadnle moved.
+	bool m_handleMoved;
 }; // class FormResizableProxyPrivate;
 
 

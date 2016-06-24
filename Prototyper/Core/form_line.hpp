@@ -101,6 +101,8 @@ protected:
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		Q_DECL_OVERRIDE;
+	//! Handle released.
+	void handleReleased( FormMoveHandle * handle ) Q_DECL_OVERRIDE;
 
 protected:
 	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )
@@ -109,6 +111,12 @@ protected:
 		Q_DECL_OVERRIDE;
 	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		Q_DECL_OVERRIDE;
+
+protected:
+	friend class UndoChangeLine;
+
+	//! Place handles.
+	void placeHandles();
 
 private:
 	Q_DISABLE_COPY( FormLine )

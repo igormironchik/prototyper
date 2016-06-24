@@ -24,12 +24,14 @@
 #include "form_image.hpp"
 #include "form_image_handles.hpp"
 #include "form.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QByteArray>
 #include <QBuffer>
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -177,6 +179,9 @@ FormImage::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 void
 FormImage::setPosition( const QPointF & pos )
 {
+	form()->undoStack()->push( new UndoMove< FormImage > ( form(),
+		objectId(), pos - position() ) );
+
 	setPos( pos );
 
 	QRectF r = boundingRect();
