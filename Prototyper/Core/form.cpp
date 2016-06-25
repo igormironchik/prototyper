@@ -27,14 +27,7 @@
 #include "project_widget.hpp"
 #include "project_cfg.hpp"
 #include "form_actions.hpp"
-#include "form_line.hpp"
-#include "form_grid_snap.hpp"
-#include "form_polyline.hpp"
-#include "form_group.hpp"
 #include "form_rect_placer.hpp"
-#include "form_text.hpp"
-#include "form_image.hpp"
-#include "form_hierarchy_model.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "form_hierarchy_widget.hpp"
@@ -42,15 +35,6 @@
 #include "form_size_dlg.hpp"
 #include "desc_window.hpp"
 #include "utils.hpp"
-#include "form_rectangle.hpp"
-#include "form_button.hpp"
-#include "form_button.hpp"
-#include "form_checkbox.hpp"
-#include "form_radio_button.hpp"
-#include "form_combobox.hpp"
-#include "form_spinbox.hpp"
-#include "form_hslider.hpp"
-#include "form_vslider.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -84,137 +68,6 @@ namespace Core {
 //
 // FormPrivate
 //
-
-class FormPrivate {
-public:
-	FormPrivate( Cfg::Form & cfg, Form * parent )
-		:	q( parent )
-		,	m_gridMode( Form::ShowGrid )
-		,	m_gridStepAction( 0 )
-		,	m_cfg( cfg )
-		,	m_pressed( false )
-		,	m_current( 0 )
-		,	m_id( 0 )
-		,	m_snap( 0 )
-		,	m_polyline( false )
-		,	m_currentPoly( 0 )
-		,	m_model( 0 )
-		,	m_btns( FormProperties::MinimizeButton |
-				FormProperties::MaximizeButton |
-				FormProperties::CloseButton )
-		,	m_undoStack( 0 )
-	{
-	}
-
-	//! Init.
-	void init();
-	//! \return Current Z-value.
-	qreal currentZValue() const;
-	//! \return Current Z-value.
-	void currentZValue( const QList< QGraphicsItem* > & items,
-		qreal & z ) const;
-	//! \return Start point for line.
-	QPointF lineStartPoint( const QPointF & point,
-		bool & intersected, bool & intersectedEnds,
-		FormLine* & intersectedLine ) const;
-	//! Clear current lines.
-	void clearCurrentLines();
-	//! Handle mouse move in current lines.
-	void handleMouseMoveInCurrentLines( const QPointF & point );
-	//! Handle mouse move in current polyline.
-	void handleMouseMoveInCurrentPolyLine( const QPointF & point );
-	//! Ungroup.
-	void ungroup( QGraphicsItem * group );
-	//! \return Next ID.
-	QString id();
-	//! Update form from the configuration.
-	void updateFromCfg();
-	//! Clear form.
-	void clear();
-	//! Create text.
-	FormText * createText( const Cfg::Text & cfg );
-	//! Create group.
-	FormGroup * createGroup( const Cfg::Group & cfg );
-	//! Create element.
-	template< class Elem, class Config >
-	Elem * createElem( const Config & cfg );
-	//! Create element with rect.
-	template< class Elem, class Config >
-	Elem * createElemWithRect( const Config & cfg, const QRectF & rect );
-	//! Clear IDs.
-	void clearIds( FormGroup * group );
-	//! Add IDs.
-	void addIds( FormGroup * group );
-	//! Create description.
-	void createDescription( const QString & id );
-	//! Set text.
-	void setText( const QSharedPointer< QTextDocument > & doc,
-		const QList< Cfg::TextStyle > & text );
-	//! Update link.
-	void updateLink( const QList< QGraphicsItem* > & childItems,
-		const QString & oldName, const QString & name );
-	//! Hide handles of current item.
-	void hideHandlesOfCurrent();
-	//! Remove descriptions of the object.
-	void removeDescriptions( FormObject * obj );
-	//! Selection.
-	QList< QGraphicsItem* > selection();
-
-	//! AlignPoint.
-	enum AlignPoint {
-		//! Align Horizontal Left.
-		AlignHorLeftPoint,
-		//! Align Horizontal Center.
-		AlignHorCenterPoint,
-		//! Align Horizontal Right.
-		AlignHorRightPoint,
-		//! Align Vertical Top.
-		AlignVertTopPoint,
-		//! Align Vertical Center.
-		AlignVertCenterPoint,
-		//! Align Vertical Bottom.
-		AlignVertBottomPoint
-	}; // enum AlignPoint
-
-	//! Search align point.
-	qreal searchAlignPoint( const QList< QGraphicsItem* > & items,
-		AlignPoint point );
-
-	//! Parent.
-	Form * q;
-	//! Grid mode.
-	Form::GridMode m_gridMode;
-	//! Grid step action.
-	QAction * m_gridStepAction;
-	//! Cfg.
-	Cfg::Form & m_cfg;
-	//! Pressed.
-	bool m_pressed;
-	//! Current item.
-	QGraphicsItem * m_current;
-	//! Mouse pos.
-	QPointF m_pos;
-	//! ID.
-	quint64 m_id;
-	//! Current lines.
-	QList< FormLine* > m_currentLines;
-	//! Grid snap.
-	GridSnap * m_snap;
-	//! Make polyline.
-	bool m_polyline;
-	//! Current polyline.
-	FormPolyline * m_currentPoly;
-	//! Hierarchy model.
-	FormHierarchyModel * m_model;
-	//! IDs
-	QStringList m_ids;
-	//! Descriptions.
-	QMap< QString, QSharedPointer< QTextDocument > > m_desc;
-	//! Buttons.
-	FormProperties::Buttons m_btns;
-	//! Undo stack.
-	QUndoStack * m_undoStack;
-}; // class FormPrivate
 
 void
 FormPrivate::init()
@@ -959,7 +812,7 @@ Form::setSize( const Cfg::Size & s )
 	update();
 }
 
-Form::GridMode
+GridMode
 Form::gridMode() const
 {
 	return d->m_gridMode;
@@ -1645,7 +1498,8 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 }
 
 void
-Form::deleteItems( const QList< QGraphicsItem* > & items )
+Form::deleteItems( const QList< QGraphicsItem* > & items,
+	bool makeUndoCommand )
 {
 	foreach( QGraphicsItem * item, items )
 	{
@@ -1656,17 +1510,13 @@ Form::deleteItems( const QList< QGraphicsItem* > & items )
 
 		if( obj )
 		{
-			pushUndoDeleteCommand( d->m_undoStack, obj, this );
+			if( makeUndoCommand )
+				pushUndoDeleteCommand( d->m_undoStack, obj, this );
 
 			d->m_model->removeObject( obj, this );
 
 			d->removeDescriptions( obj );
-		}
 
-		scene()->removeItem( item );
-
-		if( obj )
-		{
 			d->m_model->endRemoveObject();
 
 			d->m_ids.removeOne( obj->objectId() );
@@ -1715,15 +1565,8 @@ QRectF
 Form::boundingRect() const
 {
 	if( !d.isNull() )
-	{
-		const qreal wh = ( d->m_btns.testFlag( FormProperties::MinimizeButton ) ?
-			30.0 : ( d->m_btns.testFlag( FormProperties::MaximizeButton ) ?
-				30.0 : ( d->m_btns.testFlag( FormProperties::CloseButton ) ?
-					30.0 : 0.0 ) ) );
-
 		return QRectF( 0.0, 0.0, d->m_cfg.size().width(),
-			d->m_cfg.size().height() + wh );
-	}
+			d->m_cfg.size().height() + 30.0 );
 	else
 		return QRectF();
 }
@@ -1744,10 +1587,7 @@ void
 Form::draw( QPainter * painter, int width, int height,
 	FormProperties::Buttons btns, int gridStep, bool drawGrid )
 {
-	const int wh = ( btns.testFlag( FormProperties::MinimizeButton ) ?
-		30 : ( btns.testFlag( FormProperties::MaximizeButton ) ?
-			30 : ( btns.testFlag( FormProperties::CloseButton ) ?
-				30 : 0 ) ) );
+	const int wh = 30;
 
 	static const QColor gridColor = Qt::gray;
 
@@ -1755,78 +1595,75 @@ Form::draw( QPainter * painter, int width, int height,
 
 	painter->setRenderHint( QPainter::Antialiasing, false );
 
-	if( wh )
+	painter->setBrush( QBrush( gridColor ) );
+
+	painter->drawRect( QRect( 0, 0, width, wh ) );
+
+	painter->setBrush( Qt::white );
+
+	const int w = 20;
+	const int o = 5;
+
+	const int trd = qRound( (qreal) w / 3.5 );
+	const int half = qRound( (qreal) w / 2.0 );
+
+	int i = 1;
+
+	if( btns.testFlag( FormProperties::CloseButton ) )
 	{
-		painter->setBrush( QBrush( gridColor ) );
+		const QRect b( width - o * i - w * i, o, w, w );
 
-		painter->drawRect( QRect( 0, 0, width, wh ) );
+		painter->drawEllipse( b );
 
-		painter->setBrush( Qt::white );
+		painter->drawLine( b.x() + trd, b.y() + trd,
+			b.x() + w - trd, b.y() + w - trd );
 
-		const int w = 20;
-		const int o = 5;
+		painter->drawLine( b.x() + trd, b.y() + w - trd,
+			b.x() + w - trd, b.y() + trd );
 
-		const int trd = qRound( (qreal) w / 3.5 );
-		const int half = qRound( (qreal) w / 2.0 );
+		++i;
+	}
 
-		int i = 1;
+	if( btns.testFlag( FormProperties::MaximizeButton ) )
+	{
+		const QRect b( width - o * i - w * i, o, w, w );
 
-		if( btns.testFlag( FormProperties::CloseButton ) )
-		{
-			const QRect b( width - o * i - w * i, o, w, w );
+		painter->save();
 
-			painter->drawEllipse( b );
+		painter->setPen( Qt::white );
 
-			painter->drawLine( b.x() + trd, b.y() + trd,
-				b.x() + w - trd, b.y() + w - trd );
+		painter->drawLine( b.x() + half, b.y() + trd,
+			b.x() + w - trd, b.y() + half );
 
-			painter->drawLine( b.x() + trd, b.y() + w - trd,
-				b.x() + w - trd, b.y() + trd );
+		painter->drawLine( b.x() + w - trd, b.y() + half,
+			b.x() + half, b.y() + w - trd );
 
-			++i;
-		}
+		painter->drawLine( b.x() + half, b.y() + w - trd,
+			b.x() + trd, b.y() + half );
 
-		if( btns.testFlag( FormProperties::MaximizeButton ) )
-		{
-			const QRect b( width - o * i - w * i, o, w, w );
+		painter->drawLine( b.x() + trd, b.y() + half,
+			b.x() + half, b.y() + trd );
 
-			painter->save();
+		painter->restore();
 
-			painter->setPen( Qt::white );
+		++i;
+	}
 
-			painter->drawLine( b.x() + half, b.y() + trd,
-				b.x() + w - trd, b.y() + half );
+	if( btns.testFlag( FormProperties::MinimizeButton ) )
+	{
+		const QRect b( width - o * i - w * i, o, w, w );
 
-			painter->drawLine( b.x() + w - trd, b.y() + half,
-				b.x() + half, b.y() + w - trd );
+		painter->save();
 
-			painter->drawLine( b.x() + half, b.y() + w - trd,
-				b.x() + trd, b.y() + half );
+		painter->setPen( Qt::white );
 
-			painter->drawLine( b.x() + trd, b.y() + half,
-				b.x() + half, b.y() + trd );
+		painter->drawLine( b.x() + trd, b.y() + half,
+			b.x() + half, b.y() + w - trd );
 
-			painter->restore();
+		painter->drawLine( b.x() + half, b.y() + w - trd,
+			b.x() + w - trd, b.y() + half );
 
-			++i;
-		}
-
-		if( btns.testFlag( FormProperties::MinimizeButton ) )
-		{
-			const QRect b( width - o * i - w * i, o, w, w );
-
-			painter->save();
-
-			painter->setPen( Qt::white );
-
-			painter->drawLine( b.x() + trd, b.y() + half,
-				b.x() + half, b.y() + w - trd );
-
-			painter->drawLine( b.x() + half, b.y() + w - trd,
-				b.x() + w - trd, b.y() + half );
-
-			painter->restore();
-		}
+		painter->restore();
 	}
 
 	painter->setBrush( Qt::white );
@@ -1927,6 +1764,8 @@ Form::renameObject( FormObject * obj, const QString & newId )
 	d->m_ids.removeOne( old );
 
 	d->m_ids.append( newId );
+
+	d->m_model->update( obj );
 }
 
 void
@@ -2093,7 +1932,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				if( rect )
 				{
-					QRectF r = rect->rect();
+					QRectF r = rect->rectangle();
 					r.setBottomRight( mouseEvent->pos() );
 
 					rect->setRectangle( r );
@@ -2451,7 +2290,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					if( FormAction::instance()->isSnapEnabled() )
 						p = d->m_snap->snapPos();
 
-					QRectF r = rect->rect();
+					QRectF r = rect->rectangle();
 					r.setBottomRight( p );
 
 					rect->setRectangle( r );

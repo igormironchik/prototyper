@@ -43,6 +43,9 @@
 #include <QMessageBox>
 #include <QStringListModel>
 #include <QApplication>
+#include <QAction>
+#include <QUndoStack>
+#include <QUndoGroup>
 
 
 namespace Prototyper {
@@ -82,6 +85,7 @@ public:
 		,	m_tabs( 0 )
 		,	m_desc( 0 )
 		,	m_tabBar( 0 )
+		,	m_undoGroup( 0 )
 	{
 	}
 
@@ -106,6 +110,8 @@ public:
 	QStringList m_tabNames;
 	//! Forms.
 	QList< FormView* > m_forms;
+	//! Undo group.
+	QUndoGroup * m_undoGroup;
 }; // class ProjectWidgetPrivate
 
 void
@@ -127,6 +133,8 @@ ProjectWidgetPrivate::init()
 	m_desc = new ProjectDescTab( m_tabs );
 	m_tabs->addTab( m_desc, m_tabNames.first() );
 
+	m_undoGroup = new QUndoGroup( q );
+
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formRenameRequest,
 		q, &ProjectWidget::renameTab );
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formAddRequest,
@@ -135,6 +143,8 @@ ProjectWidgetPrivate::init()
 		q, &ProjectWidget::deleteForm );
 	ProjectWidget::connect( m_desc->editor(), &TextEditor::changed,
 		q, &ProjectWidget::changed );
+	ProjectWidget::connect( m_tabs, &QTabWidget::currentChanged,
+		q, &ProjectWidget::tabChanged );
 }
 
 void
@@ -151,6 +161,8 @@ ProjectWidgetPrivate::newProject()
 		m_tabNames.removeAt( i );
 
 		ProjectWidget::disconnect( tab, 0, 0, 0 );
+
+		m_undoGroup->removeStack( m_forms.at( i )->form()->undoStack() );
 
 		tab->deleteLater();
 	}
@@ -181,13 +193,15 @@ ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
 	FormView * form = new FormView( cfg, m_tabs );
 
 	form->form()->setGridMode( showGrid ?
-		Form::ShowGrid : Form::NoGrid );
+		ShowGrid : NoGrid );
 
 	m_tabNames.append( cfg.tabName() );
 
 	m_tabs->addTab( form, cfg.tabName() );
 
 	m_forms.append( form );
+
+	m_undoGroup->addStack( form->form()->undoStack() );
 
 	ProjectWidget::connect( form->formScene(), &FormScene::changed,
 		q, &ProjectWidget::changed );
@@ -273,6 +287,12 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 		setStringList( d->m_tabNames );
 }
 
+QUndoGroup *
+ProjectWidget::undoGroup() const
+{
+	return d->m_undoGroup;
+}
+
 void
 ProjectWidget::addForm()
 {
@@ -353,12 +373,13 @@ ProjectWidget::deleteForm( const QString & name )
 					"Are you sure?" ).arg( name ) );
 
 		if( btn == QMessageBox::Yes )
-		{
+		{		
 			const int index = d->m_tabNames.indexOf( name );
 
-			QWidget * tab = d->m_tabs->widget( index );
+			d->m_undoGroup->removeStack(
+				d->m_forms.at( index - 1 )->form()->undoStack() );
 
-			d->m_tabs->removeTab( index );
+			QWidget * tab = d->m_tabs->widget( index );
 
 			d->m_tabNames.removeAt( index );
 
@@ -368,6 +389,8 @@ ProjectWidget::deleteForm( const QString & name )
 			d->m_forms.removeAt( index - 1 );
 
 			d->m_cfg.form().removeAt( index - 1 );
+
+			d->m_tabs->removeTab( index );
 
 			disconnect( tab, 0, 0, 0 );
 
@@ -395,6 +418,16 @@ ProjectWidget::activateTab( const QString & tabName )
 {
 	if( d->m_tabNames.contains( tabName ) )
 		d->m_tabs->setCurrentIndex( d->m_tabNames.indexOf( tabName ) );
+}
+
+void
+ProjectWidget::tabChanged( int index )
+{
+	if( index > 0 )
+		d->m_undoGroup->setActiveStack(
+			d->m_forms.at( index - 1 )->form()->undoStack() );
+	else
+		d->m_undoGroup->setActiveStack( Q_NULLPTR );
 }
 
 } /* namespace Core */

@@ -62,5 +62,7 @@
 		<file>img/align-vertical-top.png</file>
 		<file>img/align-vertical-center.png</file>
 		<file>img/align-vertical-bottom.png</file>
+		<file>img/edit-undo.png</file>
+		<file>img/edit-redo.png</file>
 	</qresource>
 </RCC>

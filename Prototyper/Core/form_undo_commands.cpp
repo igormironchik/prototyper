@@ -33,8 +33,10 @@ namespace Core {
 //
 
 UndoGroup::UndoGroup( Form * form, const QString & id )
-	:	m_form( form )
+	:	QUndoCommand( QObject::tr( "Group" ) )
+	,	m_form( form )
 	,	m_id( id )
+	,	m_undone( false )
 {
 }
 
@@ -45,7 +47,7 @@ UndoGroup::~UndoGroup()
 void
 UndoGroup::undo()
 {
-	TopGui::instance()->projectWindow()->switchToSelectMode();
+	m_undone = true;
 
 	FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
 
@@ -57,26 +59,31 @@ UndoGroup::undo()
 		m_items.append( dynamic_cast< FormObject* > ( item )->objectId() );
 
 	m_form->ungroup( group );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
 
 void
 UndoGroup::redo()
 {
-	TopGui::instance()->projectWindow()->switchToSelectMode();
-
-	QList< QGraphicsItem* > items;
-
-	foreach( const QString & id, m_items )
+	if( m_undone )
 	{
-		QGraphicsItem * item = m_form->findItem( id );
+		QList< QGraphicsItem* > items;
 
-		if( item )
-			items.append( item );
+		foreach( const QString & id, m_items )
+		{
+			QGraphicsItem * item = m_form->findItem( id );
+
+			if( item )
+				items.append( item );
+		}
+
+		FormGroup * group = m_form->group( items );
+
+		m_form->renameObject( group, m_id );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
-
-	FormGroup * group = m_form->group( items );
-
-	m_form->renameObject( group, m_id );
 }
 
 
@@ -86,9 +93,11 @@ UndoGroup::redo()
 
 UndoUngroup::UndoUngroup( const QStringList & items,
 	const QString & groupId, Form * form )
-	:	m_items( items )
+	:	QUndoCommand( QObject::tr( "Ungroup" ) )
+	,	m_items( items )
 	,	m_id( groupId )
 	,	m_form( form )
+	,	m_undone( false )
 {
 }
 
@@ -99,7 +108,7 @@ UndoUngroup::~UndoUngroup()
 void
 UndoUngroup::undo()
 {
-	TopGui::instance()->projectWindow()->switchToSelectMode();
+	m_undone = true;
 
 	QList< QGraphicsItem* > items;
 
@@ -109,16 +118,21 @@ UndoUngroup::undo()
 	FormGroup * group = m_form->group( items );
 
 	m_form->renameObject( group, m_id );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
 
 void
 UndoUngroup::redo()
 {
-	TopGui::instance()->projectWindow()->switchToSelectMode();
+	if( m_undone )
+	{
+		FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
 
-	FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
+		m_form->ungroup( group );
 
-	m_form->ungroup( group );
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
 }
 
 
@@ -128,9 +142,11 @@ UndoUngroup::redo()
 
 UndoAddLineToPoly::UndoAddLineToPoly( Form * form,
 	const QString & id, const QLineF & line )
-	:	m_line( line )
+	:	QUndoCommand( QObject::tr( "Add Line" ) )
+	,	m_line( line )
 	,	m_form( form )
 	,	m_id( id )
+	,	m_undone( false )
 {
 }
 
@@ -141,25 +157,23 @@ UndoAddLineToPoly::~UndoAddLineToPoly()
 void
 UndoAddLineToPoly::undo()
 {
+	m_undone = true;
+
 	FormPolyline * poly = dynamic_cast< FormPolyline* > (
 		m_form->findItem( m_id ) );
 
 	poly->removeLine( m_line );
 
-	TopGui::instance()->projectWindow()->switchToPolylineMode();
-
 	if( poly->countOfLines() == 1 )
 	{
 		const QLineF line = poly->lines().first();
 
-		m_form->deleteItems( QList< QGraphicsItem* > () << poly );
+		m_form->deleteItems( QList< QGraphicsItem* > () << poly, false );
 
 		FormLine * lineItem = dynamic_cast< FormLine* > (
-			createElement< FormLine > ( m_form ) );
+			m_form->createElement< FormLine > ( m_id ) );
 
 		lineItem->setLine( line );
-
-		m_form->renameObject( lineItem, m_id );
 
 		lineItem->showHandles( true );
 
@@ -171,43 +185,48 @@ UndoAddLineToPoly::undo()
 
 		poly->showHandles( true );
 	}
+
+	TopGui::instance()->projectWindow()->switchToPolylineMode();
 }
 
 void
 UndoAddLineToPoly::redo()
 {
-	TopGui::instance()->projectWindow()->switchToPolylineMode();
-
-	FormLine * lineItem = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
-
-	if( lineItem )
+	if( m_undone )
 	{
-		const QLineF line = lineItem->line();
-
-		m_form->deleteItems( QList< QGraphicsItem* > () << lineItem );
-
-		FormPolyline * poly = dynamic_cast< FormPolyline* > (
-			createElement< FormPolyline > ( m_form ) );
-
-		m_form->renameObject( poly, m_id );
-
-		poly->appendLine( line );
-
-		poly->appendLine( m_line );
-
-		poly->showHandles( true );
-	}
-	else
-	{
-		FormPolyline * poly = dynamic_cast< FormPolyline* > (
+		FormLine * lineItem = dynamic_cast< FormLine* > (
 			m_form->findItem( m_id ) );
 
-		poly->appendLine( m_line );
+		if( lineItem )
+		{
+			const QLineF line = lineItem->line();
 
-		if( poly->isClosed() )
-			poly->showHandles( false );
-		else
+			m_form->deleteItems( QList< QGraphicsItem* > () << lineItem,
+				false );
+
+			FormPolyline * poly = dynamic_cast< FormPolyline* > (
+				m_form->createElement< FormPolyline > ( m_id ) );
+
+			poly->appendLine( line );
+
+			poly->appendLine( m_line );
+
 			poly->showHandles( true );
+		}
+		else
+		{
+			FormPolyline * poly = dynamic_cast< FormPolyline* > (
+				m_form->findItem( m_id ) );
+
+			poly->appendLine( m_line );
+
+			if( poly->isClosed() )
+				poly->showHandles( false );
+			else
+				poly->showHandles( true );
+		}
+
+		TopGui::instance()->projectWindow()->switchToPolylineMode();
 	}
 }
 
@@ -218,9 +237,11 @@ UndoAddLineToPoly::redo()
 
 UndoRenameObject::UndoRenameObject( Form * form,
 	const QString & oldName, const QString & newName )
-	:	m_form( form )
+	:	QUndoCommand( QObject::tr( "Rename Object" ) )
+	,	m_form( form )
 	,	m_oldName( oldName )
 	,	m_newName( newName )
+	,	m_undone( false )
 {
 }
 
@@ -231,19 +252,28 @@ UndoRenameObject::~UndoRenameObject()
 void
 UndoRenameObject::undo()
 {
+	m_undone = true;
+
 	FormObject * obj = dynamic_cast< FormObject* > (
 		m_form->findItem( m_newName ) );
 
 	m_form->renameObject( obj, m_oldName );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
 
 void
 UndoRenameObject::redo()
 {
-	FormObject * obj = dynamic_cast< FormObject* > (
-		m_form->findItem( m_oldName ) );
+	if( m_undone )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > (
+			m_form->findItem( m_oldName ) );
 
-	m_form->renameObject( obj, m_newName );
+		m_form->renameObject( obj, m_newName );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
 }
 
 
@@ -253,10 +283,12 @@ UndoRenameObject::redo()
 
 UndoChangeLine::UndoChangeLine( Form * form, const QString & id,
 	const QLineF & oldLine, const QLineF & newLine )
-	:	m_form( form )
+	:	QUndoCommand( QObject::tr( "Change Line" ) )
+	,	m_form( form )
 	,	m_id( id )
 	,	m_oldLine( oldLine )
 	,	m_newLine( newLine )
+	,	m_undone( false )
 {
 }
 
@@ -267,21 +299,30 @@ UndoChangeLine::~UndoChangeLine()
 void
 UndoChangeLine::undo()
 {
+	m_undone = true;
+
 	FormLine * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
 
 	line->setLine( m_oldLine );
 
 	line->placeHandles();
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
 
 void
 UndoChangeLine::redo()
 {
-	FormLine * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
+	if( m_undone )
+	{
+		FormLine * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
 
-	line->setLine( m_newLine );
+		line->setLine( m_newLine );
 
-	line->placeHandles();
+		line->placeHandles();
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
 }
 
 } /* namespace Core */

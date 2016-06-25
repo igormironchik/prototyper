@@ -31,6 +31,7 @@
 
 // Qt include.
 #include <QUndoStack>
+#include <QPainter>
 
 
 namespace Prototyper {
@@ -63,6 +64,8 @@ public:
 	QRectF m_subsidiaryRect;
 	//! Is handle moved?
 	bool m_isHandleMoved;
+	//! Rect.
+	QRectF m_rect;
 }; // class FormRectPrivate
 
 void
@@ -82,8 +85,8 @@ FormRectPrivate::init()
 
 void
 FormRectPrivate::updateRect( const QRectF & r )
-{
-	q->setRect( r );
+{	
+	m_rect = r;
 
 	QRectF hr = q->boundingRect();
 
@@ -101,7 +104,7 @@ FormRectPrivate::updateRect( const QRectF & r )
 //
 
 FormRect::FormRect( Form * form, QGraphicsItem * parent )
-	:	QGraphicsRectItem( parent )
+	:	QGraphicsItem( parent )
 	,	FormObject( FormObject::RectType, form )
 	,	d( new FormRectPrivate( this ) )
 {
@@ -132,14 +135,14 @@ FormRect::cfg() const
 	c.setLink( link() );
 
 	Cfg::Point topLeft;
-	topLeft.setX( rect().topLeft().x() );
-	topLeft.setY( rect().topLeft().y() );
+	topLeft.setX( d->m_rect.topLeft().x() );
+	topLeft.setY( d->m_rect.topLeft().y() );
 
 	c.setTopLeft( topLeft );
 
 	Cfg::Size s;
-	s.setWidth( rect().size().width() );
-	s.setHeight( rect().size().height() );
+	s.setWidth( d->m_rect.size().width() );
+	s.setHeight( d->m_rect.size().height() );
 
 	c.setSize( s );
 
@@ -160,7 +163,7 @@ FormRect::setCfg( const Cfg::Rect & c )
 
 	setPos( QPointF( c.pos().x(), c.pos().y() ) );
 
-	setRectangle( r );
+	d->updateRect( r );
 
 	setLink( c.link() );
 }
@@ -168,14 +171,26 @@ FormRect::setCfg( const Cfg::Rect & c )
 QRectF
 FormRect::boundingRect() const
 {
-	return QGraphicsRectItem::boundingRect();
+	if( !d.isNull() )
+	{
+		const qreal w = objectPen().widthF() / 2.0;
+
+		return d->m_rect.adjusted( -w, -w, w, w );
+	}
+	else
+		return QRectF();
 }
 
 void
 FormRect::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
-	QGraphicsRectItem::paint( painter, option, widget );
+	Q_UNUSED( option )
+	Q_UNUSED( widget )
+
+	painter->setPen( objectPen() );
+
+	painter->drawRect( d->m_rect );
 
 	if( isSelected() && !group() )
 		d->m_handles->show();
@@ -184,49 +199,34 @@ FormRect::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormRect::setObjectPen( const QPen & p )
-{
-	FormObject::setObjectPen( p );
-
-	setPen( p );
-}
-
-void
-FormRect::setObjectBrush( const QBrush & b )
-{
-	setBrush( b );
-
-	FormObject::setObjectBrush( b );
-}
-
-void
 FormRect::setPosition( const QPointF & pos )
 {
 	form()->undoStack()->push( new UndoMove< FormRect > ( form(),
 		objectId(), pos - position() ) );
 
-	setPos( pos - rect().topLeft() );
+	setPos( pos - d->m_rect.topLeft() );
 
-	d->updateRect( rect() );
+	d->updateRect( d->m_rect );
 }
 
 QPointF
 FormRect::position() const
 {
-	return pos() + rect().topLeft();
+	return pos() + d->m_rect.topLeft();
 }
 
 void
 FormRect::setRectangle( const QRectF & r )
 {
-	if( d->m_handles->checkConstraint( r.size() ) )
-		d->updateRect( r );
+	setPos( 0.0, 0.0 );
+
+	d->updateRect( r );
 }
 
 QRectF
 FormRect::rectangle() const
 {
-	QRectF r = boundingRect();
+	QRectF r = d->m_rect;
 	r.moveTopLeft( position() );
 
 	return r;
@@ -237,7 +237,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	if( !d->m_isHandleMoved )
 	{
-		d->m_subsidiaryRect = rect();
+		d->m_subsidiaryRect = rectangle();
 
 		d->m_isHandleMoved = true;
 	}
@@ -246,12 +246,12 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	{
 		moveBy( delta.x(), delta.y() );
 
-		d->updateRect( rect() );
+		d->updateRect( d->m_rect );
 	}
 	else if( handle == d->m_handles->m_topLeft.data() )
 	{
 		const QRectF r =
-			rect().adjusted( delta.x(), delta.y(), 0.0, 0.0 );
+			d->m_rect.adjusted( delta.x(), delta.y(), 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -259,7 +259,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_top.data() )
 	{
 		const QRectF r =
-			rect().adjusted( 0.0, delta.y(), 0.0, 0.0 );
+			d->m_rect.adjusted( 0.0, delta.y(), 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -267,7 +267,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_topRight.data() )
 	{
 		const QRectF r =
-			rect().adjusted( 0.0, delta.y(), delta.x(), 0.0 );
+			d->m_rect.adjusted( 0.0, delta.y(), delta.x(), 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -275,7 +275,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_right.data() )
 	{
 		const QRectF r =
-			rect().adjusted( 0.0, 0.0, delta.x(), 0.0 );
+			d->m_rect.adjusted( 0.0, 0.0, delta.x(), 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -283,7 +283,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_bottomRight.data() )
 	{
 		const QRectF r =
-			rect().adjusted( 0.0, 0.0, delta.x(), delta.y() );
+			d->m_rect.adjusted( 0.0, 0.0, delta.x(), delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -291,7 +291,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_bottom.data() )
 	{
 		const QRectF r =
-			rect().adjusted( 0.0, 0.0, 0.0, delta.y() );
+			d->m_rect.adjusted( 0.0, 0.0, 0.0, delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -299,7 +299,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_bottomLeft.data() )
 	{
 		const QRectF r =
-			rect().adjusted( delta.x(), 0.0, 0.0, delta.y() );
+			d->m_rect.adjusted( delta.x(), 0.0, 0.0, delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -307,7 +307,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 	else if( handle == d->m_handles->m_left.data() )
 	{
 		const QRectF r =
-			rect().adjusted( delta.x(), 0.0, 0.0, 0.0 );
+			d->m_rect.adjusted( delta.x(), 0.0, 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
@@ -323,10 +323,14 @@ FormRect::handleReleased( FormMoveHandle * handle )
 
 	if( handle == d->m_handles->m_move.data() )
 		form()->undoStack()->push( new UndoMove< FormRect > ( form(),
-			objectId(), rect().topLeft() - d->m_subsidiaryRect.topLeft() ) );
+			objectId(), position() - d->m_subsidiaryRect.topLeft() ) );
 	else
+	{
+		QRectF r = rectangle();
+
 		form()->undoStack()->push( new UndoResize< FormRect > ( form(),
-			objectId(), d->m_subsidiaryRect, rect() ) );
+			objectId(), d->m_subsidiaryRect, r ) );
+	}
 }
 
 } /* namespace Core */

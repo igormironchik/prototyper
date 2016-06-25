@@ -24,7 +24,7 @@
 #define PROTOTYPER__CORE__FORM_RECTANGLE_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsRectItem>
+#include <QGraphicsItem>
 #include <QScopedPointer>
 
 // Prototyper include.
@@ -48,7 +48,7 @@ class FormRectPrivate;
 
 //! Rect on the form.
 class FormRect
-	:	public QGraphicsRectItem
+	:	public QGraphicsItem
 	,	public FormObject
 	,	public FormWithHandle
 {
@@ -69,12 +69,6 @@ public:
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
-
-	//! Set pen.
-	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
-
-	//! Set brush.
-	void setObjectBrush( const QBrush & b ) Q_DECL_OVERRIDE;
 
 	//! Position elements.
 	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;

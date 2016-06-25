@@ -29,6 +29,7 @@
 
 QT_BEGIN_NAMESPACE
 class QTabWidget;
+class QUndoGroup;
 QT_END_NAMESPACE
 
 
@@ -84,6 +85,9 @@ public:
 	//! Set project.
 	void setProject( const Cfg::Project & cfg );
 
+	//! \return Undo group.
+	QUndoGroup * undoGroup() const;
+
 public slots:
 	//! Add form.
 	void addForm();
@@ -95,6 +99,12 @@ public slots:
 	void newProject();
 	//! Activate tabe.
 	void activateTab( const QString & tabName );
+
+private slots:
+	friend class ProjectWidgetPrivate;
+
+	//! Tab changed.
+	void tabChanged( int index );
 
 private:
 	Q_DISABLE_COPY( ProjectWidget )

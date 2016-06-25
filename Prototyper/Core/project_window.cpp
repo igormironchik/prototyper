@@ -56,6 +56,8 @@
 #include <QColorDialog>
 #include <QMimeData>
 #include <QDrag>
+#include <QUndoStack>
+#include <QUndoGroup>
 
 
 namespace Prototyper {
@@ -133,6 +135,10 @@ public:
 	QScopedPointer< DescWindow > m_desc;
 	//! Draw polyline action.
 	QAction * m_drawPolyLine;
+	//! Undo action.
+	QAction * m_undoAction;
+	//! Redo action.
+	QAction * m_redoAction;
 }; // class ProjectWindowPrivate
 
 void
@@ -250,7 +256,7 @@ ProjectWindowPrivate::init()
 
 	m_drawPolyLine = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-polyline.png" ),
-		ProjectWindow::tr( "Draw Line" ) );
+		ProjectWindow::tr( "Draw Polyline" ) );
 	m_drawPolyLine->setCheckable( true );
 	m_drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
 	m_drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
@@ -433,11 +439,41 @@ ProjectWindowPrivate::init()
 	form->addAction( drawRect );
 	form->addAction( insertText );
 	form->addAction( insertImage );
+	form->addAction( drawButton );
+	form->addAction( drawComboBox );
+	form->addAction( drawRadioButton );
+	form->addAction( drawCheckBox );
+	form->addAction( drawHSlider );
+	form->addAction( drawVSlider );
+	form->addAction( drawSpinbox );
+
+	form->addSeparator();
+
+	form->addAction( alignHorizLeft );
+	form->addAction( alignHorizCenter );
+	form->addAction( alignHorizRight );
+	form->addAction( alignVertTop );
+	form->addAction( alignVertCenter );
+	form->addAction( alignVertBottom );
 
 	form->addSeparator();
 
 	form->addAction( group );
 	form->addAction( ungroup );
+
+	form->addSeparator();
+
+	QAction * undoAction = m_widget->undoGroup()->createUndoAction( q );
+	undoAction->setShortcutContext( Qt::ApplicationShortcut );
+	undoAction->setShortcut( ProjectWindow::tr( "Ctrl+Z" ) );
+	undoAction->setIcon( QIcon( ":/Core/img/edit-undo.png" ) );
+	form->addAction( undoAction );
+
+	QAction * redoAction = m_widget->undoGroup()->createRedoAction( q );
+	redoAction->setShortcutContext( Qt::ApplicationShortcut );
+	redoAction->setShortcut( ProjectWindow::tr( "Ctrl+Y" ) );
+	redoAction->setIcon( QIcon( ":/Core/img/edit-redo.png" ) );
+	form->addAction( redoAction );
 
 	form->addSeparator();
 
@@ -737,7 +773,7 @@ ProjectWindow::p_quit()
 void
 ProjectWindow::p_showHideGrid( bool show )
 {
-	Form::GridMode mode = ( show ? Form::ShowGrid : Form::NoGrid );
+	GridMode mode = ( show ? ShowGrid : NoGrid );
 
 	d->m_cfg.setShowGrid( show );
 
