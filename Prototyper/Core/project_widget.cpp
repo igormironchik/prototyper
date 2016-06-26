@@ -307,7 +307,7 @@ ProjectWidget::cleanUndoGroup()
 void
 ProjectWidget::addForm()
 {
-	NewFormDlg dlg( d->m_tabNames, tr( "Inter New Form Properties..." ), this );
+	NewFormDlg dlg( d->m_tabNames, tr( "Enter New Form Properties..." ), this );
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
