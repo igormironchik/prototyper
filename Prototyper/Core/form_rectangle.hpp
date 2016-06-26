@@ -71,13 +71,15 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;
+	void setPosition( const QPointF & pos,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! \return Position of the element.
 	QPointF position() const Q_DECL_OVERRIDE;
 
 	//! Set rect.
-	void setRectangle( const QRectF & r ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & r,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! \return Rectangle of the element.
 	QRectF rectangle() const Q_DECL_OVERRIDE;

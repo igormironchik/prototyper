@@ -193,10 +193,11 @@ FormComboBox::boundingRect() const
 }
 
 void
-FormComboBox::setPosition( const QPointF & pos )
+FormComboBox::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormComboBox > ( form(), objectId(),
-		pos - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormComboBox > ( form(),
+			objectId(), pos - position() ) );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -220,8 +221,10 @@ FormComboBox::rectangle() const
 }
 
 void
-FormComboBox::setRectangle( const QRectF & rect )
+FormComboBox::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
+	Q_UNUSED( pushUndoCommand )
+
 	resize( rect );
 }
 

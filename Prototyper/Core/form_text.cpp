@@ -327,10 +327,11 @@ FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormText::setPosition( const QPointF & pos )
+FormText::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormText > ( form(),
-		objectId(), pos - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormText > ( form(),
+			objectId(), pos - position() ) );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -354,8 +355,10 @@ FormText::rectangle() const
 }
 
 void
-FormText::setRectangle( const QRectF & rect )
+FormText::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
+	Q_UNUSED( pushUndoCommand )
+
 	resize( rect );
 }
 

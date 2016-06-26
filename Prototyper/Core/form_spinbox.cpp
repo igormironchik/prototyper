@@ -271,10 +271,11 @@ FormSpinBox::boundingRect() const
 }
 
 void
-FormSpinBox::setPosition( const QPointF & pos )
+FormSpinBox::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormSpinBox > ( form(),
-		objectId(), pos - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormSpinBox > ( form(),
+			objectId(), pos - position() ) );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -298,8 +299,11 @@ FormSpinBox::rectangle() const
 }
 
 void
-FormSpinBox::setRectangle( const QRectF & rect )
+FormSpinBox::setRectangle( const QRectF & rect,
+	bool pushUndoCommand )
 {
+	Q_UNUSED( pushUndoCommand )
+
 	resize( rect );
 }
 

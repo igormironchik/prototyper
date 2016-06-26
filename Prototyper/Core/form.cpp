@@ -210,8 +210,6 @@ FormPrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 				QApplication::processEvents();
 
 				m_model->addObject( obj, q );
-
-				//obj->setPosition( obj->position() );
 			}
 
 			if( FormAction::instance()->mode() == FormAction::Select )
@@ -1688,9 +1686,10 @@ Form::draw( QPainter * painter, int width, int height,
 }
 
 void
-Form::setPosition( const QPointF & pos )
+Form::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
 	Q_UNUSED( pos )
+	Q_UNUSED( pushUndoCommand )
 }
 
 QPointF
@@ -1706,11 +1705,12 @@ Form::rectangle() const
 }
 
 void
-Form::setRectangle( const QRectF & rect )
+Form::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
-	d->m_undoStack->push( new UndoResize< Form >( this, objectId(),
-		QRectF( 0.0, 0.0, d->m_cfg.size().width(), d->m_cfg.size().height() ),
-		rect ) );
+	if( pushUndoCommand )
+		d->m_undoStack->push( new UndoResize< Form >( this, objectId(),
+			QRectF( 0.0, 0.0, d->m_cfg.size().width(), d->m_cfg.size().height() ),
+			rect ) );
 
 	d->m_cfg.size().width() = rect.width();
 	d->m_cfg.size().height() = rect.height();

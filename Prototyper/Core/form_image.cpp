@@ -177,10 +177,11 @@ FormImage::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormImage::setPosition( const QPointF & pos )
+FormImage::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormImage > ( form(),
-		objectId(), pos - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormImage > ( form(),
+			objectId(), pos - position() ) );
 
 	setPos( pos );
 
@@ -206,8 +207,10 @@ FormImage::rectangle() const
 }
 
 void
-FormImage::setRectangle( const QRectF & rect )
+FormImage::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
+	Q_UNUSED( pushUndoCommand )
+
 	resize( rect );
 }
 

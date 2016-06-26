@@ -117,7 +117,8 @@ public:
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos ) Q_DECL_OVERRIDE;
+	void setPosition( const QPointF & pos,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! \return Position of the element.
 	QPointF position() const Q_DECL_OVERRIDE;
@@ -126,7 +127,8 @@ public:
 	QRectF rectangle() const Q_DECL_OVERRIDE;
 
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 protected:
 	//! Resize.

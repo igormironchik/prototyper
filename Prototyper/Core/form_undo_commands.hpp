@@ -165,7 +165,7 @@ public:
 		FormObject * elem = dynamic_cast< FormObject* > (
 			m_form->findItem( m_id ) );
 
-		elem->setPosition( elem->position() - m_delta );
+		elem->setPosition( elem->position() - m_delta, false );
 
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
@@ -177,7 +177,7 @@ public:
 			FormObject * elem = dynamic_cast< FormObject* > (
 				m_form->findItem( m_id ) );
 
-			elem->setPosition( elem->position() + m_delta );
+			elem->setPosition( elem->position() + m_delta, false );
 
 			TopGui::instance()->projectWindow()->switchToSelectMode();
 		}
@@ -227,7 +227,7 @@ public:
 		FormObject * elem = dynamic_cast< FormObject* > (
 			m_form->findItem( m_id ) );
 
-		elem->setRectangle( m_oldRect );
+		elem->setRectangle( m_oldRect, false );
 
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
@@ -239,7 +239,7 @@ public:
 			FormObject * elem = dynamic_cast< FormObject* > (
 				m_form->findItem( m_id ) );
 
-			elem->setRectangle( m_newRect );
+			elem->setRectangle( m_newRect, false );
 
 			TopGui::instance()->projectWindow()->switchToSelectMode();
 		}

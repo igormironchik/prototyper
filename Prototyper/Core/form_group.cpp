@@ -67,6 +67,7 @@ public:
 		,	m_topRight( 0 )
 		,	m_bottomRight( 0 )
 		,	m_bottomLeft( 0 )
+		,	m_handleMoved( false )
 	{
 	}
 
@@ -93,6 +94,8 @@ public:
 	QList< FormObject* > m_child;
 	//! Old pos.
 	QPointF m_oldPos;
+	//! Is handle moved?
+	bool m_handleMoved;
 }; // class FormGroupPrivate
 
 void
@@ -461,12 +464,13 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormGroup::setPosition( const QPointF & pos )
+FormGroup::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormGroup > ( form(),
-		objectId(), pos - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormGroup > ( form(),
+			objectId(), pos - position() ) );
 
-	setPos( pos );
+	setPos( pos - QGraphicsItemGroup::boundingRect().topLeft() );
 
 	update();
 }
@@ -487,9 +491,10 @@ FormGroup::rectangle() const
 }
 
 void
-FormGroup::setRectangle( const QRectF & rect )
+FormGroup::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
 	Q_UNUSED( rect )
+	Q_UNUSED( pushUndoCommand )
 }
 
 void
@@ -497,7 +502,12 @@ FormGroup::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	Q_UNUSED( handle )
 
-	d->m_oldPos = position();
+	if( !d->m_handleMoved )
+	{
+		d->m_oldPos = position();
+
+		d->m_handleMoved = true;
+	}
 
 	moveBy( delta.x(), delta.y() );
 }
@@ -506,6 +516,8 @@ void
 FormGroup::handleReleased( FormMoveHandle * handle )
 {
 	Q_UNUSED( handle )
+
+	d->m_handleMoved = false;
 
 	form()->undoStack()->push( new UndoMove< FormObject > (
 		form(), objectId(),

@@ -323,10 +323,11 @@ FormLine::handleMouseMoveInHandles( const QPointF & point )
 }
 
 void
-FormLine::setPosition( const QPointF & pos )
+FormLine::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormLine > ( form(),
-		objectId(), pos - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormLine > ( form(),
+			objectId(), pos - position() ) );
 
 	setPos( pos - QGraphicsLineItem::boundingRect().topLeft() );
 
@@ -349,9 +350,10 @@ FormLine::rectangle() const
 }
 
 void
-FormLine::setRectangle( const QRectF & rect )
+FormLine::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
 	Q_UNUSED( rect )
+	Q_UNUSED( pushUndoCommand )
 }
 
 void

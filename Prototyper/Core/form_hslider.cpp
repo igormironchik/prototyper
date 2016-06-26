@@ -192,10 +192,11 @@ FormHSlider::boundingRect() const
 }
 
 void
-FormHSlider::setPosition( const QPointF & pos )
+FormHSlider::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormHSlider > ( form(),
-		objectId(), pos - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormHSlider > ( form(),
+			objectId(), pos - position() ) );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -219,8 +220,10 @@ FormHSlider::rectangle() const
 }
 
 void
-FormHSlider::setRectangle( const QRectF & rect )
+FormHSlider::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
+	Q_UNUSED( pushUndoCommand )
+
 	resize( rect );
 }
 

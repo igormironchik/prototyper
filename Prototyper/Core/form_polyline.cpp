@@ -553,10 +553,11 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 }
 
 void
-FormPolyline::setPosition( const QPointF & p )
+FormPolyline::setPosition( const QPointF & p, bool pushUndoCommand )
 {
-	form()->undoStack()->push( new UndoMove< FormPolyline > ( form(),
-		objectId(), p - position() ) );
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove< FormPolyline > ( form(),
+			objectId(), p - position() ) );
 
 	setPos( p - d->boundingRect().topLeft() );
 
@@ -587,8 +588,10 @@ FormPolyline::rectangle() const
 }
 
 void
-FormPolyline::setRectangle( const QRectF & rect )
+FormPolyline::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
+	Q_UNUSED( pushUndoCommand )
+
 	if( d->m_handles->checkConstraint( rect.size() ) )
 		d->updateLines( d->boundingRect(), rect );
 }
