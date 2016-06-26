@@ -276,18 +276,26 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 		FormObject * obj = dynamic_cast< FormObject* > ( d->m_object );
 
 		if( obj )
+		{
 			d->m_form->undoStack()->push( new UndoResize< FormObject > (
 				obj->form(), obj->objectId(),
 				d->m_subsidiaryRect, d->m_rect ) );
+
+			obj->form()->emitChanged();
+		}
 	}
 	else
 	{
 		FormObject * obj = dynamic_cast< FormObject* > ( d->m_object );
 
 		if( obj )
+		{
 			d->m_form->undoStack()->push( new UndoMove< FormObject > (
 				obj->form(), obj->objectId(),
 				d->m_rect.topLeft() - d->m_subsidiaryRect.topLeft() ) );
+
+			obj->form()->emitChanged();
+		}
 	}
 }
 

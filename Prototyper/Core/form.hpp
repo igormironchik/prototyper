@@ -324,6 +324,9 @@ public:
 	//! Set rectangle.
 	void setRectangle( const QRectF & rect ) Q_DECL_OVERRIDE;
 
+	//! Emit changed signal.
+	void emitChanged();
+
 public slots:
 	//! Rename object.
 	void renameObject( FormObject * obj );

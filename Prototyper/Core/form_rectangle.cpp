@@ -331,6 +331,8 @@ FormRect::handleReleased( FormMoveHandle * handle )
 		form()->undoStack()->push( new UndoResize< FormRect > ( form(),
 			objectId(), d->m_subsidiaryRect, r ) );
 	}
+
+	form()->emitChanged();
 }
 
 } /* namespace Core */

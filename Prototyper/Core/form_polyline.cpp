@@ -691,6 +691,8 @@ FormPolyline::handleReleased( FormMoveHandle * handle )
 	else
 		form()->undoStack()->push( new UndoResize< FormPolyline > ( form(),
 			objectId(), d->m_subsidiaryRect, d->m_resized ) );
+
+	form()->emitChanged();
 }
 
 } /* namespace Core */

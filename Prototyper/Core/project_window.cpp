@@ -565,6 +565,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_alignVerticalCenter );
 	ProjectWindow::connect( alignVertBottom, &QAction::triggered,
 		q, &ProjectWindow::p_alignVerticalBottom );
+	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::canUndoChanged,
+		q, &ProjectWindow::p_canUndoChanged );
 }
 
 void
@@ -1340,6 +1342,31 @@ void
 ProjectWindow::p_alignHorizontalRight()
 {
 	FormAction::instance()->form()->alignHorizontalRight();
+}
+
+void
+ProjectWindow::p_canUndoChanged( bool canUndo )
+{
+	Q_UNUSED( canUndo )
+
+	QList< QUndoStack* > stacks = d->m_widget->undoGroup()->stacks();
+
+	bool can = false;
+
+	foreach( QUndoStack * s, stacks )
+	{
+		if( s->canUndo() )
+		{
+			can = true;
+
+			break;
+		}
+	}
+
+	if( can )
+		setWindowModified( true );
+	else
+		setWindowModified( false );
 }
 
 } /* namespace Core */

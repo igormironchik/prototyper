@@ -91,6 +91,8 @@ public:
 	QScopedPointer< FormMoveHandle > m_bottomLeft;
 	//! Child.
 	QList< FormObject* > m_child;
+	//! Old pos.
+	QPointF m_oldPos;
 }; // class FormGroupPrivate
 
 void
@@ -493,12 +495,23 @@ FormGroup::setRectangle( const QRectF & rect )
 void
 FormGroup::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
-	if( handle == d->m_center.data() ||
-		handle == d->m_topLeft.data() ||
-		handle == d->m_topRight.data() ||
-		handle == d->m_bottomRight.data() ||
-		handle == d->m_bottomLeft.data() )
-			moveBy( delta.x(), delta.y() );
+	Q_UNUSED( handle )
+
+	d->m_oldPos = position();
+
+	moveBy( delta.x(), delta.y() );
+}
+
+void
+FormGroup::handleReleased( FormMoveHandle * handle )
+{
+	Q_UNUSED( handle )
+
+	form()->undoStack()->push( new UndoMove< FormObject > (
+		form(), objectId(),
+		position() - d->m_oldPos ) );
+
+	form()->emitChanged();
 }
 
 template< class Elem, class Config >

@@ -172,6 +172,8 @@ private slots:
 	void p_alignHorizontalCenter();
 	//! Align horizontal right.
 	void p_alignHorizontalRight();
+	//! Can undo changed.
+	void p_canUndoChanged( bool canUndo );
 
 private:
 	friend class ProjectWindowPrivate;

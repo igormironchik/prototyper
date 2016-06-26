@@ -392,6 +392,8 @@ FormLine::handleReleased( FormMoveHandle * handle )
 		else
 			form()->undoStack()->push( new UndoChangeLine( form(), objectId(),
 				d->m_oldLine, line() ) );
+
+		form()->emitChanged();
 	}
 }
 

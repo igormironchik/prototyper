@@ -1720,6 +1720,12 @@ Form::setRectangle( const QRectF & rect )
 }
 
 void
+Form::emitChanged()
+{
+	emit changed();
+}
+
+void
 Form::renameObject( FormObject * obj )
 {
 	if( obj->form() == this )
