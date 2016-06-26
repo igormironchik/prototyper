@@ -55,6 +55,7 @@
 #include <QTextDocument>
 #include <QSharedPointer>
 #include <QUndoStack>
+#include <QUndoGroup>
 
 // C++ include.
 #include <algorithm>
@@ -87,7 +88,8 @@ FormPrivate::init()
 
 	m_model = TopGui::instance()->projectWindow()->formHierarchy()->model();
 
-	m_undoStack = new QUndoStack( q );
+	m_undoStack = new QUndoStack(
+		TopGui::instance()->projectWindow()->projectWidget()->undoGroup() );
 }
 
 qreal

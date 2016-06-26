@@ -164,6 +164,8 @@ ProjectWidgetPrivate::newProject()
 
 		m_undoGroup->removeStack( m_forms.at( i )->form()->undoStack() );
 
+		m_forms.at( i )->form()->undoStack()->deleteLater();
+
 		tab->deleteLater();
 	}
 
@@ -202,8 +204,6 @@ ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
 	m_tabs->addTab( form, cfg.tabName() );
 
 	m_forms.append( form );
-
-	m_undoGroup->addStack( form->form()->undoStack() );
 
 	ProjectWidget::connect( form->formScene(), &FormScene::changed,
 		q, &ProjectWidget::changed );
@@ -389,6 +389,8 @@ ProjectWidget::deleteForm( const QString & name )
 
 			d->m_undoGroup->removeStack(
 				d->m_forms.at( index - 1 )->form()->undoStack() );
+
+			d->m_forms.at( index - 1 )->form()->undoStack()->deleteLater();
 
 			QWidget * tab = d->m_tabs->widget( index );
 
