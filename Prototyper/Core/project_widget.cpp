@@ -162,9 +162,9 @@ ProjectWidgetPrivate::newProject()
 
 		ProjectWidget::disconnect( tab, 0, 0, 0 );
 
-		m_undoGroup->removeStack( m_forms.at( i )->form()->undoStack() );
+		m_undoGroup->removeStack( m_forms.at( i - 1 )->form()->undoStack() );
 
-		m_forms.at( i )->form()->undoStack()->deleteLater();
+		m_forms.at( i - 1 )->form()->undoStack()->deleteLater();
 
 		tab->deleteLater();
 	}
