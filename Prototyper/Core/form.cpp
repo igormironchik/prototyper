@@ -175,12 +175,14 @@ FormPrivate::handleMouseMoveInCurrentPolyLine( const QPointF & point )
 }
 
 void
-FormPrivate::ungroup( QGraphicsItem * group )
+FormPrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 {
 	FormGroup * tmp = dynamic_cast< FormGroup* > ( group );
 
 	if( tmp )
 	{
+		m_current = Q_NULLPTR;
+
 		QList< QGraphicsItem* > items = tmp->childItems();
 
 		QStringList ids;
@@ -188,8 +190,9 @@ FormPrivate::ungroup( QGraphicsItem * group )
 		foreach( QGraphicsItem * i, tmp->children() )
 			ids.append( dynamic_cast< FormObject* > ( i )->objectId() );
 
-		m_undoStack->push( new UndoUngroup( ids,
-			tmp->objectId(), q ) );
+		if( pushUndoCommand )
+			m_undoStack->push( new UndoUngroup( ids,
+				tmp->objectId(), q ) );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -208,7 +211,7 @@ FormPrivate::ungroup( QGraphicsItem * group )
 
 				m_model->addObject( obj, q );
 
-				obj->setPosition( item->pos() );
+				//obj->setPosition( obj->position() );
 			}
 
 			if( FormAction::instance()->mode() == FormAction::Select )
@@ -225,8 +228,6 @@ FormPrivate::ungroup( QGraphicsItem * group )
 		}
 
 		m_model->removeObject( tmp, q );
-
-		q->scene()->removeItem( tmp );
 
 		if( m_desc.contains( tmp->objectId() ) )
 		{
@@ -1129,7 +1130,8 @@ Form::ungroup()
 }
 
 FormGroup *
-Form::group( const QList< QGraphicsItem* > & items )
+Form::group( const QList< QGraphicsItem* > & items,
+	bool pushUndoCommand )
 {
 	FormGroup * group = Q_NULLPTR;
 
@@ -1192,7 +1194,8 @@ Form::group( const QList< QGraphicsItem* > & items )
 	{
 		d->m_current = group;
 
-		d->m_undoStack->push( new UndoGroup( this, group->objectId() ) );
+		if( pushUndoCommand )
+			d->m_undoStack->push( new UndoGroup( this, group->objectId() ) );
 
 		if( FormAction::instance()->mode() == FormAction::Select )
 		{
@@ -1213,9 +1216,9 @@ Form::group( const QList< QGraphicsItem* > & items )
 }
 
 void
-Form::ungroup( FormGroup * g )
+Form::ungroup( FormGroup * g, bool pushUndoCommand )
 {
-	d->ungroup( g );
+	d->ungroup( g, pushUndoCommand );
 }
 
 void
@@ -1747,7 +1750,8 @@ Form::renameObject( FormObject * obj )
 }
 
 void
-Form::renameObject( FormObject * obj, const QString & newId )
+Form::renameObject( FormObject * obj, const QString & newId,
+	bool pushUndoCommand )
 {
 	const QString old = obj->objectId();
 
@@ -1764,8 +1768,9 @@ Form::renameObject( FormObject * obj, const QString & newId )
 	TopGui::instance()->projectWindow()->descWindow()->renameItem(
 		this, obj->objectId(), newId );
 
-	d->m_undoStack->push( new UndoRenameObject( this, obj->objectId(),
-		newId ) );
+	if( pushUndoCommand )
+		d->m_undoStack->push( new UndoRenameObject( this, obj->objectId(),
+			newId ) );
 
 	obj->setObjectId( newId );
 

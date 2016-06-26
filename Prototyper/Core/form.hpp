@@ -118,7 +118,7 @@ public:
 	//! Handle mouse move in current polyline.
 	void handleMouseMoveInCurrentPolyLine( const QPointF & point );
 	//! Ungroup.
-	void ungroup( QGraphicsItem * group );
+	void ungroup( QGraphicsItem * group, bool pushUndoCommand = true );
 	//! \return Next ID.
 	QString id();
 	//! Update form from the configuration.
@@ -280,9 +280,10 @@ public:
 	void ungroup();
 
 	//! Group items.
-	FormGroup * group( const QList< QGraphicsItem* > & items );
+	FormGroup * group( const QList< QGraphicsItem* > & items,
+		bool pushUndoCommand = true );
 	//! Ungroup group.
-	void ungroup( FormGroup * g );
+	void ungroup( FormGroup * g, bool pushUndoCommand = true );
 
 	//! Align vertical top.
 	void alignVerticalTop();
@@ -331,7 +332,8 @@ public slots:
 	//! Rename object.
 	void renameObject( FormObject * obj );
 	//! Rename object.
-	void renameObject( FormObject * obj, const QString & newId );
+	void renameObject( FormObject * obj, const QString & newId,
+		bool pushUndoCommand = true );
 	//! Rename form.
 	void renameForm( const QString & name );
 	//! Edit description.

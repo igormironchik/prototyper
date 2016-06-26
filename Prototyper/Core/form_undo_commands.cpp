@@ -49,6 +49,8 @@ UndoGroup::undo()
 {
 	m_undone = true;
 
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+
 	FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
 
 	QList< QGraphicsItem* > items = group->children();
@@ -58,9 +60,7 @@ UndoGroup::undo()
 	foreach( QGraphicsItem * item, items )
 		m_items.append( dynamic_cast< FormObject* > ( item )->objectId() );
 
-	m_form->ungroup( group );
-
-	TopGui::instance()->projectWindow()->switchToSelectMode();
+	m_form->ungroup( group, false );
 }
 
 void
@@ -68,6 +68,8 @@ UndoGroup::redo()
 {
 	if( m_undone )
 	{
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+
 		QList< QGraphicsItem* > items;
 
 		foreach( const QString & id, m_items )
@@ -78,11 +80,9 @@ UndoGroup::redo()
 				items.append( item );
 		}
 
-		FormGroup * group = m_form->group( items );
+		FormGroup * group = m_form->group( items, false );
 
-		m_form->renameObject( group, m_id );
-
-		TopGui::instance()->projectWindow()->switchToSelectMode();
+		m_form->renameObject( group, m_id, false );
 	}
 }
 
@@ -110,16 +110,16 @@ UndoUngroup::undo()
 {
 	m_undone = true;
 
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+
 	QList< QGraphicsItem* > items;
 
 	foreach( const QString & id, m_items )
 		items.append( m_form->findItem( id ) );
 
-	FormGroup * group = m_form->group( items );
+	FormGroup * group = m_form->group( items, false );
 
-	m_form->renameObject( group, m_id );
-
-	TopGui::instance()->projectWindow()->switchToSelectMode();
+	m_form->renameObject( group, m_id, false );
 }
 
 void
@@ -127,11 +127,11 @@ UndoUngroup::redo()
 {
 	if( m_undone )
 	{
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+
 		FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
 
-		m_form->ungroup( group );
-
-		TopGui::instance()->projectWindow()->switchToSelectMode();
+		m_form->ungroup( group, false );
 	}
 }
 
@@ -259,7 +259,7 @@ UndoRenameObject::undo()
 	FormObject * obj = dynamic_cast< FormObject* > (
 		m_form->findItem( m_newName ) );
 
-	m_form->renameObject( obj, m_oldName );
+	m_form->renameObject( obj, m_oldName, false );
 
 	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
@@ -272,7 +272,7 @@ UndoRenameObject::redo()
 		FormObject * obj = dynamic_cast< FormObject* > (
 			m_form->findItem( m_oldName ) );
 
-		m_form->renameObject( obj, m_newName );
+		m_form->renameObject( obj, m_newName, false );
 
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
