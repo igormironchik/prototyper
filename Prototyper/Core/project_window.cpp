@@ -565,7 +565,7 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_alignVerticalCenter );
 	ProjectWindow::connect( alignVertBottom, &QAction::triggered,
 		q, &ProjectWindow::p_alignVerticalBottom );
-	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::canUndoChanged,
+	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::cleanChanged,
 		q, &ProjectWindow::p_canUndoChanged );
 }
 
@@ -896,6 +896,8 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 
 			QtConfFile::writeQtConfFile( tag, d->m_fileName,
 				QTextCodec::codecForName( "UTF-8" ) );
+
+			d->m_widget->cleanUndoGroup();
 		}
 		catch( const QtConfFile::Exception & x )
 		{

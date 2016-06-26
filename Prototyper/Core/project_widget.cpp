@@ -184,6 +184,8 @@ ProjectWidgetPrivate::newProject()
 
 	TopGui::instance()->projectWindow()->tabsList()->model()->
 		setStringList( m_tabNames );
+
+	q->cleanUndoGroup();
 }
 
 void
@@ -285,12 +287,21 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 
 	TopGui::instance()->projectWindow()->tabsList()->model()->
 		setStringList( d->m_tabNames );
+
+	cleanUndoGroup();
 }
 
 QUndoGroup *
 ProjectWidget::undoGroup() const
 {
 	return d->m_undoGroup;
+}
+
+void
+ProjectWidget::cleanUndoGroup()
+{
+	foreach( QUndoStack * s, d->m_undoGroup->stacks() )
+		s->setClean();
 }
 
 void

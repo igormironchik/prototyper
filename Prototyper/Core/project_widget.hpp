@@ -88,6 +88,9 @@ public:
 	//! \return Undo group.
 	QUndoGroup * undoGroup() const;
 
+	//! Clean undo group.
+	void cleanUndoGroup();
+
 public slots:
 	//! Add form.
 	void addForm();
