@@ -159,6 +159,8 @@ UndoAddLineToPoly::undo()
 {
 	m_undone = true;
 
+	TopGui::instance()->projectWindow()->switchToPolylineMode();
+
 	FormPolyline * poly = dynamic_cast< FormPolyline* > (
 		m_form->findItem( m_id ) );
 
@@ -185,8 +187,6 @@ UndoAddLineToPoly::undo()
 
 		poly->showHandles( true );
 	}
-
-	TopGui::instance()->projectWindow()->switchToPolylineMode();
 }
 
 void
@@ -194,6 +194,8 @@ UndoAddLineToPoly::redo()
 {
 	if( m_undone )
 	{
+		TopGui::instance()->projectWindow()->switchToPolylineMode();
+
 		FormLine * lineItem = dynamic_cast< FormLine* > (
 			m_form->findItem( m_id ) );
 
@@ -212,6 +214,8 @@ UndoAddLineToPoly::redo()
 			poly->appendLine( m_line );
 
 			poly->showHandles( true );
+
+			m_form->setCurrentPolyLine( poly );
 		}
 		else
 		{
@@ -225,8 +229,6 @@ UndoAddLineToPoly::redo()
 			else
 				poly->showHandles( true );
 		}
-
-		TopGui::instance()->projectWindow()->switchToPolylineMode();
 	}
 }
 

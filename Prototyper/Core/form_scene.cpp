@@ -70,7 +70,7 @@ public:
 void
 FormScenePrivate::init()
 {
-
+	q->setItemIndexMethod( QGraphicsScene::NoIndex );
 }
 
 void

@@ -2181,19 +2181,14 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					if( d->m_polyline )
 					{
-						bool created = false;
-
 						if( !d->m_currentLines.isEmpty() )
 						{
 							d->m_currentPoly = new FormPolyline( this, this );
 
-							created = true;
-
-							const QString id = d->id();
+							const QString id =
+								d->m_currentLines.first()->objectId();
 
 							d->m_currentPoly->setObjectId( id );
-
-							d->m_ids.append( id );
 
 							d->m_model->addObject( d->m_currentPoly, this );
 
@@ -2201,14 +2196,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 								d->m_currentLines.first()->line() );
 							d->m_currentPoly->showHandles( true );
 
-							d->m_undoStack->push(
-								new UndoCreate< FormPolyline, Cfg::Polyline > (
-									this, d->m_currentPoly->objectId() ) );
-
 							d->m_model->removeObject( d->m_currentLines.first(),
 								this );
-
-							scene()->removeItem( d->m_currentLines.first() );
 
 							d->m_model->endRemoveObject();
 
@@ -2219,10 +2208,9 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 						d->m_currentPoly->appendLine( line->line() );
 
-						if( !created )
-							d->m_undoStack->push( new UndoAddLineToPoly( this,
-								d->m_currentPoly->objectId(),
-								line->line() ) );
+						d->m_undoStack->push( new UndoAddLineToPoly( this,
+							d->m_currentPoly->objectId(),
+							line->line() ) );
 
 						d->m_model->removeObject( line, this );
 
@@ -2494,7 +2482,10 @@ Form::setCurrentLine( FormLine * line )
 
 	d->m_currentLines.clear();
 
-	d->m_currentLines.append( line );
+	if( line )
+		d->m_currentLines.append( line );
+
+	d->m_currentPoly = Q_NULLPTR;
 }
 
 void
@@ -2505,6 +2496,8 @@ Form::setCurrentPolyLine( FormPolyline * line )
 	d->m_currentLines.clear();
 
 	d->m_currentPoly = line;
+
+	d->m_polyline = true;
 }
 
 } /* namespace Core */

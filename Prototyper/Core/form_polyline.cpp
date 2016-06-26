@@ -148,6 +148,8 @@ FormPolylinePrivate::makePath()
 
 		if( i + 1 == m_lines.size() && line.p2() == first )
 			m_closed = true;
+		else
+			m_closed = false;
 	}
 
 	m_polygon = QPolygonF( points );
