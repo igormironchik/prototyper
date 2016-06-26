@@ -269,6 +269,8 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 void
 FormResizableProxy::handleReleased( FormMoveHandle * handle )
 {
+	d->m_handleMoved = false;
+
 	if( handle != d->m_handles->m_move.data() )
 	{
 		d->m_object->resize( d->m_rect );

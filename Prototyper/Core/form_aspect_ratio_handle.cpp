@@ -189,11 +189,7 @@ AspectRatioHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 	{
 		d->m_pressed = false;
 
-		QRectF r = boundingRect();
-		r.moveTop( pos().y() );
-		r.moveLeft( pos().x() );
-
-		if( r.contains( mapToScene( event->pos() ) ) )
+		if( boundingRect().contains( event->pos() ) )
 		{
 			d->m_keepAspectRatio = !d->m_keepAspectRatio;
 
