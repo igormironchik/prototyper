@@ -2,7 +2,7 @@
 <Package>
     <DisplayName>Prototyper</DisplayName>
     <Description>Install Prototyper - Simple UI Prototyping Software.</Description>
-    <Version>1.1.0</Version>
+    <Version>1.2.0</Version>
     <ReleaseDate>2016-06-16</ReleaseDate>
     <Licenses>
         <License name="GNU GPL 3.0" file="license.txt" />
