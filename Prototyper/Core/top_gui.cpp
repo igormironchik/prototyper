@@ -140,12 +140,7 @@ TopGuiPrivate::init()
 void
 TopGuiPrivate::placeByDefault()
 {
-	const QRect r = QApplication::desktop()->availableGeometry();
-
-	const int offset = 15;
-
-	m_projectWindow->move( r.x() + offset, r.y() + offset );
-	m_projectWindow->resize( r.width() - offset * 2, r.height() - offset * 2 );
+	m_projectWindow->showMaximized();
 }
 
 
