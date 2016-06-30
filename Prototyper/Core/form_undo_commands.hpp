@@ -478,6 +478,37 @@ private:
 	bool m_undone;
 }; // class UndoChangeLine
 
+
+//
+// UndoChangePen
+//
+
+//! Undo changing of pen.
+class UndoChangePen
+	:	public QUndoCommand
+{
+public:
+	UndoChangePen( Form * form, const QString & id, const QPen & oldPen,
+		const QPen & newPen );
+	~UndoChangePen();
+
+	void undo() Q_DECL_OVERRIDE;
+
+	void redo() Q_DECL_OVERRIDE;
+
+private:
+	//! Form.
+	Form * m_form;
+	//! Id.
+	QString m_id;
+	//! Old pen.
+	QPen m_oldPen;
+	//! New pen.
+	QPen m_newPen;
+	//! Undone?
+	bool m_undone;
+}; // class UndoChangePen
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

@@ -116,7 +116,8 @@ FormPolylinePrivate::init()
 
 	m_handles->hide();
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ),
+		false );
 
 	q->setObjectBrush( Qt::transparent );
 }
@@ -299,7 +300,7 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 		appendLine( line );
 	}
 
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
 	setObjectBrush( Cfg::fromBrush( c.brush() ) );
 
@@ -502,9 +503,9 @@ FormPolyline::pointUnderHandle( const QPointF & p, bool & intersected ) const
 }
 
 void
-FormPolyline::setObjectPen( const QPen & p )
+FormPolyline::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p );
+	FormObject::setObjectPen( p, pushUndoCommand );
 
 	setPen( p );
 }

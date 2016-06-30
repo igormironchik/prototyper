@@ -78,7 +78,8 @@ FormRectPrivate::init()
 
 	m_handles->hide();
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ),
+		false );
 
 	q->setObjectBrush( Qt::transparent );
 }
@@ -154,7 +155,7 @@ FormRect::setCfg( const Cfg::Rect & c )
 {
 	setObjectId( c.objectId() );
 
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
 	setObjectBrush( Cfg::fromBrush( c.brush() ) );
 

@@ -92,7 +92,7 @@ FormLinePrivate::init()
 	m_h2->hide();
 	m_move->hide();
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ) );
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ), false );
 }
 
 void
@@ -191,7 +191,7 @@ FormLine::setCfg( const Cfg::Line & c )
 
 	setObjectId( c.objectId() );
 
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
 	setLink( c.link() );
 }
@@ -250,9 +250,9 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormLine::setObjectPen( const QPen & p )
+FormLine::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p );
+	FormObject::setObjectPen( p, pushUndoCommand );
 
 	setPen( p );
 }

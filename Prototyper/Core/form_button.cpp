@@ -139,9 +139,9 @@ FormButton::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormButton::setObjectPen( const QPen & p )
+FormButton::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p );
+	FormObject::setObjectPen( p, pushUndoCommand );
 
 	update();
 }
@@ -179,7 +179,7 @@ FormButton::setCfg( const Cfg::Button & c )
 {
 	setObjectId( c.objectId() );
 	setLink( c.link() );
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 	d->setRect( QRectF( c.pos().x(), c.pos().y(),
 		c.size().width(), c.size().height() ) );
 

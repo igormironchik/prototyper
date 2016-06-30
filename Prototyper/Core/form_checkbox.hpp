@@ -102,7 +102,8 @@ public:
 		const QRectF & rect, qreal width, bool isChecked, const QString & text );
 
 	//! Set pen.
-	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
+	void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! \return Cfg.
 	Cfg::CheckBox cfg() const;

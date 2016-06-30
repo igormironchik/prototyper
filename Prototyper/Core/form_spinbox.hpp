@@ -66,7 +66,8 @@ public:
 		const QPen & pen, const QFont & font, const QString & text );
 
 	//! Set pen.
-	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
+	void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! \return Cfg.
 	Cfg::SpinBox cfg() const;

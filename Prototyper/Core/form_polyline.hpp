@@ -89,7 +89,8 @@ public:
 	QPointF pointUnderHandle( const QPointF & p, bool & intersected ) const;
 
 	//! Set pen.
-	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
+	void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! Set brush.
 	void setObjectBrush( const QBrush & b ) Q_DECL_OVERRIDE;

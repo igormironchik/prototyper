@@ -171,9 +171,9 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 }
 
 void
-FormSpinBox::setObjectPen( const QPen & p )
+FormSpinBox::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p );
+	FormObject::setObjectPen( p, pushUndoCommand );
 
 	update();
 }
@@ -211,7 +211,7 @@ FormSpinBox::setCfg( const Cfg::SpinBox & c )
 {
 	setObjectId( c.objectId() );
 	setLink( c.link() );
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 	d->setRect( QRectF( c.pos().x(), c.pos().y(),
 		c.size().width(), c.size().height() ) );
 

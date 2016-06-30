@@ -22,6 +22,10 @@
 
 // Prototyper include.
 #include "form_object.hpp"
+#include "form_undo_commands.hpp"
+
+// Qt include.
+#include <QUndoStack>
 
 
 namespace Prototyper {
@@ -68,8 +72,12 @@ FormObject::objectPen() const
 }
 
 void
-FormObject::setObjectPen( const QPen & p )
+FormObject::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
+	if( pushUndoCommand )
+		m_form->undoStack()->push(
+			new UndoChangePen( m_form, m_id, m_pen, p ) );
+
 	m_pen = p;
 }
 

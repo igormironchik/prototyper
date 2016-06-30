@@ -171,9 +171,9 @@ FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
 }
 
 void
-FormCheckBox::setObjectPen( const QPen & p )
+FormCheckBox::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p );
+	FormObject::setObjectPen( p, pushUndoCommand );
 
 	update();
 }
@@ -214,7 +214,7 @@ FormCheckBox::setCfg( const Cfg::CheckBox & c )
 
 	setObjectId( c.objectId() );
 	setLink( c.link() );
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
 	d->setRect( QRectF( c.pos().x(), c.pos().y(),
 		c.width(), c.size().height() ) );

@@ -89,7 +89,8 @@ public:
 	//! \return Pen.
 	virtual const QPen & objectPen() const;
 	//! Set pen.
-	virtual void setObjectPen( const QPen & p );
+	virtual void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true );
 
 	//! \return Brush.
 	virtual const QBrush & objectBrush() const;

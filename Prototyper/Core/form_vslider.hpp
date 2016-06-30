@@ -64,7 +64,8 @@ public:
 		const QPen & pen );
 
 	//! Set pen.
-	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
+	void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! \return Cfg.
 	Cfg::VSlider cfg() const;

@@ -63,7 +63,8 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 	//! Set pen.
-	void setObjectPen( const QPen & p ) Q_DECL_OVERRIDE;
+	void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! \return Cfg.
 	Cfg::Button cfg() const;

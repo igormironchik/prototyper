@@ -140,9 +140,9 @@ FormHSlider::draw( QPainter * painter, const QRectF & rect,
 }
 
 void
-FormHSlider::setObjectPen( const QPen & p )
+FormHSlider::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p );
+	FormObject::setObjectPen( p, pushUndoCommand );
 
 	update();
 }
@@ -178,7 +178,7 @@ FormHSlider::setCfg( const Cfg::HSlider & c )
 {
 	setObjectId( c.objectId() );
 	setLink( c.link() );
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 	d->setRect( QRectF( c.pos().x(), c.pos().y(),
 		c.size().width(), c.size().height() ) );
 

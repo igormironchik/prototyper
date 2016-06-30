@@ -327,6 +327,49 @@ UndoChangeLine::redo()
 	}
 }
 
+
+//
+// UndoChangePen
+//
+
+UndoChangePen::UndoChangePen( Form * form, const QString & id,
+	const QPen & oldPen, const QPen & newPen )
+	:	m_form( form )
+	,	m_id( id )
+	,	m_oldPen( oldPen )
+	,	m_newPen( newPen )
+	,	m_undone( false )
+{
+}
+
+UndoChangePen::~UndoChangePen()
+{
+}
+
+void
+UndoChangePen::undo()
+{
+	m_undone = true;
+
+	FormObject * obj = dynamic_cast< FormObject* > ( m_form->findItem( m_id ) );
+
+	if( obj )
+		obj->setObjectPen( m_oldPen, false );
+}
+
+void
+UndoChangePen::redo()
+{
+	if( m_undone )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > (
+			m_form->findItem( m_id ) );
+
+		if( obj )
+			obj->setObjectPen( m_newPen, false );
+	}
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

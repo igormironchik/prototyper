@@ -141,9 +141,9 @@ FormComboBox::draw( QPainter * painter, const QRectF & rect,
 }
 
 void
-FormComboBox::setObjectPen( const QPen & p )
+FormComboBox::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p );
+	FormObject::setObjectPen( p, pushUndoCommand );
 
 	update();
 }
@@ -179,7 +179,7 @@ FormComboBox::setCfg( const Cfg::ComboBox & c )
 {
 	setObjectId( c.objectId() );
 	setLink( c.link() );
-	setObjectPen( Cfg::fromPen( c.pen() ) );
+	setObjectPen( Cfg::fromPen( c.pen() ), false );
 	d->setRect( QRectF( c.pos().x(), c.pos().y(),
 		c.size().width(), c.size().height() ) );
 
