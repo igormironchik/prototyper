@@ -38,6 +38,8 @@
 #include <QFont>
 #include <QTextBlockFormat>
 #include <QUndoStack>
+#include <QKeyEvent>
+#include <QEvent>
 
 
 namespace Prototyper {
@@ -632,6 +634,40 @@ FormText::focusOutEvent( QFocusEvent * event )
 	setTextCursor( c );
 
 	QGraphicsTextItem::focusOutEvent( event );
+}
+
+void
+FormText::keyPressEvent( QKeyEvent * e )
+{
+	if( e == QKeySequence::Undo || e == QKeySequence::Redo )
+		e->ignore();
+	else
+		QGraphicsTextItem::keyPressEvent( e );
+}
+
+bool
+FormText::sceneEvent( QEvent * e )
+{
+	switch( e->type() )
+	{
+		case QEvent::ShortcutOverride :
+		{
+			QKeyEvent * ke = static_cast< QKeyEvent* > ( e );
+
+			if( ke == QKeySequence::Redo || ke == QKeySequence::Undo )
+			{
+				ke->ignore();
+
+				return false;
+			}
+			else
+				return QGraphicsTextItem::sceneEvent( e );
+		}
+			break;
+
+		default :
+			return QGraphicsTextItem::sceneEvent( e );
+	}
 }
 
 } /* namespace Core */

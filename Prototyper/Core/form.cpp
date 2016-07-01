@@ -1857,6 +1857,17 @@ Form::properties()
 }
 
 void
+Form::undoCommandInTextAdded()
+{
+	FormObject * obj = dynamic_cast< FormObject* > (
+		sender()->parent()->parent() );
+
+	if( obj )
+		d->m_undoStack->push( new UndoChangeTextOnForm(
+			this, obj->objectId() ) );
+}
+
+void
 Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
 	FormRectPlacer * placer = dynamic_cast< FormRectPlacer* > ( d->m_current );
@@ -2270,8 +2281,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					c.select( QTextCursor::Document );
 					text->setTextCursor( c );
 
-					d->m_undoStack->push( new UndoCreate< FormText, Cfg::Text > (
-						this, text->objectId() ) );
+					connect( text->document(), &QTextDocument::undoCommandAdded,
+						this, &Form::undoCommandInTextAdded );
 				}
 
 				emit changed();

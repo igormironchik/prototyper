@@ -23,6 +23,9 @@
 // Prototyper include.
 #include "form_undo_commands.hpp"
 
+// Qt include.
+#include <QTextDocument>
+
 
 namespace Prototyper {
 
@@ -334,7 +337,8 @@ UndoChangeLine::redo()
 
 UndoChangePen::UndoChangePen( Form * form, const QString & id,
 	const QPen & oldPen, const QPen & newPen )
-	:	m_form( form )
+	:	QUndoCommand( QObject::tr( "Change Pen" ) )
+	,	m_form( form )
 	,	m_id( id )
 	,	m_oldPen( oldPen )
 	,	m_newPen( newPen )
@@ -367,6 +371,48 @@ UndoChangePen::redo()
 
 		if( obj )
 			obj->setObjectPen( m_newPen, false );
+	}
+}
+
+
+//
+// UndoChangeTextOnForm
+//
+
+UndoChangeTextOnForm::UndoChangeTextOnForm( Form * form, const QString & id )
+	:	QUndoCommand( QObject::tr( "Change Text" ) )
+	,	m_form( form )
+	,	m_id( id )
+	,	m_undone( false )
+{
+}
+
+UndoChangeTextOnForm::~UndoChangeTextOnForm()
+{
+}
+
+void
+UndoChangeTextOnForm::undo()
+{
+	m_undone = true;
+
+	FormText * text = dynamic_cast< FormText* > (
+		m_form->findItem( m_id ) );
+
+	if( text )
+		text->document()->undo();
+}
+
+void
+UndoChangeTextOnForm::redo()
+{
+	if( m_undone )
+	{
+		FormText * text = dynamic_cast< FormText* > (
+			m_form->findItem( m_id ) );
+
+		if( text )
+			text->document()->redo();
 	}
 }
 

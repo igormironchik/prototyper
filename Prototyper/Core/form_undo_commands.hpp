@@ -509,6 +509,32 @@ private:
 	bool m_undone;
 }; // class UndoChangePen
 
+
+//
+// UndoChangeTextOnForm
+//
+
+//! Undo text changing on the form.
+class UndoChangeTextOnForm
+	:	public QUndoCommand
+{
+public:
+	UndoChangeTextOnForm( Form * form, const QString & id );
+	~UndoChangeTextOnForm();
+
+	void undo() Q_DECL_OVERRIDE;
+
+	void redo() Q_DECL_OVERRIDE;
+
+private:
+	//! Form.
+	Form * m_form;
+	//! Id.
+	QString m_id;
+	//! Undone?
+	bool m_undone;
+}; // class UndoChangeTextOnForm
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

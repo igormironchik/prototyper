@@ -123,6 +123,8 @@ protected:
 
 protected:
 	void focusOutEvent( QFocusEvent * event ) Q_DECL_OVERRIDE;
+	void keyPressEvent( QKeyEvent * e ) Q_DECL_OVERRIDE;
+	bool sceneEvent( QEvent * e ) Q_DECL_OVERRIDE;
 
 private:
 	friend class FormTextPrivate;

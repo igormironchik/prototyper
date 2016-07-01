@@ -348,6 +348,8 @@ private slots:
 	void resizeForm();
 	//! Properties.
 	void properties();
+	//! Undo command in text item was added.
+	void undoCommandInTextAdded();
 
 protected:
 	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
