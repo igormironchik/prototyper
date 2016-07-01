@@ -472,6 +472,9 @@ FormPrivate::createText( const Cfg::Text & cfg )
 
 	m_ids.append( text->objectId() );
 
+	Form::connect( text->document(), &QTextDocument::undoCommandAdded,
+		q, &Form::undoCommandInTextAdded );
+
 	return text;
 }
 

@@ -27,6 +27,7 @@
 #include <QUndoCommand>
 #include <QList>
 #include <QObject>
+#include <QPointer>
 
 // Prototyper include.
 #include "form.hpp"
@@ -533,6 +534,8 @@ private:
 	QString m_id;
 	//! Undone?
 	bool m_undone;
+	//! Document.
+	QPointer< QTextDocument > m_doc;
 }; // class UndoChangeTextOnForm
 
 } /* namespace Core */

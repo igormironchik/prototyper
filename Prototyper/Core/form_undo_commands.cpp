@@ -384,11 +384,14 @@ UndoChangeTextOnForm::UndoChangeTextOnForm( Form * form, const QString & id )
 	,	m_form( form )
 	,	m_id( id )
 	,	m_undone( false )
+	,	m_doc( 0 )
 {
 }
 
 UndoChangeTextOnForm::~UndoChangeTextOnForm()
 {
+	if( !m_doc.isNull() )
+		m_doc->deleteLater();
 }
 
 void
@@ -400,7 +403,13 @@ UndoChangeTextOnForm::undo()
 		m_form->findItem( m_id ) );
 
 	if( text )
+	{
+		m_doc = text->document();
+
+		m_doc->setParent( Q_NULLPTR );
+
 		text->document()->undo();
+	}
 }
 
 void
@@ -412,7 +421,12 @@ UndoChangeTextOnForm::redo()
 			m_form->findItem( m_id ) );
 
 		if( text )
+		{
+			if( !m_doc.isNull() && m_doc.data() != text->document() )
+				text->setDocument( m_doc.data() );
+
 			text->document()->redo();
+		}
 	}
 }
 
