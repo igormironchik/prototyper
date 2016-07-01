@@ -52,10 +52,10 @@
 #include <QImage>
 #include <QVariant>
 #include <QGraphicsView>
-#include <QTextDocument>
 #include <QSharedPointer>
 #include <QUndoStack>
 #include <QUndoGroup>
+#include <QMap>
 
 // C++ include.
 #include <algorithm>
@@ -471,6 +471,8 @@ FormPrivate::createText( const Cfg::Text & cfg )
 	text->setCfg( cfg );
 
 	m_ids.append( text->objectId() );
+
+	m_docs.insert( text->document(), text );
 
 	Form::connect( text->document(), &QTextDocument::undoCommandAdded,
 		q, &Form::undoCommandInTextAdded );
@@ -1542,6 +1544,19 @@ Form::deleteItems( const QList< QGraphicsItem* > & items,
 				}
 					break;
 
+				case FormObject::TextType :
+				{
+					FormText * text = dynamic_cast< FormText* > ( item );
+
+					if( text )
+					{
+						removeDocFromMap( text->document() );
+
+						text->postDeletion();
+					}
+				}
+					break;
+
 				default :
 				{
 					obj->postDeletion();
@@ -1861,9 +1876,8 @@ Form::properties()
 
 void
 Form::undoCommandInTextAdded()
-{
-	FormObject * obj = dynamic_cast< FormObject* > (
-		sender()->parent()->parent() );
+{	
+	FormObject * obj = d->m_docs[ sender() ];
 
 	if( obj )
 		d->m_undoStack->push( new UndoChangeTextOnForm(
@@ -2284,6 +2298,8 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					c.select( QTextCursor::Document );
 					text->setTextCursor( c );
 
+					d->m_docs.insert( text->document(), text );
+
 					connect( text->document(), &QTextDocument::undoCommandAdded,
 						this, &Form::undoCommandInTextAdded );
 				}
@@ -2492,6 +2508,18 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 	}
 	else
 		QGraphicsObject::dropEvent( event );
+}
+
+void
+Form::removeDocFromMap( QObject * doc )
+{
+	d->m_docs.remove( doc );
+}
+
+void
+Form::updateDocItemInMap( QObject * doc, FormText * text )
+{
+	d->m_docs[ doc ] = text;
 }
 
 void

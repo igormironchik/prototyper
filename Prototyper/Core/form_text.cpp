@@ -264,6 +264,8 @@ FormText::setCfg( const Cfg::Text & c )
 		setTextCursor( cursor );
 	}
 
+	document()->clearUndoRedoStacks();
+
 	setObjectId( c.objectId() );
 
 	setTextWidth( c.textWidth() );

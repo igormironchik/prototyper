@@ -26,6 +26,7 @@
 // Qt include.
 #include <QGraphicsObject>
 #include <QScopedPointer>
+#include <QTextDocument>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -208,6 +209,8 @@ public:
 	FormProperties::Buttons m_btns;
 	//! Undo stack.
 	QUndoStack * m_undoStack;
+	//! Map of text documents.
+	QMap< QObject*, FormText* > m_docs;
 }; // class FormPrivate
 
 
@@ -375,7 +378,12 @@ protected:
 	friend class UndoAddLineToPoly;
 	template< class Elem, class Config > friend class UndoCreate;
 	template< class Elem, class Config > friend class UndoDelete;
+	friend class UndoChangeTextOnForm;
 
+	//! Remove document from map.
+	void removeDocFromMap( QObject * doc );
+	//! Update document's item.
+	void updateDocItemInMap( QObject * doc, FormText * text );
 	//! Set current line.
 	void setCurrentLine( FormLine * line );
 	//! Set current polyline.

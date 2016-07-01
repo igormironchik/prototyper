@@ -423,7 +423,13 @@ UndoChangeTextOnForm::redo()
 		if( text )
 		{
 			if( !m_doc.isNull() && m_doc.data() != text->document() )
+			{
+				m_form->removeDocFromMap( text->document() );
+
+				m_form->updateDocItemInMap( m_doc.data(), text );
+
 				text->setDocument( m_doc.data() );
+			}
 
 			text->document()->redo();
 		}

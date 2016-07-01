@@ -136,6 +136,73 @@ private:
 }; // class UndoCreate
 
 
+
+//
+// UndoCreate
+//
+
+//! Undo create.
+template<>
+class UndoCreate< FormText, Cfg::Text >
+	:	public QUndoCommand
+{
+public:
+	UndoCreate( Form * f, const QString & id )
+		:	QUndoCommand( QObject::tr( "Create" ) )
+		,	m_form( f )
+		,	m_id( id )
+		,	m_undone( false )
+	{
+	}
+
+	~UndoCreate()
+	{
+	}
+
+	void undo() Q_DECL_OVERRIDE
+	{
+		m_undone = true;
+
+		FormText * elem = dynamic_cast< FormText* > ( m_form->findItem( m_id ) );
+
+		m_cfg = elem->cfg();
+
+		m_form->deleteItems( QList< QGraphicsItem* > () << elem, false );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+
+	void redo() Q_DECL_OVERRIDE
+	{
+		if( m_undone )
+		{
+			FormText * elem = dynamic_cast< FormText* > (
+				m_form->createElement< FormText >( m_id ) );
+
+			elem->setCfg( m_cfg );
+
+			m_form->updateDocItemInMap( elem->document(), elem );
+
+			QObject::connect( elem->document(),
+				&QTextDocument::undoCommandAdded,
+				m_form, &Form::undoCommandInTextAdded );
+
+			TopGui::instance()->projectWindow()->switchToSelectMode();
+		}
+	}
+
+private:
+	//! Configuration.
+	Cfg::Text m_cfg;
+	//! Form.
+	Form * m_form;
+	//! Id.
+	QString m_id;
+	//! Undone?
+	bool m_undone;
+}; // class UndoCreate
+
+
 //
 // UndoMove
 //
