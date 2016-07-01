@@ -237,6 +237,14 @@ FormRect::rectangle() const
 }
 
 void
+FormRect::setObjectPen( const QPen & p, bool pushUndoCommand )
+{
+	FormObject::setObjectPen( p, pushUndoCommand );
+
+	update();
+}
+
+void
 FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
 	if( !d->m_isHandleMoved )

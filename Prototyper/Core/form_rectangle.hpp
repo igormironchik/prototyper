@@ -84,6 +84,10 @@ public:
 	//! \return Rectangle of the element.
 	QRectF rectangle() const Q_DECL_OVERRIDE;
 
+	//! Set pen.
+	void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+
 protected:
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle )

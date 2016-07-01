@@ -90,6 +90,10 @@ public:
 	void setRectangle( const QRectF & rect,
 		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
+	//! Set object's pen.
+	void setObjectPen( const QPen & p,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+
 public slots:
 	//! Less font size.
 	void lessFontSize();
