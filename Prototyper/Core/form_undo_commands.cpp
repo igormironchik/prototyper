@@ -359,6 +359,8 @@ UndoChangePen::undo()
 
 	if( obj )
 		obj->setObjectPen( m_oldPen, false );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
 
 void
@@ -371,6 +373,8 @@ UndoChangePen::redo()
 
 		if( obj )
 			obj->setObjectPen( m_newPen, false );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 }
 
@@ -410,6 +414,8 @@ UndoChangeTextOnForm::undo()
 
 		text->document()->undo();
 	}
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
 
 void
@@ -432,6 +438,92 @@ UndoChangeTextOnForm::redo()
 			}
 
 			text->document()->redo();
+		}
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+}
+
+
+//
+// UndoChangeTextWithOpts
+//
+
+UndoChangeTextWithOpts::UndoChangeTextWithOpts( Form * form, const QString & id,
+	const Cfg::TextStyle & oldOpts, const Cfg::TextStyle & newOpts )
+	:	QUndoCommand( QObject::tr( "Change Text Options" ) )
+	,	m_form( form )
+	,	m_id( id )
+	,	m_oldOpts( oldOpts )
+	,	m_newOpts( newOpts )
+	,	m_undone( false )
+{
+}
+
+UndoChangeTextWithOpts::~UndoChangeTextWithOpts()
+{
+}
+
+void
+UndoChangeTextWithOpts::undo()
+{
+	m_undone = true;
+
+	setTextOpts( m_oldOpts );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+}
+
+void
+UndoChangeTextWithOpts::redo()
+{
+	if( m_undone )
+	{
+		setTextOpts( m_newOpts );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+}
+
+void
+UndoChangeTextWithOpts::setTextOpts( const Cfg::TextStyle & opts )
+{
+	FormObject * obj = dynamic_cast< FormObject* > ( m_form->findItem( m_id ) );
+
+	if( obj )
+	{
+		switch( obj->objectType() )
+		{
+			case FormObject::ButtonType :
+			{
+				FormButton * e = dynamic_cast< FormButton* > ( obj );
+
+				if( e )
+					e->setText( opts );
+			}
+				break;
+
+			case FormObject::CheckBoxType :
+			case FormObject::RadioButtonType :
+			{
+				FormCheckBox * e = dynamic_cast< FormCheckBox* > ( obj );
+
+				if( e )
+					e->setText( opts );
+			}
+				break;
+
+			case FormObject::SpinBoxType :
+			{
+				FormSpinBox * e = dynamic_cast< FormSpinBox* > ( obj );
+
+				if( e )
+					e->setText( opts );
+			}
+				break;
+
+			default :
+				break;
 		}
 	}
 }

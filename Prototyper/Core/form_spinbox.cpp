@@ -344,6 +344,9 @@ FormSpinBox::properties()
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
+		form()->undoStack()->push( new UndoChangeTextWithOpts( form(),
+			objectId(), text(), dlg.cfg().text() ) );
+
 		setText( dlg.cfg().text() );
 
 		update();

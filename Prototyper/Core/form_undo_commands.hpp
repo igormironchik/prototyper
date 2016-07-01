@@ -47,6 +47,7 @@
 #include "form_vslider.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
+#include "project_cfg.hpp"
 
 
 QT_BEGIN_NAMESPACE
@@ -604,6 +605,41 @@ private:
 	//! Document.
 	QPointer< QTextDocument > m_doc;
 }; // class UndoChangeTextOnForm
+
+
+//
+// UndoChangeTextWithOpts
+//
+
+//! Undo changing text with options.
+class UndoChangeTextWithOpts
+	:	public QUndoCommand
+{
+public:
+	UndoChangeTextWithOpts( Form * form, const QString & id,
+		const Cfg::TextStyle & oldOpts, const Cfg::TextStyle & newOpts );
+	~UndoChangeTextWithOpts();
+
+	void undo() Q_DECL_OVERRIDE;
+
+	void redo() Q_DECL_OVERRIDE;
+
+private:
+	//! Set text options.
+	void setTextOpts( const Cfg::TextStyle & opts );
+
+private:
+	//! Form.
+	Form * m_form;
+	//! Id.
+	QString m_id;
+	//! Old options.
+	Cfg::TextStyle m_oldOpts;
+	//! New options.
+	Cfg::TextStyle m_newOpts;
+	//! Undone?
+	bool m_undone;
+}; // class UndoChangeTextWithOpts
 
 } /* namespace Core */
 

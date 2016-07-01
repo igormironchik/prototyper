@@ -40,6 +40,7 @@ namespace Core {
 
 class FormCheckBox;
 class FormImageHandles;
+class TextWithOpts;
 
 
 //

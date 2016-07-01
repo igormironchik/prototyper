@@ -37,6 +37,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class TextWithOpts;
+
+
 //
 // FormButton
 //

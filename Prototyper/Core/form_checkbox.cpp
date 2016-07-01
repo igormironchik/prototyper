@@ -265,6 +265,8 @@ FormCheckBox::setText( const Cfg::TextStyle & c )
 	d->m_font.setPointSize( c.fontSize() );
 
 	d->m_text = c.text();
+
+	update();
 }
 
 QRectF
@@ -362,6 +364,9 @@ FormCheckBox::properties()
 	if( dlg.exec() == QDialog::Accepted )
 	{
 		Cfg::CheckBox c = dlg.cfg();
+
+		form()->undoStack()->push( new UndoChangeTextWithOpts( form(),
+			objectId(), text(), c.text() ) );
 
 		setText( c.text() );
 

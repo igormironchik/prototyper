@@ -229,6 +229,8 @@ FormButton::setText( const Cfg::TextStyle & c )
 	d->m_font.setPointSize( c.fontSize() );
 
 	d->m_text = c.text();
+
+	update();
 }
 
 QRectF
@@ -309,6 +311,9 @@ FormButton::properties()
 
 	if( dlg.exec() == QDialog::Accepted )
 	{
+		form()->undoStack()->push( new UndoChangeTextWithOpts( form(),
+			objectId(), text(), dlg.cfg() ) );
+
 		setText( dlg.cfg() );
 
 		update();
