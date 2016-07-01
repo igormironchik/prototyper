@@ -35,6 +35,7 @@
 #include <QMenu>
 #include <QAction>
 #include <QUndoStack>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -305,6 +306,8 @@ FormSpinBox::setRectangle( const QRectF & rect,
 	Q_UNUSED( pushUndoCommand )
 
 	resize( rect );
+
+	scene()->update();
 }
 
 void

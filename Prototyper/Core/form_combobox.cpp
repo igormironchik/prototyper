@@ -30,6 +30,7 @@
 #include <QPainter>
 #include <QPainterPath>
 #include <QUndoStack>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -226,6 +227,8 @@ FormComboBox::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	Q_UNUSED( pushUndoCommand )
 
 	resize( rect );
+
+	scene()->update();
 }
 
 void

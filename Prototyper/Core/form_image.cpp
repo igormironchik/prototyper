@@ -32,6 +32,7 @@
 #include <QByteArray>
 #include <QBuffer>
 #include <QUndoStack>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -212,6 +213,8 @@ FormImage::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	Q_UNUSED( pushUndoCommand )
 
 	resize( rect );
+
+	scene()->update();
 }
 
 void

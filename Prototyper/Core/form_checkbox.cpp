@@ -35,6 +35,7 @@
 #include <QAction>
 #include <QGraphicsSceneContextMenuEvent>
 #include <QUndoStack>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -307,6 +308,8 @@ FormCheckBox::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	Q_UNUSED( pushUndoCommand )
 
 	resize( rect );
+
+	scene()->update();
 }
 
 void

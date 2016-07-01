@@ -36,6 +36,7 @@
 #include <QApplication>
 #include <QPainter>
 #include <QUndoStack>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -594,7 +595,11 @@ FormPolyline::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	Q_UNUSED( pushUndoCommand )
 
 	if( d->m_handles->checkConstraint( rect.size() ) )
+	{
 		d->updateLines( d->boundingRect(), rect );
+
+		scene()->update();
+	}
 }
 
 void

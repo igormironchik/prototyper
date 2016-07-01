@@ -32,6 +32,7 @@
 // Qt include.
 #include <QUndoStack>
 #include <QPainter>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -225,6 +226,8 @@ FormRect::setRectangle( const QRectF & r, bool pushUndoCommand )
 	setPos( 0.0, 0.0 );
 
 	d->updateRect( r );
+
+	scene()->update();
 }
 
 QRectF

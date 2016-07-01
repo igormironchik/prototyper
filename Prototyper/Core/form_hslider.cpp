@@ -29,6 +29,7 @@
 // Qt include.
 #include <QPainter>
 #include <QUndoStack>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -225,6 +226,8 @@ FormHSlider::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	Q_UNUSED( pushUndoCommand )
 
 	resize( rect );
+
+	scene()->update();
 }
 
 void

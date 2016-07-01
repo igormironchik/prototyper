@@ -40,6 +40,7 @@
 #include <QUndoStack>
 #include <QKeyEvent>
 #include <QEvent>
+#include <QGraphicsScene>
 
 
 namespace Prototyper {
@@ -364,6 +365,8 @@ FormText::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	Q_UNUSED( pushUndoCommand )
 
 	resize( rect );
+
+	scene()->update();
 }
 
 void
