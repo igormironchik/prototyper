@@ -149,6 +149,8 @@ TextEditor::setText( const QList< Cfg::TextStyle > & blocks )
 	QTextCursor cursor = textCursor();
 	cursor.setPosition( 0 );
 	setTextCursor( cursor );
+
+	document()->clearUndoRedoStacks();
 }
 
 void

@@ -567,6 +567,9 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_alignVerticalBottom );
 	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::cleanChanged,
 		q, &ProjectWindow::p_canUndoChanged );
+	ProjectWindow::connect( m_widget->descriptionTab()->editor(),
+		&TextEditor::undoAvailable,
+		q, &ProjectWindow::p_canUndoChanged );
 }
 
 void
@@ -898,6 +901,9 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 				QTextCodec::codecForName( "UTF-8" ) );
 
 			d->m_widget->cleanUndoGroup();
+
+			d->m_widget->descriptionTab()->editor()->document()->
+				clearUndoRedoStacks();
 		}
 		catch( const QtConfFile::Exception & x )
 		{
@@ -1355,13 +1361,18 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 
 	bool can = false;
 
-	foreach( QUndoStack * s, stacks )
+	if( d->m_widget->descriptionTab()->editor()->document()->isUndoAvailable() )
+		can = true;
+	else
 	{
-		if( s->canUndo() )
+		foreach( QUndoStack * s, stacks )
 		{
-			can = true;
+			if( s->canUndo() )
+			{
+				can = true;
 
-			break;
+				break;
+			}
 		}
 	}
 
