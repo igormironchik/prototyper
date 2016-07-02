@@ -570,6 +570,8 @@ ProjectWindowPrivate::init()
 	ProjectWindow::connect( m_widget->descriptionTab()->editor(),
 		&TextEditor::undoAvailable,
 		q, &ProjectWindow::p_canUndoChanged );
+	ProjectWindow::connect( m_desc.data(), &DescWindow::undoAvailable,
+		q, &ProjectWindow::p_canUndoChanged );
 }
 
 void
@@ -904,6 +906,8 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 
 			d->m_widget->descriptionTab()->editor()->document()->
 				clearUndoRedoStacks();
+
+			d->m_desc->clearUndoRedoStacks();
 		}
 		catch( const QtConfFile::Exception & x )
 		{
@@ -1362,6 +1366,8 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 	bool can = false;
 
 	if( d->m_widget->descriptionTab()->editor()->document()->isUndoAvailable() )
+		can = true;
+	else if( d->m_desc->isUndoAvailable() )
 		can = true;
 	else
 	{

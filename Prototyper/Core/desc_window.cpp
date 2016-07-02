@@ -149,6 +149,25 @@ DescWindow::~DescWindow()
 {
 }
 
+bool
+DescWindow::isUndoAvailable() const
+{
+	foreach( TextEditor * e, d->m_editors )
+	{
+		if( e->document()->isUndoAvailable() )
+			return true;
+	}
+
+	return false;
+}
+
+void
+DescWindow::clearUndoRedoStacks()
+{
+	foreach( TextEditor * e, d->m_editors )
+		e->document()->clearUndoRedoStacks();
+}
+
 void
 DescWindow::setEditors( const QString & current,
 	const QMap< QString, QSharedPointer< QTextDocument > > & docs, Form * form )
@@ -167,6 +186,9 @@ DescWindow::setEditors( const QString & current,
 			index = i;
 
 		d->m_editors.append( new TextEditor( d->m_box ) );
+
+		connect( d->m_editors.last(), &TextEditor::undoAvailable,
+			this, &DescWindow::undoAvailable );
 
 		d->m_editors.last()->setDocument( it.value().data() );
 

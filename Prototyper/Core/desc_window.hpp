@@ -54,10 +54,17 @@ class DescWindow
 signals:
 	//! Changed.
 	void changed();
+	//! Undo available.
+	void undoAvailable( bool available );
 
 public:
 	DescWindow( QWidget * parent = 0, Qt::WindowFlags flags = 0 );
 	~DescWindow();
+
+	//! \return Is undo available?
+	bool isUndoAvailable() const;
+	//! Clear undo stack.
+	void clearUndoRedoStacks();
 
 public slots:
 	//! Set editors.
