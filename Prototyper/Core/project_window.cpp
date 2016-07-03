@@ -1373,7 +1373,7 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 	{
 		foreach( QUndoStack * s, stacks )
 		{
-			if( s->canUndo() )
+			if( !s->isClean() )
 			{
 				can = true;
 
