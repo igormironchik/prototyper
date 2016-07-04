@@ -853,6 +853,8 @@ Form::cfg() const
 {
 	Cfg::Form c = d->m_cfg;
 
+	c.windowButtons().clear();
+
 	if( d->m_btns.testFlag( FormProperties::MinimizeButton ) )
 		c.windowButtons().append( Cfg::c_minimize );
 
