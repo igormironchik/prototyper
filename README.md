@@ -7,7 +7,7 @@ First of all I have to say that I see Prototyper as a software for creation of U
 prototypes for desktop and mobile applications. I do not set a goal to create prototyping
 software for Web-pages, but may be Prototyper will be usefull for Web-pages too.
 
-And Prototyper will be released under GNU GPL v3.0!!!
+And Prototyper released under GNU GPL v3.0!!!
 
 # Getting from Repository
 
