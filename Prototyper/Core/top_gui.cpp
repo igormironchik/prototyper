@@ -107,9 +107,7 @@ TopGuiPrivate::init()
 			m_projectWindow->resize( cfg.projectWindow().width(),
 				cfg.projectWindow().height() );
 
-			if( !cfg.projectWindow().isShown() )
-				m_projectWindow->showMinimized();
-			else if( cfg.projectWindow().isMaximized() )
+			if( cfg.projectWindow().isMaximized() )
 				m_projectWindow->showMaximized();
 
 			m_projectWindow->descWindow()->move( cfg.descWindow().x(),
