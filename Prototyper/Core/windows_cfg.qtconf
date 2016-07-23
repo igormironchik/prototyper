@@ -36,6 +36,10 @@
 						{name isShown}
 						{required}
 					}
+					{tagScalar
+						{valueType bool}
+						{name isMaximized}
+					}
 				}
 
 				|#

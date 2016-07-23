@@ -107,10 +107,22 @@ TopGuiPrivate::init()
 			m_projectWindow->resize( cfg.projectWindow().width(),
 				cfg.projectWindow().height() );
 
+			if( !cfg.projectWindow().isShown() )
+				m_projectWindow->showMinimized();
+			else if( cfg.projectWindow().isMaximized() )
+				m_projectWindow->showMaximized();
+
 			m_projectWindow->descWindow()->move( cfg.descWindow().x(),
 				cfg.descWindow().y() );
 			m_projectWindow->descWindow()->resize( cfg.descWindow().width(),
 				cfg.descWindow().height() );
+
+			if( cfg.descWindow().isMaximized() )
+			{
+				m_projectWindow->descWindow()->showMaximized();
+
+				m_projectWindow->descWindow()->hide();
+			}
 		}
 		catch( const QtConfFile::Exception & )
 		{
@@ -219,7 +231,8 @@ TopGui::saveCfg( QWidget * parent )
 		proj.setY( d->m_projectWindow->y() );
 		proj.setWidth( d->m_projectWindow->width() );
 		proj.setHeight( d->m_projectWindow->height() );
-		proj.setIsShown( true );
+		proj.setIsShown( !d->m_projectWindow->isMinimized() );
+		proj.setIsMaximized( d->m_projectWindow->isMaximized() );
 
 		cfg.setProjectWindow( proj );
 
@@ -228,7 +241,8 @@ TopGui::saveCfg( QWidget * parent )
 		desc.setY( d->m_projectWindow->descWindow()->y() );
 		desc.setWidth( d->m_projectWindow->descWindow()->width() );
 		desc.setHeight( d->m_projectWindow->descWindow()->height() );
-		desc.setIsShown( true );
+		desc.setIsShown( d->m_projectWindow->descWindow()->isVisible() );
+		desc.setIsMaximized( d->m_projectWindow->descWindow()->isMaximized() );
 
 		cfg.setDescWindow( desc );
 
