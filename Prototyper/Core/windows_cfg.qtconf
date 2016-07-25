@@ -42,6 +42,7 @@
 					}
 				}
 
+
 				|#
 					Windows configuration in the app.
 				#|
@@ -56,6 +57,11 @@
 						{valueType Window}
 						{name descWindow}
 						{required}
+					}
+					
+					{tagScalar
+						{valueType QString}
+						{name state}
 					}
 				}
 

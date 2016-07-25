@@ -44,6 +44,7 @@ namespace Core {
 static const QString c_appCfgFileName = QLatin1String( "/Prototyper.cfg" );
 static const QString c_appSessionCfgFileName =
 	QLatin1String( "/Session.cfg" );
+static const int c_stateVersion = 1;
 
 //
 // TopGuiPrivate
@@ -120,6 +121,13 @@ TopGuiPrivate::init()
 				m_projectWindow->descWindow()->showMaximized();
 
 				m_projectWindow->descWindow()->hide();
+			}
+
+			if( !cfg.state().isEmpty() )
+			{
+				m_projectWindow->restoreState(
+					QByteArray::fromBase64( cfg.state().toLatin1() ),
+					c_stateVersion );
 			}
 		}
 		catch( const QtConfFile::Exception & )
@@ -243,6 +251,10 @@ TopGui::saveCfg( QWidget * parent )
 		desc.setIsMaximized( d->m_projectWindow->descWindow()->isMaximized() );
 
 		cfg.setDescWindow( desc );
+
+		cfg.setState(
+			QString( d->m_projectWindow->saveState(
+				c_stateVersion ).toBase64() ) );
 
 		Cfg::TagWindowsCfg tag( cfg );
 

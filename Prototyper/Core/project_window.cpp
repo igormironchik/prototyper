@@ -77,6 +77,7 @@ public:
 		,	m_grid( 0 )
 		,	m_gridStep( 0 )
 		,	m_formToolBar( 0 )
+		,	m_stdItemsToolBar( Q_NULLPTR )
 		,	m_formToolBarGroup( 0 )
 		,	m_formHierarchy( 0 )
 		,	m_tabsList( 0 )
@@ -121,6 +122,8 @@ public:
 	QString m_fileName;
 	//! Form toolbar.
 	QToolBar * m_formToolBar;
+	//! Standard items' toolbar.
+	QToolBar * m_stdItemsToolBar;
 	//! Form toolbar group.
 	QActionGroup * m_formToolBarGroup;
 	//! Form's hierarchy.
@@ -209,6 +212,7 @@ ProjectWindowPrivate::init()
 	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "&View" ) );
 
 	m_formHierarchy = new FormHierarchyWidget( q );
+	m_formHierarchy->setObjectName( QLatin1String( "m_formHierarchy" ) );
 
 	q->addDockWidget( Qt::RightDockWidgetArea, m_formHierarchy );
 
@@ -219,6 +223,7 @@ ProjectWindowPrivate::init()
 		ProjectWindow::tr( "Ctrl+Alt+H" ) );
 
 	m_tabsList = new TabsList( q );
+	m_tabsList->setObjectName( QLatin1String( "m_tabsList" ) );
 
 	q->addDockWidget( Qt::RightDockWidgetArea, m_tabsList );
 
@@ -235,6 +240,11 @@ ProjectWindowPrivate::init()
 	q->addAction( newForm );
 
 	m_formToolBar = new QToolBar( ProjectWindow::tr( "Form Tools" ), q );
+	m_formToolBar->setObjectName( QLatin1String( "m_formToolBar" ) );
+
+	m_stdItemsToolBar = new QToolBar( ProjectWindow::tr( "Standard Items" ), q );
+	m_stdItemsToolBar->setObjectName( QLatin1String( "m_stdItemsToolBar" ) );
+
 	m_formToolBarGroup = new QActionGroup( q );
 	m_formToolBarGroup->setExclusive( true );
 
@@ -310,9 +320,7 @@ ProjectWindowPrivate::init()
 //		QIcon( ":/Core/img/fill-color.png" ),
 //		ProjectWindow::tr( "Fill Color" ) );
 
-	m_formToolBar->addSeparator();
-
-	QAction * drawButton = m_formToolBar->addAction(
+	QAction * drawButton = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-pushbutton.png" ),
 		ProjectWindow::tr( "Draw Button" ) );
 	drawButton->setCheckable( true );
@@ -320,7 +328,7 @@ ProjectWindowPrivate::init()
 	drawButton->setShortcutContext( Qt::ApplicationShortcut );
 	drawButton->setShortcut( ProjectWindow::tr( "Alt+B" ) );
 
-	QAction * drawComboBox = m_formToolBar->addAction(
+	QAction * drawComboBox = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-combobox.png" ),
 		ProjectWindow::tr( "Draw ComboBox" ) );
 	drawComboBox->setCheckable( true );
@@ -328,7 +336,7 @@ ProjectWindowPrivate::init()
 	drawComboBox->setShortcutContext( Qt::ApplicationShortcut );
 	drawComboBox->setShortcut( ProjectWindow::tr( "Alt+C" ) );
 
-	QAction * drawRadioButton = m_formToolBar->addAction(
+	QAction * drawRadioButton = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-radiobutton.png" ),
 		ProjectWindow::tr( "Draw Radio Button" ) );
 	drawRadioButton->setCheckable( true );
@@ -336,7 +344,7 @@ ProjectWindowPrivate::init()
 	drawRadioButton->setShortcutContext( Qt::ApplicationShortcut );
 	drawRadioButton->setShortcut( ProjectWindow::tr( "Alt+R" ) );
 
-	QAction * drawCheckBox = m_formToolBar->addAction(
+	QAction * drawCheckBox = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-checkbox.png" ),
 		ProjectWindow::tr( "Draw Check Box" ) );
 	drawCheckBox->setCheckable( true );
@@ -344,7 +352,7 @@ ProjectWindowPrivate::init()
 	drawCheckBox->setShortcutContext( Qt::ApplicationShortcut );
 	drawCheckBox->setShortcut( ProjectWindow::tr( "Alt+K" ) );
 
-	QAction * drawHSlider = m_formToolBar->addAction(
+	QAction * drawHSlider = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-hslider.png" ),
 		ProjectWindow::tr( "Draw Horizontal Slider" ) );
 	drawHSlider->setCheckable( true );
@@ -352,7 +360,7 @@ ProjectWindowPrivate::init()
 	drawHSlider->setShortcutContext( Qt::ApplicationShortcut );
 	drawHSlider->setShortcut( ProjectWindow::tr( "Alt+H" ) );
 
-	QAction * drawVSlider = m_formToolBar->addAction(
+	QAction * drawVSlider = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-vslider.png" ),
 		ProjectWindow::tr( "Draw Vertical Slider" ) );
 	drawVSlider->setCheckable( true );
@@ -360,7 +368,7 @@ ProjectWindowPrivate::init()
 	drawVSlider->setShortcutContext( Qt::ApplicationShortcut );
 	drawVSlider->setShortcut( ProjectWindow::tr( "Alt+V" ) );
 
-	QAction * drawSpinbox = m_formToolBar->addAction(
+	QAction * drawSpinbox = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-spinbox.png" ),
 		ProjectWindow::tr( "Draw Spinbox" ) );
 	drawSpinbox->setCheckable( true );
@@ -408,7 +416,13 @@ ProjectWindowPrivate::init()
 
 	q->addToolBar( Qt::LeftToolBarArea, m_formToolBar );
 
+	q->addToolBarBreak( Qt::LeftToolBarArea );
+
+	q->addToolBar( Qt::LeftToolBarArea, m_stdItemsToolBar );
+
 	m_formToolBar->hide();
+
+	m_stdItemsToolBar->hide();
 
 	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
 	m_grid = form->addAction(
@@ -771,6 +785,8 @@ ProjectWindow::p_quit()
 		if( btn == QMessageBox::Yes )
 			p_saveProjectImpl();
 	}
+
+	d->m_widget->tabs()->setCurrentIndex( 0 );
 
 	TopGui::instance()->saveCfg( 0 );
 
@@ -1138,6 +1154,7 @@ ProjectWindow::p_tabChanged( int index )
 	if( index > 0 )
 	{
 		d->m_formToolBar->show();
+		d->m_stdItemsToolBar->show();
 		d->m_widget->descriptionTab()->toolBar()->hide();
 
 		FormAction::instance()->setForm(
@@ -1146,6 +1163,7 @@ ProjectWindow::p_tabChanged( int index )
 	else
 	{
 		d->m_formToolBar->hide();
+		d->m_stdItemsToolBar->hide();
 		d->m_widget->descriptionTab()->toolBar()->show();
 
 		FormAction::instance()->setForm( 0 );
