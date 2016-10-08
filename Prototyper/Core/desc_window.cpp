@@ -52,6 +52,12 @@ public:
 	{
 	}
 
+	~DescWindowPrivate()
+	{
+		for( TextEditor * e : qAsConst( m_editors ) )
+			e->setDocument( Q_NULLPTR );
+	}
+
 	//! Init.
 	void init();
 	//! \return Current text editor.

@@ -48,15 +48,20 @@ public:
 	{
 	}
 
+	~DescDockWidgetPrivate()
+	{
+		m_editor->setDocument( Q_NULLPTR );
+	}
+
 	//! Init.
 	void init();
 
+	//! Document.
+	QSharedPointer< QTextDocument > m_doc;
 	//! Editor.
 	TextEditor * m_editor;
 	//! Tool bar.
 	TextOptsBar * m_bar;
-	//! Document.
-	QSharedPointer< QTextDocument > m_doc;
 	//! Parent.
 	DescDockWidget * q;
 }; // class DescDockWidgetPrivate
@@ -141,12 +146,12 @@ DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc )
 
 	d->m_doc = doc;
 
-	d->m_editor->setDocument( d->m_doc.data() );
-
 	if( d->m_doc.data() )
 	{
 		d->m_bar->setEnabled( true );
 		d->m_editor->setEnabled( true );
+
+		d->m_editor->setDocument( d->m_doc.data() );
 
 		connect( d->m_doc.data(), &QTextDocument::cursorPositionChanged,
 			d->m_bar, &TextOptsBar::updateState );
@@ -155,6 +160,8 @@ DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc )
 	}
 	else
 	{
+		d->m_editor->setDocument( Q_NULLPTR );
+
 		d->m_bar->setEnabled( false );
 		d->m_editor->setEnabled( false );
 	}

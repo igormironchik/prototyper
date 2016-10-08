@@ -100,6 +100,8 @@ FormScene::FormScene( const Cfg::Form & cfg, QObject * parent )
 
 FormScene::~FormScene()
 {
+	if( d->m_form )
+		disconnect( this, 0, d->m_form, 0 );
 }
 
 Form *
