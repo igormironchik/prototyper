@@ -30,6 +30,7 @@ generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdpart
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
 HEADERS +=	desc_window.hpp \
+			desc_widget.hpp \
 			exporter.hpp \
 			export.hpp \
 			form_actions.hpp \
@@ -86,6 +87,7 @@ HEADERS +=	desc_window.hpp \
     form_undo_commands.hpp
 
 SOURCES +=	desc_window.cpp \
+			desc_widget.cpp \
 			exporter.cpp \
 			form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
