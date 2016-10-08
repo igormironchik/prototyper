@@ -36,6 +36,8 @@
 #include "form_hierarchy_widget.hpp"
 #include "form_hierarchy_model.hpp"
 #include "new_form_dlg.hpp"
+#include "desc_widget.hpp"
+#include "project_window.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -437,10 +439,19 @@ void
 ProjectWidget::tabChanged( int index )
 {
 	if( index > 0 )
+	{
 		d->m_undoGroup->setActiveStack(
 			d->m_forms.at( index - 1 )->form()->undoStack() );
+
+		d->m_forms.at( index - 1 )->form()->selectionChanged();
+	}
 	else
+	{
 		d->m_undoGroup->setActiveStack( Q_NULLPTR );
+
+		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
+			QSharedPointer< QTextDocument > ( Q_NULLPTR ), QString() );
+	}
 }
 
 } /* namespace Core */

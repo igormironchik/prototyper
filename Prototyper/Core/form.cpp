@@ -1855,12 +1855,12 @@ Form::selectionChanged()
 			obj->objectId(), d->m_desc, this );
 
 		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			d->m_desc[ obj->objectId() ] );
+			d->m_desc[ obj->objectId() ], obj->objectId() );
 	}
 	else
 	{
 		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			QSharedPointer< QTextDocument > ( Q_NULLPTR ) );
+			QSharedPointer< QTextDocument > ( Q_NULLPTR ), QString() );
 	}
 }
 

@@ -57,7 +57,8 @@ public:
 	~DescDockWidget();
 
 	//! Set document.
-	void setDocument( QSharedPointer< QTextDocument > doc );
+	void setDocument( QSharedPointer< QTextDocument > doc,
+		const QString & id );
 
 private:
 	Q_DISABLE_COPY( DescDockWidget )

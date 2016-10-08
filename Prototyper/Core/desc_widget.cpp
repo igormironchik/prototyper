@@ -97,9 +97,6 @@ DescDockWidgetPrivate::init()
 
 	m_editor->setTextCursor( c );
 
-	DescDockWidget::connect( m_editor, &TextEditor::changed,
-		q, &DescDockWidget::changed );
-
 	DescDockWidget::connect( m_bar, &TextOptsBar::lessFontSize,
 		m_editor, &TextEditor::lessFontSize );
 	DescDockWidget::connect( m_bar, &TextOptsBar::moreFontSize,
@@ -139,7 +136,8 @@ DescDockWidget::~DescDockWidget()
 }
 
 void
-DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc )
+DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc,
+	const QString & id )
 {
 	if( d->m_doc.data() )
 		disconnect( d->m_doc.data(), 0, this, 0 );
@@ -148,10 +146,15 @@ DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc )
 
 	if( d->m_doc.data() )
 	{
+		setWindowTitle( id );
+
 		d->m_bar->setEnabled( true );
 		d->m_editor->setEnabled( true );
 
 		d->m_editor->setDocument( d->m_doc.data() );
+
+		connect( d->m_editor, &TextEditor::changed,
+			this, &DescDockWidget::changed );
 
 		connect( d->m_doc.data(), &QTextDocument::cursorPositionChanged,
 			d->m_bar, &TextOptsBar::updateState );
@@ -160,6 +163,10 @@ DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc )
 	}
 	else
 	{
+		disconnect( d->m_editor, 0, this, 0 );
+
+		setWindowTitle( QString() );
+
 		d->m_editor->setDocument( Q_NULLPTR );
 
 		d->m_bar->setEnabled( false );
