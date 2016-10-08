@@ -40,6 +40,7 @@
 #include "pdf_exporter.hpp"
 #include "html_exporter.hpp"
 #include "svg_exporter.hpp"
+#include "desc_widget.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -72,19 +73,20 @@ class ProjectWindowPrivate {
 public:
 	ProjectWindowPrivate( ProjectWindow * parent )
 		:	q( parent )
-		,	m_widget( 0 )
-		,	m_saveProject( 0 )
-		,	m_grid( 0 )
-		,	m_gridStep( 0 )
-		,	m_formToolBar( 0 )
+		,	m_widget( Q_NULLPTR )
+		,	m_saveProject( Q_NULLPTR )
+		,	m_grid( Q_NULLPTR )
+		,	m_gridStep( Q_NULLPTR )
+		,	m_formToolBar( Q_NULLPTR )
 		,	m_stdItemsToolBar( Q_NULLPTR )
-		,	m_formToolBarGroup( 0 )
-		,	m_formHierarchy( 0 )
-		,	m_tabsList( 0 )
-		,	m_drawLine( 0 )
-		,	m_select( 0 )
-		,	m_desc( 0 )
-		,	m_drawPolyLine( 0 )
+		,	m_formToolBarGroup( Q_NULLPTR )
+		,	m_formHierarchy( Q_NULLPTR )
+		,	m_descWidget( Q_NULLPTR )
+		,	m_tabsList( Q_NULLPTR )
+		,	m_drawLine( Q_NULLPTR )
+		,	m_select( Q_NULLPTR )
+		,	m_desc( Q_NULLPTR )
+		,	m_drawPolyLine( Q_NULLPTR )
 	{
 	}
 
@@ -128,6 +130,8 @@ public:
 	QActionGroup * m_formToolBarGroup;
 	//! Form's hierarchy.
 	FormHierarchyWidget * m_formHierarchy;
+	//! Description widget.
+	DescDockWidget * m_descWidget;
 	//! Tabs list.
 	TabsList * m_tabsList;
 	//! Draw line action.
@@ -232,6 +236,17 @@ ProjectWindowPrivate::init()
 		Qt::ApplicationShortcut );
 	m_tabsList->toggleViewAction()->setShortcut(
 		ProjectWindow::tr( "Ctrl+Alt+T" ) );
+
+	m_descWidget = new DescDockWidget( q );
+	m_descWidget->setObjectName( QLatin1String( "m_descWidget" ) );
+
+	q->addDockWidget( Qt::RightDockWidgetArea, m_descWidget );
+
+	view->addAction( m_descWidget->toggleViewAction() );
+	m_descWidget->toggleViewAction()->setShortcutContext(
+		Qt::ApplicationShortcut );
+	m_descWidget->toggleViewAction()->setShortcut(
+		ProjectWindow::tr( "Ctrl+Alt+D" ) );
 
 	QAction * newForm = new QAction( QIcon( ":/Core/img/list-add.png" ),
 		ProjectWindow::tr( "Add Form" ), q );
@@ -542,6 +557,8 @@ ProjectWindowPrivate::init()
 	ProjectWindow::connect( m_desc.data(), &DescWindow::changed,
 		q, &ProjectWindow::p_projectChanged );
 	ProjectWindow::connect( m_formHierarchy, &FormHierarchyWidget::changed,
+		q, &ProjectWindow::p_projectChanged );
+	ProjectWindow::connect( m_descWidget, &DescDockWidget::changed,
 		q, &ProjectWindow::p_projectChanged );
 	ProjectWindow::connect( exportToPdf, &QAction::triggered,
 		q, &ProjectWindow::p_exportToPDf );

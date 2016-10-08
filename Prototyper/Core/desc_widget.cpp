@@ -64,16 +64,24 @@ public:
 void
 DescDockWidgetPrivate::init()
 {
-	QVBoxLayout * l = new QVBoxLayout( q );
+	QWidget * w = new QWidget( q );
+
+	QVBoxLayout * l = new QVBoxLayout( w );
 	l->setMargin( 0 );
 
-	m_bar = new TextOptsBar( TextOptsBar::Small, q );
+	m_bar = new TextOptsBar( TextOptsBar::Small, w );
+	m_bar->setEnabled( false );
+
 	l->addWidget( m_bar );
 
-	m_editor = new TextEditor( q );
+	m_editor = new TextEditor( w );
+	m_editor->setEnabled( false );
+
 	l->addWidget( m_editor );
 
 	m_editor->setFontPointSize( 10.0 );
+
+	q->setWidget( w );
 
 	QTextCursor c = m_editor->textCursor();
 

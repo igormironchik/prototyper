@@ -44,7 +44,7 @@ namespace Core {
 static const QString c_appCfgFileName = QLatin1String( "/Prototyper.cfg" );
 static const QString c_appSessionCfgFileName =
 	QLatin1String( "/Session.cfg" );
-static const int c_stateVersion = 1;
+static const int c_stateVersion = 2;
 
 //
 // TopGuiPrivate
