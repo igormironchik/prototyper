@@ -36,6 +36,7 @@
 #include "desc_window.hpp"
 #include "utils.hpp"
 #include "form_undo_commands.hpp"
+#include "desc_widget.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -1836,6 +1837,31 @@ Form::editDescription( const QString & id )
 		id, d->m_desc, this );
 
 	TopGui::instance()->projectWindow()->descWindow()->show();
+}
+
+void
+Form::selectionChanged()
+{
+	const QList< QGraphicsItem* > s = d->selection();
+
+	if( s.size() == 1 )
+	{
+		FormObject * obj = dynamic_cast< FormObject* > ( s.first() );
+
+		if( !d->m_desc.contains( obj->objectId() ) )
+			d->createDescription( obj->objectId() );
+
+		TopGui::instance()->projectWindow()->descWindow()->setEditors(
+			obj->objectId(), d->m_desc, this );
+
+		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
+			d->m_desc[ obj->objectId() ] );
+	}
+	else
+	{
+		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
+			QSharedPointer< QTextDocument > ( Q_NULLPTR ) );
+	}
 }
 
 void

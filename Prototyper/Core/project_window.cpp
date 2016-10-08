@@ -728,6 +728,12 @@ ProjectWindow::formHierarchy() const
 	return d->m_formHierarchy;
 }
 
+DescDockWidget *
+ProjectWindow::descDockWidget() const
+{
+	return d->m_descWidget;
+}
+
 TabsList *
 ProjectWindow::tabsList() const
 {

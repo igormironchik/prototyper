@@ -124,6 +124,9 @@ FormScene::setForm( Form * f )
 	d->m_form = f;
 
 	addItem( d->m_form );
+
+	connect( this, &FormScene::selectionChanged,
+		d->m_form, &Form::selectionChanged );
 }
 
 void

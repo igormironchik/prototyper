@@ -343,6 +343,8 @@ public slots:
 	void renameForm( const QString & name );
 	//! Edit description.
 	void editDescription( const QString & id );
+	//! Selection changed.
+	void selectionChanged();
 
 private slots:
 	//! Set grid step.

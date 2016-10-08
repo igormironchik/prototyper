@@ -36,6 +36,7 @@ class ProjectWidget;
 class TabsList;
 class FormHierarchyWidget;
 class DescWindow;
+class DescDockWidget;
 
 
 //
@@ -70,6 +71,9 @@ public:
 
 	//! \return Form hierarchy widget.
 	FormHierarchyWidget * formHierarchy() const;
+
+	//! \return Description dock widget.
+	DescDockWidget * descDockWidget() const;
 
 	//! \return Tabs list widget.
 	TabsList * tabsList() const;
