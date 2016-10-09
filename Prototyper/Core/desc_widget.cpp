@@ -144,6 +144,8 @@ DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc,
 
 	d->m_doc = doc;
 
+	disconnect( d->m_editor, 0, this, 0 );
+
 	if( d->m_doc.data() )
 	{
 		setWindowTitle( id );
@@ -163,8 +165,6 @@ DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc,
 	}
 	else
 	{
-		disconnect( d->m_editor, 0, this, 0 );
-
 		setWindowTitle( QString() );
 
 		d->m_editor->setDocument( Q_NULLPTR );
