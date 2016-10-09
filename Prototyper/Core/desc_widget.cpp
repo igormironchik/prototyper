@@ -24,6 +24,7 @@
 #include "desc_widget.hpp"
 #include "text_opts_bar.hpp"
 #include "text_editor.hpp"
+#include "form.hpp"
 
 // Qt include.
 #include <QTextDocument>
