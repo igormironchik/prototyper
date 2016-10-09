@@ -450,7 +450,8 @@ ProjectWidget::tabChanged( int index )
 		d->m_undoGroup->setActiveStack( Q_NULLPTR );
 
 		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			QSharedPointer< QTextDocument > ( Q_NULLPTR ), QString() );
+			QSharedPointer< QTextDocument > ( Q_NULLPTR ),
+			QString(), Q_NULLPTR );
 	}
 }
 
