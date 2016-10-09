@@ -174,6 +174,12 @@ DescWindow::clearUndoRedoStacks()
 		e->document()->clearUndoRedoStacks();
 }
 
+Form *
+DescWindow::form() const
+{
+	return d->m_form;
+}
+
 void
 DescWindow::setEditors( const QString & current,
 	const QMap< QString, QSharedPointer< QTextDocument > > & docs, Form * form )
@@ -256,6 +262,8 @@ DescWindow::deleteItem( Form * form, const QString & name )
 				DescWindow::disconnect( d->m_editors.at( i ), 0, 0, 0 );
 
 				delete d->m_editors.at( i );
+
+				d->m_editors.removeAt( i );
 
 				return;
 			}

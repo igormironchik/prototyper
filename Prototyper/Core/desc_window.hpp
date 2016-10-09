@@ -66,6 +66,9 @@ public:
 	//! Clear undo stack.
 	void clearUndoRedoStacks();
 
+	//! \return Form.
+	Form * form() const;
+
 public slots:
 	//! Set editors.
 	void setEditors( const QString & current,
