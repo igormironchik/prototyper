@@ -36,6 +36,9 @@ namespace Prototyper {
 
 namespace Core {
 
+class Form;
+
+
 //
 // DescDockWidget
 //
@@ -58,7 +61,10 @@ public:
 
 	//! Set document.
 	void setDocument( QSharedPointer< QTextDocument > doc,
-		const QString & id );
+		const QString & id, Form * form );
+
+	//! \return Form.
+	Form * form() const;
 
 private:
 	Q_DISABLE_COPY( DescDockWidget )

@@ -1783,6 +1783,12 @@ Form::renameObject( FormObject * obj, const QString & newId,
 
 		d->m_desc.remove( obj->objectId() );
 
+		auto * dock = TopGui::instance()->projectWindow()->descDockWidget();
+
+		if( dock->form() == this &&
+			dock->windowTitle() == obj->objectId() )
+				dock->setWindowTitle( newId );
+
 		d->m_desc[ newId ] = doc;
 	}
 
@@ -1855,12 +1861,13 @@ Form::selectionChanged()
 			obj->objectId(), d->m_desc, this );
 
 		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			d->m_desc[ obj->objectId() ], obj->objectId() );
+			d->m_desc[ obj->objectId() ], obj->objectId(), this );
 	}
 	else
 	{
 		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			QSharedPointer< QTextDocument > ( Q_NULLPTR ), QString() );
+			QSharedPointer< QTextDocument > ( Q_NULLPTR ),
+			QString(), Q_NULLPTR );
 	}
 }
 

@@ -44,6 +44,7 @@ public:
 	DescDockWidgetPrivate( DescDockWidget * parent )
 		:	m_editor( Q_NULLPTR )
 		,	m_bar( Q_NULLPTR )
+		,	m_form( Q_NULLPTR )
 		,	q( parent )
 	{
 	}
@@ -62,6 +63,8 @@ public:
 	TextEditor * m_editor;
 	//! Tool bar.
 	TextOptsBar * m_bar;
+	//! Form.
+	Form * m_form;
 	//! Parent.
 	DescDockWidget * q;
 }; // class DescDockWidgetPrivate
@@ -137,12 +140,14 @@ DescDockWidget::~DescDockWidget()
 
 void
 DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc,
-	const QString & id )
+	const QString & id, Form * form )
 {
 	if( d->m_doc.data() )
 		disconnect( d->m_doc.data(), 0, this, 0 );
 
 	d->m_doc = doc;
+
+	d->m_form = form;
 
 	disconnect( d->m_editor, 0, this, 0 );
 
@@ -172,6 +177,12 @@ DescDockWidget::setDocument( QSharedPointer< QTextDocument > doc,
 		d->m_bar->setEnabled( false );
 		d->m_editor->setEnabled( false );
 	}
+}
+
+Form *
+DescDockWidget::form() const
+{
+	return d->m_form;
 }
 
 } /* namespace Core */
