@@ -2,7 +2,7 @@
 TEMPLATE = lib
 CONFIG += shared
 TARGET = Prototyper.Core
-QT += core gui widgets svg
+QT += core gui widgets svg xml
 CONFIG += c++14
 DEFINES += PROTOTYPER_CORE
 
