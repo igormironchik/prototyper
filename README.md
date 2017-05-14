@@ -27,9 +27,9 @@ And Prototyper released under GNU GPL v3.0!!!
 
 # Some screenshots
             
-![Description page]( http://igor-mironchik.besaba.com/images/prototyper/prototyper-description.png )
+![Description page]( https://image.ibb.co/byzBT5/prototyper_description.png )
             
-![Form page]( http://igor-mironchik.besaba.com/images/prototyper/prototyper-dialog.png )
+![Form page]( https://image.ibb.co/joud85/prototyper_dialog.png )
 
 # Getting from Repository
 
