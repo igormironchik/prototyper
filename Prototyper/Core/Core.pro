@@ -84,7 +84,8 @@ HEADERS +=	desc_window.hpp \
     form_spinbox_properties.hpp \
     form_properties.hpp \
     svg_exporter.hpp \
-    form_undo_commands.hpp
+    form_undo_commands.hpp \
+	constants.hpp
 
 SOURCES +=	desc_window.cpp \
 			desc_widget.cpp \

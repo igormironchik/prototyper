@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "form_grid_snap.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -72,10 +73,16 @@ GridSnapPrivate::init()
 QPointF
 GridSnapPrivate::calc( const QPointF & p )
 {
+	int y = ( (int) p.y() - c_formHeaderHeight ) / m_step * m_step +
+		qRound( (qreal) ( ( (int) p.y() - c_formHeaderHeight ) % m_step ) /
+			(qreal) m_step ) * m_step + c_formHeaderHeight;
+
+	if( y < c_formHeaderHeight )
+		y = c_formHeaderHeight;
+
 	return QPointF( (int) p.x() / m_step * m_step +
 			qRound( (qreal) ( (int) p.x() % m_step ) / (qreal) m_step ) * m_step,
-		(int) p.y() / m_step * m_step +
-			qRound( (qreal) ( (int) p.y() % m_step ) / (qreal) m_step ) * m_step );
+		y );
 }
 
 void

@@ -37,6 +37,7 @@
 #include "utils.hpp"
 #include "form_undo_commands.hpp"
 #include "desc_widget.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -1611,7 +1612,7 @@ void
 Form::draw( QPainter * painter, int width, int height,
 	FormProperties::Buttons btns, int gridStep, bool drawGrid )
 {
-	const int wh = 30;
+	const int wh = c_formHeaderHeight;
 
 	static const QColor gridColor = Qt::gray;
 
