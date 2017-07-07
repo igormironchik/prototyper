@@ -61,6 +61,10 @@ class ProjectWidget
 signals:
 	//! Project has been modified.
 	void changed();
+	//! Form added.
+	void formAdded( FormView * );
+	//! Form deleted.
+	void formDeleted( FormView * );
 
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,
@@ -110,6 +114,8 @@ private slots:
 	void tabChanged( int index );
 
 private:
+	friend class ProjectWidgetPrivate;
+
 	Q_DISABLE_COPY( ProjectWidget )
 
 	QScopedPointer< ProjectWidgetPrivate > d;

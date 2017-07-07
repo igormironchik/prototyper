@@ -211,6 +211,8 @@ ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
 		q, &ProjectWidget::changed );
 	ProjectWidget::connect( form->form(), &Form::changed,
 		q, &ProjectWidget::changed );
+
+	emit q->formAdded( form );
 }
 
 
@@ -401,6 +403,8 @@ ProjectWidget::deleteForm( const QString & name )
 			TopGui::instance()->projectWindow()->formHierarchy()->model()->
 				removeForm( d->m_forms.at( index - 1 )->form() );
 
+			FormView * form = d->m_forms.at( index - 1 );
+
 			d->m_forms.removeAt( index - 1 );
 
 			d->m_cfg.form().removeAt( index - 1 );
@@ -418,6 +422,8 @@ ProjectWidget::deleteForm( const QString & name )
 				view->form()->updateLink( name, QString() );
 
 			emit changed();
+
+			emit formDeleted( form );
 		}
 	}
 }

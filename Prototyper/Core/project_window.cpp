@@ -146,6 +146,10 @@ public:
 	QAction * m_undoAction;
 	//! Redo action.
 	QAction * m_redoAction;
+	//! Added forms.
+	QList< FormView* > m_addedForms;
+	//! Deleted forms.
+	QList< FormView* > m_deletedForms;
 }; // class ProjectWindowPrivate
 
 void
@@ -603,6 +607,10 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_canUndoChanged );
 	ProjectWindow::connect( m_desc.data(), &DescWindow::undoAvailable,
 		q, &ProjectWindow::p_canUndoChanged );
+	ProjectWindow::connect( m_widget, &ProjectWidget::formAdded,
+		q, &ProjectWindow::p_formAdded );
+	ProjectWindow::connect( m_widget, &ProjectWidget::formDeleted,
+		q, &ProjectWindow::p_formDeleted );
 }
 
 void
@@ -957,6 +965,10 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 		}
 
 		setWindowModified( false );
+
+		d->m_addedForms.clear();
+
+		d->m_deletedForms.clear();
 	}
 	else
 		p_saveProjectAs();
@@ -1406,7 +1418,11 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 
 	bool can = false;
 
-	if( d->m_widget->descriptionTab()->editor()->document()->isUndoAvailable() )
+	if( !d->m_addedForms.isEmpty() )
+		can = true;
+	else if( !d->m_deletedForms.isEmpty() )
+		can = true;
+	else if( d->m_widget->descriptionTab()->editor()->document()->isUndoAvailable() )
 		can = true;
 	else if( d->m_desc->isUndoAvailable() )
 		can = true;
@@ -1427,6 +1443,21 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 		setWindowModified( true );
 	else
 		setWindowModified( false );
+}
+
+void
+ProjectWindow::p_formAdded( FormView * form )
+{
+	d->m_addedForms.append( form );
+}
+
+void
+ProjectWindow::p_formDeleted( FormView * form )
+{
+	d->m_deletedForms.append( form );
+
+	if( d->m_addedForms.contains( form ) )
+		d->m_addedForms.removeOne( form );
 }
 
 } /* namespace Core */

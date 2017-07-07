@@ -37,6 +37,7 @@ class TabsList;
 class FormHierarchyWidget;
 class DescWindow;
 class DescDockWidget;
+class FormView;
 
 
 //
@@ -178,6 +179,10 @@ private slots:
 	void p_alignHorizontalRight();
 	//! Can undo changed.
 	void p_canUndoChanged( bool canUndo );
+	//! Form added.
+	void p_formAdded( FormView * form );
+	//! Form deleted.
+	void p_formDeleted( FormView * form );
 
 private:
 	friend class ProjectWindowPrivate;
