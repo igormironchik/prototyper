@@ -64,5 +64,7 @@
 		<file>img/align-vertical-bottom.png</file>
 		<file>img/edit-undo.png</file>
 		<file>img/edit-redo.png</file>
+		<file>img/prototyper.png</file>
+		<file>img/qt.png</file>
 	</qresource>
 </RCC>

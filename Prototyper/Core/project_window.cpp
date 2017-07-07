@@ -514,8 +514,10 @@ ProjectWindowPrivate::init()
 	form->addAction( redoAction );
 
 	QMenu * help = q->menuBar()->addMenu( ProjectWindow::tr( "&Help" ) );
-	QAction * about = help->addAction( ProjectWindow::tr( "About" ) );
-	QAction * aboutQt = help->addAction( ProjectWindow::tr( "About Qt" ) );
+	QAction * about = help->addAction( QIcon( ":/Core/img/prototyper.png" ),
+		ProjectWindow::tr( "About" ) );
+	QAction * aboutQt = help->addAction( QIcon( ":/Core/img/qt.png" ),
+		ProjectWindow::tr( "About Qt" ) );
 
 	ProjectWindow::connect( quitAction, &QAction::triggered,
 		q, &ProjectWindow::p_quit );
