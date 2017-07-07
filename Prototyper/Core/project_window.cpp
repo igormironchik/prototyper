@@ -444,6 +444,11 @@ ProjectWindowPrivate::init()
 	m_stdItemsToolBar->hide();
 
 	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
+
+	form->addAction( newForm );
+
+	form->addSeparator();
+
 	m_grid = form->addAction(
 		QIcon( ":/Core/img/view-grid.png" ),
 		ProjectWindow::tr( "Show Grid" ) );
@@ -507,10 +512,6 @@ ProjectWindowPrivate::init()
 	redoAction->setShortcut( ProjectWindow::tr( "Ctrl+Y" ) );
 	redoAction->setIcon( QIcon( ":/Core/img/edit-redo.png" ) );
 	form->addAction( redoAction );
-
-	form->addSeparator();
-
-	form->addAction( newForm );
 
 	QMenu * help = q->menuBar()->addMenu( ProjectWindow::tr( "&Help" ) );
 	QAction * about = help->addAction( ProjectWindow::tr( "About" ) );
