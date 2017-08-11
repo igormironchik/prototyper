@@ -47,7 +47,7 @@ class TabsModel
 	:	public QStringListModel
 {
 public:
-	TabsModel( QObject * parent )
+	explicit TabsModel( QObject * parent )
 		:	QStringListModel( parent )
 	{
 	}
@@ -76,7 +76,7 @@ private:
 
 class TabsViewPrivate {
 public:
-	TabsViewPrivate( TabsView * parent )
+	explicit TabsViewPrivate( TabsView * parent )
 		:	q( parent )
 		,	m_activate( 0 )
 	{
@@ -192,7 +192,7 @@ TabsView::p_deleteForm()
 
 class TabsListPrivate {
 public:
-	TabsListPrivate( TabsList * parent )
+	explicit TabsListPrivate( TabsList * parent )
 		:	q( parent )
 		,	m_view( 0 )
 		,	m_model( 0 )

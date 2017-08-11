@@ -39,7 +39,7 @@ namespace Core {
 
 class ProjectDescTabPrivate {
 public:
-	ProjectDescTabPrivate( ProjectDescTab * parent )
+	explicit ProjectDescTabPrivate( ProjectDescTab * parent )
 		:	q( parent )
 		,	m_bar( 0 )
 		,	m_editor( 0 )

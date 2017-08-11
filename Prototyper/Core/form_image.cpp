@@ -45,7 +45,7 @@ namespace Core {
 
 class FormImagePrivate {
 public:
-	FormImagePrivate( FormImage * parent )
+	explicit FormImagePrivate( FormImage * parent )
 		:	q( parent )
 		,	m_handles( 0 )
 	{

@@ -71,7 +71,7 @@ namespace Core {
 
 class ProjectWindowPrivate {
 public:
-	ProjectWindowPrivate( ProjectWindow * parent )
+	explicit ProjectWindowPrivate( ProjectWindow * parent )
 		:	q( parent )
 		,	m_widget( Q_NULLPTR )
 		,	m_saveProject( Q_NULLPTR )
@@ -87,6 +87,8 @@ public:
 		,	m_select( Q_NULLPTR )
 		,	m_desc( Q_NULLPTR )
 		,	m_drawPolyLine( Q_NULLPTR )
+		,	m_undoAction( Q_NULLPTR )
+		,	m_redoAction( Q_NULLPTR )
 	{
 	}
 

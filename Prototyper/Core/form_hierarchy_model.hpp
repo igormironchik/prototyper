@@ -45,7 +45,7 @@ class FormHierarchyModel
 	:	public QAbstractItemModel
 {
 public:
-	FormHierarchyModel( QObject * parent = 0 );
+	explicit FormHierarchyModel( QObject * parent = 0 );
 	~FormHierarchyModel();
 
 	//! Add form.

@@ -78,7 +78,7 @@ public:
 	virtual void exportToDoc( const QString & fileName ) = 0;
 
 protected:
-	Exporter( QScopedPointer< ExporterPrivate > && dd );
+	explicit Exporter( QScopedPointer< ExporterPrivate > && dd );
 
 protected:
 	QScopedPointer< ExporterPrivate > d;

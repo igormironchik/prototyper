@@ -35,7 +35,7 @@ namespace Core {
 
 class FormPropertiesPrivate {
 public:
-	FormPropertiesPrivate( FormProperties * parent )
+	explicit FormPropertiesPrivate( FormProperties * parent )
 		:	q( parent )
 	{
 	}

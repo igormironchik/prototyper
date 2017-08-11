@@ -44,7 +44,7 @@ namespace Core {
 
 class DescWindowPrivate {
 public:
-	DescWindowPrivate( DescWindow * parent )
+	explicit DescWindowPrivate( DescWindow * parent )
 		:	q( parent )
 		,	m_box( 0 )
 		,	m_bar( 0 )

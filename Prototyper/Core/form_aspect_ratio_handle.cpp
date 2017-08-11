@@ -40,7 +40,7 @@ namespace Core {
 
 class AspectRatioHandlePrivate {
 public:
-	AspectRatioHandlePrivate( AspectRatioHandle * parent )
+	explicit AspectRatioHandlePrivate( AspectRatioHandle * parent )
 		:	q( parent )
 		,	m_keepAspectRatio( true )
 		,	m_hovered( false )

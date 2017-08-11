@@ -42,7 +42,7 @@ namespace Core {
 
 class DescDockWidgetPrivate {
 public:
-	DescDockWidgetPrivate( DescDockWidget * parent )
+	explicit DescDockWidgetPrivate( DescDockWidget * parent )
 		:	m_editor( Q_NULLPTR )
 		,	m_bar( Q_NULLPTR )
 		,	m_form( Q_NULLPTR )

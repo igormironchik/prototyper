@@ -39,7 +39,7 @@ namespace Core {
 
 class GridStepDlgPrivate {
 public:
-	GridStepDlgPrivate( GridStepDlg * parent )
+	explicit GridStepDlgPrivate( GridStepDlg * parent )
 		:	q( parent )
 	{
 	}

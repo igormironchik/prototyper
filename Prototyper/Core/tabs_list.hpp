@@ -56,7 +56,7 @@ signals:
 	void activateTab( const QModelIndex & );
 
 public:
-	TabsView( QWidget * parent );
+	explicit TabsView( QWidget * parent );
 	~TabsView();
 
 protected:

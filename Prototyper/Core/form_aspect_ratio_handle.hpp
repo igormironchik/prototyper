@@ -43,7 +43,7 @@ class AspectRatioHandle
 	:	public QGraphicsItem
 {
 public:
-	AspectRatioHandle( QGraphicsItem * parent );
+	explicit AspectRatioHandle( QGraphicsItem * parent );
 	~AspectRatioHandle();
 
 	//! \return Is keep aspect ratio?

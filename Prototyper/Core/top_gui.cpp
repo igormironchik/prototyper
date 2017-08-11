@@ -52,7 +52,7 @@ static const int c_stateVersion = 2;
 
 class TopGuiPrivate {
 public:
-	TopGuiPrivate( TopGui * parent )
+	explicit TopGuiPrivate( TopGui * parent )
 		:	q( parent )
 		,	m_projectWindow( 0 )
 	{

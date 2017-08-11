@@ -60,7 +60,7 @@ namespace Core {
 
 class FormGroupPrivate {
 public:
-	FormGroupPrivate( FormGroup * parent )
+	explicit FormGroupPrivate( FormGroup * parent )
 		:	q( parent )
 		,	m_center( 0 )
 		,	m_topLeft( 0 )
@@ -385,8 +385,10 @@ FormGroup::children() const
 {
 	QList< QGraphicsItem* > items = childItems();
 
-	std::remove_if( items.begin(), items.end(), [] ( QGraphicsItem * item )
-		{ return ( dynamic_cast< FormObject* > ( item ) == 0 ); } );
+	items.erase( std::remove_if( items.begin(), items.end(),
+			[] ( QGraphicsItem * item ) {
+				return ( dynamic_cast< FormObject* > ( item ) == 0 ); } ),
+		items.end() );
 
 	return items;
 }

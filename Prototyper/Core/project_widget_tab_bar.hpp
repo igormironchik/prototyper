@@ -53,7 +53,7 @@ signals:
 	void formAddRequest();
 
 public:
-	ProjectTabBar( QWidget * parent = 0 );
+	explicit ProjectTabBar( QWidget * parent = 0 );
 	~ProjectTabBar();
 
 private slots:

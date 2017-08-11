@@ -35,7 +35,7 @@ namespace Core {
 
 class FormTextOptsPrivate {
 public:
-	FormTextOptsPrivate( FormTextOpts * parent )
+	explicit FormTextOptsPrivate( FormTextOpts * parent )
 		:	q( parent )
 		,	m_bar( 0 )
 	{

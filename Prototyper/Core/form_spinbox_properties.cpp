@@ -40,7 +40,7 @@ namespace Core {
 
 class SpinBoxPropertiesPrivate {
 public:
-	SpinBoxPropertiesPrivate( SpinBoxProperties * parent )
+	explicit SpinBoxPropertiesPrivate( SpinBoxProperties * parent )
 		:	q( parent )
 	{
 	}

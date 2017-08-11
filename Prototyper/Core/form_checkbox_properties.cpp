@@ -42,7 +42,7 @@ namespace Core {
 
 class CheckBoxPropertiesPrivate {
 public:
-	CheckBoxPropertiesPrivate( CheckBoxProperties * parent )
+	explicit CheckBoxPropertiesPrivate( CheckBoxProperties * parent )
 		:	q( parent )
 	{
 	}

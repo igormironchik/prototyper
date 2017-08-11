@@ -39,7 +39,7 @@ namespace Core {
 
 class FormActionPrivate {
 public:
-	FormActionPrivate( FormAction * parent )
+	explicit FormActionPrivate( FormAction * parent )
 		:	q( parent )
 		,	m_mode( FormAction::Select )
 		,	m_form( 0 )

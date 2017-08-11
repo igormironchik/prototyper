@@ -49,7 +49,7 @@ namespace Core {
 
 class FormPolylinePrivate {
 public:
-	FormPolylinePrivate( FormPolyline * parent )
+	explicit FormPolylinePrivate( FormPolyline * parent )
 		:	q( parent )
 		,	m_start( 0 )
 		,	m_end( 0 )

@@ -43,7 +43,7 @@ class FormRectPlacer
 	:	public QGraphicsItem
 {
 public:
-	FormRectPlacer( QGraphicsItem * parent );
+	explicit FormRectPlacer( QGraphicsItem * parent );
 	~FormRectPlacer();
 
 	//! Set start pos.

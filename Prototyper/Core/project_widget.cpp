@@ -63,7 +63,7 @@ class TabWidget
 	:	public QTabWidget
 {
 public:
-	TabWidget( QWidget * parent = 0 )
+	explicit TabWidget( QWidget * parent = 0 )
 		:	QTabWidget( parent )
 	{
 	}

@@ -38,7 +38,7 @@ namespace Core {
 
 class ProjectTabBarPrivate {
 public:
-	ProjectTabBarPrivate( ProjectTabBar * parent )
+	explicit ProjectTabBarPrivate( ProjectTabBar * parent )
 		:	q( parent )
 		,	m_menuTabIndex( 0 )
 	{

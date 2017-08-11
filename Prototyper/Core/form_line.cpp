@@ -48,7 +48,7 @@ namespace Core {
 
 class FormLinePrivate {
 public:
-	FormLinePrivate( FormLine * parent )
+	explicit FormLinePrivate( FormLine * parent )
 		:	q( parent )
 		,	m_h1( 0 )
 		,	m_h2( 0 )

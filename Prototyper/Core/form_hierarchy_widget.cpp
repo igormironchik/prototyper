@@ -287,7 +287,7 @@ FormHierarchyView::postConstruction()
 
 class FormHierarchyWidgetPrivate {
 public:
-	FormHierarchyWidgetPrivate( FormHierarchyWidget * parent )
+	explicit FormHierarchyWidgetPrivate( FormHierarchyWidget * parent )
 		:	q( parent )
 		,	m_view( 0 )
 		,	m_model( 0 )

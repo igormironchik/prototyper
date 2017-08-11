@@ -45,7 +45,7 @@ namespace Core {
 
 class FormRectPrivate {
 public:
-	FormRectPrivate( FormRect * parent )
+	explicit FormRectPrivate( FormRect * parent )
 		:	q( parent )
 		,	m_handles( 0 )
 		,	m_isHandleMoved( false )

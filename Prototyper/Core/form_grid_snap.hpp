@@ -43,7 +43,7 @@ class GridSnap
 	:	public QGraphicsItem
 {
 public:
-	GridSnap( QGraphicsItem * parent );
+	explicit GridSnap( QGraphicsItem * parent );
 	~GridSnap();
 
 	//! \return Current position.

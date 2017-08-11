@@ -40,7 +40,7 @@ namespace Core {
 
 class GridSnapPrivate {
 public:
-	GridSnapPrivate( GridSnap * parent )
+	explicit GridSnapPrivate( GridSnap * parent )
 		:	q( parent )
 		,	m_step( 10.0 )
 		,	m_size( 5 )

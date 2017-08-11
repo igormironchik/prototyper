@@ -54,7 +54,7 @@ signals:
 	void changed();
 
 public:
-	TextEditor( QWidget * parent = 0 );
+	explicit TextEditor( QWidget * parent = 0 );
 	~TextEditor();
 
 	//! \return Text.

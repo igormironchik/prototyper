@@ -38,7 +38,7 @@ namespace Core {
 
 class FormRectPlacerPrivate {
 public:
-	FormRectPlacerPrivate( FormRectPlacer * parent )
+	explicit FormRectPlacerPrivate( FormRectPlacer * parent )
 		:	q( parent )
 		,	m_rect( 0.0, 0.0, 0.0, 0.0 )
 	{

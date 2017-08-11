@@ -266,14 +266,13 @@ PdfExporterPrivate::printDocument( const QTextDocument & doc, QPdfWriter & pdf,
 
 		QTextImageFormat imageFormat;
 
-		bool isObject = false;
 		bool isImage = false;
 		bool isBreak = false;
 
 		for( ; !it.atEnd(); ++it )
 		{
 			const QString txt = it.fragment().text();
-			isObject = txt.contains(
+			bool isObject = txt.contains(
 				QChar::ObjectReplacementCharacter );
 			isImage = isObject &&
 				it.fragment().charFormat().isImageFormat();

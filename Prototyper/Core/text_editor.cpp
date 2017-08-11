@@ -40,7 +40,7 @@ namespace Core {
 
 class TextEditorPrivate {
 public:
-	TextEditorPrivate( TextEditor * parent )
+	explicit TextEditorPrivate( TextEditor * parent )
 		:	q( parent )
 	{
 	}

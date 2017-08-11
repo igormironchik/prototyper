@@ -42,7 +42,7 @@ namespace Core {
 
 class ButtonPropertiesPrivate {
 public:
-	ButtonPropertiesPrivate( ButtonProperties * parent )
+	explicit ButtonPropertiesPrivate( ButtonProperties * parent )
 		:	q( parent )
 	{
 	}

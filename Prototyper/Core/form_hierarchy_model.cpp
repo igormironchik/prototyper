@@ -40,7 +40,7 @@ namespace Core {
 
 class FormHierarchyModelPrivate {
 public:
-	FormHierarchyModelPrivate( FormHierarchyModel * parent )
+	explicit FormHierarchyModelPrivate( FormHierarchyModel * parent )
 		:	q( parent )
 	{
 	}
