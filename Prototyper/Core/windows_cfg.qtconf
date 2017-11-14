@@ -48,13 +48,13 @@
 				#|
 				{class WindowsCfg
 					{tag
-						{valueType Window}
+						{valueType Prototyper::Core::Cfg::Window}
 						{name projectWindow}
 						{required}
 					}
 
 					{tag
-						{valueType Window}
+						{valueType Prototyper::Core::Cfg::Window}
 						{name descWindow}
 						{required}
 					}

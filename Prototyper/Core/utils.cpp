@@ -54,41 +54,41 @@ namespace Cfg {
 // textStyle
 //
 
-QList< QString > textStyle( const QTextCharFormat & f,
+std::vector< QString > textStyle( const QTextCharFormat & f,
 	const QTextBlockFormat & b )
 {
-	QList< QString > res;
+	std::vector< QString > res;
 
 	if( f.fontWeight() == QFont::Bold )
-		res.append( c_boldStyle );
+		res.push_back( c_boldStyle );
 
 	if( f.fontItalic() )
-		res.append( c_italicStyle );
+		res.push_back( c_italicStyle );
 
 	if( f.fontUnderline() )
-		res.append( c_underlineStyle );
+		res.push_back( c_underlineStyle );
 
-	if( res.isEmpty() )
-		res.append( c_normalStyle );
+	if( res.empty() )
+		res.push_back( c_normalStyle );
 
 	switch( b.alignment() )
 	{
 		case Qt::AlignCenter :
 		case Qt::AlignHCenter :
 		{
-			res.append( c_center );
+			res.push_back( c_center );
 		}
 			break;
 
 		case Qt::AlignRight :
 		{
-			res.append( c_right );
+			res.push_back( c_right );
 		}
 			break;
 
 		default :
 		{
-			res.append( c_left );
+			res.push_back( c_left );
 		}
 			break;
 	}
@@ -101,9 +101,9 @@ QList< QString > textStyle( const QTextCharFormat & f,
 // text
 //
 
-QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
+std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 {
-	QList< Cfg::TextStyle > blocks;
+	std::vector< Cfg::TextStyle > blocks;
 
 	int pos = 0;
 
@@ -122,11 +122,11 @@ QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 		if( f != c.charFormat() || b != c.blockFormat() )
 		{
 			Cfg::TextStyle style;
-			style.setStyle( textStyle( f, b ) );
-			style.setFontSize( f.fontPointSize() );
-			style.setText( t );
+			style.set_style( textStyle( f, b ) );
+			style.set_fontSize( f.fontPointSize() );
+			style.set_text( t );
 
-			blocks.append( style );
+			blocks.push_back( style );
 
 			f = c.charFormat();
 
@@ -141,11 +141,11 @@ QList< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 	if( !t.isEmpty() )
 	{
 		Cfg::TextStyle style;
-		style.setStyle( textStyle( f, b ) );
-		style.setFontSize( f.fontPointSize() );
-		style.setText( t );
+		style.set_style( textStyle( f, b ) );
+		style.set_fontSize( f.fontPointSize() );
+		style.set_text( t );
 
-		blocks.append( style );
+		blocks.push_back( style );
 	}
 
 	return blocks;
@@ -160,8 +160,8 @@ Cfg::Pen pen( const QPen & p )
 {
 	Cfg::Pen res;
 
-	res.setWidth( p.widthF() );
-	res.setColor( p.color().name( QColor::HexArgb ) );
+	res.set_width( p.widthF() );
+	res.set_color( p.color().name( QColor::HexArgb ) );
 
 	return res;
 } // pen
@@ -185,7 +185,7 @@ Cfg::Brush brush( const QBrush & b )
 {
 	Cfg::Brush res;
 
-	res.setColor( b.color().name( QColor::HexArgb ) );
+	res.set_color( b.color().name( QColor::HexArgb ) );
 
 	return res;
 } // brush
@@ -208,12 +208,15 @@ QBrush fromBrush( const Cfg::Brush & b )
 void initBlockFormat( QTextBlockFormat & b,
 	const Cfg::TextStyle & style )
 {
-	if( style.style().contains( c_left ) )
-		b.setAlignment( Qt::AlignLeft );
-	else if( style.style().contains( c_right ) )
-		b.setAlignment( Qt::AlignRight );
-	else if( style.style().contains( c_center ) )
-		b.setAlignment( Qt::AlignCenter );
+	if( std::find( style.style().cbegin(), style.style().cend(),
+		c_left ) != style.style().cend() )
+			b.setAlignment( Qt::AlignLeft );
+	else if( std::find( style.style().cbegin(), style.style().cend(),
+		c_right ) != style.style().cend() )
+			b.setAlignment( Qt::AlignRight );
+	else if( std::find( style.style().cbegin(), style.style().cend(),
+		c_center ) != style.style().cend() )
+			b.setAlignment( Qt::AlignCenter );
 }
 
 
@@ -222,7 +225,7 @@ void initBlockFormat( QTextBlockFormat & b,
 //
 
 void fillTextDocument( QTextDocument * doc,
-	const QList< Cfg::TextStyle > & text, qreal scale )
+	const std::vector< Cfg::TextStyle > & text, qreal scale )
 {
 	QTextCursor c( doc );
 
@@ -233,7 +236,8 @@ void fillTextDocument( QTextDocument * doc,
 
 	foreach( const Cfg::TextStyle & s, text )
 	{
-		if( s.style().contains( Cfg::c_normalStyle ) )
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_normalStyle ) != s.style().cend() )
 		{
 			fmt.setFontWeight( QFont::Normal );
 			fmt.setFontItalic( false );
@@ -241,18 +245,21 @@ void fillTextDocument( QTextDocument * doc,
 		}
 		else
 		{
-			if( s.style().contains( Cfg::c_boldStyle ) )
-				fmt.setFontWeight( QFont::Bold );
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_boldStyle ) != s.style().cend() )
+					fmt.setFontWeight( QFont::Bold );
 			else
 				fmt.setFontWeight( QFont::Normal );
 
-			if( s.style().contains( Cfg::c_italicStyle ) )
-				fmt.setFontItalic( true );
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_italicStyle ) != s.style().cend() )
+					fmt.setFontItalic( true );
 			else
 				fmt.setFontItalic( false );
 
-			if( s.style().contains( Cfg::c_underlineStyle ) )
-				fmt.setFontUnderline( true );
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_underlineStyle ) != s.style().cend() )
+					fmt.setFontUnderline( true );
 			else
 				fmt.setFontUnderline( false );
 		}
@@ -281,22 +288,22 @@ textStyleFromFont( const QFont & f )
 {
 	Cfg::TextStyle textStyle;
 
-	QList< QString > style;
+	std::vector< QString > style;
 
 	if( f.weight() == QFont::Bold )
-		style.append( Cfg::c_boldStyle );
+		style.push_back( Cfg::c_boldStyle );
 
 	if( f.italic() )
-		style.append( Cfg::c_italicStyle );
+		style.push_back( Cfg::c_italicStyle );
 
 	if( f.underline() )
-		style.append( Cfg::c_underlineStyle );
+		style.push_back( Cfg::c_underlineStyle );
 
-	if( style.isEmpty() )
-		style.append( Cfg::c_normalStyle );
+	if( style.empty() )
+		style.push_back( Cfg::c_normalStyle );
 
-	textStyle.setStyle( style );
-	textStyle.setFontSize( f.pointSize() );
+	textStyle.set_style( style );
+	textStyle.set_fontSize( f.pointSize() );
 
 	return textStyle;
 }

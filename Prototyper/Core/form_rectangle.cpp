@@ -122,31 +122,31 @@ FormRect::cfg() const
 {
 	Cfg::Rect c;
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
-	c.setPen( Cfg::pen( objectPen() ) );
+	c.set_pen( Cfg::pen( objectPen() ) );
 
-	c.setBrush( Cfg::brush( objectBrush() ) );
+	c.set_brush( Cfg::brush( objectBrush() ) );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	Cfg::Point topLeft;
-	topLeft.setX( d->m_rect.topLeft().x() );
-	topLeft.setY( d->m_rect.topLeft().y() );
+	topLeft.set_x( d->m_rect.topLeft().x() );
+	topLeft.set_y( d->m_rect.topLeft().y() );
 
-	c.setTopLeft( topLeft );
+	c.set_topLeft( topLeft );
 
 	Cfg::Size s;
-	s.setWidth( d->m_rect.size().width() );
-	s.setHeight( d->m_rect.size().height() );
+	s.set_width( d->m_rect.size().width() );
+	s.set_height( d->m_rect.size().height() );
 
-	c.setSize( s );
+	c.set_size( s );
 
 	return c;
 }

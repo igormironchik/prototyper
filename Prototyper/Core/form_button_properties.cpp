@@ -83,23 +83,23 @@ ButtonProperties::cfg() const
 {
 	Cfg::TextStyle c;
 
-	QList< QString > style;
+	std::vector< QString > style;
 
 	if( d->m_ui.m_bold->isChecked() )
-		style.append( Cfg::c_boldStyle );
+		style.push_back( Cfg::c_boldStyle );
 
 	if( d->m_ui.m_italic->isChecked() )
-		style.append( Cfg::c_italicStyle );
+		style.push_back( Cfg::c_italicStyle );
 
 	if( d->m_ui.m_underline->isChecked() )
-		style.append( Cfg::c_underlineStyle );
+		style.push_back( Cfg::c_underlineStyle );
 
-	if( style.isEmpty() )
-		style.append( Cfg::c_normalStyle );
+	if( style.empty() )
+		style.push_back( Cfg::c_normalStyle );
 
-	c.setStyle( style );
-	c.setFontSize( d->m_ui.m_fontSize->value() );
-	c.setText( d->m_ui.m_text->text() );
+	c.set_style( style );
+	c.set_fontSize( d->m_ui.m_fontSize->value() );
+	c.set_text( d->m_ui.m_text->text() );
 
 	return c;
 }
@@ -107,18 +107,21 @@ ButtonProperties::cfg() const
 void
 ButtonProperties::setCfg( const Cfg::TextStyle & c )
 {
-	if( c.style().contains( Cfg::c_boldStyle ) )
-		d->m_ui.m_bold->setChecked( true );
+	if( std::find( c.style().cbegin(), c.style().cend(),
+		Cfg::c_boldStyle ) != c.style().cend() )
+			d->m_ui.m_bold->setChecked( true );
 	else
 		d->m_ui.m_bold->setChecked( false );
 
-	if( c.style().contains( Cfg::c_italicStyle ) )
-		d->m_ui.m_italic->setChecked( true );
+	if( std::find( c.style().cbegin(), c.style().cend(),
+		Cfg::c_italicStyle ) != c.style().cend() )
+			d->m_ui.m_italic->setChecked( true );
 	else
 		d->m_ui.m_italic->setChecked( false );
 
-	if( c.style().contains( Cfg::c_underlineStyle ) )
-		d->m_ui.m_underline->setChecked( true );
+	if( std::find( c.style().cbegin(), c.style().cend(),
+		Cfg::c_underlineStyle ) != c.style().cend() )
+			d->m_ui.m_underline->setChecked( true );
 	else
 		d->m_ui.m_underline->setChecked( false );
 

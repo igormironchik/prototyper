@@ -151,27 +151,27 @@ FormLine::cfg() const
 	Cfg::Line c;
 
 	Cfg::Point p1;
-	p1.setX( l.p1().x() );
-	p1.setY( l.p1().y() );
+	p1.set_x( l.p1().x() );
+	p1.set_y( l.p1().y() );
 
 	Cfg::Point p2;
-	p2.setX( l.p2().x() );
-	p2.setY( l.p2().y() );
+	p2.set_x( l.p2().x() );
+	p2.set_y( l.p2().y() );
 
 	c.p1() = p1;
 	c.p2() = p2;
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
 	c.pos() = p;
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
-	c.setPen( Cfg::pen( objectPen() ) );
+	c.set_pen( Cfg::pen( objectPen() ) );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	return c;
 }

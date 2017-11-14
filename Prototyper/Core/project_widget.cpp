@@ -184,7 +184,7 @@ ProjectWidgetPrivate::newProject()
 
 	m_cfg = Cfg::Project();
 
-	m_cfg.description().setTabName( projectDescTabName );
+	m_cfg.description().set_tabName( projectDescTabName );
 
 	TopGui::instance()->projectWindow()->tabsList()->model()->
 		setStringList( m_tabNames );
@@ -283,8 +283,8 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 
 	d->m_tabNames[ 0 ] = d->m_cfg.description().tabName();
 
-	QList< Cfg::Form >::Iterator it = d->m_cfg.form().begin();
-	QList< Cfg::Form >::Iterator last = d->m_cfg.form().end();
+	auto it = d->m_cfg.form().begin();
+	auto last = d->m_cfg.form().end();
 
 	for( ; it != last; ++it )
 		d->addForm( *it, d->m_cfg.showGrid() );
@@ -316,14 +316,14 @@ ProjectWidget::addForm()
 	if( dlg.exec() == QDialog::Accepted )
 	{
 		Cfg::Form cfg;
-		cfg.setGridStep( d->m_cfg.defaultGridStep() );
-		cfg.size().setWidth( dlg.size().width() );
-		cfg.size().setHeight( dlg.size().height() );
-		cfg.setTabName( dlg.name() );
+		cfg.set_gridStep( d->m_cfg.defaultGridStep() );
+		cfg.size().set_width( dlg.size().width() );
+		cfg.size().set_height( dlg.size().height() );
+		cfg.set_tabName( dlg.name() );
 
-		d->m_cfg.form().append( cfg );
+		d->m_cfg.form().push_back( cfg );
 
-		d->addForm( d->m_cfg.form().last(), d->m_cfg.showGrid() );
+		d->addForm( d->m_cfg.form().back(), d->m_cfg.showGrid() );
 
 		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
 
@@ -356,7 +356,7 @@ ProjectWidget::renameTab( const QString & oldName )
 
 			if( index > 0 )
 			{
-				d->m_cfg.form()[ index - 1 ].setTabName( dlg.name() );
+				d->m_cfg.form()[ index - 1 ].set_tabName( dlg.name() );
 
 				d->m_forms[ index - 1 ]->form()->renameForm( dlg.name() );
 
@@ -367,7 +367,7 @@ ProjectWidget::renameTab( const QString & oldName )
 					view->form()->updateLink( oldName, dlg.name() );
 			}
 			else
-				d->m_cfg.description().setTabName( dlg.name() );
+				d->m_cfg.description().set_tabName( dlg.name() );
 
 			TopGui::instance()->projectWindow()->tabsList()->model()->
 				setStringList( d->m_tabNames );
@@ -407,7 +407,7 @@ ProjectWidget::deleteForm( const QString & name )
 
 			d->m_forms.removeAt( index - 1 );
 
-			d->m_cfg.form().removeAt( index - 1 );
+			d->m_cfg.form().erase( d->m_cfg.form().begin() + index - 1 );
 
 			d->m_tabs->removeTab( index );
 

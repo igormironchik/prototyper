@@ -59,6 +59,9 @@
 #include <QDrag>
 #include <QUndoStack>
 #include <QUndoGroup>
+#include <QTextCodec>
+#include <QTextStream>
+#include <QFile>
 
 
 namespace Prototyper {
@@ -665,7 +668,7 @@ ProjectWindowPrivate::enableEditing( const QList< QGraphicsItem* > & children,
 void
 ProjectWindowPrivate::updateCfg()
 {
-	m_cfg.description().setText(
+	m_cfg.description().set_text(
 		m_widget->descriptionTab()->editor()->text() );
 
 	for( int i = 0; i < m_widget->forms().size(); ++i )
@@ -756,30 +759,44 @@ ProjectWindow::tabsList() const
 void
 ProjectWindow::readProject( const QString & fileName )
 {
-	try {
-		Cfg::TagProject tag;
+	QFile file( fileName );
 
-		QtConfFile::readQtConfFile( tag, fileName,
-			QTextCodec::codecForName( "UTF-8" ) );
-
-		p_newProject();
-
-		d->m_fileName = fileName;
-
-		d->m_widget->setProject( tag.getCfg() );
-
-		setWindowModified( false );
-
-		setWindowTitle( tr( "Prototyper - %1[*]" )
-			.arg( QFileInfo( fileName ).baseName() ) );
-
-		d->m_select->trigger();
-	}
-	catch( const QtConfFile::Exception & x )
+	if( file.open( QIODevice::ReadOnly ) )
 	{
-		QMessageBox::warning( this, tr( "Unable to Read Project..." ),
-			tr( "Unable to read project.\n%1" ).arg( x.whatAsQString() ) );
+		try {
+			Cfg::tag_Project< cfgfile::qstring_trait_t > tag;
+
+			QTextStream stream( &file );
+			stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
+
+			cfgfile::read_cfgfile( tag, stream, fileName );
+
+			file.close();
+
+			p_newProject();
+
+			d->m_fileName = fileName;
+
+			d->m_widget->setProject( tag.get_cfg() );
+
+			setWindowModified( false );
+
+			setWindowTitle( tr( "Prototyper - %1[*]" )
+				.arg( QFileInfo( fileName ).baseName() ) );
+
+			d->m_select->trigger();
+		}
+		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+		{
+			file.close();
+
+			QMessageBox::warning( this, tr( "Unable to Read Project..." ),
+				tr( "Unable to read project.\n%1" ).arg( x.desc() ) );
+		}
 	}
+	else
+		QMessageBox::warning( this, tr( "Unable to Read Project..." ),
+			tr( "Unable to read project.\nUnable to open file" ) );
 }
 
 void
@@ -834,7 +851,7 @@ ProjectWindow::p_showHideGrid( bool show )
 {
 	GridMode mode = ( show ? ShowGrid : NoGrid );
 
-	d->m_cfg.setShowGrid( show );
+	d->m_cfg.set_showGrid( show );
 
 	foreach( FormView * view, d->m_widget->forms() )
 		view->form()->setGridMode( mode );
@@ -862,7 +879,7 @@ ProjectWindow::setGridStep( int step, bool forAll )
 	{
 		if( dlg.applyForAllForms() )
 		{
-			d->m_cfg.setDefaultGridStep( dlg.gridStep() );
+			d->m_cfg.set_defaultGridStep( dlg.gridStep() );
 
 			foreach( FormView * view, d->m_widget->forms() )
 				view->form()->setGridStep( dlg.gridStep() );
@@ -948,23 +965,41 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 		if( !d->m_fileName.endsWith( ext ) )
 			d->m_fileName.append( ext );
 
-		try {
-			Cfg::TagProject tag( d->m_cfg );
+		QFile file( d->m_fileName );
 
-			QtConfFile::writeQtConfFile( tag, d->m_fileName,
-				QTextCodec::codecForName( "UTF-8" ) );
+		if( file.open( QIODevice::WriteOnly ) )
+		{
+			try {
+				Cfg::tag_Project< cfgfile::qstring_trait_t > tag( d->m_cfg );
 
-			d->m_widget->cleanUndoGroup();
+				QTextStream stream( &file );
+				stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 
-			d->m_widget->descriptionTab()->editor()->document()->
-				clearUndoRedoStacks();
+				cfgfile::write_cfgfile( tag, stream );
 
-			d->m_desc->clearUndoRedoStacks();
+				file.close();
+
+				d->m_widget->cleanUndoGroup();
+
+				d->m_widget->descriptionTab()->editor()->document()->
+					clearUndoRedoStacks();
+
+				d->m_desc->clearUndoRedoStacks();
+			}
+			catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+			{
+				file.close();
+
+				QMessageBox::warning( this, tr( "Unable to Save Project..." ),
+					tr( "Unable to save project.\n%1" ).arg( x.desc() ) );
+
+				return;
+			}
 		}
-		catch( const QtConfFile::Exception & x )
+		else
 		{
 			QMessageBox::warning( this, tr( "Unable to Save Project..." ),
-				tr( "Unable to save project.\n%1" ).arg( x.whatAsQString() ) );
+				tr( "Unable to save project.\nUnable to open file." ) );
 
 			return;
 		}

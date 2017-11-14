@@ -58,9 +58,9 @@ public:
 	~TextEditor();
 
 	//! \return Text.
-	QList< Cfg::TextStyle > text() const;
+	std::vector< Cfg::TextStyle > text() const;
 	//! Set text.
-	void setText( const QList< Cfg::TextStyle > & blocks );
+	void setText( const std::vector< Cfg::TextStyle > & blocks );
 
 public slots:
 	//! Less font size.

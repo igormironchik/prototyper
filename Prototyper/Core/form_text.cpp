@@ -175,19 +175,19 @@ FormText::cfg() const
 {
 	Cfg::Text c;
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
-	c.setTextWidth( textWidth() );
+	c.set_textWidth( textWidth() );
 
-	c.setText( Cfg::text( textCursor(), toPlainText() ) );
+	c.set_text( Cfg::text( textCursor(), toPlainText() ) );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	return c;
 }
@@ -203,7 +203,8 @@ FormText::setCfg( const Cfg::Text & c )
 
 	foreach( const Cfg::TextStyle & s, c.text() )
 	{
-		if( s.style().contains( Cfg::c_normalStyle ) )
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_normalStyle ) != s.style().cend() )
 		{
 			f.setWeight( QFont::Normal );
 			f.setItalic( false );
@@ -215,7 +216,8 @@ FormText::setCfg( const Cfg::Text & c )
 		}
 		else
 		{
-			if( s.style().contains( Cfg::c_boldStyle ) )
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_boldStyle ) != s.style().cend() )
 			{
 				f.setWeight( QFont::Bold );
 				fmt.setFontWeight( QFont::Bold );
@@ -226,7 +228,8 @@ FormText::setCfg( const Cfg::Text & c )
 				fmt.setFontWeight( QFont::Normal );
 			}
 
-			if( s.style().contains( Cfg::c_italicStyle ) )
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_italicStyle ) != s.style().cend() )
 			{
 				f.setItalic( true );
 				fmt.setFontItalic( true );
@@ -237,7 +240,8 @@ FormText::setCfg( const Cfg::Text & c )
 				fmt.setFontItalic( false );
 			}
 
-			if( s.style().contains( Cfg::c_underlineStyle ) )
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_underlineStyle ) != s.style().cend() )
 			{
 				f.setUnderline( true );
 				fmt.setFontUnderline( true );

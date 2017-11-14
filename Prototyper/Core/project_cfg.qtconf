@@ -43,7 +43,7 @@
 				#|
 				{class ProjectDesc
 					{tagVectorOfTags
-						{valueType TextStyle}
+						{valueType Prototyper::Core::Cfg::TextStyle}
 						{name text}
 					}
 
@@ -133,19 +133,19 @@
 				#|
 				{class Line
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name p1}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name p2}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 					}
 
@@ -156,7 +156,7 @@
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
@@ -172,13 +172,13 @@
 				#|
 				{class Polyline
 					{tagVectorOfTags
-						{valueType Line}
+						{valueType Prototyper::Core::Cfg::Line}
 						{name line}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
@@ -190,17 +190,17 @@
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
 					{tag
-						{valueType Brush}
+						{valueType Prototyper::Core::Cfg::Brush}
 						{name brush}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
@@ -217,12 +217,12 @@
 				#|
 				{class Text
 					{tagVectorOfTags
-						{valueType TextStyle}
+						{valueType Prototyper::Core::Cfg::TextStyle}
 						{name text}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
@@ -263,13 +263,13 @@
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
@@ -292,19 +292,19 @@
 				#|
 				{class Rect
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name topLeft}
 						{required}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
@@ -316,12 +316,12 @@
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
 					{tag
-						{valueType Brush}
+						{valueType Prototyper::Core::Cfg::Brush}
 						{name brush}
 					}
 
@@ -337,25 +337,25 @@
 				#|
 				{class Button
 					{tag
-						{valueType TextStyle}
+						{valueType Prototyper::Core::Cfg::TextStyle}
 						{name text}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
@@ -377,25 +377,25 @@
 				#|
 				{class CheckBox
 					{tag
-						{valueType TextStyle}
+						{valueType Prototyper::Core::Cfg::TextStyle}
 						{name text}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
@@ -430,19 +430,19 @@
 				#|
 				{class ComboBox
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
@@ -464,25 +464,25 @@
 				#|
 				{class SpinBox
 					{tag
-						{valueType TextStyle}
+						{valueType Prototyper::Core::Cfg::TextStyle}
 						{name text}
 						{required}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
@@ -504,19 +504,19 @@
 				#|
 				{class HSlider
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
@@ -538,19 +538,19 @@
 				#|
 				{class VSlider
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
 
 					{tag
-						{valueType Pen}
+						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
 
@@ -578,72 +578,72 @@
 					}
 
 					{tagVectorOfTags
-						{valueType Line}
+						{valueType Prototyper::Core::Cfg::Line}
 						{name line}
 					}
 
 					{tagVectorOfTags
-						{valueType Polyline}
+						{valueType Prototyper::Core::Cfg::Polyline}
 						{name polyline}
 					}
 
 					{tagVectorOfTags
-						{valueType Text}
+						{valueType Prototyper::Core::Cfg::Text}
 						{name text}
 					}
 
 					{tagVectorOfTags
-						{valueType Image}
+						{valueType Prototyper::Core::Cfg::Image}
 						{name image}
 					}
 
 					{tagVectorOfTags
-						{valueType Rect}
+						{valueType Prototyper::Core::Cfg::Rect}
 						{name rect}
 					}
 
 					{tagVectorOfTags
-						{valueType Button}
+						{valueType Prototyper::Core::Cfg::Button}
 						{name button}
 					}
 
 					{tagVectorOfTags
-						{valueType CheckBox}
+						{valueType Prototyper::Core::Cfg::CheckBox}
 						{name checkbox}
 					}
 
 					{tagVectorOfTags
-						{valueType CheckBox}
+						{valueType Prototyper::Core::Cfg::CheckBox}
 						{name radiobutton}
 					}
 
 					{tagVectorOfTags
-						{valueType ComboBox}
+						{valueType Prototyper::Core::Cfg::ComboBox}
 						{name combobox}
 					}
 
 					{tagVectorOfTags
-						{valueType SpinBox}
+						{valueType Prototyper::Core::Cfg::SpinBox}
 						{name spinbox}
 					}
 
 					{tagVectorOfTags
-						{valueType HSlider}
+						{valueType Prototyper::Core::Cfg::HSlider}
 						{name hslider}
 					}
 
 					{tagVectorOfTags
-						{valueType VSlider}
+						{valueType Prototyper::Core::Cfg::VSlider}
 						{name vslider}
 					}
 
 					{tagVectorOfTags
-						{valueType Group}
+						{valueType Prototyper::Core::Cfg::Group}
 						{name group}
 					}
 
 					{tag
-						{valueType Point}
+						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
 					}
@@ -660,7 +660,7 @@
 				#|
 				{class Description
 					{tagVectorOfTags
-						{valueType TextStyle}
+						{valueType Prototyper::Core::Cfg::TextStyle}
 						{name text}
 					}
 
@@ -685,7 +685,7 @@
 					}
 
 					{tag
-						{valueType Size}
+						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
 						{required}
 					}
@@ -704,72 +704,72 @@
 					}
 
 					{tagVectorOfTags
-						{valueType Line}
+						{valueType Prototyper::Core::Cfg::Line}
 						{name line}
 					}
 
 					{tagVectorOfTags
-						{valueType Polyline}
+						{valueType Prototyper::Core::Cfg::Polyline}
 						{name polyline}
 					}
 
 					{tagVectorOfTags
-						{valueType Text}
+						{valueType Prototyper::Core::Cfg::Text}
 						{name text}
 					}
 
 					{tagVectorOfTags
-						{valueType Image}
+						{valueType Prototyper::Core::Cfg::Image}
 						{name image}
 					}
 
 					{tagVectorOfTags
-						{valueType Rect}
+						{valueType Prototyper::Core::Cfg::Rect}
 						{name rect}
 					}
 
 					{tagVectorOfTags
-						{valueType Group}
+						{valueType Prototyper::Core::Cfg::Group}
 						{name group}
 					}
 
 					{tagVectorOfTags
-						{valueType Description}
+						{valueType Prototyper::Core::Cfg::Description}
 						{name desc}
 					}
 
 					{tagVectorOfTags
-						{valueType Button}
+						{valueType Prototyper::Core::Cfg::Button}
 						{name button}
 					}
 
 					{tagVectorOfTags
-						{valueType CheckBox}
+						{valueType Prototyper::Core::Cfg::CheckBox}
 						{name checkbox}
 					}
 
 					{tagVectorOfTags
-						{valueType CheckBox}
+						{valueType Prototyper::Core::Cfg::CheckBox}
 						{name radiobutton}
 					}
 
 					{tagVectorOfTags
-						{valueType ComboBox}
+						{valueType Prototyper::Core::Cfg::ComboBox}
 						{name combobox}
 					}
 
 					{tagVectorOfTags
-						{valueType SpinBox}
+						{valueType Prototyper::Core::Cfg::SpinBox}
 						{name spinbox}
 					}
 
 					{tagVectorOfTags
-						{valueType HSlider}
+						{valueType Prototyper::Core::Cfg::HSlider}
 						{name hslider}
 					}
 
 					{tagVectorOfTags
-						{valueType VSlider}
+						{valueType Prototyper::Core::Cfg::VSlider}
 						{name vslider}
 					}
 
@@ -785,13 +785,13 @@
 				#|
 				{class Project
 					{tag
-						{valueType ProjectDesc}
+						{valueType Prototyper::Core::Cfg::ProjectDesc}
 						{name description}
 						{required}
 					}
 
 					{tagVectorOfTags
-						{valueType Form}
+						{valueType Prototyper::Core::Cfg::Form}
 						{name form}
 					}
 

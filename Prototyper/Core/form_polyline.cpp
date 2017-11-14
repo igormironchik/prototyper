@@ -241,44 +241,44 @@ FormPolyline::cfg() const
 {
 	Cfg::Polyline c;
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
 	foreach( const QLineF & l, d->m_lines )
 	{
 		Cfg::Point p1;
-		p1.setX( l.p1().x() );
-		p1.setY( l.p1().y() );
+		p1.set_x( l.p1().x() );
+		p1.set_y( l.p1().y() );
 
 		Cfg::Point p2;
-		p2.setX( l.p2().x() );
-		p2.setY( l.p2().y() );
+		p2.set_x( l.p2().x() );
+		p2.set_y( l.p2().y() );
 
 		Cfg::Line line;
-		line.setP1( p1 );
-		line.setP2( p2 );
+		line.set_p1( p1 );
+		line.set_p2( p2 );
 
-		line.setPen( Cfg::pen( objectPen() ) );
+		line.set_pen( Cfg::pen( objectPen() ) );
 
-		c.line().append( line );
+		c.line().push_back( line );
 	}
 
-	c.setPen( Cfg::pen( objectPen() ) );
+	c.set_pen( Cfg::pen( objectPen() ) );
 
-	c.setBrush( Cfg::brush( objectBrush() ) );
+	c.set_brush( Cfg::brush( objectBrush() ) );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	Cfg::Size s;
-	s.setWidth( d->m_resized.width() );
-	s.setHeight( d->m_resized.height() );
+	s.set_width( d->m_resized.width() );
+	s.set_height( d->m_resized.height() );
 
-	c.setSize( s );
+	c.set_size( s );
 
 	return c;
 }

@@ -162,7 +162,7 @@ FormGroup::cfg() const
 					FormLine * line = dynamic_cast< FormLine* > ( item );
 
 					if( line )
-						c.line().append( line->cfg() );
+						c.line().push_back( line->cfg() );
 				}
 					break;
 
@@ -171,7 +171,7 @@ FormGroup::cfg() const
 					FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
 
 					if( poly )
-						c.polyline().append( poly->cfg() );
+						c.polyline().push_back( poly->cfg() );
 				}
 					break;
 
@@ -180,7 +180,7 @@ FormGroup::cfg() const
 					FormText * text = dynamic_cast< FormText* > ( item );
 
 					if( text )
-						c.text().append( text->cfg() );
+						c.text().push_back( text->cfg() );
 				}
 					break;
 
@@ -189,7 +189,7 @@ FormGroup::cfg() const
 					FormImage * image = dynamic_cast< FormImage* > ( item );
 
 					if( image )
-						c.image().append( image->cfg() );
+						c.image().push_back( image->cfg() );
 				}
 					break;
 
@@ -198,7 +198,7 @@ FormGroup::cfg() const
 					FormRect * rect = dynamic_cast< FormRect* > ( item );
 
 					if( rect )
-						c.rect().append( rect->cfg() );
+						c.rect().push_back( rect->cfg() );
 				}
 					break;
 
@@ -207,7 +207,7 @@ FormGroup::cfg() const
 					FormGroup * group = dynamic_cast< FormGroup* > ( item );
 
 					if( group )
-						c.group().append( group->cfg() );
+						c.group().push_back( group->cfg() );
 				}
 					break;
 
@@ -216,7 +216,7 @@ FormGroup::cfg() const
 					FormButton * e = dynamic_cast< FormButton* > ( item );
 
 					if( e )
-						c.button().append( e->cfg() );
+						c.button().push_back( e->cfg() );
 				}
 					break;
 
@@ -225,7 +225,7 @@ FormGroup::cfg() const
 					FormComboBox * e = dynamic_cast< FormComboBox* > ( item );
 
 					if( e )
-						c.combobox().append( e->cfg() );
+						c.combobox().push_back( e->cfg() );
 				}
 					break;
 
@@ -234,7 +234,7 @@ FormGroup::cfg() const
 					FormRadioButton * e = dynamic_cast< FormRadioButton* > ( item );
 
 					if( e )
-						c.radiobutton().append( e->cfg() );
+						c.radiobutton().push_back( e->cfg() );
 				}
 					break;
 
@@ -243,7 +243,7 @@ FormGroup::cfg() const
 					FormCheckBox * e = dynamic_cast< FormCheckBox* > ( item );
 
 					if( e )
-						c.checkbox().append( e->cfg() );
+						c.checkbox().push_back( e->cfg() );
 				}
 					break;
 
@@ -252,7 +252,7 @@ FormGroup::cfg() const
 					FormHSlider * e = dynamic_cast< FormHSlider* > ( item );
 
 					if( e )
-						c.hslider().append( e->cfg() );
+						c.hslider().push_back( e->cfg() );
 				}
 					break;
 
@@ -261,7 +261,7 @@ FormGroup::cfg() const
 					FormVSlider * e = dynamic_cast< FormVSlider* > ( item );
 
 					if( e )
-						c.vslider().append( e->cfg() );
+						c.vslider().push_back( e->cfg() );
 				}
 					break;
 
@@ -270,7 +270,7 @@ FormGroup::cfg() const
 					FormSpinBox * e = dynamic_cast< FormSpinBox* > ( item );
 
 					if( e )
-						c.spinbox().append( e->cfg() );
+						c.spinbox().push_back( e->cfg() );
 				}
 					break;
 
@@ -280,15 +280,15 @@ FormGroup::cfg() const
 		}
 	}
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	return c;
 }

@@ -35,6 +35,9 @@
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QDir>
+#include <QTextCodec>
+#include <QTextStream>
+#include <QFile>
 
 
 namespace Prototyper {
@@ -95,59 +98,82 @@ TopGuiPrivate::init()
 		placeByDefault();
 	else
 	{
-		try {
-			Cfg::TagWindowsCfg tag;
+		QFile file( m_appCfgFileName );
 
-			QtConfFile::readQtConfFile( tag, m_appCfgFileName,
-				QTextCodec::codecForName( "UTF-8" ) );
-
-			Cfg::WindowsCfg cfg = tag.getCfg();
-
-			m_projectWindow->move( cfg.projectWindow().x(),
-				cfg.projectWindow().y() );
-			m_projectWindow->resize( cfg.projectWindow().width(),
-				cfg.projectWindow().height() );
-
-			if( cfg.projectWindow().isMaximized() )
-				m_projectWindow->showMaximized();
-
-			m_projectWindow->descWindow()->move( cfg.descWindow().x(),
-				cfg.descWindow().y() );
-			m_projectWindow->descWindow()->resize( cfg.descWindow().width(),
-				cfg.descWindow().height() );
-
-			if( cfg.descWindow().isMaximized() )
-			{
-				m_projectWindow->descWindow()->showMaximized();
-
-				m_projectWindow->descWindow()->hide();
-			}
-
-			if( !cfg.state().isEmpty() )
-			{
-				m_projectWindow->restoreState(
-					QByteArray::fromBase64( cfg.state().toLatin1() ),
-					c_stateVersion );
-			}
-		}
-		catch( const QtConfFile::Exception & )
+		if( file.open( QIODevice::ReadOnly ) )
 		{
-			placeByDefault();
+			try {
+				Cfg::tag_WindowsCfg< cfgfile::qstring_trait_t > tag;
+
+				QTextStream stream( &file );
+				stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
+
+				cfgfile::read_cfgfile( tag, stream, m_appCfgFileName );
+
+				file.close();
+
+				Cfg::WindowsCfg cfg = tag.get_cfg();
+
+				m_projectWindow->move( cfg.projectWindow().x(),
+					cfg.projectWindow().y() );
+				m_projectWindow->resize( cfg.projectWindow().width(),
+					cfg.projectWindow().height() );
+
+				if( cfg.projectWindow().isMaximized() )
+					m_projectWindow->showMaximized();
+
+				m_projectWindow->descWindow()->move( cfg.descWindow().x(),
+					cfg.descWindow().y() );
+				m_projectWindow->descWindow()->resize( cfg.descWindow().width(),
+					cfg.descWindow().height() );
+
+				if( cfg.descWindow().isMaximized() )
+				{
+					m_projectWindow->descWindow()->showMaximized();
+
+					m_projectWindow->descWindow()->hide();
+				}
+
+				if( !cfg.state().isEmpty() )
+				{
+					m_projectWindow->restoreState(
+						QByteArray::fromBase64( cfg.state().toLatin1() ),
+						c_stateVersion );
+				}
+			}
+			catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & )
+			{
+				file.close();
+
+				placeByDefault();
+			}
 		}
+		else
+			placeByDefault();
 	}
 
 	QString projectFileName;
 
-	try {
-		Cfg::TagSession tag;
+	QFile file( m_appSessionCfgFileName );
 
-		QtConfFile::readQtConfFile( tag, m_appSessionCfgFileName,
-			QTextCodec::codecForName( "UTF-8" ) );
-
-		projectFileName = tag.getCfg().project();
-	}
-	catch( const QtConfFile::Exception & )
+	if( file.open( QIODevice::ReadOnly ) )
 	{
+		try {
+			Cfg::tag_Session< cfgfile::qstring_trait_t > tag;
+
+			QTextStream stream( &file );
+			stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
+
+			cfgfile::read_cfgfile( tag, stream, m_appSessionCfgFileName );
+
+			file.close();
+
+			projectFileName = tag.get_cfg().project();
+		}
+		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & )
+		{
+			file.close();
+		}
 	}
 
 	if( !projectFileName.isEmpty() &&
@@ -229,64 +255,98 @@ TopGui::saveCfg( QWidget * parent )
 		}
 	}
 
-	try {
-		Cfg::WindowsCfg cfg;
-
-		Cfg::Window proj;
-		proj.setX( d->m_projectWindow->x() );
-		proj.setY( d->m_projectWindow->y() );
-		proj.setWidth( d->m_projectWindow->width() );
-		proj.setHeight( d->m_projectWindow->height() );
-		proj.setIsShown( !d->m_projectWindow->isMinimized() );
-		proj.setIsMaximized( d->m_projectWindow->isMaximized() );
-
-		cfg.setProjectWindow( proj );
-
-		Cfg::Window desc;
-		desc.setX( d->m_projectWindow->descWindow()->x() );
-		desc.setY( d->m_projectWindow->descWindow()->y() );
-		desc.setWidth( d->m_projectWindow->descWindow()->width() );
-		desc.setHeight( d->m_projectWindow->descWindow()->height() );
-		desc.setIsShown( d->m_projectWindow->descWindow()->isVisible() );
-		desc.setIsMaximized( d->m_projectWindow->descWindow()->isMaximized() );
-
-		cfg.setDescWindow( desc );
-
-		cfg.setState(
-			QString( d->m_projectWindow->saveState(
-				c_stateVersion ).toBase64() ) );
-
-		Cfg::TagWindowsCfg tag( cfg );
-
-		QtConfFile::writeQtConfFile( tag, d->m_appCfgFileName,
-			QTextCodec::codecForName( "UTF-8" ) );
-	}
-	catch( const QtConfFile::Exception & x )
 	{
-		if( parent )
+		QFile file( d->m_appCfgFileName );
+
+		if( file.open( QIODevice::WriteOnly ) )
+		{
+			try {
+				Cfg::WindowsCfg cfg;
+
+				Cfg::Window proj;
+				proj.set_x( d->m_projectWindow->x() );
+				proj.set_y( d->m_projectWindow->y() );
+				proj.set_width( d->m_projectWindow->width() );
+				proj.set_height( d->m_projectWindow->height() );
+				proj.set_isShown( !d->m_projectWindow->isMinimized() );
+				proj.set_isMaximized( d->m_projectWindow->isMaximized() );
+
+				cfg.set_projectWindow( proj );
+
+				Cfg::Window desc;
+				desc.set_x( d->m_projectWindow->descWindow()->x() );
+				desc.set_y( d->m_projectWindow->descWindow()->y() );
+				desc.set_width( d->m_projectWindow->descWindow()->width() );
+				desc.set_height( d->m_projectWindow->descWindow()->height() );
+				desc.set_isShown( d->m_projectWindow->descWindow()->isVisible() );
+				desc.set_isMaximized( d->m_projectWindow->descWindow()->isMaximized() );
+
+				cfg.set_descWindow( desc );
+
+				cfg.set_state(
+					QString( d->m_projectWindow->saveState(
+						c_stateVersion ).toBase64() ) );
+
+				Cfg::tag_WindowsCfg< cfgfile::qstring_trait_t > tag( cfg );
+
+				QTextStream stream( &file );
+				stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
+
+				cfgfile::write_cfgfile( tag, stream );
+
+				file.close();
+			}
+			catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+			{
+				file.close();
+
+				if( parent )
+					QMessageBox::warning( parent,
+						tr( "Unable to Save Configuration..." ),
+						tr( "Unable to save configuration.\n"
+							"%1" ).arg( x.desc() ) );
+			}
+		}
+		else if( parent )
 			QMessageBox::warning( parent,
 				tr( "Unable to Save Configuration..." ),
 				tr( "Unable to save configuration.\n"
-					"%1" ).arg( x.whatAsQString() ) );
+					"Unable to open file." ) );
 	}
 
-	try {
-		Cfg::Session s;
-		s.setProject( d->m_projectWindow->projectFileName() );
+	QFile file( d->m_appSessionCfgFileName );
 
-		Cfg::TagSession tag( s );
-
-		QtConfFile::writeQtConfFile( tag, d->m_appSessionCfgFileName,
-			QTextCodec::codecForName( "UTF-8" ) );
-	}
-	catch( const QtConfFile::Exception & x )
+	if( file.open( QIODevice::WriteOnly ) )
 	{
-		if( parent )
-			QMessageBox::warning( parent,
-				tr( "Unable to Save Session..." ),
-				tr( "Unable to save session.\n"
-					"%1" ).arg( x.whatAsQString() ) );
+		try {
+			Cfg::Session s;
+			s.set_project( d->m_projectWindow->projectFileName() );
+
+			Cfg::tag_Session< cfgfile::qstring_trait_t > tag( s );
+
+			QTextStream stream( &file );
+			stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
+
+			cfgfile::write_cfgfile( tag, stream );
+
+			file.close();
+		}
+		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
+		{
+			file.close();
+
+			if( parent )
+				QMessageBox::warning( parent,
+					tr( "Unable to Save Session..." ),
+					tr( "Unable to save session.\n"
+						"%1" ).arg( x.desc() ) );
+		}
 	}
+	else if( parent )
+		QMessageBox::warning( parent,
+			tr( "Unable to Save Session..." ),
+			tr( "Unable to save session.\n"
+				"Unable to open file." ) );
 }
 
 } /* namespace Core */

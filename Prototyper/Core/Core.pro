@@ -2,9 +2,9 @@
 TEMPLATE = lib
 CONFIG += shared
 TARGET = Prototyper.Core
-QT += core gui widgets svg xml
+QT += core gui widgets svg
 CONFIG += c++14
-DEFINES += PROTOTYPER_CORE
+DEFINES += PROTOTYPER_CORE CFGFILE_QT_SUPPORT
 
 RESOURCES = resources.qrc
 
@@ -23,7 +23,7 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = GENERATED
 
-generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/QtConfFile/qtconffile.generator ) ) \
+generate_cfg.commands = $$shell_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/cfgfile/cfgfile.generator ) ) \
 -i ${QMAKE_FILE_IN} \
 -o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
 
@@ -152,10 +152,5 @@ FORMS +=	form_size_dlg.ui \
     form_spinbox_properties.ui \
     form_properties.ui
 
-unix|win32: LIBS += -L$$OUT_PWD/../../3rdparty/QtConfFile/lib/ -lQtConfFile
-
-INCLUDEPATH += $$PWD/../../3rdparty/QtConfFile
-DEPENDPATH += $$PWD/../../3rdparty/QtConfFile
-
-win32:!win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../../3rdparty/QtConfFile/lib/QtConfFile.lib
-else:unix|win32-g++: PRE_TARGETDEPS += $$OUT_PWD/../../3rdparty/QtConfFile/lib/libQtConfFile.a
+INCLUDEPATH += $$PWD/../../3rdparty/cfgfile
+DEPENDPATH += $$PWD/../../3rdparty/cfgfile

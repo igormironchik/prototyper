@@ -61,31 +61,37 @@ static inline QString printStyle( const Cfg::TextStyle & style )
 }
 
 static inline void printText( QTextStream & stream,
-	const QList< Cfg::TextStyle > & text )
+	const std::vector< Cfg::TextStyle > & text )
 {
 	foreach( const Cfg::TextStyle & t, text )
 	{
 		stream << QLatin1String( "<span " )
 			<< printStyle( t )
 			<< QLatin1String( ">" )
-			<< ( t.style().contains( Cfg::c_boldStyle ) ?
-					QLatin1String( "<b>" ) : QString() )
-			<< ( t.style().contains( Cfg::c_italicStyle ) ?
-					QLatin1String( "<i>" ) : QString() )
-			<< ( t.style().contains( Cfg::c_underlineStyle ) ?
-					QLatin1String( "<ins>" ) : QString() );
+			<< ( std::find( t.style().cbegin(), t.style().cend(),
+					Cfg::c_boldStyle ) != t.style().cend() ?
+						QLatin1String( "<b>" ) : QString() )
+			<< ( std::find( t.style().cbegin(), t.style().cend(),
+					Cfg::c_italicStyle ) != t.style().cend() ?
+						QLatin1String( "<i>" ) : QString() )
+			<< ( std::find( t.style().cbegin(), t.style().cend(),
+						Cfg::c_underlineStyle ) != t.style().cend() ?
+							QLatin1String( "<ins>" ) : QString() );
 
 		QStringList strings = t.text().split( QLatin1Char( '\n' ) );
 
 		foreach( const QString & str, strings )
 			stream << str << QLatin1String( "<br>" ) << endl;
 
-		stream << ( t.style().contains( Cfg::c_underlineStyle ) ?
-					QLatin1String( "</ins>" ) : QString() )
-			<< ( t.style().contains( Cfg::c_italicStyle ) ?
-					QLatin1String( "</i>" ) : QString() )
-			<< ( t.style().contains( Cfg::c_boldStyle ) ?
-					QLatin1String( "</b>" ) : QString() )
+		stream << ( std::find( t.style().cbegin(), t.style().cend(),
+						Cfg::c_underlineStyle ) != t.style().cend()  ?
+							QLatin1String( "</ins>" ) : QString() )
+			<< ( std::find( t.style().cbegin(), t.style().cend(),
+					Cfg::c_italicStyle ) != t.style().cend() ?
+						QLatin1String( "</i>" ) : QString() )
+			<< ( std::find( t.style().cbegin(), t.style().cend(),
+					Cfg::c_boldStyle ) != t.style().cend() ?
+						QLatin1String( "</b>" ) : QString() )
 			<< QLatin1String( "</span>" )
 			<< endl;
 	}
@@ -94,13 +100,13 @@ static inline void printText( QTextStream & stream,
 static inline void printLink( QTextStream & stream, const QString & id,
 	QMap< QString, QString > & lnks )
 {
-	QList< Cfg::TextStyle > linkList;
+	std::vector< Cfg::TextStyle > linkList;
 	Cfg::TextStyle lnk;
-	lnk.style().append( Cfg::c_italicStyle );
-	lnk.style().append( Cfg::c_underlineStyle );
+	lnk.style().push_back( Cfg::c_italicStyle );
+	lnk.style().push_back( Cfg::c_underlineStyle );
 	lnk.fontSize() = 8.0;
 	lnk.text() = QString( "Linked to: " ) + lnks[ id ];
-	linkList.append( lnk );
+	linkList.push_back( lnk );
 
 	stream << QLatin1String( "<a href=\"#" )
 		<< lnks[ id ]
@@ -128,12 +134,12 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 	{
 		QMap< QString, QString > lnks = links( form );
 
-		QList< Cfg::TextStyle > headList;
+		std::vector< Cfg::TextStyle > headList;
 		Cfg::TextStyle head;
-		head.style().append( Cfg::c_boldStyle );
+		head.style().push_back( Cfg::c_boldStyle );
 		head.fontSize() = 20.0;
 		head.text() = form.tabName();
-		headList.append( head );
+		headList.push_back( head );
 
 		stream << QLatin1String( "<a name=\"" )
 			<< form.tabName() << QLatin1String( "\">" );
@@ -162,15 +168,14 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 			<< QLatin1String( "px;\">" )
 			<< data << QLatin1String( "</div><br>" );
 
-		auto formIt = std::find_if( form.desc().constBegin(),
-			form.desc().constEnd(),
+		auto formIt = std::find_if( form.desc().cbegin(), form.desc().cend(),
 			[&form] ( const Cfg::Description & desc ) -> bool
 				{
 					return ( form.tabName() == desc.id() );
 				}
 		);
 
-		if( formIt != form.desc().constEnd() && !formIt->text().isEmpty() )
+		if( formIt != form.desc().cend() && !formIt->text().empty() )
 		{
 			stream << QLatin1String( "<br><br>" ) << endl;
 
@@ -186,18 +191,18 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 			}
 		}
 
-		for( auto it = form.desc().constBegin(), last = form.desc().constEnd();
+		for( auto it = form.desc().cbegin(), last = form.desc().cend();
 			it != last; ++it )
 		{
-			if( it != formIt && !it->text().isEmpty() )
+			if( it != formIt && !it->text().empty() )
 			{
-				QList< Cfg::TextStyle > headList;
+				std::vector< Cfg::TextStyle > headList;
 				Cfg::TextStyle head;
-				head.style().append( Cfg::c_boldStyle );
-				head.style().append( Cfg::c_italicStyle );
+				head.style().push_back( Cfg::c_boldStyle );
+				head.style().push_back( Cfg::c_italicStyle );
 				head.fontSize() = 15.0;
 				head.text() = it->id();
-				headList.append( head );
+				headList.push_back( head );
 
 				printText( stream, headList );
 
@@ -218,13 +223,13 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 
 		if( !lnks.isEmpty() )
 		{
-			QList< Cfg::TextStyle > linksList;
+			std::vector< Cfg::TextStyle > linksList;
 			Cfg::TextStyle head;
-			head.style().append( Cfg::c_boldStyle );
-			head.style().append( Cfg::c_italicStyle );
+			head.style().push_back( Cfg::c_boldStyle );
+			head.style().push_back( Cfg::c_italicStyle );
 			head.fontSize() = 15.0;
 			head.text() = QLatin1String( "Links:" );
-			linksList.append( head );
+			linksList.push_back( head );
 
 			printText( stream, linksList );
 
@@ -232,9 +237,9 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 
 			linksList.clear();
 			Cfg::TextStyle lnk;
-			lnk.style().append( Cfg::c_underlineStyle );
-			lnk.setFontSize( 8.0 );
-			linksList.append( lnk );
+			lnk.style().push_back( Cfg::c_underlineStyle );
+			lnk.set_fontSize( 8.0 );
+			linksList.push_back( lnk );
 
 			QMapIterator< QString, QString > it( lnks );
 
@@ -246,7 +251,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 					<< lnks[ it.key() ]
 					<< QLatin1String( "\">" );
 
-				linksList.last().setText( it.key() + QLatin1String( " -> " ) +
+				linksList.back().set_text( it.key() + QLatin1String( " -> " ) +
 					it.value() );
 
 				printText( stream, linksList );

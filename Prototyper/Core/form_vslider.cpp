@@ -153,23 +153,23 @@ FormVSlider::cfg() const
 {
 	Cfg::VSlider c;
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
 	Cfg::Size s;
-	s.setWidth( d->m_rect.width() );
-	s.setHeight( d->m_rect.height() );
+	s.set_width( d->m_rect.width() );
+	s.set_height( d->m_rect.height() );
 
-	c.setSize( s );
+	c.set_size( s );
 
-	c.setPen( Cfg::pen( objectPen() ) );
+	c.set_pen( Cfg::pen( objectPen() ) );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	return c;
 }

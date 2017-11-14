@@ -93,20 +93,21 @@ TextEditor::~TextEditor()
 
 
 
-QList< Cfg::TextStyle >
+std::vector< Cfg::TextStyle >
 TextEditor::text() const
 {
 	return Cfg::text( textCursor(), toPlainText() );
 }
 
 void
-TextEditor::setText( const QList< Cfg::TextStyle > & blocks )
+TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 {
 	reset();
 
 	foreach( const Cfg::TextStyle & s, blocks )
 	{
-		if( s.style().contains( Cfg::c_normalStyle ) )
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_normalStyle ) != s.style().cend() )
 		{
 			setFontWeight( QFont::Normal );
 			setFontItalic( false );
@@ -114,28 +115,34 @@ TextEditor::setText( const QList< Cfg::TextStyle > & blocks )
 		}
 		else
 		{
-			if( s.style().contains( Cfg::c_boldStyle ) )
-				setFontWeight( QFont::Bold );
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_boldStyle ) != s.style().cend() )
+					setFontWeight( QFont::Bold );
 			else
 				setFontWeight( QFont::Normal );
 
-			if( s.style().contains( Cfg::c_italicStyle ) )
-				setFontItalic( true );
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_italicStyle ) != s.style().cend() )
+					setFontItalic( true );
 			else
 				setFontItalic( false );
 
-			if( s.style().contains( Cfg::c_underlineStyle ) )
-				setFontUnderline( true );
+			if( std::find( s.style().cbegin(), s.style().cend(),
+				Cfg::c_underlineStyle ) != s.style().cend() )
+					setFontUnderline( true );
 			else
 				setFontUnderline( false );
 		}
 
-		if( s.style().contains( Cfg::c_left ) )
-			setAlignment( Qt::AlignLeft );
-		else if( s.style().contains( Cfg::c_right ) )
-			setAlignment( Qt::AlignRight );
-		else if( s.style().contains( Cfg::c_center ) )
-			setAlignment( Qt::AlignCenter );
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_left ) != s.style().cend() )
+				setAlignment( Qt::AlignLeft );
+		else if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_right ) != s.style().cend() )
+				setAlignment( Qt::AlignRight );
+		else if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_center ) != s.style().cend() )
+				setAlignment( Qt::AlignCenter );
 
 		setFontPointSize( s.fontSize() );
 

@@ -37,6 +37,9 @@
 #include <QPainter>
 #include <QTextDocument>
 
+// C++ include.
+#include <algorithm>
+
 
 namespace Prototyper {
 
@@ -104,14 +107,17 @@ static inline QFont font( const Cfg::TextStyle & s, QPainter & p )
 {
 	QFont f = p.font();
 
-	if( s.style().contains( Cfg::c_boldStyle ) )
-		f.setBold( true );
+	if( std::find( s.style().cbegin(), s.style().cend(), Cfg::c_boldStyle ) !=
+		s.style().cend() )
+			f.setBold( true );
 
-	if( s.style().contains( Cfg::c_italicStyle ) )
-		f.setItalic( true );
+	if( std::find( s.style().cbegin(), s.style().cend(), Cfg::c_italicStyle ) !=
+		s.style().cend() )
+			f.setItalic( true );
 
-	if( s.style().contains( Cfg::c_underlineStyle ) )
-		f.setUnderline( true );
+	if( std::find( s.style().cbegin(), s.style().cend(), Cfg::c_underlineStyle ) !=
+		s.style().cend() )
+			f.setUnderline( true );
 
 	f.setPointSize( s.fontSize() );
 
@@ -291,7 +297,7 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 void
 ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 {
-	const int wh = ( form.windowButtons().isEmpty() ? 0 : 30 );
+	const int wh = ( form.windowButtons().empty() ? 0 : 30 );
 
 	svg.setViewBox( QRect( 0, 0,
 		form.size().width(), form.size().height() + wh ) );
@@ -303,14 +309,17 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 
 	FormProperties::Buttons btns;
 
-	if( form.windowButtons().contains( Cfg::c_maximize ) )
-		btns |= FormProperties::MaximizeButton;
+	if( std::find( form.windowButtons().cbegin(), form.windowButtons().cend(),
+		Cfg::c_maximize ) != form.windowButtons().cend() )
+			btns |= FormProperties::MaximizeButton;
 
-	if( form.windowButtons().contains( Cfg::c_minimize ) )
-		btns |= FormProperties::MinimizeButton;
+	if( std::find( form.windowButtons().cbegin(), form.windowButtons().cend(),
+		Cfg::c_minimize ) != form.windowButtons().cend() )
+			btns |= FormProperties::MinimizeButton;
 
-	if( form.windowButtons().contains( Cfg::c_close ) )
-		btns |= FormProperties::CloseButton;
+	if( std::find( form.windowButtons().cbegin(), form.windowButtons().cend(),
+		Cfg::c_close ) != form.windowButtons().cend() )
+			btns |= FormProperties::CloseButton;
 
 	Form::draw( &p, form.size().width(), form.size().height(), btns, 0, false );
 

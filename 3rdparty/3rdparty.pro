@@ -1,5 +1,4 @@
 
 TEMPLATE = subdirs
 
-SUBDIRS = QtConfFile/QtConfFile \
-		  QtConfFile/generator
+SUBDIRS = cfgfile/generator

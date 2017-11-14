@@ -184,26 +184,26 @@ FormCheckBox::cfg() const
 {
 	Cfg::CheckBox c;
 
-	c.setWidth( d->m_width );
+	c.set_width( d->m_width );
 
-	c.setIsChecked( d->m_checked );
-	c.setObjectId( objectId() );
-	c.setLink( link() );
-	c.setPen( Cfg::pen( objectPen() ) );
+	c.set_isChecked( d->m_checked );
+	c.set_objectId( objectId() );
+	c.set_link( link() );
+	c.set_pen( Cfg::pen( objectPen() ) );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
 	Cfg::Size s;
-	s.setWidth( d->m_rect.width() );
-	s.setHeight( d->m_rect.height() );
+	s.set_width( d->m_rect.width() );
+	s.set_height( d->m_rect.height() );
 
-	c.setSize( s );
+	c.set_size( s );
 
-	c.setText( text() );
+	c.set_text( text() );
 
 	return c;
 }
@@ -229,8 +229,8 @@ Cfg::TextStyle
 FormCheckBox::text() const
 {
 	Cfg::TextStyle textStyle = Cfg::textStyleFromFont( d->m_font );
-	textStyle.style().append( Cfg::c_left );
-	textStyle.setText( d->m_text );
+	textStyle.style().push_back( Cfg::c_left );
+	textStyle.set_text( d->m_text );
 
 	return textStyle;
 }
@@ -238,7 +238,8 @@ FormCheckBox::text() const
 void
 FormCheckBox::setText( const Cfg::TextStyle & c )
 {
-	if( c.style().contains( Cfg::c_normalStyle ) )
+	if( std::find( c.style().cbegin(), c.style().cend(),
+		Cfg::c_normalStyle ) != c.style().cend() )
 	{
 		d->m_font.setWeight( QFont::Normal );
 		d->m_font.setItalic( false );
@@ -246,18 +247,21 @@ FormCheckBox::setText( const Cfg::TextStyle & c )
 	}
 	else
 	{
-		if( c.style().contains( Cfg::c_boldStyle ) )
-			d->m_font.setWeight( QFont::Bold );
+		if( std::find( c.style().cbegin(), c.style().cend(),
+			Cfg::c_boldStyle ) != c.style().cend() )
+				d->m_font.setWeight( QFont::Bold );
 		else
 			d->m_font.setWeight( QFont::Normal );
 
-		if( c.style().contains( Cfg::c_italicStyle ) )
-			d->m_font.setItalic( true );
+		if( std::find( c.style().cbegin(), c.style().cend(),
+			Cfg::c_italicStyle ) != c.style().cend() )
+				d->m_font.setItalic( true );
 		else
 			d->m_font.setItalic( false );
 
-		if( c.style().contains( Cfg::c_underlineStyle ) )
-			d->m_font.setUnderline( true );
+		if( std::find( c.style().cbegin(), c.style().cend(),
+			Cfg::c_underlineStyle ) != c.style().cend() )
+				d->m_font.setUnderline( true );
 		else
 			d->m_font.setUnderline( false );
 	}

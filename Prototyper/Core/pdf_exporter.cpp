@@ -144,15 +144,14 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 
 		c.movePosition( QTextCursor::End );
 
-		auto formIt = std::find_if( form.desc().constBegin(),
-			form.desc().constEnd(),
+		auto formIt = std::find_if( form.desc().cbegin(), form.desc().cend(),
 			[&form] ( const Cfg::Description & desc ) -> bool
 				{
 					return ( form.tabName() == desc.id() );
 				}
 		);
 
-		if( formIt != form.desc().constEnd() && !formIt->text().isEmpty() )
+		if( formIt != form.desc().cend() && !formIt->text().empty() )
 		{
 			c.insertText( QLatin1String( "\n\n" ) );
 
@@ -182,10 +181,10 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 			}
 		}
 
-		for( auto it = form.desc().constBegin(), last = form.desc().constEnd();
+		for( auto it = form.desc().cbegin(), last = form.desc().cend();
 			it != last; ++it )
 		{
-			if( it != formIt && !it->text().isEmpty() )
+			if( it != formIt && !it->text().empty() )
 			{
 				QTextCharFormat h2;
 				h2.setFontWeight( QFont::Bold );

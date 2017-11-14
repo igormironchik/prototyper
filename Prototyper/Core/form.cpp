@@ -274,14 +274,17 @@ FormPrivate::updateFromCfg()
 
 	m_btns = FormProperties::Buttons();
 
-	if( m_cfg.windowButtons().contains( Cfg::c_minimize ) )
-		m_btns |= FormProperties::MinimizeButton;
+	if( std::find( m_cfg.windowButtons().cbegin(), m_cfg.windowButtons().cend(),
+		Cfg::c_minimize ) != m_cfg.windowButtons().cend() )
+			m_btns |= FormProperties::MinimizeButton;
 
-	if( m_cfg.windowButtons().contains( Cfg::c_maximize ) )
-		m_btns |= FormProperties::MaximizeButton;
+	if( std::find( m_cfg.windowButtons().cbegin(), m_cfg.windowButtons().cend(),
+		Cfg::c_maximize ) != m_cfg.windowButtons().cend() )
+			m_btns |= FormProperties::MaximizeButton;
 
-	if( m_cfg.windowButtons().contains( Cfg::c_close ) )
-		m_btns |= FormProperties::CloseButton;
+	if( std::find( m_cfg.windowButtons().cbegin(), m_cfg.windowButtons().cend(),
+		Cfg::c_close ) != m_cfg.windowButtons().cend() )
+			m_btns |= FormProperties::CloseButton;
 
 	TopGui::instance()->projectWindow()->formHierarchy()->view()->update(
 		m_model->index( q ) );
@@ -554,7 +557,7 @@ FormPrivate::createDescription( const QString & id )
 
 void
 FormPrivate::setText( const QSharedPointer< QTextDocument > & doc,
-	const QList< Cfg::TextStyle > & text )
+	const std::vector< Cfg::TextStyle > & text )
 {
 	doc->clear();
 
@@ -815,7 +818,7 @@ Form::size() const
 void
 Form::setSize( const Cfg::Size & s )
 {
-	d->m_cfg.setSize( s );
+	d->m_cfg.set_size( s );
 
 	update();
 }
@@ -843,7 +846,7 @@ Form::gridStep() const
 void
 Form::setGridStep( int s )
 {
-	d->m_cfg.setGridStep( s );
+	d->m_cfg.set_gridStep( s );
 
 	d->m_snap->setGridStep( s );
 
@@ -858,13 +861,13 @@ Form::cfg() const
 	c.windowButtons().clear();
 
 	if( d->m_btns.testFlag( FormProperties::MinimizeButton ) )
-		c.windowButtons().append( Cfg::c_minimize );
+		c.windowButtons().push_back( Cfg::c_minimize );
 
 	if( d->m_btns.testFlag( FormProperties::MaximizeButton ) )
-		c.windowButtons().append( Cfg::c_maximize );
+		c.windowButtons().push_back( Cfg::c_maximize );
 
 	if( d->m_btns.testFlag( FormProperties::CloseButton ) )
-		c.windowButtons().append( Cfg::c_close );
+		c.windowButtons().push_back( Cfg::c_close );
 
 	c.line().clear();
 	c.polyline().clear();
@@ -894,7 +897,7 @@ Form::cfg() const
 					FormLine * line = dynamic_cast< FormLine* > ( item );
 
 					if( line )
-						c.line().append( line->cfg() );
+						c.line().push_back( line->cfg() );
 				}
 					break;
 
@@ -903,7 +906,7 @@ Form::cfg() const
 					FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
 
 					if( poly )
-						c.polyline().append( poly->cfg() );
+						c.polyline().push_back( poly->cfg() );
 				}
 					break;
 
@@ -912,7 +915,7 @@ Form::cfg() const
 					FormText * text = dynamic_cast< FormText* > ( item );
 
 					if( text )
-						c.text().append( text->cfg() );
+						c.text().push_back( text->cfg() );
 				}
 					break;
 
@@ -921,7 +924,7 @@ Form::cfg() const
 					FormImage * image = dynamic_cast< FormImage* > ( item );
 
 					if( image )
-						c.image().append( image->cfg() );
+						c.image().push_back( image->cfg() );
 				}
 					break;
 
@@ -930,7 +933,7 @@ Form::cfg() const
 					FormRect * rect = dynamic_cast< FormRect* > ( item );
 
 					if( rect )
-						c.rect().append( rect->cfg() );
+						c.rect().push_back( rect->cfg() );
 				}
 					break;
 
@@ -939,7 +942,7 @@ Form::cfg() const
 					FormGroup * group = dynamic_cast< FormGroup* > ( item );
 
 					if( group )
-						c.group().append( group->cfg() );
+						c.group().push_back( group->cfg() );
 				}
 					break;
 
@@ -948,7 +951,7 @@ Form::cfg() const
 					FormButton * btn = dynamic_cast< FormButton* > ( item );
 
 					if( btn )
-						c.button().append( btn->cfg() );
+						c.button().push_back( btn->cfg() );
 				}
 					break;
 
@@ -957,7 +960,7 @@ Form::cfg() const
 					FormCheckBox * chk = dynamic_cast< FormCheckBox* > ( item );
 
 					if( chk )
-						c.checkbox().append( chk->cfg() );
+						c.checkbox().push_back( chk->cfg() );
 				}
 					break;
 
@@ -966,7 +969,7 @@ Form::cfg() const
 					FormRadioButton * r = dynamic_cast< FormRadioButton* > ( item );
 
 					if( r )
-						c.radiobutton().append( r->cfg() );
+						c.radiobutton().push_back( r->cfg() );
 				}
 					break;
 
@@ -975,7 +978,7 @@ Form::cfg() const
 					FormComboBox * cb = dynamic_cast< FormComboBox* > ( item );
 
 					if( cb )
-						c.combobox().append( cb->cfg() );
+						c.combobox().push_back( cb->cfg() );
 				}
 					break;
 
@@ -984,7 +987,7 @@ Form::cfg() const
 					FormSpinBox * sb = dynamic_cast< FormSpinBox* > ( item );
 
 					if( sb )
-						c.spinbox().append( sb->cfg() );
+						c.spinbox().push_back( sb->cfg() );
 				}
 					break;
 
@@ -993,7 +996,7 @@ Form::cfg() const
 					FormHSlider * hs = dynamic_cast< FormHSlider* > ( item );
 
 					if( hs )
-						c.hslider().append( hs->cfg() );
+						c.hslider().push_back( hs->cfg() );
 				}
 					break;
 
@@ -1002,7 +1005,7 @@ Form::cfg() const
 					FormVSlider * vs = dynamic_cast< FormVSlider* > ( item );
 
 					if( vs )
-						c.vslider().append( vs->cfg() );
+						c.vslider().push_back( vs->cfg() );
 				}
 					break;
 
@@ -1012,21 +1015,21 @@ Form::cfg() const
 		}
 	}
 
-	c.setTabName( objectId() );
+	c.set_tabName( objectId() );
 
 	auto last = d->m_desc.constEnd();
 
 	for( auto it = d->m_desc.constBegin(); it != last; ++it )
 	{
 		Cfg::Description desc;
-		desc.setId( it.key() );
-		desc.setText( Cfg::text( QTextCursor( it.value().data() ),
+		desc.set_id( it.key() );
+		desc.set_text( Cfg::text( QTextCursor( it.value().data() ),
 			it.value()->toPlainText() ) );
 
-		c.desc().append( desc );
+		c.desc().push_back( desc );
 	}
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	return c;
 }

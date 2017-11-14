@@ -90,29 +90,29 @@ FormImage::cfg() const
 {
 	Cfg::Image c;
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
 	Cfg::Size s;
-	s.setWidth( pixmap().width() );
-	s.setHeight( pixmap().height() );
+	s.set_width( pixmap().width() );
+	s.set_height( pixmap().height() );
 
-	c.setSize( s );
+	c.set_size( s );
 
-	c.setKeepAspectRatio( d->m_handles->isKeepAspectRatio() );
+	c.set_keepAspectRatio( d->m_handles->isKeepAspectRatio() );
 
 	QByteArray byteArray;
 	QBuffer buffer( &byteArray );
 	d->m_image.save( &buffer, "PNG" );
 
-	c.setData( QString::fromLatin1( byteArray.toBase64().data() ) );
+	c.set_data( QString::fromLatin1( byteArray.toBase64().data() ) );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	return c;
 }

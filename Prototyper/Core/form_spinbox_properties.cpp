@@ -83,25 +83,25 @@ SpinBoxProperties::cfg() const
 
 	Cfg::TextStyle c;
 
-	QList< QString > style;
+	std::vector< QString > style;
 
 	if( d->m_ui.m_bold->isChecked() )
-		style.append( Cfg::c_boldStyle );
+		style.push_back( Cfg::c_boldStyle );
 
 	if( d->m_ui.m_italic->isChecked() )
-		style.append( Cfg::c_italicStyle );
+		style.push_back( Cfg::c_italicStyle );
 
 	if( d->m_ui.m_underline->isChecked() )
-		style.append( Cfg::c_underlineStyle );
+		style.push_back( Cfg::c_underlineStyle );
 
-	if( style.isEmpty() )
-		style.append( Cfg::c_normalStyle );
+	if( style.empty() )
+		style.push_back( Cfg::c_normalStyle );
 
-	c.setStyle( style );
-	c.setFontSize( d->m_ui.m_size->value() );
-	c.setText( QString::number( d->m_ui.m_value->value() ) );
+	c.set_style( style );
+	c.set_fontSize( d->m_ui.m_size->value() );
+	c.set_text( QString::number( d->m_ui.m_value->value() ) );
 
-	s.setText( c );
+	s.set_text( c );
 
 	return s;
 }
@@ -109,18 +109,21 @@ SpinBoxProperties::cfg() const
 void
 SpinBoxProperties::setCfg( const Cfg::SpinBox & s )
 {
-	if( s.text().style().contains( Cfg::c_boldStyle ) )
-		d->m_ui.m_bold->setChecked( true );
+	if( std::find( s.text().style().cbegin(), s.text().style().cend(),
+		Cfg::c_boldStyle ) != s.text().style().cend() )
+			d->m_ui.m_bold->setChecked( true );
 	else
 		d->m_ui.m_bold->setChecked( false );
 
-	if( s.text().style().contains( Cfg::c_italicStyle ) )
-		d->m_ui.m_italic->setChecked( true );
+	if( std::find( s.text().style().cbegin(), s.text().style().cend(),
+		Cfg::c_italicStyle ) != s.text().style().cend() )
+			d->m_ui.m_italic->setChecked( true );
 	else
 		d->m_ui.m_italic->setChecked( false );
 
-	if( s.text().style().contains( Cfg::c_underlineStyle ) )
-		d->m_ui.m_underline->setChecked( true );
+	if( std::find( s.text().style().cbegin(), s.text().style().cend(),
+		Cfg::c_underlineStyle ) != s.text().style().cend() )
+			d->m_ui.m_underline->setChecked( true );
 	else
 		d->m_ui.m_underline->setChecked( false );
 

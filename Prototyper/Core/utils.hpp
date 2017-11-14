@@ -62,7 +62,7 @@ static const QString c_close = QLatin1String( "close" );
 //
 
 //! \return Text style for the configuration.
-QList< QString > textStyle( const QTextCharFormat & f,
+std::vector< QString > textStyle( const QTextCharFormat & f,
 	const QTextBlockFormat & b );
 
 
@@ -71,7 +71,7 @@ QList< QString > textStyle( const QTextCharFormat & f,
 //
 
 //! \return Text for the configuration.
-QList< Cfg::TextStyle > text( QTextCursor c, const QString & data );
+std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data );
 
 
 //
@@ -115,7 +115,7 @@ void initBlockFormat( QTextBlockFormat & b,
 //
 
 void fillTextDocument( QTextDocument * doc,
-	const QList< Cfg::TextStyle > & text, qreal scale = 1.0 );
+	const std::vector< Cfg::TextStyle > & text, qreal scale = 1.0 );
 
 
 //

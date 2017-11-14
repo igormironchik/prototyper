@@ -144,7 +144,7 @@ public:
 	void createDescription( const QString & id );
 	//! Set text.
 	void setText( const QSharedPointer< QTextDocument > & doc,
-		const QList< Cfg::TextStyle > & text );
+		const std::vector< Cfg::TextStyle > & text );
 	//! Update link.
 	void updateLink( const QList< QGraphicsItem* > & childItems,
 		const QString & oldName, const QString & name );

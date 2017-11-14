@@ -85,27 +85,27 @@ CheckBoxProperties::cfg() const
 
 	Cfg::TextStyle c;
 
-	QList< QString > style;
+	std::vector< QString > style;
 
 	if( d->m_ui.m_bold->isChecked() )
-		style.append( Cfg::c_boldStyle );
+		style.push_back( Cfg::c_boldStyle );
 
 	if( d->m_ui.m_italic->isChecked() )
-		style.append( Cfg::c_italicStyle );
+		style.push_back( Cfg::c_italicStyle );
 
 	if( d->m_ui.m_underline->isChecked() )
-		style.append( Cfg::c_underlineStyle );
+		style.push_back( Cfg::c_underlineStyle );
 
-	if( style.isEmpty() )
-		style.append( Cfg::c_normalStyle );
+	if( style.empty() )
+		style.push_back( Cfg::c_normalStyle );
 
-	c.setStyle( style );
-	c.setFontSize( d->m_ui.m_fontSize->value() );
-	c.setText( d->m_ui.m_text->text() );
+	c.set_style( style );
+	c.set_fontSize( d->m_ui.m_fontSize->value() );
+	c.set_text( d->m_ui.m_text->text() );
 
-	res.setText( c );
+	res.set_text( c );
 
-	res.setIsChecked( d->m_ui.m_isChecked->isChecked() );
+	res.set_isChecked( d->m_ui.m_isChecked->isChecked() );
 
 	return res;
 }
@@ -113,18 +113,21 @@ CheckBoxProperties::cfg() const
 void
 CheckBoxProperties::setCfg( const Cfg::CheckBox & c )
 {
-	if( c.text().style().contains( Cfg::c_boldStyle ) )
-		d->m_ui.m_bold->setChecked( true );
+	if( std::find( c.text().style().cbegin(), c.text().style().cend(),
+		Cfg::c_boldStyle ) != c.text().style().cend() )
+			d->m_ui.m_bold->setChecked( true );
 	else
 		d->m_ui.m_bold->setChecked( false );
 
-	if( c.text().style().contains( Cfg::c_italicStyle ) )
-		d->m_ui.m_italic->setChecked( true );
+	if( std::find( c.text().style().cbegin(), c.text().style().cend(),
+		Cfg::c_italicStyle ) != c.text().style().cend() )
+			d->m_ui.m_italic->setChecked( true );
 	else
 		d->m_ui.m_italic->setChecked( false );
 
-	if( c.text().style().contains( Cfg::c_underlineStyle ) )
-		d->m_ui.m_underline->setChecked( true );
+	if( std::find( c.text().style().cbegin(), c.text().style().cend(),
+		Cfg::c_underlineStyle ) != c.text().style().cend() )
+			d->m_ui.m_underline->setChecked( true );
 	else
 		d->m_ui.m_underline->setChecked( false );
 

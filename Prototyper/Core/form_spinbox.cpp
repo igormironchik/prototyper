@@ -184,25 +184,25 @@ FormSpinBox::cfg() const
 {
 	Cfg::SpinBox c;
 
-	c.setObjectId( objectId() );
+	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.setX( pos().x() );
-	p.setY( pos().y() );
+	p.set_x( pos().x() );
+	p.set_y( pos().y() );
 
-	c.setPos( p );
+	c.set_pos( p );
 
 	Cfg::Size s;
-	s.setWidth( d->m_rect.width() );
-	s.setHeight( d->m_rect.height() );
+	s.set_width( d->m_rect.width() );
+	s.set_height( d->m_rect.height() );
 
-	c.setSize( s );
+	c.set_size( s );
 
-	c.setPen( Cfg::pen( objectPen() ) );
+	c.set_pen( Cfg::pen( objectPen() ) );
 
-	c.setText( text() );
+	c.set_text( text() );
 
-	c.setLink( link() );
+	c.set_link( link() );
 
 	return c;
 }
@@ -225,8 +225,8 @@ Cfg::TextStyle
 FormSpinBox::text() const
 {
 	Cfg::TextStyle textStyle = Cfg::textStyleFromFont( d->m_font );
-	textStyle.style().append( Cfg::c_right );
-	textStyle.setText( d->m_text );
+	textStyle.style().push_back( Cfg::c_right );
+	textStyle.set_text( d->m_text );
 
 	return textStyle;
 }
@@ -234,7 +234,8 @@ FormSpinBox::text() const
 void
 FormSpinBox::setText( const Cfg::TextStyle & c )
 {
-	if( c.style().contains( Cfg::c_normalStyle ) )
+	if( std::find( c.style().cbegin(), c.style().cend(),
+		Cfg::c_normalStyle ) != c.style().cend() )
 	{
 		d->m_font.setWeight( QFont::Normal );
 		d->m_font.setItalic( false );
@@ -242,18 +243,21 @@ FormSpinBox::setText( const Cfg::TextStyle & c )
 	}
 	else
 	{
-		if( c.style().contains( Cfg::c_boldStyle ) )
-			d->m_font.setWeight( QFont::Bold );
+		if( std::find( c.style().cbegin(), c.style().cend(),
+			Cfg::c_boldStyle ) != c.style().cend() )
+				d->m_font.setWeight( QFont::Bold );
 		else
 			d->m_font.setWeight( QFont::Normal );
 
-		if( c.style().contains( Cfg::c_italicStyle ) )
-			d->m_font.setItalic( true );
+		if( std::find( c.style().cbegin(), c.style().cend(),
+			Cfg::c_italicStyle ) != c.style().cend() )
+				d->m_font.setItalic( true );
 		else
 			d->m_font.setItalic( false );
 
-		if( c.style().contains( Cfg::c_underlineStyle ) )
-			d->m_font.setUnderline( true );
+		if( std::find( c.style().cbegin(), c.style().cend(),
+			Cfg::c_underlineStyle ) != c.style().cend() )
+				d->m_font.setUnderline( true );
 		else
 			d->m_font.setUnderline( false );
 	}
