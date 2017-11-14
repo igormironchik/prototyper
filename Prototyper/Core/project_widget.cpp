@@ -254,6 +254,12 @@ ProjectWidget::formsNames() const
 	return res;
 }
 
+QString
+ProjectWidget::projectTabName() const
+{
+	return d->m_tabNames.front();
+}
+
 QTabWidget *
 ProjectWidget::tabs() const
 {

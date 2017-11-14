@@ -80,6 +80,9 @@ public:
 	//! \return Forms' names.
 	QStringList formsNames() const;
 
+	//! \return Project tab name.
+	QString projectTabName() const;
+
 	//! \return Tab widget.
 	QTabWidget * tabs() const;
 

@@ -668,6 +668,8 @@ ProjectWindowPrivate::enableEditing( const QList< QGraphicsItem* > & children,
 void
 ProjectWindowPrivate::updateCfg()
 {
+	m_cfg.description().set_tabName( m_widget->projectTabName() );
+
 	m_cfg.description().set_text(
 		m_widget->descriptionTab()->editor()->text() );
 
