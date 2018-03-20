@@ -1,3 +1,5 @@
+[![Donate](https://liberapay.com/assets/widgets/donate.svg)](https://liberapay.com/imironchik/donate)
+
 # About
 
 Prototyper this is desktop application to make UI prototypes, simple integration
