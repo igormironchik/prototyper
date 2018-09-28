@@ -1864,9 +1864,6 @@ Form::selectionChanged()
 	if( !d->m_desc.contains( obj->objectId() ) )
 		d->createDescription( obj->objectId() );
 
-	TopGui::instance()->projectWindow()->descWindow()->setEditors(
-		obj->objectId(), d->m_desc, this );
-
 	TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
 		d->m_desc[ obj->objectId() ], obj->objectId(), this );
 }
