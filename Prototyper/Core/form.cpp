@@ -1780,21 +1780,7 @@ Form::renameObject( FormObject * obj, const QString & newId,
 {
 	const QString old = obj->objectId();
 
-	if( d->m_desc.contains( old ) )
-	{
-		QSharedPointer< QTextDocument > doc =
-			d->m_desc[ obj->objectId() ];
-
-		d->m_desc.remove( obj->objectId() );
-
-		auto * dock = TopGui::instance()->projectWindow()->descDockWidget();
-
-		if( dock->form() == this &&
-			dock->windowTitle() == obj->objectId() )
-				dock->setWindowTitle( newId );
-
-		d->m_desc[ newId ] = doc;
-	}
+	handleDescDuringRename( obj, newId );
 
 	TopGui::instance()->projectWindow()->descWindow()->renameItem(
 		this, obj->objectId(), newId );
@@ -1813,19 +1799,33 @@ Form::renameObject( FormObject * obj, const QString & newId,
 }
 
 void
-Form::renameForm( const QString & name )
+Form::handleDescDuringRename( FormObject * obj, const QString & newId )
 {
-	const QString old = objectId();
+	const QString old = obj->objectId();
 
 	if( d->m_desc.contains( old ) )
 	{
 		QSharedPointer< QTextDocument > doc =
-			d->m_desc[ old ];
+			d->m_desc[ obj->objectId() ];
 
-		d->m_desc.remove( old );
+		d->m_desc.remove( obj->objectId() );
 
-		d->m_desc[ name ] = doc;
+		auto * dock = TopGui::instance()->projectWindow()->descDockWidget();
+
+		if( dock->form() == this &&
+			dock->windowTitle() == obj->objectId() )
+				dock->setWindowTitle( newId );
+
+		d->m_desc[ newId ] = doc;
 	}
+}
+
+void
+Form::renameForm( const QString & name )
+{
+	const QString old = objectId();
+
+	handleDescDuringRename( this, name );
 
 	TopGui::instance()->projectWindow()->descWindow()->renameItem(
 		this, old, name );
@@ -1854,25 +1854,21 @@ Form::selectionChanged()
 {
 	const QList< QGraphicsItem* > s = d->selection();
 
+	FormObject * obj = Q_NULLPTR;
+
 	if( s.size() == 1 )
-	{
-		FormObject * obj = dynamic_cast< FormObject* > ( s.first() );
-
-		if( !d->m_desc.contains( obj->objectId() ) )
-			d->createDescription( obj->objectId() );
-
-		TopGui::instance()->projectWindow()->descWindow()->setEditors(
-			obj->objectId(), d->m_desc, this );
-
-		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			d->m_desc[ obj->objectId() ], obj->objectId(), this );
-	}
+		obj = dynamic_cast< FormObject* > ( s.first() );
 	else
-	{
-		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			QSharedPointer< QTextDocument > ( Q_NULLPTR ),
-			QString(), Q_NULLPTR );
-	}
+		obj = this;
+
+	if( !d->m_desc.contains( obj->objectId() ) )
+		d->createDescription( obj->objectId() );
+
+	TopGui::instance()->projectWindow()->descWindow()->setEditors(
+		obj->objectId(), d->m_desc, this );
+
+	TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
+		d->m_desc[ obj->objectId() ], obj->objectId(), this );
 }
 
 void

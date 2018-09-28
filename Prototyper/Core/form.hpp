@@ -355,6 +355,8 @@ private slots:
 	void properties();
 	//! Undo command in text item was added.
 	void undoCommandInTextAdded();
+	//! Handle description during renaming.
+	void handleDescDuringRename( FormObject * obj, const QString & newId );
 
 protected:
 	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
