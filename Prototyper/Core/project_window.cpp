@@ -787,6 +787,8 @@ ProjectWindow::readProject( const QString & fileName )
 				.arg( QFileInfo( fileName ).baseName() ) );
 
 			d->m_select->trigger();
+			d->m_addedForms.clear();
+			d->m_deletedForms.clear();
 		}
 		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 		{

@@ -55,7 +55,6 @@ public:
 void
 TextEditorPrivate::init()
 {
-	q->setWordWrapMode( QTextOption::WordWrap );
 	q->setUndoRedoEnabled( true );
 
 	q->setFontPointSize( 10.0 );
@@ -102,6 +101,8 @@ TextEditor::text() const
 void
 TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 {
+	disconnect( this, &QTextEdit::textChanged, this, Q_NULLPTR );
+
 	reset();
 
 	foreach( const Cfg::TextStyle & s, blocks )
@@ -157,7 +158,10 @@ TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 	cursor.setPosition( 0 );
 	setTextCursor( cursor );
 
+	document()->setTextWidth( width() );
 	document()->clearUndoRedoStacks();
+
+	connect( this, &QTextEdit::textChanged, this, &TextEditor::changed );
 }
 
 void

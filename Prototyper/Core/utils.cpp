@@ -276,6 +276,8 @@ void fillTextDocument( QTextDocument * doc,
 
 		c.movePosition( QTextCursor::End );
 	}
+
+	doc->clearUndoRedoStacks();
 }
 
 
