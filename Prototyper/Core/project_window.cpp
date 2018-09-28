@@ -222,7 +222,7 @@ ProjectWindowPrivate::init()
 	quitAction->setShortcutContext( Qt::ApplicationShortcut );
 	quitAction->setShortcut( ProjectWindow::tr( "Ctrl+Q" ) );
 
-	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "&View" ) );
+	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "&Dock" ) );
 
 	m_formHierarchy = new FormHierarchyWidget( q );
 	m_formHierarchy->setObjectName( QLatin1String( "m_formHierarchy" ) );

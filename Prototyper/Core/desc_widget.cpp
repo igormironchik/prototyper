@@ -31,8 +31,6 @@
 #include <QTextEdit>
 #include <QVBoxLayout>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 
