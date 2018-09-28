@@ -55,7 +55,7 @@ signals:
 
 public:
 	explicit TextEditor( QWidget * parent = 0 );
-	~TextEditor();
+	~TextEditor() Q_DECL_OVERRIDE;
 
 	//! \return Text.
 	std::vector< Cfg::TextStyle > text() const;

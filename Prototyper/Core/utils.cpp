@@ -112,9 +112,6 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 	QTextCharFormat f = c.charFormat();
 	QTextBlockFormat b = c.blockFormat();
 
-	if( f.fontPointSize() < 1.0 )
-		f.setFontPointSize( 10.0 );
-
 	QString t;
 
 	while( c.movePosition( QTextCursor::NextCharacter ) )
@@ -123,7 +120,7 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 		{
 			Cfg::TextStyle style;
 			style.set_style( textStyle( f, b ) );
-			style.set_fontSize( f.fontPointSize() );
+			style.set_fontSize( f.fontPointSize() < 1.0 ? 10.0 : f.fontPointSize() );
 			style.set_text( t );
 
 			blocks.push_back( style );
@@ -142,7 +139,7 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 	{
 		Cfg::TextStyle style;
 		style.set_style( textStyle( f, b ) );
-		style.set_fontSize( f.fontPointSize() );
+		style.set_fontSize( f.fontPointSize() < 1.0 ? 10.0 : f.fontPointSize() );
 		style.set_text( t );
 
 		blocks.push_back( style );
