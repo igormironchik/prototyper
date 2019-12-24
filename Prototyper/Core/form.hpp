@@ -82,7 +82,7 @@ enum GridMode {
 
 class FormPrivate {
 public:
-	FormPrivate( Cfg::Form & cfg, Form * parent )
+	FormPrivate( const Cfg::Form & cfg, Form * parent )
 		:	q( parent )
 		,	m_gridMode( ShowGrid )
 		,	m_gridStepAction( 0 )
@@ -182,7 +182,7 @@ public:
 	//! Grid step action.
 	QAction * m_gridStepAction;
 	//! Cfg.
-	Cfg::Form & m_cfg;
+	Cfg::Form m_cfg;
 	//! Pressed.
 	bool m_pressed;
 	//! Current item.
@@ -230,7 +230,7 @@ signals:
 	void changed();
 
 public:
-	explicit Form( Cfg::Form & c, QGraphicsItem * parent = 0 );
+	explicit Form( const Cfg::Form & c, QGraphicsItem * parent = 0 );
 	~Form();
 
 	//! \return Type.

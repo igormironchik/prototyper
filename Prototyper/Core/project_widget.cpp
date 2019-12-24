@@ -327,9 +327,7 @@ ProjectWidget::addForm()
 		cfg.size().set_height( dlg.size().height() );
 		cfg.set_tabName( dlg.name() );
 
-		d->m_cfg.form().push_back( cfg );
-
-		d->addForm( d->m_cfg.form().back(), d->m_cfg.showGrid() );
+		d->addForm( cfg, d->m_cfg.showGrid() );
 
 		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
 
@@ -362,8 +360,6 @@ ProjectWidget::renameTab( const QString & oldName )
 
 			if( index > 0 )
 			{
-				d->m_cfg.form()[ index - 1 ].set_tabName( dlg.name() );
-
 				d->m_forms[ index - 1 ]->form()->renameForm( dlg.name() );
 
 				TopGui::instance()->projectWindow()->formHierarchy()->model()->
@@ -394,7 +390,7 @@ ProjectWidget::deleteForm( const QString & name )
 					"Are you sure?" ).arg( name ) );
 
 		if( btn == QMessageBox::Yes )
-		{		
+		{
 			const int index = d->m_tabNames.indexOf( name );
 
 			d->m_undoGroup->removeStack(
@@ -412,8 +408,6 @@ ProjectWidget::deleteForm( const QString & name )
 			FormView * form = d->m_forms.at( index - 1 );
 
 			d->m_forms.removeAt( index - 1 );
-
-			d->m_cfg.form().erase( d->m_cfg.form().begin() + index - 1 );
 
 			d->m_tabs->removeTab( index );
 

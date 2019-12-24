@@ -63,6 +63,8 @@
 #include <algorithm>
 #include <type_traits>
 
+#include <QDebug>
+
 
 namespace Prototyper {
 
@@ -785,7 +787,7 @@ FormPrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 // Form
 //
 
-Form::Form( Cfg::Form & c, QGraphicsItem * parent )
+Form::Form( const Cfg::Form & c, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
 	,	FormObject( FormObject::FormType, this )
 	,	d( 0 )
@@ -846,6 +848,7 @@ Form::gridStep() const
 void
 Form::setGridStep( int s )
 {
+	qDebug() << "set grid step" << s;
 	d->m_cfg.set_gridStep( s );
 
 	d->m_snap->setGridStep( s );
@@ -1606,6 +1609,8 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	Q_UNUSED( option )
 	Q_UNUSED( widget )
 
+	qDebug() << this << d->m_cfg.gridStep();
+
 	draw( painter, d->m_cfg.size().width(),
 		d->m_cfg.size().height(), d->m_btns, d->m_cfg.gridStep(),
 		d->m_gridMode == ShowGrid );
@@ -1835,6 +1840,8 @@ Form::renameForm( const QString & name )
 	d->m_ids.removeOne( old );
 
 	d->m_ids.append( name );
+
+	d->m_cfg.set_tabName( name );
 }
 
 void
@@ -1908,7 +1915,7 @@ Form::properties()
 
 void
 Form::undoCommandInTextAdded()
-{	
+{
 	FormObject * obj = d->m_docs[ sender() ];
 
 	if( obj )

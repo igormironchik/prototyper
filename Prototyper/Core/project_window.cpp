@@ -673,8 +673,10 @@ ProjectWindowPrivate::updateCfg()
 	m_cfg.description().set_text(
 		m_widget->descriptionTab()->editor()->text() );
 
+	m_cfg.form().clear();
+
 	for( int i = 0; i < m_widget->forms().size(); ++i )
-		m_cfg.form()[ i ] = m_widget->forms().at( i )->form()->cfg();
+		m_cfg.form().push_back( m_widget->forms().at( i )->form()->cfg() );
 }
 
 void
