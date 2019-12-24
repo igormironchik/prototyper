@@ -162,10 +162,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 			data.remove( 0, i );
 
 		stream
-			<< QLatin1String( "<div style=\"max-width=100%; "
-							  "margin: auto; width: " )
-			<< QString::number( form.size().width() )
-			<< QLatin1String( "px;\">" )
+			<< QLatin1String( "<div>" )
 			<< data << QLatin1String( "</div><br>" );
 
 		auto formIt = std::find_if( form.desc().cbegin(), form.desc().cend(),
