@@ -350,10 +350,12 @@ ProjectWidget::renameTab( const QString & oldName )
 		if( index - 1 >= 0 )
 			names << d->m_forms.at( index - 1 )->form()->ids();
 
-		NameDlg dlg( names, tr( "Enter New Tab Name..." ), this );
+		NameDlg dlg( names, tr( "Enter New Form Name..." ), this );
 
 		if( dlg.exec() == QDialog::Accepted )
 		{
+			const QString tmpOldName = oldName;
+
 			d->m_tabs->setTabText( index, dlg.name() );
 
 			d->m_tabNames[ index ] = dlg.name();
@@ -366,7 +368,7 @@ ProjectWidget::renameTab( const QString & oldName )
 					renameForm( d->m_forms.at( index - 1 )->form() );
 
 				foreach( FormView * view, d->m_forms )
-					view->form()->updateLink( oldName, dlg.name() );
+					view->form()->updateLink( tmpOldName, dlg.name() );
 			}
 			else
 				d->m_cfg.description().set_tabName( dlg.name() );

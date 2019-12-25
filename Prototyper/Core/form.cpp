@@ -274,6 +274,8 @@ FormPrivate::updateFromCfg()
 
 	q->setObjectId( m_cfg.tabName() );
 
+	m_ids.append( m_cfg.tabName() );
+
 	m_btns = FormProperties::Buttons();
 
 	if( std::find( m_cfg.windowButtons().cbegin(), m_cfg.windowButtons().cend(),
