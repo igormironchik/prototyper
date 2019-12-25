@@ -183,7 +183,7 @@ FormText::cfg() const
 
 	c.set_pos( p );
 
-	c.set_textWidth( MmPx::instance().fromMmX( textWidth() ) );
+	c.set_textWidth( MmPx::instance().toMmX( textWidth() ) );
 
 	c.set_text( Cfg::text( textCursor(), toPlainText() ) );
 
