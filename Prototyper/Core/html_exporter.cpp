@@ -110,8 +110,6 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 
 	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
-		QMap< QString, QString > lnks = links( form );
-
 		std::vector< Cfg::TextStyle > headList;
 		Cfg::TextStyle head;
 		head.style().push_back( Cfg::c_boldStyle );

@@ -37,6 +37,7 @@
 #include "form_spinbox.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -283,12 +284,10 @@ FormGroup::cfg() const
 	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.set_x( pos().x() );
-	p.set_y( pos().y() );
+	p.set_x( MmPx::instance().toMmX( pos().x() ) );
+	p.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_pos( p );
-
-	c.set_link( link() );
 
 	return c;
 }
@@ -375,9 +374,8 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	setObjectId( c.objectId() );
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
-
-	setLink( c.link() );
+	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
+		MmPx::instance().fromMmY( c.pos().y() ) ) );
 }
 
 QList< QGraphicsItem* >

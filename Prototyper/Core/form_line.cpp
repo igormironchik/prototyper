@@ -151,12 +151,12 @@ FormLine::cfg() const
 	Cfg::Line c;
 
 	Cfg::Point p1;
-	p1.set_x( l.p1().x() );
-	p1.set_y( l.p1().y() );
+	p1.set_x( MmPx::instance().toMmX( l.p1().x() ) );
+	p1.set_y( MmPx::instance().toMmY( l.p1().y() ) );
 
 	Cfg::Point p2;
-	p2.set_x( l.p2().x() );
-	p2.set_y( l.p2().y() );
+	p2.set_x( MmPx::instance().toMmX( l.p2().x() ) );
+	p2.set_y( MmPx::instance().toMmY( l.p2().y() ) );
 
 	c.p1() = p1;
 	c.p2() = p2;
@@ -171,8 +171,6 @@ FormLine::cfg() const
 
 	c.set_pen( Cfg::pen( objectPen() ) );
 
-	c.set_link( link() );
-
 	return c;
 }
 
@@ -180,8 +178,10 @@ void
 FormLine::setCfg( const Cfg::Line & c )
 {
 	QLineF line;
-	line.setP1( QPointF( c.p1().x(), c.p1().y() ) );
-	line.setP2( QPointF( c.p2().x(), c.p2().y() ) );
+	line.setP1( QPointF( MmPx::instance().fromMmX( c.p1().x() ),
+		MmPx::instance().fromMmY( c.p1().y() ) ) );
+	line.setP2( QPointF( MmPx::instance().fromMmX( c.p2().x() ),
+		MmPx::instance().fromMmY( c.p2().y() ) ) );
 
 	setLine( line );
 
@@ -192,8 +192,6 @@ FormLine::setCfg( const Cfg::Line & c )
 	setObjectId( c.objectId() );
 
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
-
-	setLink( c.link() );
 }
 
 QRectF

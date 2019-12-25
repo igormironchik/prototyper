@@ -54,8 +54,6 @@ public:
 	virtual void init();
 	//! Draw form.
 	void drawForm( QSvgGenerator & svg, const Cfg::Page & form );
-	//! \return Links' map.
-	QMap< QString, QString > links( const Cfg::Page & form );
 
 	//! Parent.
 	Exporter * q;

@@ -159,11 +159,6 @@
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
-					}
 				} || class Line
 
 
@@ -204,11 +199,6 @@
 						{name size}
 						{required}
 					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
-					}
 				} || class Polyline
 
 
@@ -237,11 +227,6 @@
 						{valueType QString}
 						{name objectId}
 						{required}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
 					}
 				} || class Text
 
@@ -278,11 +263,6 @@
 						{valueType QString}
 						{name objectId}
 						{required}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
 					}
 				} || class Image
 
@@ -324,11 +304,6 @@
 						{valueType Prototyper::Core::Cfg::Brush}
 						{name brush}
 					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
-					}
 				} || class Rect
 
 
@@ -363,11 +338,6 @@
 						{valueType QString}
 						{name objectId}
 						{required}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
 					}
 				} || class Button
 
@@ -416,11 +386,6 @@
 						{name objectId}
 						{required}
 					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
-					}
 				} || class CheckBox
 
 
@@ -450,11 +415,6 @@
 						{valueType QString}
 						{name objectId}
 						{required}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
 					}
 				} || class ComboBox
 
@@ -491,11 +451,6 @@
 						{name objectId}
 						{required}
 					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
-					}
 				} || class SpinBox
 
 
@@ -525,11 +480,6 @@
 						{name objectId}
 						{required}
 					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
-					}
 				} || class HSlider
 
 
@@ -558,11 +508,6 @@
 						{valueType QString}
 						{name objectId}
 						{required}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
 					}
 				} || class VSlider
 
@@ -646,11 +591,6 @@
 						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
 					}
 				} || class Group
 
@@ -741,11 +681,6 @@
 					{tagVectorOfTags
 						{valueType Prototyper::Core::Cfg::VSlider}
 						{name vslider}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name link}
 					}
 				} || class Form
 

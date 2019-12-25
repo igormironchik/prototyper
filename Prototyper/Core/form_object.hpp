@@ -111,11 +111,6 @@ public:
 	virtual void setRectangle( const QRectF & rect,
 		bool pushUndoCommand = true ) = 0;
 
-	//! \return Link.
-	const QString & link() const;
-	//! Set link.
-	void setLink( const QString & l );
-
 	//! \return Form.
 	Page * form() const;
 
@@ -135,8 +130,6 @@ private:
 	Page * m_form;
 	//! Type.
 	ObjectType m_type;
-	//! Link.
-	QString m_link;
 }; // class FormObject
 
 } /* namespace Core */

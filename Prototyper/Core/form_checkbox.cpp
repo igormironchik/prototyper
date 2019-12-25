@@ -188,18 +188,17 @@ FormCheckBox::cfg() const
 
 	c.set_isChecked( d->m_checked );
 	c.set_objectId( objectId() );
-	c.set_link( link() );
 	c.set_pen( Cfg::pen( objectPen() ) );
 
 	Cfg::Point p;
-	p.set_x( pos().x() );
-	p.set_y( pos().y() );
+	p.set_x( MmPx::instance().toMmX( pos().x() ) );
+	p.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_pos( p );
 
 	Cfg::Size s;
-	s.set_width( d->m_rect.width() );
-	s.set_height( d->m_rect.height() );
+	s.set_width( MmPx::instance().toMmX( d->m_rect.width() ) );
+	s.set_height( MmPx::instance().toMmY( d->m_rect.height() ) );
 
 	c.set_size( s );
 
@@ -214,11 +213,12 @@ FormCheckBox::setCfg( const Cfg::CheckBox & c )
 	d->m_checked = c.isChecked();
 
 	setObjectId( c.objectId() );
-	setLink( c.link() );
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
-	d->setRect( QRectF( c.pos().x(), c.pos().y(),
-		c.width(), c.size().height() ) );
+	d->setRect( QRectF( MmPx::instance().fromMmX( c.pos().x() ),
+		MmPx::instance().fromMmY( c.pos().y() ),
+		MmPx::instance().fromMmX( c.width() ),
+		MmPx::instance().fromMmY( c.size().height() ) ) );
 
 	setText( c.text() );
 

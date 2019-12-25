@@ -99,18 +99,6 @@ FormObject::form() const
 	return m_form;
 }
 
-const QString &
-FormObject::link() const
-{
-	return m_link;
-}
-
-void
-FormObject::setLink( const QString & l )
-{
-	m_link = l;
-}
-
 void
 FormObject::postDeletion()
 {

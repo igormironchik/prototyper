@@ -104,8 +104,6 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 
 	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
-		QMap< QString, QString > lnks = links( form );
-
 		c.movePosition( QTextCursor::End );
 
 		c.insertText( QString( "\n" ) );

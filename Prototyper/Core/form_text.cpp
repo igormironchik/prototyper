@@ -178,16 +178,14 @@ FormText::cfg() const
 	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.set_x( pos().x() );
-	p.set_y( pos().y() );
+	p.set_x( MmPx::instance().toMmX( pos().x() ) );
+	p.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_pos( p );
 
-	c.set_textWidth( textWidth() );
+	c.set_textWidth( MmPx::instance().fromMmX( textWidth() ) );
 
 	c.set_text( Cfg::text( textCursor(), toPlainText() ) );
-
-	c.set_link( link() );
 
 	return c;
 }
@@ -273,11 +271,10 @@ FormText::setCfg( const Cfg::Text & c )
 
 	setObjectId( c.objectId() );
 
-	setTextWidth( c.textWidth() );
+	setTextWidth( MmPx::instance().fromMmX( c.textWidth() ) );
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
-
-	setLink( c.link() );
+	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
+		MmPx::instance().fromMmY( c.pos().y() ) ) );
 
 	QRectF r = boundingRect();
 	r.moveTo( pos() );

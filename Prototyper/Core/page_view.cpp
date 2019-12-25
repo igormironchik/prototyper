@@ -71,11 +71,9 @@ PageViewPrivate::init()
 
 	m_form = new Page( m_cfg );
 
-	m_scene->setPage( m_form );
-
-	QApplication::processEvents();
-
 	m_form->setCfg( m_cfg );
+
+	m_scene->setPage( m_form );
 
 	q->setRubberBandSelectionMode( Qt::ContainsItemShape );
 

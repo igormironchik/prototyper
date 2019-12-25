@@ -244,20 +244,20 @@ FormPolyline::cfg() const
 	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.set_x( pos().x() );
-	p.set_y( pos().y() );
+	p.set_x( MmPx::instance().toMmX( pos().x() ) );
+	p.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_pos( p );
 
 	foreach( const QLineF & l, d->m_lines )
 	{
 		Cfg::Point p1;
-		p1.set_x( l.p1().x() );
-		p1.set_y( l.p1().y() );
+		p1.set_x( MmPx::instance().toMmX( l.p1().x() ) );
+		p1.set_y( MmPx::instance().toMmY( l.p1().y() ) );
 
 		Cfg::Point p2;
-		p2.set_x( l.p2().x() );
-		p2.set_y( l.p2().y() );
+		p2.set_x( MmPx::instance().toMmX( l.p2().x() ) );
+		p2.set_y( MmPx::instance().toMmY( l.p2().y() ) );
 
 		Cfg::Line line;
 		line.set_p1( p1 );
@@ -272,11 +272,9 @@ FormPolyline::cfg() const
 
 	c.set_brush( Cfg::brush( objectBrush() ) );
 
-	c.set_link( link() );
-
 	Cfg::Size s;
-	s.set_width( d->m_resized.width() );
-	s.set_height( d->m_resized.height() );
+	s.set_width( MmPx::instance().toMmX( d->m_resized.width() ) );
+	s.set_height( MmPx::instance().toMmY( d->m_resized.height() ) );
 
 	c.set_size( s );
 
@@ -290,13 +288,16 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 
 	d->m_lines.clear();
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
+		MmPx::instance().fromMmY( c.pos().y() ) ) );
 
 	foreach( const Cfg::Line & l, c.line() )
 	{
 		QLineF line;
-		line.setP1( QPointF( l.p1().x(), l.p1().y() ) );
-		line.setP2( QPointF( l.p2().x(), l.p2().y() ) );
+		line.setP1( QPointF( MmPx::instance().fromMmX( l.p1().x() ),
+			MmPx::instance().fromMmY( l.p1().y() ) ) );
+		line.setP2( QPointF( MmPx::instance().fromMmX( l.p2().x() ),
+			MmPx::instance().fromMmY( l.p2().y() ) ) );
 
 		appendLine( line );
 	}
@@ -307,8 +308,10 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 
 	const QRectF b = d->boundingRect();
 
-	d->m_resized = QRectF( c.pos().x() + b.x(), c.pos().y() + b.y(),
-		c.size().width(), c.size().height() );
+	d->m_resized = QRectF( MmPx::instance().fromMmX( c.pos().x() ) + b.x(),
+		MmPx::instance().fromMmY( c.pos().y() ) + b.y(),
+		MmPx::instance().fromMmX( c.size().width() ),
+		MmPx::instance().fromMmY( c.size().height() ) );
 
 	const qreal w = (qreal) objectPen().width() / 2.0;
 
@@ -316,8 +319,6 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 		12.0 + w, 12.0 + w ) );
 
 	d->updateLines( QRectF(), d->m_resized );
-
-	setLink( c.link() );
 }
 
 void

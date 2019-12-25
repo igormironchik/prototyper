@@ -236,7 +236,11 @@ PagePrivate::updateFromCfg()
 
 	QApplication::processEvents();
 
-	q->setSize( m_cfg.size() );
+	Cfg::Size size;
+	size.set_width( MmPx::instance().fromMmX( m_cfg.size().width() ) );
+	size.set_height( MmPx::instance().fromMmY( m_cfg.size().height() ) );
+
+	q->setSize( size );
 
 	q->setGridStep( m_cfg.gridStep() );
 
@@ -673,6 +677,11 @@ Cfg::Page
 Page::cfg() const
 {
 	Cfg::Page c = d->m_cfg;
+
+	Cfg::Size size;
+	size.set_width( MmPx::instance().toMmX( boundingRect().width() ) );
+	size.set_height( MmPx::instance().toMmY( boundingRect().height() ) );
+	c.set_size( size );
 
 	c.line().clear();
 	c.polyline().clear();

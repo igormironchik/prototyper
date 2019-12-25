@@ -126,6 +126,30 @@ TextStyle textStyleFromFont( const QFont & f );
 
 } /* namespace Cfg */
 
+
+//
+// MmPx
+//
+
+class MmPx {
+public:
+	static const MmPx & instance();
+
+	qreal toMmX( qreal px ) const;
+	qreal fromMmX( qreal mm ) const;
+
+	qreal toMmY( qreal px ) const;
+	qreal fromMmY( qreal mm ) const;
+
+	QSizeF a4() const;
+
+private:
+	MmPx();
+
+	qreal m_xdots;
+	qreal m_ydots;
+}; // class MmPx
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

@@ -25,6 +25,7 @@
 #include "form_image_handles.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QGraphicsSceneHoverEvent>
@@ -93,14 +94,14 @@ FormImage::cfg() const
 	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.set_x( pos().x() );
-	p.set_y( pos().y() );
+	p.set_x( MmPx::instance().toMmX( pos().x() ) );
+	p.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_pos( p );
 
 	Cfg::Size s;
-	s.set_width( pixmap().width() );
-	s.set_height( pixmap().height() );
+	s.set_width( MmPx::instance().toMmX( pixmap().width() ) );
+	s.set_height( MmPx::instance().toMmY( pixmap().height() ) );
 
 	c.set_size( s );
 
@@ -112,8 +113,6 @@ FormImage::cfg() const
 
 	c.set_data( QString::fromLatin1( byteArray.toBase64().data() ) );
 
-	c.set_link( link() );
-
 	return c;
 }
 
@@ -122,7 +121,8 @@ FormImage::setCfg( const Cfg::Image & c )
 {
 	setObjectId( c.objectId() );
 
-	const QSize s( c.size().width(), c.size().height() );
+	const QSize s( MmPx::instance().fromMmX( c.size().width() ),
+		MmPx::instance().fromMmY( c.size().height() ) );
 
 	const QByteArray data = QByteArray::fromBase64( c.data().toLatin1() );
 
@@ -134,9 +134,8 @@ FormImage::setCfg( const Cfg::Image & c )
 		( c.keepAspectRatio() ? Qt::KeepAspectRatio : Qt::IgnoreAspectRatio ),
 		Qt::SmoothTransformation ) ) );
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
-
-	setLink( c.link() );
+	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
+		MmPx::instance().fromMmY( c.pos().y() ) ) );
 
 	QRectF r = pixmap().rect();
 	r.moveTop( pos().y() );

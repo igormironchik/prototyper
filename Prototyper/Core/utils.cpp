@@ -28,6 +28,8 @@
 #include <QTextCursor>
 #include <QTextDocument>
 #include <QTextBlockFormat>
+#include <QApplication>
+#include <QScreen>
 
 
 namespace Prototyper {
@@ -308,6 +310,55 @@ textStyleFromFont( const QFont & f )
 }
 
 } /* namespace Cfg */
+
+
+//
+// MmPx
+//
+
+const MmPx &
+MmPx::instance()
+{
+	static MmPx	inst;
+
+	return inst;
+}
+
+qreal
+MmPx::toMmX( qreal px ) const
+{
+	return ( px / ( m_xdots / 25.4 ) );
+}
+
+qreal
+MmPx::fromMmX( qreal mm ) const
+{
+	return ( ( m_xdots / 25.4 ) * mm );
+}
+
+qreal
+MmPx::toMmY( qreal px ) const
+{
+	return ( px / ( m_ydots / 25.4 ) );
+}
+
+qreal
+MmPx::fromMmY( qreal mm ) const
+{
+	return ( ( m_ydots / 25.4 ) * mm );
+}
+
+MmPx::MmPx()
+	:	m_xdots( qApp->primaryScreen()->physicalDotsPerInchX() )
+	,	m_ydots( qApp->primaryScreen()->physicalDotsPerInchY() )
+{
+}
+
+QSizeF
+MmPx::a4() const
+{
+	return QSizeF( fromMmX( 210.0 ), fromMmY( 297.0 ) );
+}
 
 } /* namespace Core */
 

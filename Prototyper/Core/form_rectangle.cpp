@@ -125,8 +125,8 @@ FormRect::cfg() const
 	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.set_x( pos().x() );
-	p.set_y( pos().y() );
+	p.set_x( MmPx::instance().toMmX( pos().x() ) );
+	p.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_pos( p );
 
@@ -134,17 +134,15 @@ FormRect::cfg() const
 
 	c.set_brush( Cfg::brush( objectBrush() ) );
 
-	c.set_link( link() );
-
 	Cfg::Point topLeft;
-	topLeft.set_x( d->m_rect.topLeft().x() );
-	topLeft.set_y( d->m_rect.topLeft().y() );
+	topLeft.set_x( MmPx::instance().toMmX( d->m_rect.topLeft().x() ) );
+	topLeft.set_y( MmPx::instance().toMmY( d->m_rect.topLeft().y() ) );
 
 	c.set_topLeft( topLeft );
 
 	Cfg::Size s;
-	s.set_width( d->m_rect.size().width() );
-	s.set_height( d->m_rect.size().height() );
+	s.set_width( MmPx::instance().toMmX( d->m_rect.size().width() ) );
+	s.set_height( MmPx::instance().toMmY( d->m_rect.size().height() ) );
 
 	c.set_size( s );
 
@@ -160,14 +158,15 @@ FormRect::setCfg( const Cfg::Rect & c )
 
 	setObjectBrush( Cfg::fromBrush( c.brush() ) );
 
-	const QRectF r( c.topLeft().x(), c.topLeft().y(),
-		c.size().width(), c.size().height() );
+	const QRectF r( MmPx::instance().fromMmX( c.topLeft().x() ),
+		MmPx::instance().fromMmY( c.topLeft().y() ),
+		MmPx::instance().fromMmX( c.size().width() ),
+		MmPx::instance().fromMmY( c.size().height() ) );
 
-	setPos( QPointF( c.pos().x(), c.pos().y() ) );
+	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
+		MmPx::instance().fromMmY( c.pos().y() ) ) );
 
 	d->updateRect( r );
-
-	setLink( c.link() );
 }
 
 QRectF

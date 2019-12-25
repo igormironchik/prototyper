@@ -156,20 +156,18 @@ FormHSlider::cfg() const
 	c.set_objectId( objectId() );
 
 	Cfg::Point p;
-	p.set_x( pos().x() );
-	p.set_y( pos().y() );
+	p.set_x( MmPx::instance().toMmX( pos().x() ) );
+	p.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_pos( p );
 
 	Cfg::Size s;
-	s.set_width( d->m_rect.width() );
-	s.set_height( d->m_rect.height() );
+	s.set_width( MmPx::instance().toMmX( d->m_rect.width() ) );
+	s.set_height( MmPx::instance().toMmY( d->m_rect.height() ) );
 
 	c.set_size( s );
 
 	c.set_pen( Cfg::pen( objectPen() ) );
-
-	c.set_link( link() );
 
 	return c;
 }
@@ -178,10 +176,11 @@ void
 FormHSlider::setCfg( const Cfg::HSlider & c )
 {
 	setObjectId( c.objectId() );
-	setLink( c.link() );
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
-	d->setRect( QRectF( c.pos().x(), c.pos().y(),
-		c.size().width(), c.size().height() ) );
+	d->setRect( QRectF( MmPx::instance().fromMmX( c.pos().x() ),
+		MmPx::instance().fromMmY( c.pos().y() ),
+		MmPx::instance().fromMmX( c.size().width() ),
+		MmPx::instance().fromMmY( c.size().height() ) ) );
 
 	update();
 }

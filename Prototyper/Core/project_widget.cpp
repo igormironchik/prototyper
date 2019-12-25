@@ -34,6 +34,7 @@
 #include "project_window.hpp"
 #include "tabs_list.hpp"
 #include "project_window.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -130,7 +131,7 @@ ProjectWidgetPrivate::init()
 	m_tabs->setMovable( false );
 	m_tabs->setTabPosition( QTabWidget::South );
 
-	m_tabNames.append( ProjectWidget::tr( "Project" ) );
+	m_tabNames.append( ProjectWidget::tr( "Description" ) );
 	m_desc = new ProjectDescTab( m_tabs );
 	m_tabs->addTab( m_desc, m_tabNames.first() );
 
@@ -171,7 +172,7 @@ ProjectWidgetPrivate::newProject()
 	m_forms.clear();
 
 	static const QString projectDescTabName =
-		ProjectWidget::tr( "Project" );
+		ProjectWidget::tr( "Description" );
 
 	m_tabs->setTabText( 0, projectDescTabName );
 
@@ -314,9 +315,9 @@ ProjectWidget::addPage()
 {
 	Cfg::Page cfg;
 	cfg.set_gridStep( d->m_cfg.defaultGridStep() );
-	cfg.size().set_width( 800 );
-	cfg.size().set_height( 600 );
-	cfg.set_tabName( QStringLiteral( "Page 1" ) );
+	cfg.size().set_width( 210.0 );
+	cfg.size().set_height( 297.0 );
+	cfg.set_tabName( tr( "Page %1" ).arg( QString::number( d->m_tabs->count() ) ) );
 
 	d->addPage( cfg, d->m_cfg.showGrid() );
 
@@ -341,7 +342,7 @@ ProjectWidget::renameTab( const QString & oldName )
 			names << d->m_forms.at( index - 1 )->page()->ids();
 
 		NameDlg dlg( names,
-			( index == 0 ? tr( "Enter New Project Tab Name..." ) : tr( "Enter New Form Name..." ) ),
+			( index == 0 ? tr( "Enter New Project Tab Name..." ) : tr( "Enter New Page Name..." ) ),
 			oldName, this );
 
 		if( dlg.exec() == QDialog::Accepted )
