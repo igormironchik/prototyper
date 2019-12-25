@@ -88,6 +88,7 @@ public:
 		,	m_desc( 0 )
 		,	m_tabBar( 0 )
 		,	m_undoGroup( 0 )
+		,	m_isTabRenamed( false )
 	{
 	}
 
@@ -114,6 +115,8 @@ public:
 	QList< FormView* > m_forms;
 	//! Undo group.
 	QUndoGroup * m_undoGroup;
+	//! Is tab renamed?
+	bool m_isTabRenamed;
 }; // class ProjectWidgetPrivate
 
 void
@@ -350,7 +353,9 @@ ProjectWidget::renameTab( const QString & oldName )
 		if( index - 1 >= 0 )
 			names << d->m_forms.at( index - 1 )->form()->ids();
 
-		NameDlg dlg( names, tr( "Enter New Form Name..." ), oldName, this );
+		NameDlg dlg( names,
+			( index == 0 ? tr( "Enter New Project Tab Name..." ) : tr( "Enter New Form Name..." ) ),
+			oldName, this );
 
 		if( dlg.exec() == QDialog::Accepted )
 		{
@@ -375,6 +380,8 @@ ProjectWidget::renameTab( const QString & oldName )
 
 			TopGui::instance()->projectWindow()->tabsList()->model()->
 				setStringList( d->m_tabNames );
+
+			setTabRenamed();
 
 			emit changed();
 		}
@@ -461,6 +468,18 @@ ProjectWidget::tabChanged( int index )
 			QSharedPointer< QTextDocument > ( Q_NULLPTR ),
 			QString(), Q_NULLPTR );
 	}
+}
+
+bool
+ProjectWidget::isTabRenamed() const
+{
+	return d->m_isTabRenamed;
+}
+
+void
+ProjectWidget::setTabRenamed( bool on )
+{
+	d->m_isTabRenamed = on;
 }
 
 } /* namespace Core */

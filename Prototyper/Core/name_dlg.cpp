@@ -77,6 +77,7 @@ NameDlgPrivate::init()
 	m_color = m_ui.m_edit->palette().color( QPalette::Text );
 
 	m_ui.m_edit->setText( m_oldName );
+	m_ui.m_edit->selectAll();
 
 	m_ui.m_btns->button( QDialogButtonBox::Ok )->setEnabled( false );
 

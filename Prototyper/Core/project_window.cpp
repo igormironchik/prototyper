@@ -991,6 +991,8 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 					clearUndoRedoStacks();
 
 				d->m_desc->clearUndoRedoStacks();
+
+				d->m_widget->setTabRenamed( false );
 			}
 			catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 			{
@@ -1469,6 +1471,8 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 	else if( !d->m_deletedForms.isEmpty() )
 		can = true;
 	else if( d->m_widget->descriptionTab()->editor()->document()->isUndoAvailable() )
+		can = true;
+	else if( d->m_widget->isTabRenamed() )
 		can = true;
 	else if( d->m_desc->isUndoAvailable() )
 		can = true;

@@ -98,6 +98,11 @@ public:
 	//! Clean undo group.
 	void cleanUndoGroup();
 
+	//! \return Is tab renamed?
+	bool isTabRenamed() const;
+	//! Set tab renamed.
+	void setTabRenamed( bool on = true );
+
 public slots:
 	//! Add form.
 	void addForm();
