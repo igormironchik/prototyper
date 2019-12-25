@@ -29,9 +29,7 @@ generate_cfg.commands = $$system_path( $$absolute_path( $${OUT_PWD}/../../3rdpar
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 
-HEADERS +=	desc_window.hpp \
-			desc_widget.hpp \
-			exporter.hpp \
+HEADERS +=	exporter.hpp \
 			export.hpp \
 			form_actions.hpp \
 			form_aspect_ratio_handle.hpp \
@@ -42,8 +40,6 @@ HEADERS +=	desc_window.hpp \
 			form.hpp \
 			form_grid_snap.hpp \
 			form_group.hpp \
-			form_hierarchy_model.hpp \
-			form_hierarchy_widget.hpp \
 			form_hslider.hpp \
 			form_image_handles.hpp \
 			form_image.hpp \
@@ -57,7 +53,6 @@ HEADERS +=	desc_window.hpp \
 			form_resizable.hpp \
 			form_resize_handle.hpp \
 			form_scene.hpp \
-			form_size_dlg.hpp \
 			form_spinbox.hpp \
 			form_text.hpp \
 			form_text_opts.hpp \
@@ -66,9 +61,7 @@ HEADERS +=	desc_window.hpp \
 			form_with_resize_and_move_handles.hpp \
 			grid_step_dlg.hpp \
 			html_exporter.hpp \
-			link_dlg.hpp \
 			name_dlg.hpp \
-			new_form_dlg.hpp \
 			pdf_exporter.hpp \
 			project_description_tab.hpp \
 			project_widget.hpp \
@@ -80,16 +73,13 @@ HEADERS +=	desc_window.hpp \
 			top_gui.hpp \
 			utils.hpp \
 			$$GENERATED \
-    form_checkbox_properties.hpp \
-    form_spinbox_properties.hpp \
-    form_properties.hpp \
-    svg_exporter.hpp \
-    form_undo_commands.hpp \
-	constants.hpp
+			form_checkbox_properties.hpp \
+			form_spinbox_properties.hpp \
+			svg_exporter.hpp \
+			form_undo_commands.hpp \
+			constants.hpp
 
-SOURCES +=	desc_window.cpp \
-			desc_widget.cpp \
-			exporter.cpp \
+SOURCES +=	exporter.cpp \
 			form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
 			form_button_properties.cpp \
@@ -99,8 +89,6 @@ SOURCES +=	desc_window.cpp \
 			form.cpp \
 			form_grid_snap.cpp \
 			form_group.cpp \
-			form_hierarchy_model.cpp \
-			form_hierarchy_widget.cpp \
 			form_hslider.cpp \
 			form_image_handles.cpp \
 			form_image.cpp \
@@ -114,7 +102,6 @@ SOURCES +=	desc_window.cpp \
 			form_resizable.cpp \
 			form_resize_handle.cpp \
 			form_scene.cpp \
-			form_size_dlg.cpp \
 			form_spinbox.cpp \
 			form_text.cpp \
 			form_text_opts.cpp \
@@ -123,9 +110,7 @@ SOURCES +=	desc_window.cpp \
 			form_with_resize_and_move_handles.cpp \
 			grid_step_dlg.cpp \
 			html_exporter.cpp \
-			link_dlg.cpp \
 			name_dlg.cpp \
-			new_form_dlg.cpp \
 			pdf_exporter.cpp \
 			project_description_tab.cpp \
 			project_widget.cpp \
@@ -136,21 +121,16 @@ SOURCES +=	desc_window.cpp \
 			text_opts_bar.cpp \
 			top_gui.cpp \
 			utils.cpp \
-    form_checkbox_properties.cpp \
-    form_spinbox_properties.cpp \
-    form_properties.cpp \
-    svg_exporter.cpp \
-    form_undo_commands.cpp
+			form_checkbox_properties.cpp \
+			form_spinbox_properties.cpp \
+			svg_exporter.cpp \
+			form_undo_commands.cpp
 
-FORMS +=	form_size_dlg.ui \
-			grid_step_dlg.ui \
-			link_dlg.ui \
+FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui \
-			new_form_dlg.ui \
-    form_button_properties.ui \
-    form_checkbox_properties.ui \
-    form_spinbox_properties.ui \
-    form_properties.ui
+			form_button_properties.ui \
+			form_checkbox_properties.ui \
+			form_spinbox_properties.ui \
 
 INCLUDEPATH += $$PWD/../../3rdparty/cfgfile
 DEPENDPATH += $$PWD/../../3rdparty/cfgfile
