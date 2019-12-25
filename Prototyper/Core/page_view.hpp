@@ -34,43 +34,43 @@ namespace Core {
 
 namespace Cfg {
 
-class Form;
+class Page;
 
 } /* namespace Cfg */
 
-class FormScene;
-class Form;
+class PageScene;
+class Page;
 
 //
-// FormView
+// PageView
 //
 
-class FormViewPrivate;
+class PageViewPrivate;
 
-//! Form view.
-class FormView
+//! Page view.
+class PageView
 	:	public QGraphicsView
 {
 	Q_OBJECT
 
 public:
-	FormView( Cfg::Form & cfg, QWidget * parent = 0 );
-	~FormView();
+	PageView( Cfg::Page & cfg, QWidget * parent = 0 );
+	~PageView();
 
 	//! \return Form scene.
-	FormScene * formScene() const;
+	PageScene * formScene() const;
 
 	//! \return Form.
-	Form * form() const;
+	Page * page() const;
 
 	//! Enable/disable selection.
 	void enableSelection( bool on = true );
 
 private:
-	Q_DISABLE_COPY( FormView )
+	Q_DISABLE_COPY( PageView )
 
-	QScopedPointer< FormViewPrivate > d;
-}; // class FormView
+	QScopedPointer< PageViewPrivate > d;
+}; // class PageView
 
 } /* namespace Core */
 

@@ -21,9 +21,9 @@
 */
 
 // Prototyper include.
-#include "form_view.hpp"
-#include "form_scene.hpp"
-#include "form.hpp"
+#include "page_view.hpp"
+#include "page_scene.hpp"
+#include "page.hpp"
 
 // Qt include.
 #include <QApplication>
@@ -37,9 +37,9 @@ namespace Core {
 // FormViewPrivate
 //
 
-class FormViewPrivate {
+class PageViewPrivate {
 public:
-	FormViewPrivate( Cfg::Form & cfg, FormView * parent )
+	PageViewPrivate( Cfg::Page & cfg, PageView * parent )
 		:	q( parent )
 		,	m_scene( 0 )
 		,	m_form( 0 )
@@ -51,27 +51,27 @@ public:
 	void init();
 
 	//! Parent.
-	FormView * q;
+	PageView * q;
 	//! Scene.
-	FormScene * m_scene;
+	PageScene * m_scene;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Cfg.
-	Cfg::Form & m_cfg;
+	Cfg::Page m_cfg;
 }; // class FormViewPrivate
 
 void
-FormViewPrivate::init()
+PageViewPrivate::init()
 {
 	q->setFrameStyle( QFrame::NoFrame );
 
-	m_scene = new FormScene( m_cfg, q );
+	m_scene = new PageScene( m_cfg, q );
 
 	q->setScene( m_scene );
 
-	m_form = new Form( m_cfg );
+	m_form = new Page( m_cfg );
 
-	m_scene->setForm( m_form );
+	m_scene->setPage( m_form );
 
 	QApplication::processEvents();
 
@@ -91,31 +91,31 @@ FormViewPrivate::init()
 // FormView
 //
 
-FormView::FormView( Cfg::Form & cfg, QWidget * parent )
+PageView::PageView( Cfg::Page & cfg, QWidget * parent )
 	:	QGraphicsView( parent )
-	,	d( new FormViewPrivate( cfg, this ) )
+	,	d( new PageViewPrivate( cfg, this ) )
 {
 	d->init();
 }
 
-FormView::~FormView()
+PageView::~PageView()
 {
 }
 
-FormScene *
-FormView::formScene() const
+PageScene *
+PageView::formScene() const
 {
 	return d->m_scene;
 }
 
-Form *
-FormView::form() const
+Page *
+PageView::page() const
 {
 	return d->m_form;
 }
 
 void
-FormView::enableSelection( bool on )
+PageView::enableSelection( bool on )
 {
 	if( on )
 		setDragMode( QGraphicsView::RubberBandDrag );

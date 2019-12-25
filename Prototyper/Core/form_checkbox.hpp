@@ -88,7 +88,7 @@ class FormCheckBox
 	Q_OBJECT
 
 public:
-	FormCheckBox( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
+	FormCheckBox( const QRectF & rect, Page * form, QGraphicsItem * parent = 0 );
 	~FormCheckBox();
 
 	//! \return Type.
@@ -146,7 +146,7 @@ private slots:
 	void properties();
 
 protected:
-	FormCheckBox( const QRectF & rect, Form * form, qreal defaultSize,
+	FormCheckBox( const QRectF & rect, Page * form, qreal defaultSize,
 		FormObject::ObjectType type, QGraphicsItem * parent = 0 );
 
 protected:

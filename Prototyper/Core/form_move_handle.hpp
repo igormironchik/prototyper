@@ -59,7 +59,7 @@ private:
 }; // class FormWithHandle
 
 
-class Form;
+class Page;
 
 
 //
@@ -69,7 +69,7 @@ class Form;
 class FormMoveHandlePrivate {
 public:
 	FormMoveHandlePrivate( qreal halfSize, const QPointF & zero,
-		FormWithHandle * object, FormMoveHandle * parent, Form * form,
+		FormWithHandle * object, FormMoveHandle * parent, Page * form,
 		const QCursor & c );
 	virtual ~FormMoveHandlePrivate();
 
@@ -99,7 +99,7 @@ public:
 	//! Cursor.
 	QCursor m_cursor;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 }; // class FormMoveHandlerPrivate
 
 
@@ -114,7 +114,7 @@ class FormMoveHandle
 public:
 	FormMoveHandle( qreal halfSize, const QPointF & zero,
 		FormWithHandle * object, QGraphicsItem * parent,
-		Form * form, const QCursor & c = QCursor() );
+		Page * form, const QCursor & c = QCursor() );
 	~FormMoveHandle();
 
 	//! \return Half of the size of the edge.

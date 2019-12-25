@@ -24,7 +24,7 @@
 #include "form_button.hpp"
 #include "utils.hpp"
 #include "form_button_properties.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -107,7 +107,7 @@ FormButtonPrivate::setRect( const QRectF & rect )
 // FormButton
 //
 
-FormButton::FormButton( const QRectF & rect, Form * form,
+FormButton::FormButton( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
 	,	FormObject( FormObject::ButtonType, form )

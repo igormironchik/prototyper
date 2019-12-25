@@ -43,7 +43,7 @@ class FormImageHandles
 {
 public:
 	FormImageHandles( FormResizable * resizable,
-		QGraphicsItem * parent, Form * form );
+		QGraphicsItem * parent, Page * form );
 	~FormImageHandles();
 
 	//! \return Is keep aspect ratio?

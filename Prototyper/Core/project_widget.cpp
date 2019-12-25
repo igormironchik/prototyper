@@ -26,10 +26,10 @@
 #include "project_widget_tab_bar.hpp"
 #include "name_dlg.hpp"
 #include "text_editor.hpp"
-#include "form_view.hpp"
+#include "page_view.hpp"
 #include "project_cfg.hpp"
-#include "form_scene.hpp"
-#include "form.hpp"
+#include "page_scene.hpp"
+#include "page.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "tabs_list.hpp"
@@ -92,8 +92,8 @@ public:
 	void init();
 	//! New project.
 	void newProject();
-	//! Add form.
-	void addForm( Cfg::Form & cfg, bool showGrid );
+	//! Add page.
+	void addPage( Cfg::Page & cfg, bool showGrid );
 
 	//! Parent.
 	ProjectWidget * q;
@@ -108,7 +108,7 @@ public:
 	//! Tab's names.
 	QStringList m_tabNames;
 	//! Forms.
-	QList< FormView* > m_forms;
+	QList< PageView* > m_forms;
 	//! Undo group.
 	QUndoGroup * m_undoGroup;
 	//! Is tab renamed?
@@ -139,7 +139,7 @@ ProjectWidgetPrivate::init()
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formRenameRequest,
 		q, &ProjectWidget::renameTab );
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formAddRequest,
-		q, &ProjectWidget::addForm );
+		q, &ProjectWidget::addPage );
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formDeleteRequest,
 		q, &ProjectWidget::deleteForm );
 	ProjectWidget::connect( m_desc->editor(), &TextEditor::changed,
@@ -161,9 +161,9 @@ ProjectWidgetPrivate::newProject()
 
 		ProjectWidget::disconnect( tab, 0, 0, 0 );
 
-		m_undoGroup->removeStack( m_forms.at( i - 1 )->form()->undoStack() );
+		m_undoGroup->removeStack( m_forms.at( i - 1 )->page()->undoStack() );
 
-		m_forms.at( i - 1 )->form()->undoStack()->deleteLater();
+		m_forms.at( i - 1 )->page()->undoStack()->deleteLater();
 
 		tab->deleteLater();
 	}
@@ -190,12 +190,12 @@ ProjectWidgetPrivate::newProject()
 }
 
 void
-ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
+ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 	bool showGrid )
 {
-	FormView * form = new FormView( cfg, m_tabs );
+	PageView * form = new PageView( cfg, m_tabs );
 
-	form->form()->setGridMode( showGrid ?
+	form->page()->setGridMode( showGrid ?
 		ShowGrid : NoGrid );
 
 	m_tabNames.append( cfg.tabName() );
@@ -204,9 +204,9 @@ ProjectWidgetPrivate::addForm( Cfg::Form & cfg,
 
 	m_forms.append( form );
 
-	ProjectWidget::connect( form->formScene(), &FormScene::changed,
+	ProjectWidget::connect( form->formScene(), &PageScene::changed,
 		q, &ProjectWidget::changed );
-	ProjectWidget::connect( form->form(), &Form::changed,
+	ProjectWidget::connect( form->page(), &Page::changed,
 		q, &ProjectWidget::changed );
 
 	emit q->formAdded( form );
@@ -229,8 +229,8 @@ ProjectWidget::~ProjectWidget()
 {
 }
 
-const QList< FormView* > &
-ProjectWidget::forms() const
+const QList< PageView* > &
+ProjectWidget::pages() const
 {
 	return d->m_forms;
 }
@@ -238,12 +238,12 @@ ProjectWidget::forms() const
 void
 ProjectWidget::enableSelection( bool on )
 {
-	foreach( FormView * view, d->m_forms )
+	foreach( PageView * view, d->m_forms )
 		view->enableSelection( on );
 }
 
 QStringList
-ProjectWidget::formsNames() const
+ProjectWidget::pagesNames() const
 {
 	QStringList res = d->m_tabNames;
 	res.removeFirst();
@@ -284,11 +284,11 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 
 	d->m_tabNames[ 0 ] = d->m_cfg.description().tabName();
 
-	auto it = d->m_cfg.form().begin();
-	auto last = d->m_cfg.form().end();
+	auto it = d->m_cfg.page().begin();
+	auto last = d->m_cfg.page().end();
 
 	for( ; it != last; ++it )
-		d->addForm( *it, d->m_cfg.showGrid() );
+		d->addPage( *it, d->m_cfg.showGrid() );
 
 	TopGui::instance()->projectWindow()->tabsList()->model()->
 		setStringList( d->m_tabNames );
@@ -310,15 +310,15 @@ ProjectWidget::cleanUndoGroup()
 }
 
 void
-ProjectWidget::addForm()
+ProjectWidget::addPage()
 {
-	Cfg::Form cfg;
+	Cfg::Page cfg;
 	cfg.set_gridStep( d->m_cfg.defaultGridStep() );
 	cfg.size().set_width( 800 );
 	cfg.size().set_height( 600 );
 	cfg.set_tabName( QStringLiteral( "Page 1" ) );
 
-	d->addForm( cfg, d->m_cfg.showGrid() );
+	d->addPage( cfg, d->m_cfg.showGrid() );
 
 	d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
 
@@ -338,7 +338,7 @@ ProjectWidget::renameTab( const QString & oldName )
 		QStringList names = d->m_tabNames;
 
 		if( index - 1 >= 0 )
-			names << d->m_forms.at( index - 1 )->form()->ids();
+			names << d->m_forms.at( index - 1 )->page()->ids();
 
 		NameDlg dlg( names,
 			( index == 0 ? tr( "Enter New Project Tab Name..." ) : tr( "Enter New Form Name..." ) ),
@@ -353,7 +353,7 @@ ProjectWidget::renameTab( const QString & oldName )
 			d->m_tabNames[ index ] = dlg.name();
 
 			if( index > 0 )
-				d->m_forms[ index - 1 ]->form()->renameForm( dlg.name() );
+				d->m_forms[ index - 1 ]->page()->renameForm( dlg.name() );
 			else
 				d->m_cfg.description().set_tabName( dlg.name() );
 
@@ -382,15 +382,15 @@ ProjectWidget::deleteForm( const QString & name )
 			const int index = d->m_tabNames.indexOf( name );
 
 			d->m_undoGroup->removeStack(
-				d->m_forms.at( index - 1 )->form()->undoStack() );
+				d->m_forms.at( index - 1 )->page()->undoStack() );
 
-			d->m_forms.at( index - 1 )->form()->undoStack()->deleteLater();
+			d->m_forms.at( index - 1 )->page()->undoStack()->deleteLater();
 
 			QWidget * tab = d->m_tabs->widget( index );
 
 			d->m_tabNames.removeAt( index );
 
-			FormView * form = d->m_forms.at( index - 1 );
+			PageView * form = d->m_forms.at( index - 1 );
 
 			d->m_forms.removeAt( index - 1 );
 
@@ -429,7 +429,7 @@ ProjectWidget::tabChanged( int index )
 	if( index > 0 )
 	{
 		d->m_undoGroup->setActiveStack(
-			d->m_forms.at( index - 1 )->form()->undoStack() );
+			d->m_forms.at( index - 1 )->page()->undoStack() );
 	}
 	else
 		d->m_undoGroup->setActiveStack( Q_NULLPTR );

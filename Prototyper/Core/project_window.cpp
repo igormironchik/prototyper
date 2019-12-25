@@ -23,9 +23,9 @@
 #include "project_window.hpp"
 #include "project_widget.hpp"
 #include "top_gui.hpp"
-#include "form.hpp"
-#include "form_view.hpp"
-#include "form_scene.hpp"
+#include "page.hpp"
+#include "page_view.hpp"
+#include "page_scene.hpp"
 #include "grid_step_dlg.hpp"
 #include "project_cfg.hpp"
 #include "session_cfg.hpp"
@@ -93,13 +93,13 @@ public:
 	//! Init.
 	void init();
 	//! Set flag to all items on the form.
-	void setFlag( FormView * view, QGraphicsItem::GraphicsItemFlag f,
+	void setFlag( PageView * view, QGraphicsItem::GraphicsItemFlag f,
 		bool enabled = true );
 	//! Set flag to all children.
 	void setFlag( const QList< QGraphicsItem* > & children,
 		QGraphicsItem::GraphicsItemFlag f, bool enabled );
 	//! Enable/disbale editing.
-	void enableEditing( FormView * view, bool on = true );
+	void enableEditing( PageView * view, bool on = true );
 	//! Enable/disable editing.
 	void enableEditing( const QList< QGraphicsItem* > & children,
 		bool on );
@@ -141,9 +141,9 @@ public:
 	//! Redo action.
 	QAction * m_redoAction;
 	//! Added forms.
-	QList< FormView* > m_addedForms;
+	QList< PageView* > m_addedForms;
 	//! Deleted forms.
-	QList< FormView* > m_deletedForms;
+	QList< PageView* > m_deletedForms;
 }; // class ProjectWindowPrivate
 
 void
@@ -498,7 +498,7 @@ ProjectWindowPrivate::init()
 	ProjectWindow::connect( m_gridStep, &QAction::triggered,
 		q, &ProjectWindow::p_setGridStep );
 	ProjectWindow::connect( newForm, &QAction::triggered,
-		m_widget, &ProjectWidget::addForm );
+		m_widget, &ProjectWidget::addPage );
 	ProjectWindow::connect( newProject, &QAction::triggered,
 		q, &ProjectWindow::p_newProject );
 	ProjectWindow::connect( openProject, &QAction::triggered,
@@ -579,10 +579,10 @@ ProjectWindowPrivate::init()
 }
 
 void
-ProjectWindowPrivate::setFlag( FormView * view,
+ProjectWindowPrivate::setFlag( PageView * view,
 	QGraphicsItem::GraphicsItemFlag f, bool enabled )
 {
-	setFlag( view->form()->childItems(), f, enabled );
+	setFlag( view->page()->childItems(), f, enabled );
 }
 
 void
@@ -601,9 +601,9 @@ ProjectWindowPrivate::setFlag( const QList< QGraphicsItem* > & children,
 }
 
 void
-ProjectWindowPrivate::enableEditing( FormView * view, bool on )
+ProjectWindowPrivate::enableEditing( PageView * view, bool on )
 {
-	enableEditing( view->form()->childItems(), on );
+	enableEditing( view->page()->childItems(), on );
 }
 
 void
@@ -630,10 +630,10 @@ ProjectWindowPrivate::updateCfg()
 	m_cfg.description().set_text(
 		m_widget->descriptionTab()->editor()->text() );
 
-	m_cfg.form().clear();
+	m_cfg.page().clear();
 
-	for( int i = 0; i < m_widget->forms().size(); ++i )
-		m_cfg.form().push_back( m_widget->forms().at( i )->form()->cfg() );
+	for( int i = 0; i < m_widget->pages().size(); ++i )
+		m_cfg.page().push_back( m_widget->pages().at( i )->page()->cfg() );
 }
 
 void
@@ -641,11 +641,11 @@ ProjectWindowPrivate::prepareDrawingWithRectPlacer( bool editable )
 {
 	m_widget->enableSelection( false );
 
-	foreach( FormView * v, m_widget->forms() )
+	foreach( PageView * v, m_widget->pages() )
 	{
-		v->form()->setCursor( Qt::CrossCursor );
+		v->page()->setCursor( Qt::CrossCursor );
 
-		v->form()->switchToLineDrawingMode();
+		v->page()->switchToLineDrawingMode();
 
 		setFlag( v, QGraphicsItem::ItemIsSelectable, false );
 
@@ -792,8 +792,8 @@ ProjectWindow::p_showHideGrid( bool show )
 
 	d->m_cfg.set_showGrid( show );
 
-	foreach( FormView * view, d->m_widget->forms() )
-		view->form()->setGridMode( mode );
+	foreach( PageView * view, d->m_widget->pages() )
+		view->page()->setGridMode( mode );
 
 	setWindowModified( true );
 }
@@ -801,8 +801,8 @@ ProjectWindow::p_showHideGrid( bool show )
 void
 ProjectWindow::p_snapGrid( bool on )
 {
-	foreach( FormView * view, d->m_widget->forms() )
-		view->form()->enableSnap( on );
+	foreach( PageView * view, d->m_widget->pages() )
+		view->page()->enableSnap( on );
 
 	FormAction::instance()->enableSnap( on );
 }
@@ -820,14 +820,14 @@ ProjectWindow::setGridStep( int step, bool forAll )
 		{
 			d->m_cfg.set_defaultGridStep( dlg.gridStep() );
 
-			foreach( FormView * view, d->m_widget->forms() )
-				view->form()->setGridStep( dlg.gridStep() );
+			foreach( PageView * view, d->m_widget->pages() )
+				view->page()->setGridStep( dlg.gridStep() );
 
 			setWindowModified( true );
 		}
 		else if( index > 0 )
 		{
-			d->m_widget->forms()[ index - 1 ]->form()->setGridStep(
+			d->m_widget->pages()[ index - 1 ]->page()->setGridStep(
 				dlg.gridStep() );
 
 			setWindowModified( true );
@@ -844,7 +844,7 @@ ProjectWindow::p_setGridStep()
 	bool forAll = true;
 
 	if( index > 0 )
-		step = d->m_widget->forms().at( index - 1 )->form()->gridStep();
+		step = d->m_widget->pages().at( index - 1 )->page()->gridStep();
 
 	GridStepDlg dlg( step, forAll, this );
 
@@ -1088,15 +1088,15 @@ ProjectWindow::p_select()
 
 	d->m_widget->enableSelection( true );
 
-	foreach( FormView * v, d->m_widget->forms() )
+	foreach( PageView * v, d->m_widget->pages() )
 	{
-		v->form()->setCursor( Qt::ArrowCursor );
+		v->page()->setCursor( Qt::ArrowCursor );
 
 		d->setFlag( v, QGraphicsItem::ItemIsSelectable, true );
 
 		d->enableEditing( v, false );
 
-		v->form()->switchToSelectMode();
+		v->page()->switchToSelectMode();
 	}
 }
 
@@ -1172,7 +1172,7 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_widget->descriptionTab()->toolBar()->hide();
 
 		FormAction::instance()->setForm(
-			d->m_widget->forms().at( index - 1 )->form() );
+			d->m_widget->pages().at( index - 1 )->page() );
 	}
 	else
 	{
@@ -1425,13 +1425,13 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 }
 
 void
-ProjectWindow::p_formAdded( FormView * form )
+ProjectWindow::p_formAdded( PageView * form )
 {
 	d->m_addedForms.append( form );
 }
 
 void
-ProjectWindow::p_formDeleted( FormView * form )
+ProjectWindow::p_formDeleted( PageView * form )
 {
 	d->m_deletedForms.append( form );
 

@@ -24,7 +24,7 @@
 #include "form_resizable.hpp"
 #include "form_with_resize_and_move_handles.hpp"
 #include "form_resize_handle.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_object.hpp"
 
@@ -68,7 +68,7 @@ FormResizable::moveResizable( const QPointF & delta )
 //
 
 FormResizableProxyPrivate::FormResizableProxyPrivate( FormResizable * resizable,
-	FormResizableProxy * parent, Form * form )
+	FormResizableProxy * parent, Page * form )
 	:	q( parent )
 	,	m_object( resizable )
 	,	m_rect( 0.0, 0.0, 24.0, 24.0 )
@@ -109,7 +109,7 @@ FormResizableProxyPrivate::place( const QRectF & rect )
 //
 
 FormResizableProxy::FormResizableProxy( FormResizable * resizable,
-	QGraphicsItem * parent, Form * form )
+	QGraphicsItem * parent, Page * form )
 	:	QGraphicsItem( parent )
 	,	d( 0 )
 {

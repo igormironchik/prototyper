@@ -26,7 +26,7 @@
 #include "form_actions.hpp"
 #include "form_resize_handle.hpp"
 #include "utils.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -87,7 +87,7 @@ FormRectPrivate::init()
 
 void
 FormRectPrivate::updateRect( const QRectF & r )
-{	
+{
 	m_rect = r;
 
 	QRectF hr = q->boundingRect();
@@ -105,7 +105,7 @@ FormRectPrivate::updateRect( const QRectF & r )
 // FormRect
 //
 
-FormRect::FormRect( Form * form, QGraphicsItem * parent )
+FormRect::FormRect( Page * form, QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	FormObject( FormObject::RectType, form )
 	,	d( new FormRectPrivate( this ) )

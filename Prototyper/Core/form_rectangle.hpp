@@ -37,7 +37,7 @@ namespace Prototyper {
 
 namespace Core {
 
-class Form;
+class Page;
 
 
 //
@@ -53,7 +53,7 @@ class FormRect
 	,	public FormWithHandle
 {
 public:
-	explicit FormRect( Form * form, QGraphicsItem * parent = 0 );
+	explicit FormRect( Page * form, QGraphicsItem * parent = 0 );
 	~FormRect();
 
 	//! \return Type.

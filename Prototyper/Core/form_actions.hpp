@@ -37,7 +37,7 @@ namespace Prototyper {
 
 namespace Core {
 
-class Form;
+class Page;
 
 //
 // FormAction
@@ -111,9 +111,9 @@ public:
 	void setMode( Mode m );
 
 	//! \return Current form.
-	Form * form() const;
+	Page * form() const;
 	//! Set current form.
-	void setForm( Form * f );
+	void setForm( Page * f );
 
 	//! \return Fill color.
 	const QColor & fillColor() const;

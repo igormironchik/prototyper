@@ -25,7 +25,7 @@
 #include "utils.hpp"
 #include "form_image_handles.hpp"
 #include "form_checkbox_properties.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -96,7 +96,7 @@ FormCheckBoxPrivate::setRect( const QRectF & rect )
 // FormCheckBox
 //
 
-FormCheckBox::FormCheckBox( const QRectF & rect, Form * form,
+FormCheckBox::FormCheckBox( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
 	,	FormObject( FormObject::CheckBoxType, form )
@@ -105,7 +105,7 @@ FormCheckBox::FormCheckBox( const QRectF & rect, Form * form,
 	d->init();
 }
 
-FormCheckBox::FormCheckBox( const QRectF & rect, Form * form, qreal defaultSize,
+FormCheckBox::FormCheckBox( const QRectF & rect, Page * form, qreal defaultSize,
 	FormObject::ObjectType type, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
 	,	FormObject( type, form )

@@ -68,7 +68,7 @@ class FormResizableProxy;
 class FormResizableProxyPrivate {
 public:
 	FormResizableProxyPrivate( FormResizable * resizable,
-		FormResizableProxy * parent, Form * form );
+		FormResizableProxy * parent, Page * form );
 
 	virtual ~FormResizableProxyPrivate();
 
@@ -86,7 +86,7 @@ public:
 	//! Handles.
 	QScopedPointer< WithResizeAndMoveHandles > m_handles;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Subsidiary rect.
 	QRectF m_subsidiaryRect;
 	//! Is hadnle moved.
@@ -107,7 +107,7 @@ class FormResizableProxy
 {
 public:
 	FormResizableProxy( FormResizable * resizable,
-		QGraphicsItem * parent, Form * form );
+		QGraphicsItem * parent, Page * form );
 	~FormResizableProxy();
 
 	//! Set rect.

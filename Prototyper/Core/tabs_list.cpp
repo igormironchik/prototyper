@@ -175,7 +175,7 @@ TabsView::p_renameTab()
 void
 TabsView::p_addForm()
 {
-	TopGui::instance()->projectWindow()->projectWidget()->addForm();
+	TopGui::instance()->projectWindow()->projectWidget()->addPage();
 }
 
 void

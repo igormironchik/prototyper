@@ -36,7 +36,7 @@ namespace Core {
 //
 
 WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormWithHandle * object,
-	QGraphicsItem * parent, Form * form )
+	QGraphicsItem * parent, Page * form )
 	:	m_topLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 12.0 ), -45.0,
 			object, parent, form, Qt::SizeFDiagCursor ) )
 	,	m_top( new FormResizeHandle( 6.0, QPointF( 6.0, 12.0 ), 0.0,

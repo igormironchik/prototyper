@@ -21,14 +21,14 @@
 */
 
 // Prototyper include.
-#include "form_scene.hpp"
+#include "page_scene.hpp"
 #include "project_cfg.hpp"
 #include "form_actions.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "form_object.hpp"
 #include "form_actions.hpp"
-#include "form.hpp"
+#include "page.hpp"
 
 // Qt include.
 #include <QKeyEvent>
@@ -43,9 +43,9 @@ namespace Core {
 // FormScenePrivate
 //
 
-class FormScenePrivate {
+class PageScenePrivate {
 public:
-	FormScenePrivate( const Cfg::Form & cfg, FormScene * parent )
+	PageScenePrivate( const Cfg::Page & cfg, PageScene * parent )
 		:	q( parent )
 		,	m_cfg( cfg )
 		,	m_form( 0 )
@@ -58,21 +58,21 @@ public:
 	void moveBy( const QPointF & delta );
 
 	//! Parent.
-	FormScene * q;
+	PageScene * q;
 	//! Cfg.
-	const Cfg::Form & m_cfg;
+	const Cfg::Page & m_cfg;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 }; // class FormScenePrivate;
 
 void
-FormScenePrivate::init()
+PageScenePrivate::init()
 {
 	q->setItemIndexMethod( QGraphicsScene::NoIndex );
 }
 
 void
-FormScenePrivate::moveBy( const QPointF & delta )
+PageScenePrivate::moveBy( const QPointF & delta )
 {
 	foreach( QGraphicsItem * item, q->selectedItems() )
 	{
@@ -89,27 +89,27 @@ FormScenePrivate::moveBy( const QPointF & delta )
 // FormScene
 //
 
-FormScene::FormScene( const Cfg::Form & cfg, QObject * parent )
+PageScene::PageScene( const Cfg::Page & cfg, QObject * parent )
 	:	QGraphicsScene( parent )
-	,	d( new FormScenePrivate( cfg, this ) )
+	,	d( new PageScenePrivate( cfg, this ) )
 {
 	d->init();
 }
 
-FormScene::~FormScene()
+PageScene::~PageScene()
 {
 	if( d->m_form )
 		disconnect( this, 0, d->m_form, 0 );
 }
 
-Form *
-FormScene::form() const
+Page *
+PageScene::page() const
 {
 	return d->m_form;
 }
 
 void
-FormScene::setForm( Form * f )
+PageScene::setPage( Page * f )
 {
 	if( d->m_form )
 	{
@@ -124,7 +124,7 @@ FormScene::setForm( Form * f )
 }
 
 void
-FormScene::deleteSelected()
+PageScene::deleteSelected()
 {
 	QList< QGraphicsItem* > toDelete;
 
@@ -142,7 +142,7 @@ FormScene::deleteSelected()
 }
 
 void
-FormScene::keyPressEvent( QKeyEvent * event )
+PageScene::keyPressEvent( QKeyEvent * event )
 {
 	switch( FormAction::instance()->mode() )
 	{

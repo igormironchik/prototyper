@@ -35,7 +35,7 @@
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
 #include "form_spinbox.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -132,7 +132,7 @@ FormGroupPrivate::init()
 // FormGroup
 //
 
-FormGroup::FormGroup( Form * form, QGraphicsItem * parent )
+FormGroup::FormGroup( Page * form, QGraphicsItem * parent )
 	:	QGraphicsItemGroup( parent )
 	,	FormObject( FormObject::GroupType, form )
 	,	d( new FormGroupPrivate( this ) )

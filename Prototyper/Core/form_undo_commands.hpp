@@ -30,7 +30,7 @@
 #include <QPointer>
 
 // Prototyper include.
-#include "form.hpp"
+#include "page.hpp"
 #include "form_object.hpp"
 #include "form_button.hpp"
 #include "form_checkbox.hpp"
@@ -69,7 +69,7 @@ class UndoCreate
 	:	public QUndoCommand
 {
 public:
-	UndoCreate( Form * f, const QString & id )
+	UndoCreate( Page * f, const QString & id )
 		:	QUndoCommand( QObject::tr( "Create" ) )
 		,	m_form( f )
 		,	m_id( id )
@@ -129,7 +129,7 @@ private:
 	//! Configuration.
 	Config m_cfg;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Undone?
@@ -148,7 +148,7 @@ class UndoCreate< FormText, Cfg::Text >
 	:	public QUndoCommand
 {
 public:
-	UndoCreate( Form * f, const QString & id )
+	UndoCreate( Page * f, const QString & id )
 		:	QUndoCommand( QObject::tr( "Create" ) )
 		,	m_form( f )
 		,	m_id( id )
@@ -186,7 +186,7 @@ public:
 
 			QObject::connect( elem->document(),
 				&QTextDocument::undoCommandAdded,
-				m_form, &Form::undoCommandInTextAdded );
+				m_form, &Page::undoCommandInTextAdded );
 
 			TopGui::instance()->projectWindow()->switchToSelectMode();
 		}
@@ -196,7 +196,7 @@ private:
 	//! Configuration.
 	Cfg::Text m_cfg;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Undone?
@@ -214,7 +214,7 @@ class UndoMove
 	:	public QUndoCommand
 {
 public:
-	UndoMove( Form * form, const QString & id, const QPointF & delta )
+	UndoMove( Page * form, const QString & id, const QPointF & delta )
 		:	QUndoCommand( QObject::tr( "Move" ) )
 		,	m_id( id )
 		,	m_delta( delta )
@@ -258,7 +258,7 @@ private:
 	//! Delta.
 	QPointF m_delta;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Undone?
 	bool m_undone;
 }; // class UndoMove
@@ -274,7 +274,7 @@ class UndoResize
 	:	public QUndoCommand
 {
 public:
-	UndoResize( Form * form, const QString & id, const QRectF & oldR,
+	UndoResize( Page * form, const QString & id, const QRectF & oldR,
 		const QRectF & newR )
 		:	QUndoCommand( QObject::tr( "Resize" ) )
 		,	m_form( form )
@@ -316,7 +316,7 @@ public:
 
 private:
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Old rect.
@@ -338,7 +338,7 @@ class UndoDelete
 	:	public QUndoCommand
 {
 public:
-	UndoDelete( Form * form, const Config & c )
+	UndoDelete( Page * form, const Config & c )
 		:	QUndoCommand( QObject::tr( "Delete" ) )
 		,	m_cfg( c )
 		,	m_form( form )
@@ -396,7 +396,7 @@ private:
 	//! Configuration.
 	Config m_cfg;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Undone?
 	bool m_undone;
 }; // class UndoDelete
@@ -411,7 +411,7 @@ class UndoGroup
 	:	public QUndoCommand
 {
 public:
-	UndoGroup( Form * form, const QString & id );
+	UndoGroup( Page * form, const QString & id );
 	~UndoGroup();
 
 	void undo() Q_DECL_OVERRIDE;
@@ -420,7 +420,7 @@ public:
 
 private:
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Items.
 	QStringList m_items;
 	//! Id.
@@ -440,7 +440,7 @@ class UndoUngroup
 {
 public:
 	UndoUngroup( const QStringList & items,
-		const QString & groupId, Form * form );
+		const QString & groupId, Page * form );
 	~UndoUngroup();
 
 	void undo() Q_DECL_OVERRIDE;
@@ -453,7 +453,7 @@ private:
 	//! Id.
 	QString m_id;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Undone?
 	bool m_undone;
 }; // class UndoUngroup
@@ -468,7 +468,7 @@ class UndoAddLineToPoly
 	:	public QUndoCommand
 {
 public:
-	UndoAddLineToPoly( Form * form,
+	UndoAddLineToPoly( Page * form,
 		const QString & id, const QLineF & line );
 	~UndoAddLineToPoly();
 
@@ -480,7 +480,7 @@ private:
 	//! Line.
 	QLineF m_line;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Undone?
@@ -497,7 +497,7 @@ class UndoChangeLine
 	:	public QUndoCommand
 {
 public:
-	UndoChangeLine( Form * form, const QString & id, const QLineF & oldLine,
+	UndoChangeLine( Page * form, const QString & id, const QLineF & oldLine,
 		const QLineF & newLine );
 	~UndoChangeLine();
 
@@ -507,7 +507,7 @@ public:
 
 private:
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Old line.
@@ -528,7 +528,7 @@ class UndoChangePen
 	:	public QUndoCommand
 {
 public:
-	UndoChangePen( Form * form, const QString & id, const QPen & oldPen,
+	UndoChangePen( Page * form, const QString & id, const QPen & oldPen,
 		const QPen & newPen );
 	~UndoChangePen();
 
@@ -538,7 +538,7 @@ public:
 
 private:
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Old pen.
@@ -559,7 +559,7 @@ class UndoChangeTextOnForm
 	:	public QUndoCommand
 {
 public:
-	UndoChangeTextOnForm( Form * form, const QString & id );
+	UndoChangeTextOnForm( Page * form, const QString & id );
 	~UndoChangeTextOnForm();
 
 	void undo() Q_DECL_OVERRIDE;
@@ -568,7 +568,7 @@ public:
 
 private:
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Undone?
@@ -587,7 +587,7 @@ class UndoChangeTextWithOpts
 	:	public QUndoCommand
 {
 public:
-	UndoChangeTextWithOpts( Form * form, const QString & id,
+	UndoChangeTextWithOpts( Page * form, const QString & id,
 		const Cfg::TextStyle & oldOpts, const Cfg::TextStyle & newOpts );
 	~UndoChangeTextWithOpts();
 
@@ -601,7 +601,7 @@ private:
 
 private:
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Id.
 	QString m_id;
 	//! Old options.

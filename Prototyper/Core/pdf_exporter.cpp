@@ -76,7 +76,7 @@ public:
 void
 PdfExporterPrivate::createImages()
 {
-	foreach( const Cfg::Form & form, m_cfg.form() )
+	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
 		m_images.append( QSharedPointer< QTemporaryFile >
 			( new QTemporaryFile ) );
@@ -102,7 +102,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 
 	int i = 0;
 
-	foreach( const Cfg::Form & form, m_cfg.form() )
+	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
 		QMap< QString, QString > lnks = links( form );
 
@@ -143,108 +143,6 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 		c.insertText( QLatin1String( "\n" ) );
 
 		c.movePosition( QTextCursor::End );
-
-		auto formIt = std::find_if( form.desc().cbegin(), form.desc().cend(),
-			[&form] ( const Cfg::Description & desc ) -> bool
-				{
-					return ( form.tabName() == desc.id() );
-				}
-		);
-
-		if( formIt != form.desc().cend() && !formIt->text().empty() )
-		{
-			c.insertText( QLatin1String( "\n\n" ) );
-
-			c.movePosition( QTextCursor::End );
-
-			Cfg::fillTextDocument( &doc, formIt->text() );
-
-			c.movePosition( QTextCursor::End );
-
-			c.insertText( QLatin1String( "\n\n" ) );
-
-			c.movePosition( QTextCursor::End );
-
-			if( lnks.contains( formIt->id() ) )
-			{
-				QTextCharFormat fmt;
-				fmt.setFontItalic( true );
-				fmt.setFontUnderline( true );
-				fmt.setFontPointSize( 8.0 );
-
-				c.insertText( QString( "Linked to: " ) +
-					lnks[ formIt->id() ] + QLatin1String( "\n\n" ), fmt );
-
-				lnks.remove( formIt->id() );
-
-				c.movePosition( QTextCursor::End );
-			}
-		}
-
-		for( auto it = form.desc().cbegin(), last = form.desc().cend();
-			it != last; ++it )
-		{
-			if( it != formIt && !it->text().empty() )
-			{
-				QTextCharFormat h2;
-				h2.setFontWeight( QFont::Bold );
-				h2.setFontItalic( true );
-				h2.setFontPointSize( 15.0 );
-
-				c.setCharFormat( h2 );
-
-				c.insertText( it->id() + QLatin1String( "\n\n" ) );
-
-				c.movePosition( QTextCursor::End );
-
-				Cfg::fillTextDocument( &doc, it->text() );
-
-				c.movePosition( QTextCursor::End );
-
-				c.insertText( QLatin1String( "\n\n" ) );
-
-				c.movePosition( QTextCursor::End );
-
-				if( lnks.contains( it->id() ) )
-				{
-					QTextCharFormat fmt;
-					fmt.setFontItalic( true );
-					fmt.setFontUnderline( true );
-					fmt.setFontPointSize( 8.0 );
-
-					c.insertText( QString( "Linked to: " ) +
-						lnks[ it->id() ] + QLatin1String( "\n\n" ), fmt );
-
-					lnks.remove( it->id() );
-
-					c.movePosition( QTextCursor::End );
-				}
-			}
-		}
-
-		if( !lnks.isEmpty() )
-		{
-			QTextCharFormat fmt;
-			fmt.setFontWeight( QFont::Bold );
-			fmt.setFontItalic( true );
-			fmt.setFontPointSize( 15.0 );
-
-			c.insertText( QLatin1String( "Links:\n\n" ), fmt );
-
-			fmt.setFontWeight( QFont::Normal );
-			fmt.setFontUnderline( true );
-			fmt.setFontPointSize( 8.0 );
-
-			QMapIterator< QString, QString > it( lnks );
-
-			while( it.hasNext() )
-			{
-				it.next();
-
-				c.insertText( it.key() + QLatin1String( " -> " ) +
-					it.value() + QLatin1String( "\n" ), fmt );
-			}
-		}
 	}
 }
 

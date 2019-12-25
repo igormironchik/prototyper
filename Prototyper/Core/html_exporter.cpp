@@ -97,28 +97,6 @@ static inline void printText( QTextStream & stream,
 	}
 }
 
-static inline void printLink( QTextStream & stream, const QString & id,
-	QMap< QString, QString > & lnks )
-{
-	std::vector< Cfg::TextStyle > linkList;
-	Cfg::TextStyle lnk;
-	lnk.style().push_back( Cfg::c_italicStyle );
-	lnk.style().push_back( Cfg::c_underlineStyle );
-	lnk.fontSize() = 8.0;
-	lnk.text() = QString( "Linked to: " ) + lnks[ id ];
-	linkList.push_back( lnk );
-
-	stream << QLatin1String( "<a href=\"#" )
-		<< lnks[ id ]
-		<< QLatin1String( "\">" );
-
-	printText( stream, linkList );
-
-	lnks.remove( id );
-
-	stream << QLatin1String( "</a>" ) << endl;
-}
-
 void
 HtmlExporterPrivate::printDocument( QTextStream & stream )
 {
@@ -130,7 +108,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 
 	stream << QLatin1String( "<br><br>" ) << endl;
 
-	foreach( const Cfg::Form & form, m_cfg.form() )
+	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
 		QMap< QString, QString > lnks = links( form );
 
@@ -164,98 +142,6 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 		stream
 			<< QLatin1String( "<div>" )
 			<< data << QLatin1String( "</div><br>" );
-
-		auto formIt = std::find_if( form.desc().cbegin(), form.desc().cend(),
-			[&form] ( const Cfg::Description & desc ) -> bool
-				{
-					return ( form.tabName() == desc.id() );
-				}
-		);
-
-		if( formIt != form.desc().cend() && !formIt->text().empty() )
-		{
-			stream << QLatin1String( "<br><br>" ) << endl;
-
-			printText( stream, formIt->text() );
-
-			stream << QLatin1String( "<br><br>" ) << endl;
-
-			if( lnks.contains( formIt->id() ) )
-			{
-				printLink( stream, formIt->id(), lnks );
-
-				stream << QLatin1String( "<br><br>" ) << endl;
-			}
-		}
-
-		for( auto it = form.desc().cbegin(), last = form.desc().cend();
-			it != last; ++it )
-		{
-			if( it != formIt && !it->text().empty() )
-			{
-				std::vector< Cfg::TextStyle > headList;
-				Cfg::TextStyle head;
-				head.style().push_back( Cfg::c_boldStyle );
-				head.style().push_back( Cfg::c_italicStyle );
-				head.fontSize() = 15.0;
-				head.text() = it->id();
-				headList.push_back( head );
-
-				printText( stream, headList );
-
-				stream << QLatin1String( "<br><br>" ) << endl;
-
-				printText( stream, it->text() );
-
-				stream << QLatin1String( "<br><br>" ) << endl;
-
-				if( lnks.contains( it->id() ) )
-				{
-					printLink( stream, it->id(), lnks );
-
-					stream << QLatin1String( "<br><br>" ) << endl;
-				}
-			}
-		}
-
-		if( !lnks.isEmpty() )
-		{
-			std::vector< Cfg::TextStyle > linksList;
-			Cfg::TextStyle head;
-			head.style().push_back( Cfg::c_boldStyle );
-			head.style().push_back( Cfg::c_italicStyle );
-			head.fontSize() = 15.0;
-			head.text() = QLatin1String( "Links:" );
-			linksList.push_back( head );
-
-			printText( stream, linksList );
-
-			stream << QLatin1String( "<br><br>" ) << endl;
-
-			linksList.clear();
-			Cfg::TextStyle lnk;
-			lnk.style().push_back( Cfg::c_underlineStyle );
-			lnk.set_fontSize( 8.0 );
-			linksList.push_back( lnk );
-
-			QMapIterator< QString, QString > it( lnks );
-
-			while( it.hasNext() )
-			{
-				it.next();
-
-				stream << QLatin1String( "<a href=\"#" )
-					<< lnks[ it.key() ]
-					<< QLatin1String( "\">" );
-
-				linksList.back().set_text( it.key() + QLatin1String( " -> " ) +
-					it.value() );
-
-				printText( stream, linksList );
-
-				stream << QLatin1String( "</a><br>" ) << endl;
-			}
-		}
 	}
 
 	stream << QLatin1String( "</div></body>" ) << endl;

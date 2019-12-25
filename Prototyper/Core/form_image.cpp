@@ -23,7 +23,7 @@
 // Prototyper include.
 #include "form_image.hpp"
 #include "form_image_handles.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -73,7 +73,7 @@ FormImagePrivate::init()
 // FormImage
 //
 
-FormImage::FormImage( Form * form, QGraphicsItem * parent )
+FormImage::FormImage( Page * form, QGraphicsItem * parent )
 	:	QGraphicsPixmapItem( parent )
 	,	FormObject( FormObject::ImageType, form )
 	,	d( new FormImagePrivate( this ) )

@@ -21,7 +21,7 @@
 */
 
 // Prototyper include.
-#include "form.hpp"
+#include "page.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "project_widget.hpp"
@@ -71,13 +71,13 @@ namespace Core {
 //
 
 void
-FormPrivate::init()
+PagePrivate::init()
 {
 	m_gridStepAction = new QAction( QIcon( ":/Core/img/measure.png" ),
 		ProjectWindow::tr( "Grid Step" ), q );
 
-	Form::connect( m_gridStepAction, &QAction::triggered,
-		q, &Form::slotSetGridStep );
+	Page::connect( m_gridStepAction, &QAction::triggered,
+		q, &Page::slotSetGridStep );
 
 	m_snap = new GridSnap( q );
 	m_snap->setGridStep( m_cfg.gridStep() );
@@ -91,7 +91,7 @@ FormPrivate::init()
 }
 
 qreal
-FormPrivate::currentZValue() const
+PagePrivate::currentZValue() const
 {
 	qreal z = 0.0;
 
@@ -101,7 +101,7 @@ FormPrivate::currentZValue() const
 }
 
 void
-FormPrivate::currentZValue( const QList< QGraphicsItem* > & items,
+PagePrivate::currentZValue( const QList< QGraphicsItem* > & items,
 	qreal & z ) const
 {
 	foreach( QGraphicsItem * item, items )
@@ -119,7 +119,7 @@ FormPrivate::currentZValue( const QList< QGraphicsItem* > & items,
 }
 
 QPointF
-FormPrivate::lineStartPoint( const QPointF & point, bool & intersected,
+PagePrivate::lineStartPoint( const QPointF & point, bool & intersected,
 	bool & intersectedEnds, FormLine* & intersectedLine ) const
 {
 	if( m_currentPoly )
@@ -151,7 +151,7 @@ FormPrivate::lineStartPoint( const QPointF & point, bool & intersected,
 }
 
 void
-FormPrivate::clearCurrentLines()
+PagePrivate::clearCurrentLines()
 {
 	foreach( FormLine * line, m_currentLines )
 		line->showHandles( false );
@@ -160,20 +160,20 @@ FormPrivate::clearCurrentLines()
 }
 
 void
-FormPrivate::handleMouseMoveInCurrentLines( const QPointF & point )
+PagePrivate::handleMouseMoveInCurrentLines( const QPointF & point )
 {
 	foreach( FormLine * line, m_currentLines )
 		line->handleMouseMoveInHandles( point );
 }
 
 void
-FormPrivate::handleMouseMoveInCurrentPolyLine( const QPointF & point )
+PagePrivate::handleMouseMoveInCurrentPolyLine( const QPointF & point )
 {
 	m_currentPoly->handleMouseMoveInHandles( point );
 }
 
 void
-FormPrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
+PagePrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 {
 	FormGroup * tmp = dynamic_cast< FormGroup* > ( group );
 
@@ -220,7 +220,7 @@ FormPrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 }
 
 QString
-FormPrivate::id()
+PagePrivate::id()
 {
 	while( m_ids.contains( QString::number( ++m_id ) ) )
 	{
@@ -230,7 +230,7 @@ FormPrivate::id()
 }
 
 void
-FormPrivate::updateFromCfg()
+PagePrivate::updateFromCfg()
 {
 	clear();
 
@@ -287,7 +287,7 @@ FormPrivate::updateFromCfg()
 }
 
 void
-FormPrivate::clear()
+PagePrivate::clear()
 {
 	m_ids.clear();
 
@@ -329,7 +329,7 @@ FormPrivate::clear()
 template< class Elem, class Config >
 inline
 Elem *
-FormPrivate::createElem( const Config & cfg )
+PagePrivate::createElem( const Config & cfg )
 {
 	Elem * e = new Elem( q, q );
 
@@ -343,7 +343,7 @@ FormPrivate::createElem( const Config & cfg )
 template< class Elem, class Config >
 inline
 Elem *
-FormPrivate::createElemWithRect( const Config & cfg, const QRectF & rect )
+PagePrivate::createElemWithRect( const Config & cfg, const QRectF & rect )
 {
 	Elem * e = new Elem( rect, q, q );
 
@@ -355,7 +355,7 @@ FormPrivate::createElemWithRect( const Config & cfg, const QRectF & rect )
 }
 
 FormText *
-FormPrivate::createText( const Cfg::Text & cfg )
+PagePrivate::createText( const Cfg::Text & cfg )
 {
 	const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
 
@@ -367,14 +367,14 @@ FormPrivate::createText( const Cfg::Text & cfg )
 
 	m_docs.insert( text->document(), text );
 
-	Form::connect( text->document(), &QTextDocument::undoCommandAdded,
-		q, &Form::undoCommandInTextAdded );
+	Page::connect( text->document(), &QTextDocument::undoCommandAdded,
+		q, &Page::undoCommandInTextAdded );
 
 	return text;
 }
 
 FormGroup *
-FormPrivate::createGroup( const Cfg::Group & cfg )
+PagePrivate::createGroup( const Cfg::Group & cfg )
 {
 	FormGroup * group = new FormGroup( q, q );
 
@@ -386,7 +386,7 @@ FormPrivate::createGroup( const Cfg::Group & cfg )
 }
 
 void
-FormPrivate::clearIds( FormGroup * group )
+PagePrivate::clearIds( FormGroup * group )
 {
 	foreach( QGraphicsItem * item, group->childItems() )
 	{
@@ -405,7 +405,7 @@ FormPrivate::clearIds( FormGroup * group )
 }
 
 void
-FormPrivate::addIds( FormGroup * group )
+PagePrivate::addIds( FormGroup * group )
 {
 	foreach( QGraphicsItem * item, group->childItems() )
 	{
@@ -424,7 +424,7 @@ FormPrivate::addIds( FormGroup * group )
 }
 
 void
-FormPrivate::setText( const QSharedPointer< QTextDocument > & doc,
+PagePrivate::setText( const QSharedPointer< QTextDocument > & doc,
 	const std::vector< Cfg::TextStyle > & text )
 {
 	doc->clear();
@@ -433,7 +433,7 @@ FormPrivate::setText( const QSharedPointer< QTextDocument > & doc,
 }
 
 void
-FormPrivate::hideHandlesOfCurrent()
+PagePrivate::hideHandlesOfCurrent()
 {
 	if( m_current )
 	{
@@ -469,7 +469,7 @@ FormPrivate::hideHandlesOfCurrent()
 }
 
 QList< QGraphicsItem* >
-FormPrivate::selection()
+PagePrivate::selection()
 {
 	QList< QGraphicsItem* > items =
 		q->scene()->selectedItems();
@@ -486,7 +486,7 @@ FormPrivate::selection()
 }
 
 qreal
-FormPrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
+PagePrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 	AlignPoint point )
 {
 	qreal pos = 0.0;
@@ -602,36 +602,36 @@ FormPrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 // Form
 //
 
-Form::Form( const Cfg::Form & c, QGraphicsItem * parent )
+Page::Page( Cfg::Page & c, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	FormObject( FormObject::FormType, this )
+	,	FormObject( FormObject::PageType, this )
 	,	d( 0 )
 {
-	QScopedPointer< FormPrivate > tmp( new FormPrivate( c, this ) );
+	QScopedPointer< PagePrivate > tmp( new PagePrivate( c, this ) );
 
 	tmp->init();
 
 	d.swap( tmp );
 }
 
-Form::~Form()
+Page::~Page()
 {
 }
 
 QUndoStack *
-Form::undoStack() const
+Page::undoStack() const
 {
 	return d->m_undoStack;
 }
 
 const Cfg::Size &
-Form::size() const
+Page::size() const
 {
 	return d->m_cfg.size();
 }
 
 void
-Form::setSize( const Cfg::Size & s )
+Page::setSize( const Cfg::Size & s )
 {
 	d->m_cfg.set_size( s );
 
@@ -639,13 +639,13 @@ Form::setSize( const Cfg::Size & s )
 }
 
 GridMode
-Form::gridMode() const
+Page::gridMode() const
 {
 	return d->m_gridMode;
 }
 
 void
-Form::setGridMode( GridMode m )
+Page::setGridMode( GridMode m )
 {
 	d->m_gridMode = m;
 
@@ -653,13 +653,13 @@ Form::setGridMode( GridMode m )
 }
 
 int
-Form::gridStep() const
+Page::gridStep() const
 {
 	return d->m_cfg.gridStep();
 }
 
 void
-Form::setGridStep( int s )
+Page::setGridStep( int s )
 {
 	qDebug() << "set grid step" << s;
 	d->m_cfg.set_gridStep( s );
@@ -669,17 +669,16 @@ Form::setGridStep( int s )
 	update();
 }
 
-Cfg::Form
-Form::cfg() const
+Cfg::Page
+Page::cfg() const
 {
-	Cfg::Form c = d->m_cfg;
+	Cfg::Page c = d->m_cfg;
 
 	c.line().clear();
 	c.polyline().clear();
 	c.text().clear();
 	c.image().clear();
 	c.group().clear();
-	c.desc().clear();
 	c.rect().clear();
 	c.button().clear();
 	c.checkbox().clear();
@@ -826,7 +825,7 @@ Form::cfg() const
 }
 
 void
-Form::setCfg( const Cfg::Form & c )
+Page::setCfg( const Cfg::Page & c )
 {
 	d->m_cfg = c;
 
@@ -834,7 +833,7 @@ Form::setCfg( const Cfg::Form & c )
 }
 
 void
-Form::switchToSelectMode()
+Page::switchToSelectMode()
 {
 	foreach( FormLine * line, d->m_currentLines )
 		line->setSelected( true );
@@ -852,7 +851,7 @@ Form::switchToSelectMode()
 }
 
 void
-Form::switchToLineDrawingMode()
+Page::switchToLineDrawingMode()
 {
 	d->hideHandlesOfCurrent();
 
@@ -863,7 +862,7 @@ Form::switchToLineDrawingMode()
 }
 
 void
-Form::enableSnap( bool on )
+Page::enableSnap( bool on )
 {
 	if( on )
 		d->m_snap->show();
@@ -872,19 +871,19 @@ Form::enableSnap( bool on )
 }
 
 GridSnap *
-Form::snapItem() const
+Page::snapItem() const
 {
 	return d->m_snap;
 }
 
 const QStringList &
-Form::ids() const
+Page::ids() const
 {
 	return d->m_ids;
 }
 
 QGraphicsItem *
-Form::findItem( const QString & id )
+Page::findItem( const QString & id )
 {
 	if( id == objectId() )
 		return this;
@@ -903,7 +902,7 @@ Form::findItem( const QString & id )
 }
 
 void
-Form::group()
+Page::group()
 {
 	QList< QGraphicsItem* > items =
 		scene()->selectedItems();
@@ -912,7 +911,7 @@ Form::group()
 }
 
 void
-Form::ungroup()
+Page::ungroup()
 {
 	QList< QGraphicsItem* > items =
 		scene()->selectedItems();
@@ -928,7 +927,7 @@ Form::ungroup()
 }
 
 FormGroup *
-Form::group( const QList< QGraphicsItem* > & items,
+Page::group( const QList< QGraphicsItem* > & items,
 	bool pushUndoCommand )
 {
 	FormGroup * group = Q_NULLPTR;
@@ -1001,20 +1000,20 @@ Form::group( const QList< QGraphicsItem* > & items,
 }
 
 void
-Form::ungroup( FormGroup * g, bool pushUndoCommand )
+Page::ungroup( FormGroup * g, bool pushUndoCommand )
 {
 	d->ungroup( g, pushUndoCommand );
 }
 
 void
-Form::alignVerticalTop()
+Page::alignVerticalTop()
 {
 	QList< QGraphicsItem* > items = d->selection();
 
 	if( items.size() > 1 )
 	{
 		const qreal y = d->searchAlignPoint( items,
-			FormPrivate::AlignVertTopPoint );
+			PagePrivate::AlignVertTopPoint );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -1028,14 +1027,14 @@ Form::alignVerticalTop()
 }
 
 void
-Form::alignVerticalCenter()
+Page::alignVerticalCenter()
 {
 	QList< QGraphicsItem* > items = d->selection();
 
 	if( items.size() > 1 )
 	{
 		const qreal y = d->searchAlignPoint( items,
-			FormPrivate::AlignVertCenterPoint );
+			PagePrivate::AlignVertCenterPoint );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -1055,14 +1054,14 @@ Form::alignVerticalCenter()
 }
 
 void
-Form::alignVerticalBottom()
+Page::alignVerticalBottom()
 {
 	QList< QGraphicsItem* > items = d->selection();
 
 	if( items.size() > 1 )
 	{
 		const qreal y = d->searchAlignPoint( items,
-			FormPrivate::AlignVertBottomPoint );
+			PagePrivate::AlignVertBottomPoint );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -1079,14 +1078,14 @@ Form::alignVerticalBottom()
 }
 
 void
-Form::alignHorizontalLeft()
+Page::alignHorizontalLeft()
 {
 	QList< QGraphicsItem* > items = d->selection();
 
 	if( items.size() > 1 )
 	{
 		const qreal x = d->searchAlignPoint( items,
-			FormPrivate::AlignHorLeftPoint );
+			PagePrivate::AlignHorLeftPoint );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -1099,14 +1098,14 @@ Form::alignHorizontalLeft()
 }
 
 void
-Form::alignHorizontalCenter()
+Page::alignHorizontalCenter()
 {
 	QList< QGraphicsItem* > items = d->selection();
 
 	if( items.size() > 1 )
 	{
 		const qreal x = d->searchAlignPoint( items,
-			FormPrivate::AlignHorCenterPoint );
+			PagePrivate::AlignHorCenterPoint );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -1126,14 +1125,14 @@ Form::alignHorizontalCenter()
 }
 
 void
-Form::alignHorizontalRight()
+Page::alignHorizontalRight()
 {
 	QList< QGraphicsItem* > items = d->selection();
 
 	if( items.size() > 1 )
 	{
 		const qreal x = d->searchAlignPoint( items,
-			FormPrivate::AlignHorRightPoint );
+			PagePrivate::AlignHorRightPoint );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -1148,7 +1147,7 @@ Form::alignHorizontalRight()
 }
 
 static inline void pushUndoDeleteCommand( QUndoStack * stack,
-	FormObject * obj, Form * form )
+	FormObject * obj, Page * form )
 {
 	switch( obj->objectType() )
 	{
@@ -1288,7 +1287,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 }
 
 void
-Form::deleteItems( const QList< QGraphicsItem* > & items,
+Page::deleteItems( const QList< QGraphicsItem* > & items,
 	bool makeUndoCommand )
 {
 	foreach( QGraphicsItem * item, items )
@@ -1346,7 +1345,7 @@ Form::deleteItems( const QList< QGraphicsItem* > & items,
 }
 
 QRectF
-Form::boundingRect() const
+Page::boundingRect() const
 {
 	if( !d.isNull() )
 		return QRectF( 0.0, 0.0, d->m_cfg.size().width(),
@@ -1356,7 +1355,7 @@ Form::boundingRect() const
 }
 
 void
-Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
+Page::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
 	Q_UNUSED( option )
@@ -1370,7 +1369,7 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-Form::draw( QPainter * painter, int width, int height, int gridStep, bool drawGrid )
+Page::draw( QPainter * painter, int width, int height, int gridStep, bool drawGrid )
 {
 	static const QColor gridColor = Qt::gray;
 
@@ -1400,29 +1399,29 @@ Form::draw( QPainter * painter, int width, int height, int gridStep, bool drawGr
 }
 
 void
-Form::setPosition( const QPointF & pos, bool pushUndoCommand )
+Page::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
 	Q_UNUSED( pos )
 	Q_UNUSED( pushUndoCommand )
 }
 
 QPointF
-Form::position() const
+Page::position() const
 {
 	return pos();
 }
 
 QRectF
-Form::rectangle() const
+Page::rectangle() const
 {
 	return boundingRect();
 }
 
 void
-Form::setRectangle( const QRectF & rect, bool pushUndoCommand )
+Page::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		d->m_undoStack->push( new UndoResize< Form >( this, objectId(),
+		d->m_undoStack->push( new UndoResize< Page >( this, objectId(),
 			QRectF( 0.0, 0.0, d->m_cfg.size().width(), d->m_cfg.size().height() ),
 			rect ) );
 
@@ -1439,13 +1438,13 @@ Form::setRectangle( const QRectF & rect, bool pushUndoCommand )
 }
 
 void
-Form::emitChanged()
+Page::emitChanged()
 {
 	emit changed();
 }
 
 void
-Form::renameForm( const QString & name )
+Page::renameForm( const QString & name )
 {
 	const QString old = objectId();
 
@@ -1459,14 +1458,14 @@ Form::renameForm( const QString & name )
 }
 
 void
-Form::slotSetGridStep()
+Page::slotSetGridStep()
 {
 	TopGui::instance()->projectWindow()->setGridStep(
 		d->m_cfg.gridStep(), false );
 }
 
 void
-Form::undoCommandInTextAdded()
+Page::undoCommandInTextAdded()
 {
 	FormObject * obj = d->m_docs[ sender() ];
 
@@ -1476,7 +1475,7 @@ Form::undoCommandInTextAdded()
 }
 
 void
-Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
+Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
 	FormRectPlacer * placer = dynamic_cast< FormRectPlacer* > ( d->m_current );
 
@@ -1495,7 +1494,7 @@ Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 }
 
 void
-Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
+Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 {
 	if( d->m_pressed )
 	{
@@ -1582,7 +1581,7 @@ Form::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 }
 
 void
-Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
+Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 {
 	if( mouseEvent->button() == Qt::LeftButton )
 	{
@@ -1713,8 +1712,8 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 }
 
 template< class Elem, class Config >
-Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, FormPrivate * d,
-	QGraphicsSceneMouseEvent * mouseEvent, Form * form )
+Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, PagePrivate * d,
+	QGraphicsSceneMouseEvent * mouseEvent, Page * form )
 {
 	scene->removeItem( d->m_current );
 
@@ -1757,7 +1756,7 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, FormPrivate * d,
 }
 
 void
-Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
+Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 {
 	if( mouseEvent->button() == Qt::LeftButton && d->m_pressed )
 	{
@@ -1870,7 +1869,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					d->m_docs.insert( text->document(), text );
 
 					connect( text->document(), &QTextDocument::undoCommandAdded,
-						this, &Form::undoCommandInTextAdded );
+						this, &Page::undoCommandInTextAdded );
 				}
 
 				emit changed();
@@ -1997,7 +1996,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 }
 
 void
-Form::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+Page::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
 	d->m_snap->setSnapPos( event->pos() );
 
@@ -2005,7 +2004,7 @@ Form::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 }
 
 void
-Form::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
+Page::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 {
 	d->m_snap->setSnapPos( event->pos() );
 
@@ -2013,7 +2012,7 @@ Form::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 }
 
 void
-Form::dragEnterEvent( QGraphicsSceneDragDropEvent * event )
+Page::dragEnterEvent( QGraphicsSceneDragDropEvent * event )
 {
 	d->m_snap->setSnapPos( event->pos() );
 
@@ -2024,7 +2023,7 @@ Form::dragEnterEvent( QGraphicsSceneDragDropEvent * event )
 }
 
 void
-Form::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
+Page::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
 {
 	d->m_snap->setSnapPos( event->pos() );
 
@@ -2035,7 +2034,7 @@ Form::dragMoveEvent( QGraphicsSceneDragDropEvent * event )
 }
 
 void
-Form::dropEvent( QGraphicsSceneDragDropEvent * event )
+Page::dropEvent( QGraphicsSceneDragDropEvent * event )
 {
 	if( event->mimeData()->hasImage() )
 	{
@@ -2078,19 +2077,19 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 }
 
 void
-Form::removeDocFromMap( QObject * doc )
+Page::removeDocFromMap( QObject * doc )
 {
 	d->m_docs.remove( doc );
 }
 
 void
-Form::updateDocItemInMap( QObject * doc, FormText * text )
+Page::updateDocItemInMap( QObject * doc, FormText * text )
 {
 	d->m_docs[ doc ] = text;
 }
 
 void
-Form::setCurrentLine( FormLine * line )
+Page::setCurrentLine( FormLine * line )
 {
 	d->m_current = line;
 
@@ -2103,7 +2102,7 @@ Form::setCurrentLine( FormLine * line )
 }
 
 void
-Form::setCurrentPolyLine( FormPolyline * line )
+Page::setCurrentPolyLine( FormPolyline * line )
 {
 	d->m_current = line;
 

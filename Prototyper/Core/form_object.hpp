@@ -33,7 +33,7 @@ namespace Prototyper {
 
 namespace Core {
 
-class Form;
+class Page;
 
 
 //
@@ -58,7 +58,7 @@ public:
 		//! Group.
 		GroupType = 6,
 		//! Form.
-		FormType = 7,
+		PageType = 7,
 		//! Button.
 		ButtonType = 8,
 		//! Combobox.
@@ -75,7 +75,7 @@ public:
 		SpinBoxType = 14
 	}; // enum ObjectType
 
-	FormObject( ObjectType t, Form * parent );
+	FormObject( ObjectType t, Page * parent );
 	virtual ~FormObject();
 
 	//! \return Type.
@@ -117,7 +117,7 @@ public:
 	void setLink( const QString & l );
 
 	//! \return Form.
-	Form * form() const;
+	Page * form() const;
 
 	//! Post deletion.
 	virtual void postDeletion();
@@ -132,7 +132,7 @@ private:
 	//! Brush.
 	QBrush m_brush;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Type.
 	ObjectType m_type;
 	//! Link.

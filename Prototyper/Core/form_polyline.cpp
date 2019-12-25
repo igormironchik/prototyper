@@ -27,7 +27,7 @@
 #include "form_resize_handle.hpp"
 #include "form_with_resize_and_move_handles.hpp"
 #include "utils.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -224,7 +224,7 @@ FormPolylinePrivate::boundingRect() const
 // FormPolyline
 //
 
-FormPolyline::FormPolyline( Form * form, QGraphicsItem * parent )
+FormPolyline::FormPolyline( Page * form, QGraphicsItem * parent )
 	:	QGraphicsPathItem( parent )
 	,	FormObject( FormObject::PolylineType, form )
 	,	d( new FormPolylinePrivate( this ) )

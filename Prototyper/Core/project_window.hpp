@@ -34,7 +34,7 @@ namespace Core {
 
 class ProjectWidget;
 class TabsList;
-class FormView;
+class PageView;
 
 
 //
@@ -162,9 +162,9 @@ private slots:
 	//! Can undo changed.
 	void p_canUndoChanged( bool canUndo );
 	//! Form added.
-	void p_formAdded( FormView * form );
+	void p_formAdded( PageView * form );
 	//! Form deleted.
-	void p_formDeleted( FormView * form );
+	void p_formDeleted( PageView * form );
 
 private:
 	friend class ProjectWindowPrivate;

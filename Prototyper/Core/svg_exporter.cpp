@@ -56,7 +56,7 @@ SvgExporterPrivate::createImages( const QString & dir )
 {
 	int i = 1;
 
-	foreach( const Cfg::Form & form, m_cfg.form() )
+	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
 		const QString fileName = dir + QLatin1String( "/" ) +
 			QString::number( i ) + QLatin1String( ".svg" );

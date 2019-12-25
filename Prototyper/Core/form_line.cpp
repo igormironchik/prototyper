@@ -24,7 +24,7 @@
 #include "form_line.hpp"
 #include "form_move_handle.hpp"
 #include "form_actions.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_grid_snap.hpp"
 #include "utils.hpp"
 #include "form_undo_commands.hpp"
@@ -85,7 +85,7 @@ public:
 
 void
 FormLinePrivate::init()
-{	
+{
 	createHandles();
 
 	m_h1->hide();
@@ -131,7 +131,7 @@ FormLinePrivate::createHandles()
 // FormLine
 //
 
-FormLine::FormLine( Form * form, QGraphicsItem * parent )
+FormLine::FormLine( Page * form, QGraphicsItem * parent )
 	:	QGraphicsLineItem( parent )
 	,	FormObject( FormObject::LineType, form )
 	,	d( new FormLinePrivate( this ) )
@@ -401,7 +401,7 @@ FormLine::handleReleased( FormMoveHandle * handle )
 
 void
 FormLine::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
-{	
+{
 	QGraphicsLineItem::mouseMoveEvent( event );
 }
 

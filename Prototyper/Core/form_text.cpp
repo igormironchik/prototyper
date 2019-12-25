@@ -26,7 +26,7 @@
 #include "form_resizable.hpp"
 #include "form_text_opts.hpp"
 #include "utils.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -158,7 +158,7 @@ FormTextPrivate::setRect( const QRectF & rect )
 // FormText
 //
 
-FormText::FormText( const QRectF & rect, Form * form, QGraphicsItem * parent )
+FormText::FormText( const QRectF & rect, Page * form, QGraphicsItem * parent )
 	:	QGraphicsTextItem( parent )
 	,	FormObject( FormObject::TextType, form )
 	,	d( new FormTextPrivate( rect, this ) )

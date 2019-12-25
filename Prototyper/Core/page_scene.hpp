@@ -34,21 +34,21 @@ namespace Core {
 
 namespace Cfg {
 
-class Form;
+class Page;
 
 } /* namespace Cfg */
 
-class Form;
+class Page;
 
 
 //
-// FormScene
+// PageScene
 //
 
-class FormScenePrivate;
+class PageScenePrivate;
 
-//! Form scene.
-class FormScene
+//! Page scene.
+class PageScene
 	:	public QGraphicsScene
 {
 	Q_OBJECT
@@ -58,13 +58,13 @@ signals:
 	void changed();
 
 public:
-	FormScene( const Cfg::Form & c, QObject * parent = 0 );
-	~FormScene();
+	PageScene( const Cfg::Page & c, QObject * parent = 0 );
+	~PageScene();
 
-	//! \return Form.
-	Form * form() const;
-	//! Set form.
-	void setForm( Form * f );
+	//! \return Page.
+	Page * page() const;
+	//! Set page.
+	void setPage( Page * f );
 
 public slots:
 	//! Delete selected items.
@@ -75,10 +75,10 @@ protected:
 		Q_DECL_OVERRIDE;
 
 private:
-	Q_DISABLE_COPY( FormScene )
+	Q_DISABLE_COPY( PageScene )
 
-	QScopedPointer< FormScenePrivate > d;
-}; // class FormScene
+	QScopedPointer< PageScenePrivate > d;
+}; // class PageScene
 
 } /* namespace Core */
 

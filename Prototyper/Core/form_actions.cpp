@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "form_actions.hpp"
-#include "form.hpp"
+#include "page.hpp"
 
 // Qt include.
 #include <QApplication>
@@ -55,7 +55,7 @@ public:
 	//! Mode.
 	FormAction::Mode m_mode;
 	//! Form.
-	Form * m_form;
+	Page * m_form;
 	//! Fill color.
 	QColor m_fillColor;
 	//! Stroke color.
@@ -145,14 +145,14 @@ FormAction::setMode( Mode m )
 	d->m_mode = m;
 }
 
-Form *
+Page *
 FormAction::form() const
 {
 	return d->m_form;
 }
 
 void
-FormAction::setForm( Form * f )
+FormAction::setForm( Page * f )
 {
 	d->m_form = f;
 }

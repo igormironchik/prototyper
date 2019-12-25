@@ -76,12 +76,12 @@ enum GridMode {
 
 
 //
-// FormPrivate
+// PagePrivate
 //
 
-class FormPrivate {
+class PagePrivate {
 public:
-	FormPrivate( const Cfg::Form & cfg, Form * parent )
+	PagePrivate( Cfg::Page & cfg, Page * parent )
 		:	q( parent )
 		,	m_gridMode( ShowGrid )
 		,	m_gridStepAction( 0 )
@@ -164,13 +164,13 @@ public:
 		AlignPoint point );
 
 	//! Parent.
-	Form * q;
+	Page * q;
 	//! Grid mode.
 	GridMode m_gridMode;
 	//! Grid step action.
 	QAction * m_gridStepAction;
 	//! Cfg.
-	Cfg::Form m_cfg;
+	Cfg::Page & m_cfg;
 	//! Pressed.
 	bool m_pressed;
 	//! Current item.
@@ -197,11 +197,11 @@ public:
 
 
 //
-// Form
+// Page
 //
 
-//! Form.
-class Form
+//! Page.
+class Page
 	:	public QGraphicsObject
 	,	public FormObject
 {
@@ -212,12 +212,12 @@ signals:
 	void changed();
 
 public:
-	explicit Form( const Cfg::Form & c, QGraphicsItem * parent = 0 );
-	~Form();
+	explicit Page( Cfg::Page & c, QGraphicsItem * parent = 0 );
+	~Page();
 
 	//! \return Type.
 	static ObjectType staticObjectType()
-		{ return FormType; }
+		{ return PageType; }
 
 	//! \return Undo stack.
 	QUndoStack * undoStack() const;
@@ -238,9 +238,9 @@ public:
 	void setGridStep( int s );
 
 	//! \return Configuration.
-	Cfg::Form cfg() const;
+	Cfg::Page cfg() const;
 	//! Set configuration.
-	void setCfg( const Cfg::Form & c );
+	void setCfg( const Cfg::Page & c );
 
 	//! Switch to select mode.
 	void switchToSelectMode();
@@ -454,12 +454,12 @@ protected:
 	}
 
 private:
-	friend class FormPrivate;
+	friend class PagePrivate;
 
-	Q_DISABLE_COPY( Form )
+	Q_DISABLE_COPY( Page )
 
-	QScopedPointer< FormPrivate > d;
-}; // class Form
+	QScopedPointer< PagePrivate > d;
+}; // class Page
 
 } /* namespace Core */
 

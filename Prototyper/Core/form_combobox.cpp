@@ -23,7 +23,7 @@
 // Prototyper include.
 #include "form_combobox.hpp"
 #include "utils.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -90,7 +90,7 @@ FormComboBoxPrivate::setRect( const QRectF & rect )
 // FormComboBox
 //
 
-FormComboBox::FormComboBox( const QRectF & rect, Form * form,
+FormComboBox::FormComboBox( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	FormObject( FormObject::ComboBoxType, form )

@@ -37,7 +37,7 @@ HEADERS +=	exporter.hpp \
 			form_button.hpp \
 			form_checkbox.hpp \
 			form_combobox.hpp \
-			form.hpp \
+			page.hpp \
 			form_grid_snap.hpp \
 			form_group.hpp \
 			form_hslider.hpp \
@@ -52,11 +52,11 @@ HEADERS +=	exporter.hpp \
 			form_rect_placer.hpp \
 			form_resizable.hpp \
 			form_resize_handle.hpp \
-			form_scene.hpp \
+			page_scene.hpp \
 			form_spinbox.hpp \
 			form_text.hpp \
 			form_text_opts.hpp \
-			form_view.hpp \
+			page_view.hpp \
 			form_vslider.hpp \
 			form_with_resize_and_move_handles.hpp \
 			grid_step_dlg.hpp \
@@ -86,7 +86,7 @@ SOURCES +=	exporter.cpp \
 			form_button.cpp \
 			form_checkbox.cpp \
 			form_combobox.cpp \
-			form.cpp \
+			page.cpp \
 			form_grid_snap.cpp \
 			form_group.cpp \
 			form_hslider.cpp \
@@ -101,11 +101,11 @@ SOURCES +=	exporter.cpp \
 			form_rect_placer.cpp \
 			form_resizable.cpp \
 			form_resize_handle.cpp \
-			form_scene.cpp \
+			page_scene.cpp \
 			form_spinbox.cpp \
 			form_text.cpp \
 			form_text_opts.cpp \
-			form_view.cpp \
+			page_view.cpp \
 			form_vslider.cpp \
 			form_with_resize_and_move_handles.cpp \
 			grid_step_dlg.cpp \

@@ -43,7 +43,7 @@ class Project;
 
 } /* namespace Cfg */
 
-class FormView;
+class PageView;
 class ProjectDescTab;
 
 //
@@ -62,23 +62,23 @@ signals:
 	//! Project has been modified.
 	void changed();
 	//! Form added.
-	void formAdded( FormView * );
+	void formAdded( PageView * );
 	//! Form deleted.
-	void formDeleted( FormView * );
+	void formDeleted( PageView * );
 
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,
 		QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~ProjectWidget();
 
-	//! \return Forms.
-	const QList< FormView* > & forms() const;
+	//! \return Pages.
+	const QList< PageView* > & pages() const;
 
 	//! Enable/disable selection.
 	void enableSelection( bool on = true );
 
-	//! \return Forms' names.
-	QStringList formsNames() const;
+	//! \return Pages' names.
+	QStringList pagesNames() const;
 
 	//! \return Project tab name.
 	QString projectTabName() const;
@@ -105,7 +105,7 @@ public:
 
 public slots:
 	//! Add form.
-	void addForm();
+	void addPage();
 	//! Rename tab.
 	void renameTab( const QString & oldName );
 	//! Delete form.

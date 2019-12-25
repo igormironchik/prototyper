@@ -29,7 +29,7 @@
 #include "form_spinbox.hpp"
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_polyline.hpp"
 
 // Qt include.
@@ -295,7 +295,7 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 }
 
 void
-ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
+ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form )
 {
 	svg.setViewBox( QRect( -1, 0,
 		form.size().width() + 1, form.size().height() + 30 ) );
@@ -305,7 +305,7 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 
 	p.setPen( Qt::gray );
 
-	Form::draw( &p, form.size().width(), form.size().height(), 0, false );
+	Page::draw( &p, form.size().width(), form.size().height(), 0, false );
 
 	foreach( const Cfg::Group & group, form.group() )
 		drawGroup( group, p );
@@ -432,7 +432,7 @@ static inline void findLinksInGroup( QMap< QString, QString > & lnks,
 }
 
 QMap< QString, QString >
-ExporterPrivate::links( const Cfg::Form & form )
+ExporterPrivate::links( const Cfg::Page & form )
 {
 	QMap< QString, QString > lnks;
 

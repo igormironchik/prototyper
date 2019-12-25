@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "form_move_handle.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_grid_snap.hpp"
 #include "form_actions.hpp"
 
@@ -70,7 +70,7 @@ FormWithHandle::handleReleased( FormMoveHandle * handle )
 
 FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
 	const QPointF & zero, FormWithHandle * object, FormMoveHandle * parent,
-	Form * form, const QCursor & c )
+	Page * form, const QCursor & c )
 	:	q( parent )
 	,	m_object( object )
 	,	m_size( halfSize )
@@ -104,7 +104,7 @@ FormMoveHandlePrivate::init()
 //
 
 FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
-	FormWithHandle * object, QGraphicsItem * parent, Form * form,
+	FormWithHandle * object, QGraphicsItem * parent, Page * form,
 	const QCursor & c )
 	:	QGraphicsObject( parent )
 	,	d( 0 )

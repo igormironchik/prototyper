@@ -23,7 +23,7 @@
 // Prototyper include.
 #include "form_hslider.hpp"
 #include "utils.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -89,7 +89,7 @@ FormHSliderPrivate::setRect( const QRectF & rect )
 // FormHSlider
 //
 
-FormHSlider::FormHSlider( const QRectF & rect, Form * form,
+FormHSlider::FormHSlider( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	FormObject( FormObject::HSliderType, form )

@@ -35,7 +35,7 @@ namespace Core {
 // UndoGroup
 //
 
-UndoGroup::UndoGroup( Form * form, const QString & id )
+UndoGroup::UndoGroup( Page * form, const QString & id )
 	:	QUndoCommand( QObject::tr( "Group" ) )
 	,	m_form( form )
 	,	m_id( id )
@@ -93,7 +93,7 @@ UndoGroup::redo()
 //
 
 UndoUngroup::UndoUngroup( const QStringList & items,
-	const QString & groupId, Form * form )
+	const QString & groupId, Page * form )
 	:	QUndoCommand( QObject::tr( "Ungroup" ) )
 	,	m_items( items )
 	,	m_id( groupId )
@@ -139,7 +139,7 @@ UndoUngroup::redo()
 // UndoAddLineToPoly
 //
 
-UndoAddLineToPoly::UndoAddLineToPoly( Form * form,
+UndoAddLineToPoly::UndoAddLineToPoly( Page * form,
 	const QString & id, const QLineF & line )
 	:	QUndoCommand( QObject::tr( "Add Line" ) )
 	,	m_line( line )
@@ -236,7 +236,7 @@ UndoAddLineToPoly::redo()
 // UndoChangeLine
 //
 
-UndoChangeLine::UndoChangeLine( Form * form, const QString & id,
+UndoChangeLine::UndoChangeLine( Page * form, const QString & id,
 	const QLineF & oldLine, const QLineF & newLine )
 	:	QUndoCommand( QObject::tr( "Change Line" ) )
 	,	m_form( form )
@@ -285,7 +285,7 @@ UndoChangeLine::redo()
 // UndoChangePen
 //
 
-UndoChangePen::UndoChangePen( Form * form, const QString & id,
+UndoChangePen::UndoChangePen( Page * form, const QString & id,
 	const QPen & oldPen, const QPen & newPen )
 	:	QUndoCommand( QObject::tr( "Change Pen" ) )
 	,	m_form( form )
@@ -333,7 +333,7 @@ UndoChangePen::redo()
 // UndoChangeTextOnForm
 //
 
-UndoChangeTextOnForm::UndoChangeTextOnForm( Form * form, const QString & id )
+UndoChangeTextOnForm::UndoChangeTextOnForm( Page * form, const QString & id )
 	:	QUndoCommand( QObject::tr( "Change Text" ) )
 	,	m_form( form )
 	,	m_id( id )
@@ -399,7 +399,7 @@ UndoChangeTextOnForm::redo()
 // UndoChangeTextWithOpts
 //
 
-UndoChangeTextWithOpts::UndoChangeTextWithOpts( Form * form, const QString & id,
+UndoChangeTextWithOpts::UndoChangeTextWithOpts( Page * form, const QString & id,
 	const Cfg::TextStyle & oldOpts, const Cfg::TextStyle & newOpts )
 	:	QUndoCommand( QObject::tr( "Change Text Options" ) )
 	,	m_form( form )

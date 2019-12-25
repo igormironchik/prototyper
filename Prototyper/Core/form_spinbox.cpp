@@ -23,7 +23,7 @@
 // Prototyper include.
 #include "form_spinbox.hpp"
 #include "utils.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_spinbox_properties.hpp"
 #include "form_undo_commands.hpp"
 
@@ -104,7 +104,7 @@ FormSpinBoxPrivate::setRect( const QRectF & rect )
 // FormSpinBox
 //
 
-FormSpinBox::FormSpinBox( const QRectF & rect, Form * form,
+FormSpinBox::FormSpinBox( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
 	,	FormObject( FormObject::SpinBoxType, form )

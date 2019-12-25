@@ -37,7 +37,7 @@ namespace Prototyper {
 
 namespace Core {
 
-class Form;
+class Page;
 class FormLineMoveHandle;
 
 
@@ -54,7 +54,7 @@ class FormLine
 	,	public FormWithHandle
 {
 public:
-	explicit FormLine( Form * form, QGraphicsItem * parent = 0 );
+	explicit FormLine( Page * form, QGraphicsItem * parent = 0 );
 	~FormLine();
 
 	//! \return Type.

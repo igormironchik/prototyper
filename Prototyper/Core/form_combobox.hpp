@@ -50,7 +50,7 @@ class FormComboBox
 	,	public FormResizable
 {
 public:
-	FormComboBox( const QRectF & rect, Form * form, QGraphicsItem * parent = 0 );
+	FormComboBox( const QRectF & rect, Page * form, QGraphicsItem * parent = 0 );
 	~FormComboBox();
 
 	//! \return Type.

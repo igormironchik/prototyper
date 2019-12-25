@@ -38,7 +38,7 @@ class FormImageHandlesPrivate
 {
 public:
 	FormImageHandlesPrivate( FormResizable * resizable,
-		FormImageHandles * parent, Form * form )
+		FormImageHandles * parent, Page * form )
 		:	FormResizableProxyPrivate( resizable, parent, form )
 	{
 	}
@@ -80,7 +80,7 @@ FormImageHandlesPrivate::place( const QRectF & rect )
 //
 
 FormImageHandles::FormImageHandles( FormResizable * resizable,
-	QGraphicsItem * parent, Form * form )
+	QGraphicsItem * parent, Page * form )
 	:	FormResizableProxy( QScopedPointer< FormResizableProxyPrivate > (
 			new FormImageHandlesPrivate( resizable, this, form ) ), parent )
 {

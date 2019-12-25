@@ -43,7 +43,7 @@ namespace Core {
 // FormRadioButton
 //
 
-FormRadioButton::FormRadioButton( const QRectF & rect, Form * form,
+FormRadioButton::FormRadioButton( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
 	:	FormCheckBox( rect, form, 15.0, FormObject::RadioButtonType, parent )
 {

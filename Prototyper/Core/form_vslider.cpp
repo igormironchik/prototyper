@@ -23,7 +23,7 @@
 // Prototyper include.
 #include "form_vslider.hpp"
 #include "utils.hpp"
-#include "form.hpp"
+#include "page.hpp"
 #include "form_undo_commands.hpp"
 
 // Qt include.
@@ -89,7 +89,7 @@ FormVSliderPrivate::setRect( const QRectF & rect )
 // FormVSlider
 //
 
-FormVSlider::FormVSlider( const QRectF & rect, Form * form,
+FormVSlider::FormVSlider( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	FormObject( FormObject::VSliderType, form )

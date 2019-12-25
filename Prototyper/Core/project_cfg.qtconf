@@ -656,34 +656,9 @@
 
 
 				|#
-					Description of the form's item.
+					Page.
 				#|
-				{class Description
-					{tagVectorOfTags
-						{valueType Prototyper::Core::Cfg::TextStyle}
-						{name text}
-					}
-
-					{tagScalar
-						{valueType QString}
-						{name id}
-						{required}
-					}
-				} || class Description
-
-
-				|#
-					Form.
-				#|
-				{class Form
-					{tagScalarVector
-						{valueType QString}
-						{name windowButtons}
-						{oneOfConstraint "QLatin1String( \"minimize\" )"
-							"QLatin1String( \"maximize\" )"
-							"QLatin1String( \"close\" )" }
-					}
-
+				{class Page
 					{tag
 						{valueType Prototyper::Core::Cfg::Size}
 						{name size}
@@ -731,11 +706,6 @@
 					{tagVectorOfTags
 						{valueType Prototyper::Core::Cfg::Group}
 						{name group}
-					}
-
-					{tagVectorOfTags
-						{valueType Prototyper::Core::Cfg::Description}
-						{name desc}
 					}
 
 					{tagVectorOfTags
@@ -791,8 +761,8 @@
 					}
 
 					{tagVectorOfTags
-						{valueType Prototyper::Core::Cfg::Form}
-						{name form}
+						{valueType Prototyper::Core::Cfg::Page}
+						{name page}
 					}
 
 					{tagScalar

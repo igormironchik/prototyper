@@ -37,7 +37,7 @@ namespace Prototyper {
 
 namespace Core {
 
-class Form;
+class Page;
 
 
 //
@@ -53,7 +53,7 @@ class FormPolyline
 	,	public FormWithHandle
 {
 public:
-	explicit FormPolyline( Form * form, QGraphicsItem * parent = 0 );
+	explicit FormPolyline( Page * form, QGraphicsItem * parent = 0 );
 	~FormPolyline();
 
 	//! \return Type.
