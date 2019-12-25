@@ -350,7 +350,7 @@ ProjectWidget::renameTab( const QString & oldName )
 		if( index - 1 >= 0 )
 			names << d->m_forms.at( index - 1 )->form()->ids();
 
-		NameDlg dlg( names, tr( "Enter New Form Name..." ), this );
+		NameDlg dlg( names, tr( "Enter New Form Name..." ), oldName, this );
 
 		if( dlg.exec() == QDialog::Accepted )
 		{

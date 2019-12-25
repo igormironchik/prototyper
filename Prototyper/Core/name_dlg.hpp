@@ -47,6 +47,7 @@ class NameDlg
 public:
 	NameDlg( const QStringList & names,
 		const QString & title,
+		const QString & oldName,
 		QWidget * parent = 0, Qt::WindowFlags f = 0 );
 	~NameDlg();
 

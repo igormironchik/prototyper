@@ -71,6 +71,8 @@ FormHierarchyView::FormHierarchyView( FormHierarchyModel * model, QWidget * pare
 
 	connect( this, &QTreeView::clicked,
 		this, &FormHierarchyView::p_rowCLicked );
+
+	connect( model, &FormHierarchyModel::dataChanged, this, &FormHierarchyView::changed );
 }
 
 FormHierarchyView::~FormHierarchyView()
