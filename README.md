@@ -38,3 +38,11 @@ After clone update submodules with the next command:
 ```
 git submodule update --init --recursive
 ```
+
+# Roadmap
+
+First version of the Prototyper uses forms, form items hierarchy, descriptions
+of the items. It's very hard to create mockups with this application. I decided
+to refuse from forms, and create second version with pages and comments, like
+in [Moqups](https://moqups.com/). I believe that this approach will be simpler a
+lot.
