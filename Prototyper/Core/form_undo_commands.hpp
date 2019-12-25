@@ -489,35 +489,6 @@ private:
 
 
 //
-// UndoRenameObject
-//
-
-//! Undo renaming of object.
-class UndoRenameObject
-	:	public QUndoCommand
-{
-public:
-	UndoRenameObject( Form * form, const QString & oldName,
-		const QString & newName );
-	~UndoRenameObject();
-
-	void undo() Q_DECL_OVERRIDE;
-
-	void redo() Q_DECL_OVERRIDE;
-
-private:
-	//! Form.
-	Form * m_form;
-	//! Old name.
-	QString m_oldName;
-	//! New name.
-	QString m_newName;
-	//! Undone?
-	bool m_undone;
-}; // class UndoRenameObject
-
-
-//
 // UndoChangeLine
 //
 

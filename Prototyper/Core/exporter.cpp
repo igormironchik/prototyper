@@ -305,21 +305,7 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Form & form )
 
 	p.setPen( Qt::gray );
 
-	FormProperties::Buttons btns;
-
-	if( std::find( form.windowButtons().cbegin(), form.windowButtons().cend(),
-		Cfg::c_maximize ) != form.windowButtons().cend() )
-			btns |= FormProperties::MaximizeButton;
-
-	if( std::find( form.windowButtons().cbegin(), form.windowButtons().cend(),
-		Cfg::c_minimize ) != form.windowButtons().cend() )
-			btns |= FormProperties::MinimizeButton;
-
-	if( std::find( form.windowButtons().cbegin(), form.windowButtons().cend(),
-		Cfg::c_close ) != form.windowButtons().cend() )
-			btns |= FormProperties::CloseButton;
-
-	Form::draw( &p, form.size().width(), form.size().height(), btns, 0, false );
+	Form::draw( &p, form.size().width(), form.size().height(), 0, false );
 
 	foreach( const Cfg::Group & group, form.group() )
 		drawGroup( group, p );

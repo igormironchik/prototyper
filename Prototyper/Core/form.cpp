@@ -30,13 +30,9 @@
 #include "form_rect_placer.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
-#include "form_hierarchy_widget.hpp"
 #include "name_dlg.hpp"
-#include "form_size_dlg.hpp"
-#include "desc_window.hpp"
 #include "utils.hpp"
 #include "form_undo_commands.hpp"
-#include "desc_widget.hpp"
 #include "constants.hpp"
 
 // Qt include.
@@ -89,8 +85,6 @@ FormPrivate::init()
 	q->setAcceptHoverEvents( true );
 
 	q->setAcceptDrops( true );
-
-	m_model = TopGui::instance()->projectWindow()->formHierarchy()->model();
 
 	m_undoStack = new QUndoStack(
 		TopGui::instance()->projectWindow()->projectWidget()->undoGroup() );
@@ -200,21 +194,7 @@ FormPrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 
 		foreach( QGraphicsItem * item, items )
 		{
-			FormObject * obj = dynamic_cast< FormObject* > ( item );
-
-			if( obj )
-				m_model->removeObject( obj, tmp );
-
 			tmp->removeFromGroup( item );
-
-			if( obj )
-			{
-				m_model->endRemoveObject();
-
-				QApplication::processEvents();
-
-				m_model->addObject( obj, q );
-			}
 
 			if( FormAction::instance()->mode() == FormAction::Select )
 			{
@@ -228,18 +208,6 @@ FormPrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 					text->enableEditing( false );
 			}
 		}
-
-		m_model->removeObject( tmp, q );
-
-		if( m_desc.contains( tmp->objectId() ) )
-		{
-			TopGui::instance()->projectWindow()->descWindow()->deleteItem(
-				q, tmp->objectId() );
-
-			m_desc.remove( tmp->objectId() );
-		}
-
-		m_model->endRemoveObject();
 
 		tmp->postDeletion();
 
@@ -276,122 +244,44 @@ FormPrivate::updateFromCfg()
 
 	m_ids.append( m_cfg.tabName() );
 
-	m_btns = FormProperties::Buttons();
-
-	if( std::find( m_cfg.windowButtons().cbegin(), m_cfg.windowButtons().cend(),
-		Cfg::c_minimize ) != m_cfg.windowButtons().cend() )
-			m_btns |= FormProperties::MinimizeButton;
-
-	if( std::find( m_cfg.windowButtons().cbegin(), m_cfg.windowButtons().cend(),
-		Cfg::c_maximize ) != m_cfg.windowButtons().cend() )
-			m_btns |= FormProperties::MaximizeButton;
-
-	if( std::find( m_cfg.windowButtons().cbegin(), m_cfg.windowButtons().cend(),
-		Cfg::c_close ) != m_cfg.windowButtons().cend() )
-			m_btns |= FormProperties::CloseButton;
-
-	TopGui::instance()->projectWindow()->formHierarchy()->view()->update(
-		m_model->index( q ) );
-
 	foreach( const Cfg::Line & c, m_cfg.line() )
-	{
-		FormLine * line = createElem< FormLine > ( c );
-
-		m_model->addObject( line, q );
-	}
+		createElem< FormLine > ( c );
 
 	foreach( const Cfg::Polyline & c, m_cfg.polyline() )
-	{
-		FormPolyline * line = createElem< FormPolyline > ( c );
-
-		m_model->addObject( line, q );
-	}
+		createElem< FormPolyline > ( c );
 
 	foreach( const Cfg::Text & c, m_cfg.text() )
-	{
-		FormText * text = createText( c );
-
-		m_model->addObject( text, q );
-	}
+		createText( c );
 
 	foreach( const Cfg::Image & c, m_cfg.image() )
-	{
-		FormImage * image = createElem< FormImage > ( c );
-
-		m_model->addObject( image, q );
-	}
+		createElem< FormImage > ( c );
 
 	foreach( const Cfg::Rect & c, m_cfg.rect() )
-	{
-		FormRect * rect = createElem< FormRect > ( c );
-
-		m_model->addObject( rect, q );
-	}
+		createElem< FormRect > ( c );
 
 	foreach( const Cfg::Group & c, m_cfg.group() )
-	{
-		FormGroup * group = createGroup( c );
-
-		m_model->addObject( group, q );
-	}
-
-	foreach( const Cfg::Description & c, m_cfg.desc() )
-	{
-		createDescription( c.id() );
-
-		setText( m_desc[ c.id() ], c.text() );
-	}
+		createGroup( c );
 
 	foreach( const Cfg::Button & c, m_cfg.button() )
-	{
-		FormButton * e = createElemWithRect< FormButton > ( c, QRectF() );
-
-		m_model->addObject( e, q );
-	}
+		createElemWithRect< FormButton > ( c, QRectF() );
 
 	foreach( const Cfg::ComboBox & c, m_cfg.combobox() )
-	{
-		FormComboBox * e = createElemWithRect< FormComboBox > ( c, QRectF() );
-
-		m_model->addObject( e, q );
-	}
+		createElemWithRect< FormComboBox > ( c, QRectF() );
 
 	foreach( const Cfg::CheckBox & c, m_cfg.radiobutton() )
-	{
-		FormRadioButton * e = createElemWithRect< FormRadioButton > ( c, QRectF() );
-
-		m_model->addObject( e, q );
-	}
+		createElemWithRect< FormRadioButton > ( c, QRectF() );
 
 	foreach( const Cfg::CheckBox & c, m_cfg.checkbox() )
-	{
-		FormCheckBox * e = createElemWithRect< FormCheckBox > ( c, QRectF() );
-
-		m_model->addObject( e, q );
-	}
+		createElemWithRect< FormCheckBox > ( c, QRectF() );
 
 	foreach( const Cfg::HSlider & c, m_cfg.hslider() )
-	{
-		FormHSlider * e = createElemWithRect< FormHSlider > ( c, QRectF() );
-
-		m_model->addObject( e, q );
-	}
+		createElemWithRect< FormHSlider > ( c, QRectF() );
 
 	foreach( const Cfg::VSlider & c, m_cfg.vslider() )
-	{
-		FormVSlider * e = createElemWithRect< FormVSlider > ( c, QRectF() );
-
-		m_model->addObject( e, q );
-	}
+		createElemWithRect< FormVSlider > ( c, QRectF() );
 
 	foreach( const Cfg::SpinBox & c, m_cfg.spinbox() )
-	{
-		FormSpinBox * e = createElemWithRect< FormSpinBox > ( c, QRectF() );
-
-		m_model->addObject( e, q );
-	}
-
-	q->setLink( m_cfg.link() );
+		createElemWithRect< FormSpinBox > ( c, QRectF() );
 
 	q->update();
 }
@@ -400,8 +290,6 @@ void
 FormPrivate::clear()
 {
 	m_ids.clear();
-
-	m_desc.clear();
 
 	QList< QGraphicsItem* > items = q->childItems();
 
@@ -428,14 +316,10 @@ FormPrivate::clear()
 
 	foreach( FormObject * obj, objs )
 	{
-		m_model->removeObject( obj, q );
-
 		QGraphicsItem * item = dynamic_cast< QGraphicsItem* > ( obj );
 
 		if( item )
 			q->scene()->removeItem( item );
-
-		m_model->endRemoveObject();
 	}
 
 	foreach( QGraphicsItem * item, items )
@@ -540,55 +424,12 @@ FormPrivate::addIds( FormGroup * group )
 }
 
 void
-FormPrivate::createDescription( const QString & id )
-{
-	QSharedPointer< QTextDocument > doc( new QTextDocument );
-
-	QFont f = QApplication::font();
-	f.setPointSize( 10.0 );
-
-	doc->setDefaultFont( f );
-
-	QTextCursor c( doc.data() );
-
-	QTextCharFormat fmt = c.charFormat();
-	fmt.setFontPointSize( 10.0 );
-
-	c.setCharFormat( fmt );
-
-	m_desc[ id ] = doc;
-}
-
-void
 FormPrivate::setText( const QSharedPointer< QTextDocument > & doc,
 	const std::vector< Cfg::TextStyle > & text )
 {
 	doc->clear();
 
 	Cfg::fillTextDocument( doc.data(), text );
-}
-
-void
-FormPrivate::updateLink( const QList< QGraphicsItem* > & childItems,
-	const QString & oldName, const QString & name )
-{
-	foreach( QGraphicsItem * item, childItems )
-	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
-
-		if( obj )
-		{
-			if( obj->link() == oldName )
-			{
-				obj->setLink( name );
-
-				m_model->update( obj );
-			}
-
-			if( obj->objectType() == FormObject::GroupType )
-				updateLink( item->childItems(), oldName, name );
-		}
-	}
 }
 
 void
@@ -622,34 +463,6 @@ FormPrivate::hideHandlesOfCurrent()
 
 				default :
 					break;
-			}
-		}
-	}
-}
-
-void
-FormPrivate::removeDescriptions( FormObject * obj )
-{
-	if( m_desc.contains( obj->objectId() ) )
-	{
-		TopGui::instance()->projectWindow()->descWindow()->deleteItem(
-			q, obj->objectId() );
-
-		m_desc.remove( obj->objectId() );
-	}
-
-	if( obj->objectType() == FormObject::GroupType )
-	{
-		FormGroup * group = dynamic_cast< FormGroup* > ( obj );
-
-		if( group )
-		{
-			foreach( QGraphicsItem * item, group->childItems() )
-			{
-				FormObject * tmp = dynamic_cast< FormObject* > ( item );
-
-				if( tmp )
-					removeDescriptions( tmp );
 			}
 		}
 	}
@@ -799,8 +612,6 @@ Form::Form( const Cfg::Form & c, QGraphicsItem * parent )
 	tmp->init();
 
 	d.swap( tmp );
-
-	d->m_model->addForm( this );
 }
 
 Form::~Form()
@@ -862,17 +673,6 @@ Cfg::Form
 Form::cfg() const
 {
 	Cfg::Form c = d->m_cfg;
-
-	c.windowButtons().clear();
-
-	if( d->m_btns.testFlag( FormProperties::MinimizeButton ) )
-		c.windowButtons().push_back( Cfg::c_minimize );
-
-	if( d->m_btns.testFlag( FormProperties::MaximizeButton ) )
-		c.windowButtons().push_back( Cfg::c_maximize );
-
-	if( d->m_btns.testFlag( FormProperties::CloseButton ) )
-		c.windowButtons().push_back( Cfg::c_close );
 
 	c.line().clear();
 	c.polyline().clear();
@@ -1022,20 +822,6 @@ Form::cfg() const
 
 	c.set_tabName( objectId() );
 
-	auto last = d->m_desc.constEnd();
-
-	for( auto it = d->m_desc.constBegin(); it != last; ++it )
-	{
-		Cfg::Description desc;
-		desc.set_id( it.key() );
-		desc.set_text( Cfg::text( QTextCursor( it.value().data() ),
-			it.value()->toPlainText() ) );
-
-		c.desc().push_back( desc );
-	}
-
-	c.set_link( link() );
-
 	return c;
 }
 
@@ -1045,9 +831,6 @@ Form::setCfg( const Cfg::Form & c )
 	d->m_cfg = c;
 
 	d->updateFromCfg();
-
-	TopGui::instance()->projectWindow()->formHierarchy()->view()->
-		resizeColumnToContents( 1 );
 }
 
 void
@@ -1160,8 +943,6 @@ Form::group( const QList< QGraphicsItem* > & items,
 
 		d->m_ids.append( id );
 
-		d->m_model->addObject( group, this );
-
 		foreach( QGraphicsItem * item, items )
 		{
 			item->setFlag( QGraphicsItem::ItemIsSelectable, false );
@@ -1169,14 +950,7 @@ Form::group( const QList< QGraphicsItem* > & items,
 			item->setSelected( false );
 
 			if( item->parentItem() == this )
-			{
 				group->addToGroup( item );
-
-				FormObject * obj = dynamic_cast< FormObject* > ( item );
-
-				if( obj )
-					d->m_model->addObject( obj, group );
-			}
 		}
 	}
 	else if( d->m_currentLines.size() > 1 )
@@ -1189,8 +963,6 @@ Form::group( const QList< QGraphicsItem* > & items,
 
 		d->m_ids.append( id );
 
-		d->m_model->addObject( group, this );
-
 		foreach( FormLine * line, d->m_currentLines )
 		{
 			line->setFlag( QGraphicsItem::ItemIsSelectable, false );
@@ -1198,8 +970,6 @@ Form::group( const QList< QGraphicsItem* > & items,
 			line->setSelected( false );
 
 			group->addToGroup( line );
-
-			d->m_model->addObject( line, group );
 		}
 
 		d->m_currentLines.clear();
@@ -1533,12 +1303,6 @@ Form::deleteItems( const QList< QGraphicsItem* > & items,
 			if( makeUndoCommand )
 				pushUndoDeleteCommand( d->m_undoStack, obj, this );
 
-			d->m_model->removeObject( obj, this );
-
-			d->removeDescriptions( obj );
-
-			d->m_model->endRemoveObject();
-
 			d->m_ids.removeOne( obj->objectId() );
 
 			switch( obj->objectType() )
@@ -1581,19 +1345,6 @@ Form::deleteItems( const QList< QGraphicsItem* > & items,
 	}
 }
 
-void
-Form::updateLink( const QString & oldName, const QString & name )
-{
-	if( link() == oldName )
-	{
-		setLink( name );
-
-		d->m_model->update( this );
-	}
-
-	d->updateLink( childItems(), oldName, name );
-}
-
 QRectF
 Form::boundingRect() const
 {
@@ -1614,16 +1365,13 @@ Form::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	qDebug() << this << d->m_cfg.gridStep();
 
 	draw( painter, d->m_cfg.size().width(),
-		d->m_cfg.size().height(), d->m_btns, d->m_cfg.gridStep(),
+		d->m_cfg.size().height(), d->m_cfg.gridStep(),
 		d->m_gridMode == ShowGrid );
 }
 
 void
-Form::draw( QPainter * painter, int width, int height,
-	FormProperties::Buttons btns, int gridStep, bool drawGrid )
+Form::draw( QPainter * painter, int width, int height, int gridStep, bool drawGrid )
 {
-	const int wh = c_formHeaderHeight;
-
 	static const QColor gridColor = Qt::gray;
 
 	painter->setPen( gridColor );
@@ -1632,87 +1380,21 @@ Form::draw( QPainter * painter, int width, int height,
 
 	painter->setBrush( QBrush( gridColor ) );
 
-	painter->drawRect( QRect( 0, 0, width, wh ) );
+	painter->setBrush( Qt::white );
+
 
 	painter->setBrush( Qt::white );
 
-	const int w = 20;
-	const int o = 5;
-
-	const int trd = qRound( (qreal) w / 3.5 );
-	const int half = qRound( (qreal) w / 2.0 );
-
-	int i = 1;
-
-	if( btns.testFlag( FormProperties::CloseButton ) )
-	{
-		const QRect b( width - o * i - w * i, o, w, w );
-
-		painter->drawEllipse( b );
-
-		painter->drawLine( b.x() + trd, b.y() + trd,
-			b.x() + w - trd, b.y() + w - trd );
-
-		painter->drawLine( b.x() + trd, b.y() + w - trd,
-			b.x() + w - trd, b.y() + trd );
-
-		++i;
-	}
-
-	if( btns.testFlag( FormProperties::MaximizeButton ) )
-	{
-		const QRect b( width - o * i - w * i, o, w, w );
-
-		painter->save();
-
-		painter->setPen( Qt::white );
-
-		painter->drawLine( b.x() + half, b.y() + trd,
-			b.x() + w - trd, b.y() + half );
-
-		painter->drawLine( b.x() + w - trd, b.y() + half,
-			b.x() + half, b.y() + w - trd );
-
-		painter->drawLine( b.x() + half, b.y() + w - trd,
-			b.x() + trd, b.y() + half );
-
-		painter->drawLine( b.x() + trd, b.y() + half,
-			b.x() + half, b.y() + trd );
-
-		painter->restore();
-
-		++i;
-	}
-
-	if( btns.testFlag( FormProperties::MinimizeButton ) )
-	{
-		const QRect b( width - o * i - w * i, o, w, w );
-
-		painter->save();
-
-		painter->setPen( Qt::white );
-
-		painter->drawLine( b.x() + trd, b.y() + half,
-			b.x() + half, b.y() + w - trd );
-
-		painter->drawLine( b.x() + half, b.y() + w - trd,
-			b.x() + w - trd, b.y() + half );
-
-		painter->restore();
-	}
-
-	painter->setBrush( Qt::white );
-
-	QRect r( 0, wh, width, height );
+	QRect r( 0, 0, width, height );
 
 	painter->drawRect( r );
 
 	if( drawGrid )
 	{
 		for( int x = gridStep; x < width; x += gridStep )
-			painter->drawLine( x, wh, x, height + wh );
+			painter->drawLine( x, 0, x, height );
 
-		for( int y = gridStep + wh; y < height + wh; y += gridStep )
+		for( int y = gridStep; y < height; y += gridStep )
 			painter->drawLine( 0, y, width, y );
 	}
 }
@@ -1763,79 +1445,9 @@ Form::emitChanged()
 }
 
 void
-Form::renameObject( FormObject * obj )
-{
-	if( obj->form() == this )
-	{
-		if( obj != this )
-		{
-			NameDlg dlg( d->m_ids, tr( "Enter New Name of the Object..." ),
-				obj->objectId(), scene()->views().first() );
-
-			if( dlg.exec() == QDialog::Accepted )
-				renameObject( obj, dlg.name() );
-		}
-		else
-			TopGui::instance()->projectWindow()->projectWidget()->renameTab(
-				obj->objectId() );
-	}
-}
-
-void
-Form::renameObject( FormObject * obj, const QString & newId,
-	bool pushUndoCommand )
-{
-	const QString old = obj->objectId();
-
-	handleDescDuringRename( obj, newId );
-
-	TopGui::instance()->projectWindow()->descWindow()->renameItem(
-		this, obj->objectId(), newId );
-
-	if( pushUndoCommand )
-		d->m_undoStack->push( new UndoRenameObject( this, obj->objectId(),
-			newId ) );
-
-	obj->setObjectId( newId );
-
-	d->m_ids.removeOne( old );
-
-	d->m_ids.append( newId );
-
-	d->m_model->update( obj );
-}
-
-void
-Form::handleDescDuringRename( FormObject * obj, const QString & newId )
-{
-	const QString old = obj->objectId();
-
-	if( d->m_desc.contains( old ) )
-	{
-		QSharedPointer< QTextDocument > doc =
-			d->m_desc[ obj->objectId() ];
-
-		d->m_desc.remove( obj->objectId() );
-
-		auto * dock = TopGui::instance()->projectWindow()->descDockWidget();
-
-		if( dock->form() == this &&
-			dock->windowTitle() == obj->objectId() )
-				dock->setWindowTitle( newId );
-
-		d->m_desc[ newId ] = doc;
-	}
-}
-
-void
 Form::renameForm( const QString & name )
 {
 	const QString old = objectId();
-
-	handleDescDuringRename( this, name );
-
-	TopGui::instance()->projectWindow()->descWindow()->renameItem(
-		this, old, name );
 
 	setObjectId( name );
 
@@ -1847,72 +1459,10 @@ Form::renameForm( const QString & name )
 }
 
 void
-Form::editDescription( const QString & id )
-{
-	if( !d->m_desc.contains( id ) )
-		d->createDescription( id );
-
-	TopGui::instance()->projectWindow()->descWindow()->setEditors(
-		id, d->m_desc, this );
-
-	TopGui::instance()->projectWindow()->descWindow()->show();
-}
-
-void
-Form::selectionChanged()
-{
-	const QList< QGraphicsItem* > s = d->selection();
-
-	FormObject * obj = Q_NULLPTR;
-
-	if( s.size() == 1 )
-		obj = dynamic_cast< FormObject* > ( s.first() );
-	else
-		obj = this;
-
-	if( !d->m_desc.contains( obj->objectId() ) )
-		d->createDescription( obj->objectId() );
-
-	TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-		d->m_desc[ obj->objectId() ], obj->objectId(), this );
-}
-
-void
 Form::slotSetGridStep()
 {
 	TopGui::instance()->projectWindow()->setGridStep(
 		d->m_cfg.gridStep(), false );
-}
-
-void
-Form::resizeForm()
-{
-	FormSizeDlg dlg( d->m_cfg.size().width(),
-		d->m_cfg.size().height(),
-		TopGui::instance()->projectWindow() );
-
-	if( dlg.exec() == QDialog::Accepted )
-	{
-		setRectangle( QRectF( 0.0, 0.0,
-			dlg.size().width(), dlg.size().height() ) );
-	}
-}
-
-void
-Form::properties()
-{
-	FormProperties dlg;
-
-	dlg.setButtons( d->m_btns );
-
-	if( dlg.exec() == QDialog::Accepted )
-	{
-		d->m_btns = dlg.buttons();
-
-		emit changed();
-
-		update();
-	}
 }
 
 void
@@ -1938,11 +1488,6 @@ Form::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	menu.addAction( d->m_gridStepAction );
 	menu.addAction( QIcon( ":/Core/img/transform-scale.png" ),
 		tr( "Resize" ), this, SLOT( resizeForm() ) );
-
-	menu.addSeparator();
-
-	menu.addAction( QIcon( ":/Core/img/configure.png" ),
-		tr( "Properties" ), this, &Form::properties );
 
 	menu.exec( event->screenPos() );
 
@@ -2078,8 +1623,6 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				d->m_ids.append( id );
 
-				d->m_model->addObject( line, this );
-
 				d->m_current = line;
 
 				if( !intersected )
@@ -2148,8 +1691,6 @@ Form::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				d->m_ids.append( id );
 
-				d->m_model->addObject( rect, this );
-
 				QPointF p = mouseEvent->pos();
 
 				if( FormAction::instance()->isSnapEnabled() )
@@ -2199,8 +1740,6 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, FormPrivate * d,
 		elem->setObjectId( id );
 
 		d->m_ids.append( id );
-
-		d->m_model->addObject( elem, form );
 
 		d->m_undoStack->push( new UndoCreate< Elem, Config > ( form,
 			elem->objectId() ) );
@@ -2264,16 +1803,9 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 							d->m_currentPoly->setObjectId( id );
 
-							d->m_model->addObject( d->m_currentPoly, this );
-
 							d->m_currentPoly->appendLine(
 								d->m_currentLines.first()->line() );
 							d->m_currentPoly->showHandles( true );
-
-							d->m_model->removeObject( d->m_currentLines.first(),
-								this );
-
-							d->m_model->endRemoveObject();
 
 							delete d->m_currentLines.first();
 
@@ -2286,11 +1818,7 @@ Form::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 							d->m_currentPoly->objectId(),
 							line->line() ) );
 
-						d->m_model->removeObject( line, this );
-
 						scene()->removeItem( line );
-
-						d->m_model->endRemoveObject();
 
 						delete line;
 
@@ -2523,8 +2051,6 @@ Form::dropEvent( QGraphicsSceneDragDropEvent * event )
 			this, image->objectId() ) );
 
 		d->m_ids.append( id );
-
-		d->m_model->addObject( image, this );
 
 		if( FormAction::instance()->mode() == FormAction::Select )
 		{

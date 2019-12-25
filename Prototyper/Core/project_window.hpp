@@ -34,9 +34,6 @@ namespace Core {
 
 class ProjectWidget;
 class TabsList;
-class FormHierarchyWidget;
-class DescWindow;
-class DescDockWidget;
 class FormView;
 
 
@@ -59,9 +56,6 @@ public:
 	//! \return Project widget.
 	ProjectWidget * projectWidget() const;
 
-	//! \return Descriptions window.
-	DescWindow * descWindow() const;
-
 	//! \return Project's file name.
 	const QString & projectFileName() const;
 
@@ -69,12 +63,6 @@ public:
 	QAction * showHideGridAction() const;
 	//! \return Grid step action.
 	QAction * gridStepAction() const;
-
-	//! \return Form hierarchy widget.
-	FormHierarchyWidget * formHierarchy() const;
-
-	//! \return Description dock widget.
-	DescDockWidget * descDockWidget() const;
 
 	//! \return Tabs list widget.
 	TabsList * tabsList() const;
@@ -91,12 +79,6 @@ public slots:
 
 protected:
 	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
-
-protected:
-	friend class TopGuiPrivate;
-
-	//! Do post construction init.
-	void postConstruction();
 
 private slots:
 	//! Quit.
@@ -186,6 +168,7 @@ private slots:
 
 private:
 	friend class ProjectWindowPrivate;
+	friend class TopGuiPrivate;
 
 	Q_DISABLE_COPY( ProjectWindow )
 

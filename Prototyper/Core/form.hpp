@@ -30,7 +30,6 @@
 
 // Prototyper include.
 #include "form_object.hpp"
-#include "form_properties.hpp"
 #include "form_line.hpp"
 #include "form_polyline.hpp"
 #include "form_group.hpp"
@@ -44,11 +43,11 @@
 #include "form_spinbox.hpp"
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
-#include "form_hierarchy_model.hpp"
 #include "form_grid_snap.hpp"
 
 QT_BEGIN_NAMESPACE
 class QUndoStack;
+class QAction;
 QT_END_NAMESPACE
 
 
@@ -93,10 +92,6 @@ public:
 		,	m_snap( 0 )
 		,	m_polyline( false )
 		,	m_currentPoly( 0 )
-		,	m_model( 0 )
-		,	m_btns( FormProperties::MinimizeButton |
-				FormProperties::MaximizeButton |
-				FormProperties::CloseButton )
 		,	m_undoStack( 0 )
 	{
 	}
@@ -140,18 +135,11 @@ public:
 	void clearIds( FormGroup * group );
 	//! Add IDs.
 	void addIds( FormGroup * group );
-	//! Create description.
-	void createDescription( const QString & id );
 	//! Set text.
 	void setText( const QSharedPointer< QTextDocument > & doc,
 		const std::vector< Cfg::TextStyle > & text );
-	//! Update link.
-	void updateLink( const QList< QGraphicsItem* > & childItems,
-		const QString & oldName, const QString & name );
 	//! Hide handles of current item.
 	void hideHandlesOfCurrent();
-	//! Remove descriptions of the object.
-	void removeDescriptions( FormObject * obj );
 	//! Selection.
 	QList< QGraphicsItem* > selection();
 
@@ -199,14 +187,8 @@ public:
 	bool m_polyline;
 	//! Current polyline.
 	FormPolyline * m_currentPoly;
-	//! Hierarchy model.
-	FormHierarchyModel * m_model;
 	//! IDs
 	QStringList m_ids;
-	//! Descriptions.
-	QMap< QString, QSharedPointer< QTextDocument > > m_desc;
-	//! Buttons.
-	FormProperties::Buttons m_btns;
 	//! Undo stack.
 	QUndoStack * m_undoStack;
 	//! Map of text documents.
@@ -305,16 +287,13 @@ public:
 	void deleteItems( const QList< QGraphicsItem* > & items,
 		bool makeUndoCommand = true );
 
-	//! Update renamed link.
-	void updateLink( const QString & oldName, const QString & name );
-
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget ) Q_DECL_OVERRIDE;
 
 	static void draw( QPainter * painter, int width, int height,
-		FormProperties::Buttons btns, int gridStep, bool drawGrid = true );
+		int gridStep, bool drawGrid = true );
 
 	//! Position elements.
 	void setPosition( const QPointF & pos,
@@ -334,29 +313,14 @@ public:
 	void emitChanged();
 
 public slots:
-	//! Rename object.
-	void renameObject( FormObject * obj );
-	//! Rename object.
-	void renameObject( FormObject * obj, const QString & newId,
-		bool pushUndoCommand = true );
 	//! Rename form.
 	void renameForm( const QString & name );
-	//! Edit description.
-	void editDescription( const QString & id );
-	//! Selection changed.
-	void selectionChanged();
 
 private slots:
 	//! Set grid step.
 	void slotSetGridStep();
-	//! Resize form.
-	void resizeForm();
-	//! Properties.
-	void properties();
 	//! Undo command in text item was added.
 	void undoCommandInTextAdded();
-	//! Handle description during renaming.
-	void handleDescDuringRename( FormObject * obj, const QString & newId );
 
 protected:
 	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
@@ -485,8 +449,6 @@ protected:
 		obj->setObjectId( id );
 
 		d->m_ids.append( id );
-
-		d->m_model->addObject( obj, this );
 
 		return obj;
 	}

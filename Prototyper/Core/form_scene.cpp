@@ -26,8 +26,6 @@
 #include "form_actions.hpp"
 #include "top_gui.hpp"
 #include "project_window.hpp"
-#include "form_hierarchy_widget.hpp"
-#include "form_hierarchy_model.hpp"
 #include "form_object.hpp"
 #include "form_actions.hpp"
 #include "form.hpp"
@@ -115,9 +113,6 @@ FormScene::setForm( Form * f )
 {
 	if( d->m_form )
 	{
-		TopGui::instance()->projectWindow()->
-			formHierarchy()->model()->removeForm( d->m_form );
-
 		removeItem( d->m_form );
 
 		delete d->m_form;
@@ -126,9 +121,6 @@ FormScene::setForm( Form * f )
 	d->m_form = f;
 
 	addItem( d->m_form );
-
-	connect( this, &FormScene::selectionChanged,
-		d->m_form, &Form::selectionChanged );
 }
 
 void

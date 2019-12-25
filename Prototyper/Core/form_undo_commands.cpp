@@ -83,9 +83,7 @@ UndoGroup::redo()
 				items.append( item );
 		}
 
-		FormGroup * group = m_form->group( items, false );
-
-		m_form->renameObject( group, m_id, false );
+		m_form->group( items, false );
 	}
 }
 
@@ -120,9 +118,7 @@ UndoUngroup::undo()
 	foreach( const QString & id, m_items )
 		items.append( m_form->findItem( id ) );
 
-	FormGroup * group = m_form->group( items, false );
-
-	m_form->renameObject( group, m_id, false );
+	m_form->group( items, false );
 }
 
 void
@@ -232,52 +228,6 @@ UndoAddLineToPoly::redo()
 			else
 				poly->showHandles( true );
 		}
-	}
-}
-
-
-//
-// UndoRenameObject
-//
-
-UndoRenameObject::UndoRenameObject( Form * form,
-	const QString & oldName, const QString & newName )
-	:	QUndoCommand( QObject::tr( "Rename Object" ) )
-	,	m_form( form )
-	,	m_oldName( oldName )
-	,	m_newName( newName )
-	,	m_undone( false )
-{
-}
-
-UndoRenameObject::~UndoRenameObject()
-{
-}
-
-void
-UndoRenameObject::undo()
-{
-	m_undone = true;
-
-	FormObject * obj = dynamic_cast< FormObject* > (
-		m_form->findItem( m_newName ) );
-
-	m_form->renameObject( obj, m_oldName, false );
-
-	TopGui::instance()->projectWindow()->switchToSelectMode();
-}
-
-void
-UndoRenameObject::redo()
-{
-	if( m_undone )
-	{
-		FormObject * obj = dynamic_cast< FormObject* > (
-			m_form->findItem( m_oldName ) );
-
-		m_form->renameObject( obj, m_newName, false );
-
-		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 }
 

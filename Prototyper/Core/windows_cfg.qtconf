@@ -53,12 +53,6 @@
 						{required}
 					}
 
-					{tag
-						{valueType Prototyper::Core::Cfg::Window}
-						{name descWindow}
-						{required}
-					}
-					
 					{tagScalar
 						{valueType QString}
 						{name state}

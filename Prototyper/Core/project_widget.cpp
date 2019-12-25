@@ -33,10 +33,6 @@
 #include "top_gui.hpp"
 #include "project_window.hpp"
 #include "tabs_list.hpp"
-#include "form_hierarchy_widget.hpp"
-#include "form_hierarchy_model.hpp"
-#include "new_form_dlg.hpp"
-#include "desc_widget.hpp"
 #include "project_window.hpp"
 
 // Qt include.
@@ -155,8 +151,6 @@ ProjectWidgetPrivate::init()
 void
 ProjectWidgetPrivate::newProject()
 {
-	TopGui::instance()->projectWindow()->formHierarchy()->model()->clear();
-
 	for( int i = 1; i < m_tabNames.size(); )
 	{
 		QWidget * tab = m_tabs->widget( i );
@@ -280,8 +274,6 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 {
 	d->newProject();
 
-	TopGui::instance()->projectWindow()->formHierarchy()->model()->clear();
-
 	QApplication::processEvents();
 
 	d->m_cfg = cfg;
@@ -320,25 +312,20 @@ ProjectWidget::cleanUndoGroup()
 void
 ProjectWidget::addForm()
 {
-	NewFormDlg dlg( d->m_tabNames, tr( "Enter New Form Properties..." ), this );
+	Cfg::Form cfg;
+	cfg.set_gridStep( d->m_cfg.defaultGridStep() );
+	cfg.size().set_width( 800 );
+	cfg.size().set_height( 600 );
+	cfg.set_tabName( QStringLiteral( "Page 1" ) );
 
-	if( dlg.exec() == QDialog::Accepted )
-	{
-		Cfg::Form cfg;
-		cfg.set_gridStep( d->m_cfg.defaultGridStep() );
-		cfg.size().set_width( dlg.size().width() );
-		cfg.size().set_height( dlg.size().height() );
-		cfg.set_tabName( dlg.name() );
+	d->addForm( cfg, d->m_cfg.showGrid() );
 
-		d->addForm( cfg, d->m_cfg.showGrid() );
+	d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
 
-		d->m_tabs->setCurrentIndex( d->m_tabs->count() - 1 );
+	TopGui::instance()->projectWindow()->tabsList()->model()->
+		setStringList( d->m_tabNames );
 
-		TopGui::instance()->projectWindow()->tabsList()->model()->
-			setStringList( d->m_tabNames );
-
-		emit changed();
-	}
+	emit changed();
 }
 
 void
@@ -366,15 +353,7 @@ ProjectWidget::renameTab( const QString & oldName )
 			d->m_tabNames[ index ] = dlg.name();
 
 			if( index > 0 )
-			{
 				d->m_forms[ index - 1 ]->form()->renameForm( dlg.name() );
-
-				TopGui::instance()->projectWindow()->formHierarchy()->model()->
-					renameForm( d->m_forms.at( index - 1 )->form() );
-
-				foreach( FormView * view, d->m_forms )
-					view->form()->updateLink( tmpOldName, dlg.name() );
-			}
 			else
 				d->m_cfg.description().set_tabName( dlg.name() );
 
@@ -411,9 +390,6 @@ ProjectWidget::deleteForm( const QString & name )
 
 			d->m_tabNames.removeAt( index );
 
-			TopGui::instance()->projectWindow()->formHierarchy()->model()->
-				removeForm( d->m_forms.at( index - 1 )->form() );
-
 			FormView * form = d->m_forms.at( index - 1 );
 
 			d->m_forms.removeAt( index - 1 );
@@ -426,9 +402,6 @@ ProjectWidget::deleteForm( const QString & name )
 
 			TopGui::instance()->projectWindow()->tabsList()->model()->
 				setStringList( d->m_tabNames );
-
-			foreach( FormView * view, d->m_forms )
-				view->form()->updateLink( name, QString() );
 
 			emit changed();
 
@@ -457,17 +430,9 @@ ProjectWidget::tabChanged( int index )
 	{
 		d->m_undoGroup->setActiveStack(
 			d->m_forms.at( index - 1 )->form()->undoStack() );
-
-		d->m_forms.at( index - 1 )->form()->selectionChanged();
 	}
 	else
-	{
 		d->m_undoGroup->setActiveStack( Q_NULLPTR );
-
-		TopGui::instance()->projectWindow()->descDockWidget()->setDocument(
-			QSharedPointer< QTextDocument > ( Q_NULLPTR ),
-			QString(), Q_NULLPTR );
-	}
 }
 
 bool

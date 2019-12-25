@@ -219,7 +219,7 @@ TabsListPrivate::init()
 
 	m_view->setModel( m_model );
 
-	q->setWindowTitle( TabsList::tr( "Tabs" ) );
+	q->setWindowTitle( TabsList::tr( "Pages" ) );
 
 	q->setWidget( m_view );
 

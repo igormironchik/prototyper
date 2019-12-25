@@ -32,15 +32,12 @@
 #include "project_description_tab.hpp"
 #include "text_editor.hpp"
 #include "form_actions.hpp"
-#include "form_hierarchy_widget.hpp"
 #include "tabs_list.hpp"
 #include "form_object.hpp"
 #include "form_text.hpp"
-#include "desc_window.hpp"
 #include "pdf_exporter.hpp"
 #include "html_exporter.hpp"
 #include "svg_exporter.hpp"
-#include "desc_widget.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -62,6 +59,7 @@
 #include <QTextCodec>
 #include <QTextStream>
 #include <QFile>
+#include <QStringListModel>
 
 
 namespace Prototyper {
@@ -83,12 +81,9 @@ public:
 		,	m_formToolBar( Q_NULLPTR )
 		,	m_stdItemsToolBar( Q_NULLPTR )
 		,	m_formToolBarGroup( Q_NULLPTR )
-		,	m_formHierarchy( Q_NULLPTR )
-		,	m_descWidget( Q_NULLPTR )
 		,	m_tabsList( Q_NULLPTR )
 		,	m_drawLine( Q_NULLPTR )
 		,	m_select( Q_NULLPTR )
-		,	m_desc( Q_NULLPTR )
 		,	m_drawPolyLine( Q_NULLPTR )
 		,	m_undoAction( Q_NULLPTR )
 		,	m_redoAction( Q_NULLPTR )
@@ -133,18 +128,12 @@ public:
 	QToolBar * m_stdItemsToolBar;
 	//! Form toolbar group.
 	QActionGroup * m_formToolBarGroup;
-	//! Form's hierarchy.
-	FormHierarchyWidget * m_formHierarchy;
-	//! Description widget.
-	DescDockWidget * m_descWidget;
 	//! Tabs list.
 	TabsList * m_tabsList;
 	//! Draw line action.
 	QAction * m_drawLine;
 	//! Select action.
 	QAction * m_select;
-	//! Descriptions window.
-	QScopedPointer< DescWindow > m_desc;
 	//! Draw polyline action.
 	QAction * m_drawPolyLine;
 	//! Undo action.
@@ -162,9 +151,7 @@ ProjectWindowPrivate::init()
 {
 	m_widget = new ProjectWidget( m_cfg, q );
 
-	m_desc.reset( new DescWindow );
-
-	q->addToolBar( Qt::LeftToolBarArea, m_widget->descriptionTab()->toolBar() );
+	q->addToolBar( Qt::TopToolBarArea, m_widget->descriptionTab()->toolBar() );
 
 	q->setCentralWidget( m_widget );
 
@@ -224,38 +211,18 @@ ProjectWindowPrivate::init()
 
 	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "&Dock" ) );
 
-	m_formHierarchy = new FormHierarchyWidget( q );
-	m_formHierarchy->setObjectName( QLatin1String( "m_formHierarchy" ) );
-
-	q->addDockWidget( Qt::RightDockWidgetArea, m_formHierarchy );
-
-	view->addAction( m_formHierarchy->toggleViewAction() );
-	m_formHierarchy->toggleViewAction()->setShortcutContext(
-		Qt::ApplicationShortcut );
-	m_formHierarchy->toggleViewAction()->setShortcut(
-		ProjectWindow::tr( "Ctrl+Alt+H" ) );
-
 	m_tabsList = new TabsList( q );
 	m_tabsList->setObjectName( QLatin1String( "m_tabsList" ) );
 
-	q->addDockWidget( Qt::RightDockWidgetArea, m_tabsList );
+	m_tabsList->model()->setStringList( QStringList() << m_widget->projectTabName() );
+
+	q->addDockWidget( Qt::LeftDockWidgetArea, m_tabsList );
 
 	view->addAction( m_tabsList->toggleViewAction() );
 	m_tabsList->toggleViewAction()->setShortcutContext(
 		Qt::ApplicationShortcut );
 	m_tabsList->toggleViewAction()->setShortcut(
 		ProjectWindow::tr( "Ctrl+Alt+T" ) );
-
-	m_descWidget = new DescDockWidget( q );
-	m_descWidget->setObjectName( QLatin1String( "m_descWidget" ) );
-
-	q->addDockWidget( Qt::RightDockWidgetArea, m_descWidget );
-
-	view->addAction( m_descWidget->toggleViewAction() );
-	m_descWidget->toggleViewAction()->setShortcutContext(
-		Qt::ApplicationShortcut );
-	m_descWidget->toggleViewAction()->setShortcut(
-		ProjectWindow::tr( "Ctrl+Alt+D" ) );
 
 	QAction * newForm = new QAction( QIcon( ":/Core/img/list-add.png" ),
 		ProjectWindow::tr( "Add Form" ), q );
@@ -438,11 +405,9 @@ ProjectWindowPrivate::init()
 	alignVertBottom->setShortcutContext( Qt::ApplicationShortcut );
 	alignVertBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+B" ) );
 
-	q->addToolBar( Qt::LeftToolBarArea, m_formToolBar );
+	q->addToolBar( Qt::TopToolBarArea, m_formToolBar );
 
-	q->addToolBarBreak( Qt::LeftToolBarArea );
-
-	q->addToolBar( Qt::LeftToolBarArea, m_stdItemsToolBar );
+	q->addToolBar( Qt::TopToolBarArea, m_stdItemsToolBar );
 
 	m_formToolBar->hide();
 
@@ -566,12 +531,6 @@ ProjectWindowPrivate::init()
 //		q, &ProjectWindow::p_fillColor );
 	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
 		q, &ProjectWindow::p_tabChanged );
-	ProjectWindow::connect( m_desc.data(), &DescWindow::changed,
-		q, &ProjectWindow::p_projectChanged );
-	ProjectWindow::connect( m_formHierarchy, &FormHierarchyWidget::changed,
-		q, &ProjectWindow::p_projectChanged );
-	ProjectWindow::connect( m_descWidget, &DescDockWidget::changed,
-		q, &ProjectWindow::p_projectChanged );
 	ProjectWindow::connect( exportToPdf, &QAction::triggered,
 		q, &ProjectWindow::p_exportToPDf );
 	ProjectWindow::connect( exportToHtml, &QAction::triggered,
@@ -612,8 +571,6 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_canUndoChanged );
 	ProjectWindow::connect( m_widget->descriptionTab()->editor(),
 		&TextEditor::undoAvailable,
-		q, &ProjectWindow::p_canUndoChanged );
-	ProjectWindow::connect( m_desc.data(), &DescWindow::undoAvailable,
 		q, &ProjectWindow::p_canUndoChanged );
 	ProjectWindow::connect( m_widget, &ProjectWidget::formAdded,
 		q, &ProjectWindow::p_formAdded );
@@ -718,12 +675,6 @@ ProjectWindow::projectWidget() const
 	return d->m_widget;
 }
 
-DescWindow *
-ProjectWindow::descWindow() const
-{
-	return d->m_desc.data();
-}
-
 const QString &
 ProjectWindow::projectFileName() const
 {
@@ -740,18 +691,6 @@ QAction *
 ProjectWindow::gridStepAction() const
 {
 	return d->m_gridStep;
-}
-
-FormHierarchyWidget *
-ProjectWindow::formHierarchy() const
-{
-	return d->m_formHierarchy;
-}
-
-DescDockWidget *
-ProjectWindow::descDockWidget() const
-{
-	return d->m_descWidget;
 }
 
 TabsList *
@@ -811,12 +750,6 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 	e->accept();
 
 	p_quit();
-}
-
-void
-ProjectWindow::postConstruction()
-{
-	d->m_formHierarchy->postConstruction();
 }
 
 void
@@ -989,8 +922,6 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 
 				d->m_widget->descriptionTab()->editor()->document()->
 					clearUndoRedoStacks();
-
-				d->m_desc->clearUndoRedoStacks();
 
 				d->m_widget->setTabRenamed( false );
 			}
@@ -1473,8 +1404,6 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 	else if( d->m_widget->descriptionTab()->editor()->document()->isUndoAvailable() )
 		can = true;
 	else if( d->m_widget->isTabRenamed() )
-		can = true;
-	else if( d->m_desc->isUndoAvailable() )
 		can = true;
 	else
 	{

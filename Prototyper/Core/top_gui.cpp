@@ -26,7 +26,6 @@
 #include "windows_cfg.hpp"
 #include "session_cfg.hpp"
 #include "project_widget.hpp"
-#include "desc_window.hpp"
 
 // Qt include.
 #include <QApplication>
@@ -86,8 +85,6 @@ TopGuiPrivate::init()
 {
 	m_projectWindow = new ProjectWindow;
 
-	m_projectWindow->postConstruction();
-
 	static const QString cfgFolder =
 		QStandardPaths::writableLocation( QStandardPaths::AppConfigLocation );
 
@@ -121,18 +118,6 @@ TopGuiPrivate::init()
 
 				if( cfg.projectWindow().isMaximized() )
 					m_projectWindow->showMaximized();
-
-				m_projectWindow->descWindow()->move( cfg.descWindow().x(),
-					cfg.descWindow().y() );
-				m_projectWindow->descWindow()->resize( cfg.descWindow().width(),
-					cfg.descWindow().height() );
-
-				if( cfg.descWindow().isMaximized() )
-				{
-					m_projectWindow->descWindow()->showMaximized();
-
-					m_projectWindow->descWindow()->hide();
-				}
 
 				if( !cfg.state().isEmpty() )
 				{
@@ -272,16 +257,6 @@ TopGui::saveCfg( QWidget * parent )
 				proj.set_isMaximized( d->m_projectWindow->isMaximized() );
 
 				cfg.set_projectWindow( proj );
-
-				Cfg::Window desc;
-				desc.set_x( d->m_projectWindow->descWindow()->x() );
-				desc.set_y( d->m_projectWindow->descWindow()->y() );
-				desc.set_width( d->m_projectWindow->descWindow()->width() );
-				desc.set_height( d->m_projectWindow->descWindow()->height() );
-				desc.set_isShown( d->m_projectWindow->descWindow()->isVisible() );
-				desc.set_isMaximized( d->m_projectWindow->descWindow()->isMaximized() );
-
-				cfg.set_descWindow( desc );
 
 				cfg.set_state(
 					QString( d->m_projectWindow->saveState(
