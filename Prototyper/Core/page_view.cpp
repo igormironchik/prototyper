@@ -115,6 +115,8 @@ PageView::page() const
 void
 PageView::enableSelection( bool on )
 {
+	d->m_scene->enableSelection( on );
+
 	if( on )
 		setDragMode( QGraphicsView::RubberBandDrag );
 	else

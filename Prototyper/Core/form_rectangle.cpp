@@ -90,6 +90,8 @@ FormRectPrivate::updateRect( const QRectF & r )
 {
 	m_rect = r;
 
+	m_rect.moveTopLeft( QPointF( 0.0, 0.0 ) );
+
 	QRectF hr = q->boundingRect();
 
 	hr.moveTopLeft( q->pos() + hr.topLeft() );
@@ -135,8 +137,8 @@ FormRect::cfg() const
 	c.set_brush( Cfg::brush( objectBrush() ) );
 
 	Cfg::Point topLeft;
-	topLeft.set_x( MmPx::instance().toMmX( d->m_rect.topLeft().x() ) );
-	topLeft.set_y( MmPx::instance().toMmY( d->m_rect.topLeft().y() ) );
+	topLeft.set_x( MmPx::instance().toMmX( pos().x() ) );
+	topLeft.set_y( MmPx::instance().toMmY( pos().y() ) );
 
 	c.set_topLeft( topLeft );
 
@@ -200,13 +202,13 @@ FormRect::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 }
 
 void
-FormRect::setPosition( const QPointF & pos, bool pushUndoCommand )
+FormRect::setPosition( const QPointF & p, bool pushUndoCommand )
 {
 	if( pushUndoCommand )
 		form()->undoStack()->push( new UndoMove< FormRect > ( form(),
-			objectId(), pos - position() ) );
+			objectId(), p ) );
 
-	setPos( pos - d->m_rect.topLeft() );
+	setPos( p );
 
 	d->updateRect( d->m_rect );
 }
@@ -214,7 +216,7 @@ FormRect::setPosition( const QPointF & pos, bool pushUndoCommand )
 QPointF
 FormRect::position() const
 {
-	return pos() + d->m_rect.topLeft();
+	return pos();
 }
 
 void
@@ -222,7 +224,7 @@ FormRect::setRectangle( const QRectF & r, bool pushUndoCommand )
 {
 	Q_UNUSED( pushUndoCommand )
 
-	setPos( 0.0, 0.0 );
+	setPos( r.topLeft() );
 
 	d->updateRect( r );
 
@@ -233,7 +235,7 @@ QRectF
 FormRect::rectangle() const
 {
 	QRectF r = d->m_rect;
-	r.moveTopLeft( position() );
+	r.moveTopLeft( pos() );
 
 	return r;
 }

@@ -29,10 +29,16 @@
 #include "form_object.hpp"
 #include "form_actions.hpp"
 #include "page.hpp"
+#include "form_aspect_ratio_handle.hpp"
+#include "form_move_handle.hpp"
 
 // Qt include.
 #include <QKeyEvent>
 #include <QGraphicsItem>
+#include <QGraphicsSceneMouseEvent>
+#include <QGraphicsView>
+
+#include <QDebug>
 
 
 namespace Prototyper {
@@ -49,6 +55,10 @@ public:
 		:	q( parent )
 		,	m_cfg( cfg )
 		,	m_form( 0 )
+		,	m_isPressed( false )
+		,	m_dist( 0.0 )
+		,	m_isSelectionEnabled( true )
+		,	m_isHandlePressed( false )
 	{
 	}
 
@@ -56,6 +66,12 @@ public:
 	void init();
 	//! Move by.
 	void moveBy( const QPointF & delta );
+	//! \return Is something under cursor?
+	bool isSomethingUnderMouse() const;
+	//! \return Item under mouse.
+	QGraphicsItem * itemUnderMouse() const;
+	//! \return Is handle under mouse?
+	bool isHandleUnderMouse( const QList< QGraphicsItem* > & children ) const;
 
 	//! Parent.
 	PageScene * q;
@@ -63,6 +79,16 @@ public:
 	const Cfg::Page & m_cfg;
 	//! Form.
 	Page * m_form;
+	//! Is left button pressed?
+	bool m_isPressed;
+	//! Point.
+	QPointF m_pos;
+	//! Distance.
+	qreal m_dist;
+	//! Is selection enabled.
+	bool m_isSelectionEnabled;
+	//! Is handle pressed?
+	bool m_isHandlePressed;
 }; // class FormScenePrivate;
 
 void
@@ -81,6 +107,83 @@ PageScenePrivate::moveBy( const QPointF & delta )
 		if( obj )
 			obj->setPosition( obj->position() + delta );
 	}
+}
+
+bool
+PageScenePrivate::isSomethingUnderMouse() const
+{
+	const auto children = m_form->childItems();
+
+	for( const auto & item : children )
+	{
+		if( item->isUnderMouse() )
+			return true;
+	}
+
+	return false;
+}
+
+QGraphicsItem *
+PageScenePrivate::itemUnderMouse() const
+{
+	const auto children = m_form->childItems();
+	QGraphicsItem * selected = nullptr;
+
+	for( const auto & item : children )
+	{
+		if( item->isUnderMouse() )
+		{
+			if( !selected )
+				selected = item;
+			else
+			{
+				auto br1 = selected->boundingRect();
+				br1.moveTopLeft( selected->pos() );
+				auto br2 = item->boundingRect();
+				br2.moveTopLeft( item->pos() );
+				const auto r = br1.intersected( br2 ).normalized();
+				const auto s = r.width() * r.height();
+
+				const auto r1 = selected->boundingRect().normalized();
+				const auto r2 = item->boundingRect().normalized();
+				const auto s1 = r1.width() * r1.height();
+				const auto s2 = r2.width() * r2.height();
+
+				if( s / s2 > s / s1 )
+					selected = item;
+			}
+		}
+	}
+
+	return selected;
+}
+
+bool
+PageScenePrivate::isHandleUnderMouse( const QList< QGraphicsItem* > & children ) const
+{
+	for( const auto & item : children )
+	{
+		if( item->isUnderMouse() && item->isVisible() )
+		{
+			auto * h = dynamic_cast< FormMoveHandle* > ( item );
+			auto * a = dynamic_cast< AspectRatioHandle* > ( item );
+
+			if( h || a )
+				return true;
+
+			const auto sub = item->childItems();
+
+			if( !sub.isEmpty() )
+			{
+				const auto subRet = isHandleUnderMouse( sub );
+
+				if( subRet )
+					return true;
+			}
+		}
+	}
+
+	return false;
 }
 
 
@@ -234,6 +337,85 @@ PageScene::keyPressEvent( QKeyEvent * event )
 		default :
 			QGraphicsScene::keyPressEvent( event );
 	}
+}
+
+void
+PageScene::enableSelection( bool on )
+{
+	d->m_isSelectionEnabled = on;
+}
+
+void
+PageScene::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
+{
+	if( d->m_isSelectionEnabled )
+	{
+		d->m_dist += qAbs( ( d->m_pos - event->pos() ).manhattanLength() );
+		d->m_pos = event->pos();
+
+		if( !d->isHandleUnderMouse( d->m_form->childItems() ) && !d->m_isHandlePressed )
+			event->accept();
+		else
+			QGraphicsScene::mouseMoveEvent( event );
+	}
+	else
+		QGraphicsScene::mouseMoveEvent( event );
+}
+
+void
+PageScene::mousePressEvent( QGraphicsSceneMouseEvent * event )
+{
+	if( d->m_isSelectionEnabled && event->button() == Qt::LeftButton && d->isSomethingUnderMouse() )
+	{
+		d->m_isPressed = true;
+		d->m_pos = event->pos();
+		d->m_dist = 0.0;
+
+		if( !d->isHandleUnderMouse( d->m_form->childItems() ) )
+			event->accept();
+		else
+		{
+			d->m_isHandlePressed = true;
+
+			QGraphicsScene::mousePressEvent( event );
+		}
+	}
+	else
+		QGraphicsScene::mousePressEvent( event );
+}
+
+void
+PageScene::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
+{
+	if( d->m_isSelectionEnabled && d->m_isPressed && event->button() == Qt::LeftButton )
+	{
+		d->m_isPressed = false;
+
+		auto * item = d->itemUnderMouse();
+
+		if( d->m_dist < 5.0 && item && !d->m_isHandlePressed )
+		{
+			clearSelection();
+			item->setSelected( true );
+		}
+
+		d->m_dist = 0.0;
+
+		if( !d->m_isHandlePressed )
+			event->accept();
+		else
+			QGraphicsScene::mouseReleaseEvent( event );
+
+		d->m_isHandlePressed = false;
+	}
+	else
+		QGraphicsScene::mouseReleaseEvent( event );
+}
+
+void
+PageScene::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
+{
+	event->accept();
 }
 
 } /* namespace Core */

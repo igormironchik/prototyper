@@ -69,10 +69,17 @@ public:
 public slots:
 	//! Delete selected items.
 	void deleteSelected();
+	//! Enable selection.
+	void enableSelection( bool on = true );
 
 protected:
 	void keyPressEvent( QKeyEvent * event )
 		Q_DECL_OVERRIDE;
+	void mouseMoveEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event ) override;
+
 
 private:
 	Q_DISABLE_COPY( PageScene )

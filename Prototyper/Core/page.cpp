@@ -665,7 +665,6 @@ Page::gridStep() const
 void
 Page::setGridStep( int s )
 {
-	qDebug() << "set grid step" << s;
 	d->m_cfg.set_gridStep( s );
 
 	d->m_snap->setGridStep( s );
@@ -1369,8 +1368,6 @@ Page::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 {
 	Q_UNUSED( option )
 	Q_UNUSED( widget )
-
-	qDebug() << this << d->m_cfg.gridStep();
 
 	draw( painter, d->m_cfg.size().width(),
 		d->m_cfg.size().height(), d->m_cfg.gridStep(),
