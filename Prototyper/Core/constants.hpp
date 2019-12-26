@@ -27,9 +27,6 @@ namespace Prototyper {
 
 namespace Core {
 
-//! Height of the header of the form.
-const int c_formHeaderHeight = 30;
-
 } /* namespace Core */
 
 } /* namespace Prototyper */
