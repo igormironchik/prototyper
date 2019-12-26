@@ -59,6 +59,7 @@ public:
 		,	m_dist( 0.0 )
 		,	m_isSelectionEnabled( true )
 		,	m_isHandlePressed( false )
+		,	m_wasHandleHovered( false )
 	{
 	}
 
@@ -89,6 +90,8 @@ public:
 	bool m_isSelectionEnabled;
 	//! Is handle pressed?
 	bool m_isHandlePressed;
+	//! Was handle hovered?
+	bool m_wasHandleHovered;
 }; // class FormScenePrivate;
 
 void
@@ -353,7 +356,11 @@ PageScene::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 		d->m_dist += qAbs( ( d->m_pos - event->scenePos() ).manhattanLength() );
 		d->m_pos = event->scenePos();
 
-		if( !d->isHandleUnderMouse( d->m_form->childItems() ) && !d->m_isHandlePressed )
+		bool tmpWasHovered = d->m_wasHandleHovered;
+
+		d->m_wasHandleHovered = d->isHandleUnderMouse( d->m_form->childItems() );
+
+		if( !d->m_isHandlePressed && !d->m_wasHandleHovered && !tmpWasHovered )
 			event->accept();
 		else
 			QGraphicsScene::mouseMoveEvent( event );
