@@ -65,36 +65,41 @@ ExporterPrivate::init()
 
 }
 
-static inline void drawLine( const Cfg::Line & line, QPainter & p )
+static inline void drawLine( const Cfg::Line & line, QPainter & p, qreal dpi )
 {
 	p.save();
 
-	p.setPen( QPen( QColor( line.pen().color() ), line.pen().width() ) );
+	p.setPen( QPen( QColor( line.pen().color() ),
+		MmPx::instance().fromMm( line.pen().width(), dpi ) ) );
 
-	p.drawLine( line.p1().x() + line.pos().x(), line.p1().y() + line.pos().y(),
-		line.p2().x() + line.pos().x(), line.p2().y() + line.pos().y() );
+	p.drawLine( MmPx::instance().fromMm( line.p1().x() + line.pos().x(), dpi ),
+		MmPx::instance().fromMm( line.p1().y() + line.pos().y(), dpi ),
+		MmPx::instance().fromMm( line.p2().x() + line.pos().x(), dpi ),
+		MmPx::instance().fromMm( line.p2().y() + line.pos().y(), dpi ) );
 
 	p.restore();
 }
 
-static inline void drawPolyline( const Cfg::Polyline & cfg, QPainter & p )
+static inline void drawPolyline( const Cfg::Polyline & cfg, QPainter & p, qreal dpi )
 {
 	p.save();
 
-	FormPolyline::draw( &p, cfg );
+	FormPolyline::draw( &p, cfg, dpi );
 
 	p.restore();
 }
 
-static inline void drawRect( const Cfg::Rect & rect, QPainter & p )
+static inline void drawRect( const Cfg::Rect & rect, QPainter & p, qreal dpi )
 {
 	p.save();
 
-	const QRectF r( rect.topLeft().x() + rect.pos().x(),
-		rect.topLeft().y() + rect.pos().y(),
-		rect.size().width(), rect.size().height() );
+	const QRectF r( MmPx::instance().fromMm( rect.pos().x(), dpi ),
+		MmPx::instance().fromMm( rect.pos().y(), dpi ),
+		MmPx::instance().fromMm( rect.size().width(), dpi ),
+		MmPx::instance().fromMm( rect.size().height(), dpi ) );
 
-	p.setPen( QPen( QColor( rect.pen().color() ), rect.pen().width() ) );
+	p.setPen( QPen( QColor( rect.pen().color() ),
+		MmPx::instance().fromMm( rect.pen().width(), dpi ) ) );
 
 	p.setBrush( Qt::NoBrush );
 
@@ -124,16 +129,19 @@ static inline QFont font( const Cfg::TextStyle & s, QPainter & p )
 	return f;
 }
 
-static inline void drawButton( const Cfg::Button & btn, QPainter & p )
+static inline void drawButton( const Cfg::Button & btn, QPainter & p, qreal dpi )
 {
 	p.save();
 
-	p.setPen( QPen( QColor( btn.pen().color() ), btn.pen().width() ) );
+	p.setPen( QPen( QColor( btn.pen().color() ),
+		MmPx::instance().fromMm( btn.pen().width(), dpi ) ) );
 
 	p.setFont( font( btn.text(), p ) );
 
-	const QRect r( btn.pos().x(), btn.pos().y(),
-		btn.size().width(), btn.size().height() );
+	const QRect r( MmPx::instance().fromMm( btn.pos().x(), dpi ),
+		MmPx::instance().fromMm( btn.pos().y(), dpi ),
+		MmPx::instance().fromMm( btn.size().width(), dpi ),
+		MmPx::instance().fromMm( btn.size().height(), dpi ) );
 
 	p.drawRect( r );
 
@@ -142,100 +150,113 @@ static inline void drawButton( const Cfg::Button & btn, QPainter & p )
 	p.restore();
 }
 
-static inline void drawCheckBox( const Cfg::CheckBox & chk, QPainter & p )
+static inline void drawCheckBox( const Cfg::CheckBox & chk, QPainter & p, qreal dpi )
 {
 	p.save();
 
-	FormCheckBox::draw( &p, Cfg::fromPen( chk.pen() ),
+	FormCheckBox::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
 		font( chk.text(), p ),
-		QRectF( chk.pos().x(), chk.pos().y(),
-			chk.size().width(), chk.size().height() ),
-		chk.width(),
+		QRectF( MmPx::instance().fromMm( chk.pos().x(), dpi ),
+			MmPx::instance().fromMm( chk.pos().y(), dpi ),
+			MmPx::instance().fromMm( chk.size().width(), dpi ),
+			MmPx::instance().fromMm( chk.size().height(), dpi ) ),
+		MmPx::instance().fromMm( chk.width(), dpi ),
 		chk.isChecked(),
 		chk.text().text() );
 
 	p.restore();
 }
 
-static inline void drawRadioButton( const Cfg::CheckBox & chk, QPainter & p )
+static inline void drawRadioButton( const Cfg::CheckBox & chk, QPainter & p, qreal dpi )
 {
 	p.save();
 
-	FormRadioButton::draw( &p, Cfg::fromPen( chk.pen() ),
+	FormRadioButton::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
 		font( chk.text(), p ),
-		QRectF( chk.pos().x(), chk.pos().y(),
-			chk.size().width(), chk.size().height() ),
-		chk.width(),
+		QRectF( MmPx::instance().fromMm( chk.pos().x(), dpi ),
+			MmPx::instance().fromMm( chk.pos().y(), dpi ),
+			MmPx::instance().fromMm( chk.size().width(), dpi ),
+			MmPx::instance().fromMm( chk.size().height(), dpi ) ),
+		MmPx::instance().fromMm( chk.width(), dpi ),
 		chk.isChecked(),
 		chk.text().text() );
 
 	p.restore();
 }
 
-static inline void drawComboBox( const Cfg::ComboBox & cb, QPainter & p )
+static inline void drawComboBox( const Cfg::ComboBox & cb, QPainter & p, qreal dpi )
 {
 	p.save();
 
 	FormComboBox::draw( &p,
-		QRectF( cb.pos().x(), cb.pos().y(),
-			cb.size().width(), cb.size().height() ),
-		Cfg::fromPen( cb.pen() ) );
+		QRectF( MmPx::instance().fromMm( cb.pos().x(), dpi ),
+			MmPx::instance().fromMm( cb.pos().y(), dpi ),
+			MmPx::instance().fromMm( cb.size().width(), dpi ),
+			MmPx::instance().fromMm( cb.size().height(), dpi ) ),
+		Cfg::fromPen( cb.pen(), dpi ) );
 
 	p.restore();
 }
 
-static inline void drawSpinBox( const Cfg::SpinBox & s, QPainter & p )
+static inline void drawSpinBox( const Cfg::SpinBox & s, QPainter & p, qreal dpi )
 {
 	p.save();
 
 	FormSpinBox::draw( &p,
-		QRectF( s.pos().x(), s.pos().y(),
-			s.size().width(), s.size().height() ),
-		Cfg::fromPen( s.pen() ),
+		QRectF( MmPx::instance().fromMm( s.pos().x(), dpi ),
+			MmPx::instance().fromMm( s.pos().y(), dpi ),
+			MmPx::instance().fromMm( s.size().width(), dpi ),
+			MmPx::instance().fromMm( s.size().height(), dpi ) ),
+		Cfg::fromPen( s.pen(), dpi ),
 		font( s.text(), p ),
 		s.text().text() );
 
 	p.restore();
 }
 
-static inline void drawHSlider( const Cfg::HSlider & hs, QPainter & p )
+static inline void drawHSlider( const Cfg::HSlider & hs, QPainter & p, qreal dpi )
 {
 	p.save();
 
 	FormHSlider::draw( &p,
-		QRectF( hs.pos().x(), hs.pos().y(),
-			hs.size().width(), hs.size().height() ),
-		Cfg::fromPen( hs.pen() ) );
+		QRectF( MmPx::instance().fromMm( hs.pos().x(), dpi ),
+			MmPx::instance().fromMm( hs.pos().y(), dpi ),
+			MmPx::instance().fromMm( hs.size().width(), dpi ),
+			MmPx::instance().fromMm( hs.size().height(), dpi ) ),
+		Cfg::fromPen( hs.pen(), dpi ) );
 
 	p.restore();
 }
 
-static inline void drawVSlider( const Cfg::VSlider & vs, QPainter & p )
+static inline void drawVSlider( const Cfg::VSlider & vs, QPainter & p, qreal dpi )
 {
 	p.save();
 
 	FormVSlider::draw( &p,
-		QRectF( vs.pos().x(), vs.pos().y(),
-			vs.size().width(), vs.size().height() ),
-		Cfg::fromPen( vs.pen() ) );
+		QRectF( MmPx::instance().fromMm( vs.pos().x(), dpi ),
+			MmPx::instance().fromMm( vs.pos().y(), dpi ),
+			MmPx::instance().fromMm( vs.size().width(), dpi ),
+			MmPx::instance().fromMm( vs.size().height(), dpi ) ),
+		Cfg::fromPen( vs.pen(), dpi ) );
 
 	p.restore();
 }
 
-static inline void drawGroup( const Cfg::Group & group, QPainter & p )
+static inline void drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi )
 {
 	p.save();
 
-	p.translate( group.pos().x(), group.pos().y() );
+	p.translate( MmPx::instance().fromMm( group.pos().x(), dpi ),
+		MmPx::instance().fromMm( group.pos().y(), dpi ) );
 
 	foreach( const Cfg::Group & group, group.group() )
-		drawGroup( group, p );
+		drawGroup( group, p, dpi );
 
 	foreach( const Cfg::Line & line, group.line() )
-		drawLine( line, p );
+		drawLine( line, p, dpi );
 
 	foreach( const Cfg::Polyline & poly, group.polyline() )
-		drawPolyline( poly, p );
+		drawPolyline( poly, p, dpi );
 
 	foreach( const Cfg::Text & text, group.text() )
 	{
@@ -246,7 +267,8 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 
 		Cfg::fillTextDocument( &doc, text.text() );
 
-		p.translate( text.pos().x(), text.pos().y() );
+		p.translate( MmPx::instance().fromMm( text.pos().x(), dpi ),
+			MmPx::instance().fromMm( text.pos().y(), dpi ) );
 
 		doc.drawContents( &p );
 
@@ -255,98 +277,103 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p )
 
 	foreach( const Cfg::Image & image, group.image() )
 	{
-		const QSize s( image.size().width(), image.size().height() );
+		const QSize s( MmPx::instance().fromMm( image.size().width(), dpi ),
+			MmPx::instance().fromMm( image.size().height(), dpi ) );
 
 		const QByteArray data = QByteArray::fromBase64( image.data().toLatin1() );
 
 		QImage img = QImage::fromData( data, "PNG" );
 
-		p.drawImage( image.pos().x(), image.pos().y(),
+		p.drawImage( MmPx::instance().fromMm( image.pos().x(), dpi ),
+			MmPx::instance().fromMm( image.pos().y(), dpi ),
 			img.scaled( s, ( image.keepAspectRatio() ? Qt::KeepAspectRatio :
 					Qt::IgnoreAspectRatio ),
 				Qt::SmoothTransformation ) );
 	}
 
 	foreach( const Cfg::Rect & rect, group.rect() )
-		drawRect( rect, p );
+		drawRect( rect, p, dpi );
 
 	foreach( const Cfg::Button & btn, group.button() )
-		drawButton( btn, p );
+		drawButton( btn, p, dpi );
 
 	foreach( const Cfg::CheckBox & chk, group.checkbox() )
-		drawCheckBox( chk, p );
+		drawCheckBox( chk, p, dpi );
 
 	foreach( const Cfg::CheckBox & chk, group.radiobutton() )
-		drawRadioButton( chk, p );
+		drawRadioButton( chk, p, dpi );
 
 	foreach( const Cfg::ComboBox & cb, group.combobox() )
-		drawComboBox( cb, p );
+		drawComboBox( cb, p, dpi );
 
 	foreach( const Cfg::SpinBox & s, group.spinbox() )
-		drawSpinBox( s, p );
+		drawSpinBox( s, p, dpi );
 
 	foreach( const Cfg::HSlider & hs, group.hslider() )
-		drawHSlider( hs, p );
+		drawHSlider( hs, p, dpi );
 
 	foreach( const Cfg::VSlider & vs, group.vslider() )
-		drawVSlider( vs, p );
+		drawVSlider( vs, p, dpi );
 
 	p.restore();
 }
 
 void
-ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form )
+ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dpi )
 {
 	svg.setViewBox( QRect( -1, 0,
-		form.size().width() + 1, form.size().height() + 30 ) );
+		MmPx::instance().fromMm( form.size().width(), dpi ) + 1,
+		MmPx::instance().fromMm( form.size().height(), dpi ) ) );
 
 	QPainter p;
 	p.begin( &svg );
 
 	p.setPen( Qt::gray );
 
-	Page::draw( &p, form.size().width(), form.size().height(), 0, false );
+	Page::draw( &p, MmPx::instance().fromMm( form.size().width(), dpi ),
+		MmPx::instance().fromMm( form.size().height(), dpi ), 0, false );
 
 	foreach( const Cfg::Group & group, form.group() )
-		drawGroup( group, p );
+		drawGroup( group, p, dpi );
 
 	foreach( const Cfg::Line & line, form.line() )
-		drawLine( line, p );
+		drawLine( line, p, dpi );
 
 	foreach( const Cfg::Polyline & poly, form.polyline() )
-		drawPolyline( poly, p );
+		drawPolyline( poly, p, dpi );
 
 	foreach( const Cfg::Button & btn, form.button() )
-		drawButton( btn, p );
+		drawButton( btn, p, dpi );
 
 	foreach( const Cfg::CheckBox & chk, form.checkbox() )
-		drawCheckBox( chk, p );
+		drawCheckBox( chk, p, dpi );
 
 	foreach( const Cfg::CheckBox & chk, form.radiobutton() )
-		drawRadioButton( chk, p );
+		drawRadioButton( chk, p, dpi );
 
 	foreach( const Cfg::ComboBox & cb, form.combobox() )
-		drawComboBox( cb, p );
+		drawComboBox( cb, p, dpi );
 
 	foreach( const Cfg::SpinBox & s, form.spinbox() )
-		drawSpinBox( s, p );
+		drawSpinBox( s, p, dpi );
 
 	foreach( const Cfg::HSlider & hs, form.hslider() )
-		drawHSlider( hs, p );
+		drawHSlider( hs, p, dpi );
 
 	foreach( const Cfg::VSlider & vs, form.vslider() )
-		drawVSlider( vs, p );
+		drawVSlider( vs, p, dpi );
 
 	foreach( const Cfg::Text & text, form.text() )
 	{
 		p.save();
 
 		QTextDocument doc;
-		doc.setTextWidth( text.textWidth() );
+		doc.setTextWidth( MmPx::instance().fromMm( text.textWidth(), dpi ) );
 
 		Cfg::fillTextDocument( &doc, text.text() );
 
-		p.translate( text.pos().x(), text.pos().y() );
+		p.translate( MmPx::instance().fromMm( text.pos().x(), dpi ),
+			MmPx::instance().fromMm( text.pos().y(), dpi ) );
 
 		doc.drawContents( &p );
 
@@ -355,20 +382,22 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form )
 
 	foreach( const Cfg::Image & image, form.image() )
 	{
-		const QSize s( image.size().width(), image.size().height() );
+		const QSize s( MmPx::instance().fromMm( image.size().width(), dpi ),
+			MmPx::instance().fromMm( image.size().height(), dpi ) );
 
 		const QByteArray data = QByteArray::fromBase64( image.data().toLatin1() );
 
 		QImage img = QImage::fromData( data, "PNG" );
 
-		p.drawImage( image.pos().x(), image.pos().y(),
+		p.drawImage( MmPx::instance().fromMm( image.pos().x(), dpi ),
+			MmPx::instance().fromMm( image.pos().y(), dpi ),
 			img.scaled( s, ( image.keepAspectRatio() ? Qt::KeepAspectRatio :
 					Qt::IgnoreAspectRatio ),
 				Qt::SmoothTransformation ) );
 	}
 
 	foreach( const Cfg::Rect & rect, form.rect() )
-		drawRect( rect, p );
+		drawRect( rect, p, dpi );
 
 	p.end();
 }

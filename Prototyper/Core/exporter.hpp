@@ -53,7 +53,7 @@ public:
 	//! Init.
 	virtual void init();
 	//! Draw form.
-	void drawForm( QSvgGenerator & svg, const Cfg::Page & form );
+	void drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dpi );
 
 	//! Parent.
 	Exporter * q;

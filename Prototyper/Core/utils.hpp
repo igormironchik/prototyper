@@ -86,6 +86,7 @@ Cfg::Pen pen( const QPen & p );
 //
 
 QPen fromPen( const Cfg::Pen & p );
+QPen fromPen( const Cfg::Pen & p, qreal dpi );
 
 
 //
@@ -142,6 +143,8 @@ public:
 	qreal fromMmY( qreal mm ) const;
 
 	QSizeF a4() const;
+
+	qreal fromMm( qreal mm, qreal dpi ) const;
 
 private:
 	MmPx();

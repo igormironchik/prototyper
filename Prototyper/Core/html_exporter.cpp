@@ -128,9 +128,10 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 		QBuffer buff( &data );
 		buff.open( QIODevice::WriteOnly );
 		QSvgGenerator svg;
+		svg.setResolution( 150 );
 		svg.setOutputDevice( &buff );
 
-		drawForm( svg, form );
+		drawForm( svg, form, 150.0 );
 
 		const int i = data.indexOf( QLatin1String( "\n" ) );
 

@@ -159,7 +159,7 @@ Cfg::Pen pen( const QPen & p )
 {
 	Cfg::Pen res;
 
-	res.set_width( p.widthF() );
+	res.set_width( MmPx::instance().toMmX( p.widthF() ) );
 	res.set_color( p.color().name( QColor::HexArgb ) );
 
 	return res;
@@ -172,7 +172,12 @@ Cfg::Pen pen( const QPen & p )
 
 QPen fromPen( const Cfg::Pen & p )
 {
-	return QPen( QColor( p.color() ), p.width(), Qt::SolidLine );
+	return QPen( QColor( p.color() ), MmPx::instance().fromMmX( p.width() ), Qt::SolidLine );
+} // fromPen
+
+QPen fromPen( const Cfg::Pen & p, qreal dpi )
+{
+	return QPen( QColor( p.color() ), MmPx::instance().fromMm( p.width(), dpi ), Qt::SolidLine );
 } // fromPen
 
 
@@ -358,6 +363,12 @@ QSizeF
 MmPx::a4() const
 {
 	return QSizeF( fromMmX( 210.0 ), fromMmY( 297.0 ) );
+}
+
+qreal
+MmPx::fromMm( qreal mm, qreal dpi ) const
+{
+	return ( ( dpi / 25.4 ) * mm );
 }
 
 } /* namespace Core */

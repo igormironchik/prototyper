@@ -322,15 +322,17 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 }
 
 void
-FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg )
+FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg, qreal dpi )
 {
 	QList< QLineF > lines;
 
 	foreach( const Cfg::Line & l, cfg.line() )
 	{
 		QLineF line;
-		line.setP1( QPointF( l.p1().x(), l.p1().y() ) );
-		line.setP2( QPointF( l.p2().x(), l.p2().y() ) );
+		line.setP1( QPointF( MmPx::instance().fromMm( l.p1().x(), dpi ),
+			MmPx::instance().fromMm( l.p1().y(), dpi ) ) );
+		line.setP2( QPointF( MmPx::instance().fromMm( l.p2().x(), dpi ),
+			MmPx::instance().fromMm( l.p2().y(), dpi ) ) );
 
 		lines.append( line );
 	}
@@ -353,7 +355,8 @@ FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg )
 	const qreal mx = b.width() / cfg.size().width();
 	const qreal my = b.height() / cfg.size().height();
 
-	const QPointF p( cfg.pos().x(), cfg.pos().y() );
+	const QPointF p( MmPx::instance().fromMm( cfg.pos().x(), dpi ),
+		MmPx::instance().fromMm( cfg.pos().y(), dpi ) );
 
 	QPainterPath path;
 
@@ -373,7 +376,7 @@ FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg )
 			( line.p2().y() - b.y() ) / my + b.y() + p.y() ) );
 	}
 
-	painter->setPen( Cfg::fromPen( cfg.pen() ) );
+	painter->setPen( Cfg::fromPen( cfg.pen(), dpi ) );
 
 	painter->setBrush( Cfg::fromBrush( cfg.brush() ) );
 

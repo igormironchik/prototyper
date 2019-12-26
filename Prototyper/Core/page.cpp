@@ -678,8 +678,8 @@ Page::cfg() const
 	Cfg::Page c = d->m_cfg;
 
 	Cfg::Size size;
-	size.set_width( MmPx::instance().toMmX( boundingRect().width() ) );
-	size.set_height( MmPx::instance().toMmY( boundingRect().height() ) );
+	size.set_width( MmPx::instance().toMmX( d->m_cfg.size().width() ) );
+	size.set_height( MmPx::instance().toMmY( d->m_cfg.size().height() ) );
 	c.set_size( size );
 
 	c.line().clear();

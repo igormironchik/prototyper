@@ -63,9 +63,9 @@ SvgExporterPrivate::createImages( const QString & dir )
 
 		QSvgGenerator svg;
 		svg.setFileName( fileName );
-		svg.setResolution( 72 );
+		svg.setResolution( 150 );
 
-		drawForm( svg, form );
+		drawForm( svg, form, 150.0 );
 
 		++i;
 	}
