@@ -350,8 +350,8 @@ PageScene::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 {
 	if( d->m_isSelectionEnabled )
 	{
-		d->m_dist += qAbs( ( d->m_pos - event->pos() ).manhattanLength() );
-		d->m_pos = event->pos();
+		d->m_dist += qAbs( ( d->m_pos - event->scenePos() ).manhattanLength() );
+		d->m_pos = event->scenePos();
 
 		if( !d->isHandleUnderMouse( d->m_form->childItems() ) && !d->m_isHandlePressed )
 			event->accept();
@@ -368,7 +368,7 @@ PageScene::mousePressEvent( QGraphicsSceneMouseEvent * event )
 	if( d->m_isSelectionEnabled && event->button() == Qt::LeftButton && d->isSomethingUnderMouse() )
 	{
 		d->m_isPressed = true;
-		d->m_pos = event->pos();
+		d->m_pos = event->scenePos();
 		d->m_dist = 0.0;
 
 		if( !d->isHandleUnderMouse( d->m_form->childItems() ) )
