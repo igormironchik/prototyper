@@ -348,6 +348,10 @@ protected:
 	template< class Elem, class Config > friend class UndoDelete;
 	friend class UndoChangeTextOnForm;
 
+	//! Remove document from map.
+	void removeDocFromMap( QObject * doc );
+	//! Update document's item.
+	void updateDocItemInMap( QObject * doc, FormText * text );
 	//! Set current line.
 	void setCurrentLine( FormLine * line );
 	//! Set current polyline.

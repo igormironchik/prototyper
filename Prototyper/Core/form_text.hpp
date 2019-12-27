@@ -118,6 +118,7 @@ public slots:
 
 private slots:
 	void p_cursorChanged( const QTextCursor & cursor );
+	void p_contentChanged();
 
 protected:
 	//! Resize.

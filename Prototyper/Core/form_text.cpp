@@ -116,6 +116,8 @@ FormTextPrivate::init()
 
 	FormText::connect( q->document(), &QTextDocument::cursorPositionChanged,
 		q, &FormText::p_cursorChanged );
+	FormText::connect( q->document(), &QTextDocument::contentsChanged,
+		q, &FormText::p_contentChanged );
 	FormText::connect( m_opts.data(), &FormTextOpts::lessFontSize,
 		q, &FormText::lessFontSize );
 	FormText::connect( m_opts.data(), &FormTextOpts::moreFontSize,
@@ -168,6 +170,15 @@ FormText::FormText( const QRectF & rect, Page * form, QGraphicsItem * parent )
 
 FormText::~FormText()
 {
+}
+
+void
+FormText::p_contentChanged()
+{
+	QRectF r = boundingRect();
+	r.moveTo( pos() );
+
+	d->m_proxy->setRect( r );
 }
 
 Cfg::Text
