@@ -266,7 +266,7 @@ public:
 
 	//! Group items.
 	FormGroup * group( const QList< QGraphicsItem* > & items,
-		bool pushUndoCommand = true );
+		bool pushUndoCommand = true, const QString & id = QString() );
 	//! Ungroup group.
 	void ungroup( FormGroup * g, bool pushUndoCommand = true );
 

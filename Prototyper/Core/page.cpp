@@ -936,19 +936,22 @@ Page::ungroup()
 
 FormGroup *
 Page::group( const QList< QGraphicsItem* > & items,
-	bool pushUndoCommand )
+	bool pushUndoCommand, const QString & id )
 {
 	FormGroup * group = Q_NULLPTR;
+
+	QString i = id;
+
+	if( i.isEmpty() )
+		i = d->id();
 
 	if( items.size() > 1 )
 	{
 		group = new FormGroup( this, this );
 
-		const QString id = d->id();
+		group->setObjectId( i );
 
-		group->setObjectId( id );
-
-		d->m_ids.append( id );
+		d->m_ids.append( i );
 
 		foreach( QGraphicsItem * item, items )
 		{
@@ -964,11 +967,9 @@ Page::group( const QList< QGraphicsItem* > & items,
 	{
 		group = new FormGroup( this, this );
 
-		const QString id = d->id();
+		group->setObjectId( i );
 
-		group->setObjectId( id );
-
-		d->m_ids.append( id );
+		d->m_ids.append( i );
 
 		foreach( FormLine * line, d->m_currentLines )
 		{

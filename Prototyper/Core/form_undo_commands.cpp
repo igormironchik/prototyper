@@ -83,7 +83,7 @@ UndoGroup::redo()
 				items.append( item );
 		}
 
-		m_form->group( items, false );
+		m_form->group( items, false, m_id );
 	}
 }
 
