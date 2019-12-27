@@ -118,7 +118,7 @@ UndoUngroup::undo()
 	foreach( const QString & id, m_items )
 		items.append( m_form->findItem( id ) );
 
-	m_form->group( items, false );
+	m_form->group( items, false, m_id );
 }
 
 void
