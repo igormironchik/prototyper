@@ -225,12 +225,12 @@ ProjectWindowPrivate::init()
 		ProjectWindow::tr( "Ctrl+Alt+T" ) );
 
 	QAction * newForm = new QAction( QIcon( ":/Core/img/list-add.png" ),
-		ProjectWindow::tr( "Add Form" ), q );
+		ProjectWindow::tr( "Add Page" ), q );
 	newForm->setShortcutContext( Qt::ApplicationShortcut );
 	newForm->setShortcut( ProjectWindow::tr( "Ctrl+T" ) );
 	q->addAction( newForm );
 
-	m_formToolBar = new QToolBar( ProjectWindow::tr( "Form Tools" ), q );
+	m_formToolBar = new QToolBar( ProjectWindow::tr( "Drawing Tools" ), q );
 	m_formToolBar->setObjectName( QLatin1String( "m_formToolBar" ) );
 
 	m_stdItemsToolBar = new QToolBar( ProjectWindow::tr( "Standard Items" ), q );
@@ -413,7 +413,7 @@ ProjectWindowPrivate::init()
 
 	m_stdItemsToolBar->hide();
 
-	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "F&orm" ) );
+	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "D&rawing" ) );
 
 	form->addAction( newForm );
 
