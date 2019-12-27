@@ -344,8 +344,6 @@ UndoChangeTextOnForm::UndoChangeTextOnForm( Page * form, const QString & id )
 
 UndoChangeTextOnForm::~UndoChangeTextOnForm()
 {
-	if( !m_doc.isNull() )
-		m_doc->deleteLater();
 }
 
 void
@@ -357,13 +355,7 @@ UndoChangeTextOnForm::undo()
 		m_form->findItem( m_id ) );
 
 	if( text )
-	{
-		m_doc = text->document();
-
-		m_doc->setParent( Q_NULLPTR );
-
 		text->document()->undo();
-	}
 
 	TopGui::instance()->projectWindow()->switchToSelectMode();
 }
@@ -377,18 +369,7 @@ UndoChangeTextOnForm::redo()
 			m_form->findItem( m_id ) );
 
 		if( text )
-		{
-			if( !m_doc.isNull() && m_doc.data() != text->document() )
-			{
-				m_form->removeDocFromMap( text->document() );
-
-				m_form->updateDocItemInMap( m_doc.data(), text );
-
-				text->setDocument( m_doc.data() );
-			}
-
 			text->document()->redo();
-		}
 
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}

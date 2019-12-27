@@ -2083,18 +2083,6 @@ Page::dropEvent( QGraphicsSceneDragDropEvent * event )
 }
 
 void
-Page::removeDocFromMap( QObject * doc )
-{
-	d->m_docs.remove( doc );
-}
-
-void
-Page::updateDocItemInMap( QObject * doc, FormText * text )
-{
-	d->m_docs[ doc ] = text;
-}
-
-void
 Page::setCurrentLine( FormLine * line )
 {
 	d->m_current = line;
