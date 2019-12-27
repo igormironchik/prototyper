@@ -87,6 +87,15 @@ public:
 		,	m_drawPolyLine( Q_NULLPTR )
 		,	m_undoAction( Q_NULLPTR )
 		,	m_redoAction( Q_NULLPTR )
+		,	m_strokeColor( nullptr )
+		,	m_group( nullptr )
+		,	m_ungroup( nullptr )
+		,	m_alignHorizLeft( nullptr )
+		,	m_alignHorizCenter( nullptr )
+		,	m_alignHorizRight( nullptr )
+		,	m_alignVertTop( nullptr )
+		,	m_alignVertCenter( nullptr )
+		,	m_alignVertBottom( nullptr )
 	{
 	}
 
@@ -140,6 +149,18 @@ public:
 	QAction * m_undoAction;
 	//! Redo action.
 	QAction * m_redoAction;
+	//! Stroke color action.
+	QAction * m_strokeColor;
+	//! Group action.
+	QAction * m_group;
+	//! Ungroup action.
+	QAction * m_ungroup;
+	QAction * m_alignHorizLeft;
+	QAction * m_alignHorizCenter;
+	QAction * m_alignHorizRight;
+	QAction * m_alignVertTop;
+	QAction * m_alignVertCenter;
+	QAction * m_alignVertBottom;
 	//! Added forms.
 	QList< PageView* > m_addedForms;
 	//! Deleted forms.
@@ -278,9 +299,6 @@ ProjectWindowPrivate::init()
 	insertText->setShortcutContext( Qt::ApplicationShortcut );
 	insertText->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
-	m_select->setChecked( true );
-	m_widget->enableSelection( true );
-
 	QAction * insertImage = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-image.png" ),
 		ProjectWindow::tr( "Insert Image" ) );
@@ -289,21 +307,21 @@ ProjectWindowPrivate::init()
 
 	m_formToolBar->addSeparator();
 
-	QAction * group = m_formToolBar->addAction(
+	m_group = m_formToolBar->addAction(
 		QIcon( ":/Core/img/merge.png" ),
 		ProjectWindow::tr( "Group" ) );
-	group->setShortcutContext( Qt::ApplicationShortcut );
-	group->setShortcut( ProjectWindow::tr( "Ctrl+G" ) );
+	m_group->setShortcutContext( Qt::ApplicationShortcut );
+	m_group->setShortcut( ProjectWindow::tr( "Ctrl+G" ) );
 
-	QAction * ungroup = m_formToolBar->addAction(
+	m_ungroup = m_formToolBar->addAction(
 		QIcon( ":/Core/img/split.png" ),
 		ProjectWindow::tr( "Ungroup" ) );
-	ungroup->setShortcutContext( Qt::ApplicationShortcut );
-	ungroup->setShortcut( ProjectWindow::tr( "Ctrl+U" ) );
+	m_ungroup->setShortcutContext( Qt::ApplicationShortcut );
+	m_ungroup->setShortcut( ProjectWindow::tr( "Ctrl+U" ) );
 
 	m_formToolBar->addSeparator();
 
-	QAction * strokeColor = m_formToolBar->addAction(
+	m_strokeColor = m_formToolBar->addAction(
 		QIcon( ":/Core/img/format-stroke-color.png" ),
 		ProjectWindow::tr( "Line Color" ) );
 
@@ -369,41 +387,41 @@ ProjectWindowPrivate::init()
 
 	m_formToolBar->addSeparator();
 
-	QAction * alignHorizLeft = m_formToolBar->addAction(
+	m_alignHorizLeft = m_formToolBar->addAction(
 		QIcon( ":/Core/img/align-horizontal-left.png" ),
 		ProjectWindow::tr( "Align Horizontal Left" ) );
-	alignHorizLeft->setShortcutContext( Qt::ApplicationShortcut );
-	alignHorizLeft->setShortcut( ProjectWindow::tr( "Ctrl+Alt+L" ) );
+	m_alignHorizLeft->setShortcutContext( Qt::ApplicationShortcut );
+	m_alignHorizLeft->setShortcut( ProjectWindow::tr( "Ctrl+Alt+L" ) );
 
-	QAction * alignHorizCenter = m_formToolBar->addAction(
+	m_alignHorizCenter = m_formToolBar->addAction(
 		QIcon( ":/Core/img/align-horizontal-center.png" ),
 		ProjectWindow::tr( "Align Horizontal Center" ) );
-	alignHorizCenter->setShortcutContext( Qt::ApplicationShortcut );
-	alignHorizCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+C" ) );
+	m_alignHorizCenter->setShortcutContext( Qt::ApplicationShortcut );
+	m_alignHorizCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+C" ) );
 
-	QAction * alignHorizRight = m_formToolBar->addAction(
+	m_alignHorizRight = m_formToolBar->addAction(
 		QIcon( ":/Core/img/align-horizontal-right.png" ),
 		ProjectWindow::tr( "Align Horizontal Right" ) );
-	alignHorizRight->setShortcutContext( Qt::ApplicationShortcut );
-	alignHorizRight->setShortcut( ProjectWindow::tr( "Ctrl+Alt+R" ) );
+	m_alignHorizRight->setShortcutContext( Qt::ApplicationShortcut );
+	m_alignHorizRight->setShortcut( ProjectWindow::tr( "Ctrl+Alt+R" ) );
 
-	QAction * alignVertTop = m_formToolBar->addAction(
+	m_alignVertTop = m_formToolBar->addAction(
 		QIcon( ":/Core/img/align-vertical-top.png" ),
 		ProjectWindow::tr( "Align Vertical Top" ) );
-	alignVertTop->setShortcutContext( Qt::ApplicationShortcut );
-	alignVertTop->setShortcut( ProjectWindow::tr( "Ctrl+Alt+T" ) );
+	m_alignVertTop->setShortcutContext( Qt::ApplicationShortcut );
+	m_alignVertTop->setShortcut( ProjectWindow::tr( "Ctrl+Alt+T" ) );
 
-	QAction * alignVertCenter = m_formToolBar->addAction(
+	m_alignVertCenter = m_formToolBar->addAction(
 		QIcon( ":/Core/img/align-vertical-center.png" ),
 		ProjectWindow::tr( "Align Vertical Center" ) );
-	alignVertCenter->setShortcutContext( Qt::ApplicationShortcut );
-	alignVertCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+V" ) );
+	m_alignVertCenter->setShortcutContext( Qt::ApplicationShortcut );
+	m_alignVertCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+V" ) );
 
-	QAction * alignVertBottom = m_formToolBar->addAction(
+	m_alignVertBottom = m_formToolBar->addAction(
 		QIcon( ":/Core/img/align-vertical-bottom.png" ),
 		ProjectWindow::tr( "Align Vertical Bottom" ) );
-	alignVertBottom->setShortcutContext( Qt::ApplicationShortcut );
-	alignVertBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+B" ) );
+	m_alignVertBottom->setShortcutContext( Qt::ApplicationShortcut );
+	m_alignVertBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+B" ) );
 
 	q->addToolBar( Qt::TopToolBarArea, m_formToolBar );
 
@@ -457,17 +475,17 @@ ProjectWindowPrivate::init()
 
 	form->addSeparator();
 
-	form->addAction( alignHorizLeft );
-	form->addAction( alignHorizCenter );
-	form->addAction( alignHorizRight );
-	form->addAction( alignVertTop );
-	form->addAction( alignVertCenter );
-	form->addAction( alignVertBottom );
+	form->addAction( m_alignHorizLeft );
+	form->addAction( m_alignHorizCenter );
+	form->addAction( m_alignHorizRight );
+	form->addAction( m_alignVertTop );
+	form->addAction( m_alignVertCenter );
+	form->addAction( m_alignVertBottom );
 
 	form->addSeparator();
 
-	form->addAction( group );
-	form->addAction( ungroup );
+	form->addAction( m_group );
+	form->addAction( m_ungroup );
 
 	form->addSeparator();
 
@@ -509,7 +527,7 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_saveProjectAs );
 	ProjectWindow::connect( m_widget, &ProjectWidget::changed,
 		q, &ProjectWindow::p_projectChanged );
-	ProjectWindow::connect( m_select, &QAction::triggered,
+	ProjectWindow::connect( m_select, &QAction::toggled,
 		q, &ProjectWindow::p_select );
 	ProjectWindow::connect( m_drawLine, &QAction::triggered,
 		q, &ProjectWindow::p_drawLine );
@@ -521,11 +539,11 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_insertText );
 	ProjectWindow::connect( insertImage, &QAction::triggered,
 		q, &ProjectWindow::p_insertImage );
-	ProjectWindow::connect( group, &QAction::triggered,
+	ProjectWindow::connect( m_group, &QAction::triggered,
 		q, &ProjectWindow::p_group );
-	ProjectWindow::connect( ungroup, &QAction::triggered,
+	ProjectWindow::connect( m_ungroup, &QAction::triggered,
 		q, &ProjectWindow::p_ungroup );
-	ProjectWindow::connect( strokeColor, &QAction::triggered,
+	ProjectWindow::connect( m_strokeColor, &QAction::triggered,
 		q, &ProjectWindow::p_strokeColor );
 //	ProjectWindow::connect( fillColor, &QAction::triggered,
 //		q, &ProjectWindow::p_fillColor );
@@ -555,17 +573,17 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_drawVSlider );
 	ProjectWindow::connect( drawSpinbox, &QAction::triggered,
 		q, &ProjectWindow::p_drawSpinbox );
-	ProjectWindow::connect( alignHorizLeft, &QAction::triggered,
+	ProjectWindow::connect( m_alignHorizLeft, &QAction::triggered,
 		q, &ProjectWindow::p_alignHorizontalLeft );
-	ProjectWindow::connect( alignHorizCenter, &QAction::triggered,
+	ProjectWindow::connect( m_alignHorizCenter, &QAction::triggered,
 		q, &ProjectWindow::p_alignHorizontalCenter );
-	ProjectWindow::connect( alignHorizRight, &QAction::triggered,
+	ProjectWindow::connect( m_alignHorizRight, &QAction::triggered,
 		q, &ProjectWindow::p_alignHorizontalRight );
-	ProjectWindow::connect( alignVertTop, &QAction::triggered,
+	ProjectWindow::connect( m_alignVertTop, &QAction::triggered,
 		q, &ProjectWindow::p_alignVerticalTop );
-	ProjectWindow::connect( alignVertCenter, &QAction::triggered,
+	ProjectWindow::connect( m_alignVertCenter, &QAction::triggered,
 		q, &ProjectWindow::p_alignVerticalCenter );
-	ProjectWindow::connect( alignVertBottom, &QAction::triggered,
+	ProjectWindow::connect( m_alignVertBottom, &QAction::triggered,
 		q, &ProjectWindow::p_alignVerticalBottom );
 	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::cleanChanged,
 		q, &ProjectWindow::p_canUndoChanged );
@@ -576,6 +594,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_formAdded );
 	ProjectWindow::connect( m_widget, &ProjectWidget::formDeleted,
 		q, &ProjectWindow::p_formDeleted );
+
+	q->switchToSelectMode();
 }
 
 void
@@ -727,7 +747,7 @@ ProjectWindow::readProject( const QString & fileName )
 			setWindowTitle( tr( "Prototyper - %1[*]" )
 				.arg( QFileInfo( fileName ).baseName() ) );
 
-			d->m_select->trigger();
+			switchToSelectMode();
 			d->m_addedForms.clear();
 			d->m_deletedForms.clear();
 		}
@@ -761,7 +781,10 @@ ProjectWindow::switchToPolylineMode()
 void
 ProjectWindow::switchToSelectMode()
 {
-	d->m_select->trigger();
+	if( !d->m_select->isChecked() )
+		d->m_select->setChecked( true );
+	else
+		p_select( true );
 }
 
 void
@@ -886,7 +909,7 @@ ProjectWindow::p_newProject()
 
 	setWindowModified( false );
 
-	d->m_select->trigger();
+	switchToSelectMode();
 }
 
 void
@@ -1082,21 +1105,34 @@ ProjectWindow::p_ungroup()
 }
 
 void
-ProjectWindow::p_select()
+ProjectWindow::p_select( bool checked )
 {
-	FormAction::instance()->setMode( FormAction::Select );
+	d->m_strokeColor->setEnabled( checked  );
+	d->m_group->setEnabled( checked );
+	d->m_ungroup->setEnabled( checked );
+	d->m_alignHorizLeft->setEnabled( checked );
+	d->m_alignHorizCenter->setEnabled( checked );
+	d->m_alignHorizRight->setEnabled( checked );
+	d->m_alignVertTop->setEnabled( checked );
+	d->m_alignVertCenter->setEnabled( checked );
+	d->m_alignVertBottom->setEnabled( checked );
 
-	d->m_widget->enableSelection( true );
-
-	foreach( PageView * v, d->m_widget->pages() )
+	if( checked )
 	{
-		v->page()->setCursor( Qt::ArrowCursor );
+		FormAction::instance()->setMode( FormAction::Select );
 
-		d->setFlag( v, QGraphicsItem::ItemIsSelectable, true );
+		d->m_widget->enableSelection( true );
 
-		d->enableEditing( v, false );
+		foreach( PageView * v, d->m_widget->pages() )
+		{
+			v->page()->setCursor( Qt::ArrowCursor );
 
-		v->page()->switchToSelectMode();
+			d->setFlag( v, QGraphicsItem::ItemIsSelectable, true );
+
+			d->enableEditing( v, false );
+
+			v->page()->switchToSelectMode();
+		}
 	}
 }
 

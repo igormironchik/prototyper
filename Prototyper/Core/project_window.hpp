@@ -116,7 +116,7 @@ private slots:
 	//! Ungroup.
 	void p_ungroup();
 	//! Select.
-	void p_select();
+	void p_select( bool checked );
 	//! Fill color.
 	void p_fillColor();
 	//! Stroke color.
