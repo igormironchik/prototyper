@@ -104,7 +104,7 @@ ProjectTabBar::contextMenuEvent( QContextMenuEvent * event )
 			tr( "Rename" ), this, SLOT( renameTab() ) );
 
 	menu.addAction( QIcon( ":/Core/img/list-add.png" ),
-		tr( "Add Form" ), this, SLOT( addForm() ) );
+		tr( "Add Page" ), this, SLOT( addForm() ) );
 
 	if( d->m_menuTabIndex != 0 )
 		menu.addAction( QIcon( ":/Core/img/edit-delete.png" ),

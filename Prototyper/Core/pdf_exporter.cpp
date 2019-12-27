@@ -135,12 +135,6 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc )
 		++i;
 
 		c.insertImage( image );
-
-		c.movePosition( QTextCursor::End );
-
-		c.insertText( QLatin1String( "\n" ) );
-
-		c.movePosition( QTextCursor::End );
 	}
 }
 

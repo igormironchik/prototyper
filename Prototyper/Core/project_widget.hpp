@@ -104,7 +104,7 @@ public:
 	void setTabRenamed( bool on = true );
 
 public slots:
-	//! Add form.
+	//! Add page.
 	void addPage();
 	//! Rename tab.
 	void renameTab( const QString & oldName );

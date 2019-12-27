@@ -144,7 +144,7 @@ TabsView::contextMenuEvent( QContextMenuEvent * event )
 				tr( "Rename" ), this, SLOT( p_renameTab() ) );
 
 		menu.addAction( QIcon( ":/Core/img/list-add.png" ),
-			tr( "Add Form" ), this, SLOT( p_addForm() ) );
+			tr( "Add Page" ), this, SLOT( p_addForm() ) );
 
 		if( d->m_index.row() != 0 )
 			menu.addAction( QIcon( ":/Core/img/edit-delete.png" ),
@@ -152,7 +152,7 @@ TabsView::contextMenuEvent( QContextMenuEvent * event )
 	}
 	else
 		menu.addAction( QIcon( ":/Core/img/list-add.png" ),
-			tr( "Add Form" ), this, SLOT( p_addForm() ) );
+			tr( "Add Page" ), this, SLOT( p_addForm() ) );
 
 	menu.exec( event->globalPos() );
 
