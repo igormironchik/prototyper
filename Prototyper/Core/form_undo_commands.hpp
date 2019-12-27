@@ -54,6 +54,8 @@ QT_BEGIN_NAMESPACE
 class QGraphicsItem;
 QT_END_NAMESPACE
 
+#include <QDebug>
+
 
 namespace Prototyper {
 
@@ -153,11 +155,14 @@ public:
 		,	m_form( f )
 		,	m_id( id )
 		,	m_undone( false )
+		,	m_doc( nullptr )
 	{
 	}
 
 	~UndoCreate()
 	{
+		if( m_doc )
+			m_doc->deleteLater();
 	}
 
 	void undo() Q_DECL_OVERRIDE
@@ -167,6 +172,15 @@ public:
 		FormText * elem = dynamic_cast< FormText* > ( m_form->findItem( m_id ) );
 
 		m_cfg = elem->cfg();
+
+		m_form->removeDocFromMap( elem->document() );
+
+		m_doc = elem->document();
+		m_doc->setParent( nullptr );
+
+		QObject::disconnect( m_doc, 0, m_form, 0 );
+
+		elem->setDocument( m_doc->clone() );
 
 		m_form->deleteItems( QList< QGraphicsItem* > () << elem, false );
 
@@ -181,6 +195,10 @@ public:
 				m_form->createElement< FormText >( m_id ) );
 
 			elem->setCfg( m_cfg );
+
+			elem->setDocument( m_doc );
+
+			m_doc = nullptr;
 
 			m_form->updateDocItemInMap( elem->document(), elem );
 
@@ -201,6 +219,8 @@ private:
 	QString m_id;
 	//! Undone?
 	bool m_undone;
+	//! Document.
+	QTextDocument * m_doc;
 }; // class UndoCreate
 
 
@@ -403,6 +423,99 @@ private:
 
 
 //
+// UndoCreate
+//
+
+//! Undo create.
+template<>
+class UndoDelete< FormText, Cfg::Text >
+	:	public QUndoCommand
+{
+public:
+	UndoDelete( Page * form, const Cfg::Text & c )
+		:	QUndoCommand( QObject::tr( "Delete" ) )
+		,	m_cfg( c )
+		,	m_form( form )
+		,	m_undone( false )
+		,	m_doc( nullptr )
+	{
+		auto * elem = m_form->findItem( m_cfg.objectId() );
+		auto * text = dynamic_cast< FormText* > ( elem );
+
+		m_doc = text->document();
+		m_doc->setParent( nullptr );
+
+		QObject::disconnect( m_doc, 0, m_form, 0 );
+
+		text->setDocument( m_doc->clone() );
+
+		m_form->removeDocFromMap( m_doc );
+	}
+
+	~UndoDelete()
+	{
+		if( m_doc )
+			m_doc->deleteLater();
+	}
+
+	void undo() Q_DECL_OVERRIDE
+	{
+		m_undone = true;
+
+		FormText * elem = dynamic_cast< FormText* > (
+			m_form->createElement< FormText > ( m_cfg.objectId() ) );
+
+		elem->setCfg( m_cfg );
+
+		elem->setDocument( m_doc );
+
+		m_doc = nullptr;
+
+		m_form->updateDocItemInMap( elem->document(), elem );
+
+		QObject::connect( elem->document(),
+			&QTextDocument::undoCommandAdded,
+			m_form, &Page::undoCommandInTextAdded );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+
+	void redo() Q_DECL_OVERRIDE
+	{
+		if( m_undone )
+		{
+			QGraphicsItem * elem = m_form->findItem( m_cfg.objectId() );
+
+			auto * text = dynamic_cast< FormText* > ( elem );
+
+			m_form->removeDocFromMap( text->document() );
+
+			m_doc = text->document();
+			m_doc->setParent( nullptr );
+
+			QObject::disconnect( m_doc, 0, m_form, 0 );
+
+			text->setDocument( m_doc->clone() );
+
+			m_form->deleteItems( QList< QGraphicsItem* > () << elem, false );
+
+			TopGui::instance()->projectWindow()->switchToSelectMode();
+		}
+	}
+
+private:
+	//! Configuration.
+	Cfg::Text m_cfg;
+	//! Form.
+	Page * m_form;
+	//! Undone?
+	bool m_undone;
+	//! Document.
+	QTextDocument * m_doc;
+}; // class UndoCreate
+
+
+//
 // UndoGroup
 //
 
@@ -573,8 +686,6 @@ private:
 	QString m_id;
 	//! Undone?
 	bool m_undone;
-	//! Document.
-	QPointer< QTextDocument > m_doc;
 }; // class UndoChangeTextOnForm
 
 

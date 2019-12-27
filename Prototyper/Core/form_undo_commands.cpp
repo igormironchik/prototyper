@@ -338,7 +338,6 @@ UndoChangeTextOnForm::UndoChangeTextOnForm( Page * form, const QString & id )
 	,	m_form( form )
 	,	m_id( id )
 	,	m_undone( false )
-	,	m_doc( 0 )
 {
 }
 
