@@ -9,7 +9,7 @@ Component.prototype.createOperations = function()
 
 	if( installer.value( "os" ) === "win" )
 	{
-		component.addOperation( "Execute", "{0,1638}", "@TargetDir@\\vcredist_x86.exe",
+		component.addOperation( "Execute", "{0,1638}", "@TargetDir@\\VC_redist.x64.exe",
 			"/silent" );
 
 		component.addOperation( "CreateShortcut", "@TargetDir@\\Prototyper.App.exe",
