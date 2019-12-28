@@ -16,6 +16,10 @@ TO_GENERATE =	windows_cfg.qtconf \
 
 GENERATED =
 
+macx {
+	QMAKE_LFLAGS_SONAME = -Wl,-install_name,@executable_path/../Frameworks/
+}
+
 QMAKE_EXTRA_COMPILERS += generate_cfg
 generate_cfg.name = CONF_GEN
 generate_cfg.input = TO_GENERATE
