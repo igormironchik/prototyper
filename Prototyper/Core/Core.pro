@@ -23,7 +23,13 @@ generate_cfg.output = ${QMAKE_FILE_BASE}.hpp
 generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = GENERATED
 
-generate_cfg.commands = $$system_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/cfgfile/cfgfile.generator ) ) \
+macx {
+	CFGFILE_EXE = $$system_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/cfgfile/cfgfile.generator.app/Contents/MacOS/cfgfile.generator ) )
+} else {
+	CFGFILE_EXE = $$system_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/cfgfile/cfgfile.generator ) )
+}
+
+generate_cfg.commands = $${CFGFILE_EXE} \
 -i $$shell_quote( ${QMAKE_FILE_IN} ) \
 -o $$shell_quote( $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp )
 
