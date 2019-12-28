@@ -24,8 +24,8 @@ generate_cfg.CONFIG = no_link
 generate_cfg.variable_out = GENERATED
 
 generate_cfg.commands = $$system_path( $$absolute_path( $${OUT_PWD}/../../3rdparty/cfgfile/cfgfile.generator ) ) \
--i ${QMAKE_FILE_IN} \
--o $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp
+-i $$shell_quote( ${QMAKE_FILE_IN} ) \
+-o $$shell_quote( $${OUT_PWD}/${QMAKE_FILE_BASE}.hpp )
 
 PRE_TARGETDEPS += compiler_generate_cfg_make_all
 

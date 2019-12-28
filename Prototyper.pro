@@ -22,10 +22,12 @@ defineTest(minQtVersion) {
     return(false)
 }
 
-!minQtVersion(5, 5, 1) {
+!minQtVersion(5, 14, 0) {
 	message("Cannot build Prototyper with Qt version $${QT_VERSION}.")
-    error("Use at least Qt 5.5.1.")
+    error("Use at least Qt 5.14.0.")
 }
+
+CONFIG += c++11
 
 TEMPLATE = subdirs
 
