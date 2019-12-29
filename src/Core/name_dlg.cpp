@@ -105,13 +105,13 @@ NameDlg::~NameDlg()
 QString
 NameDlg::name() const
 {
-	return d->m_ui.m_edit->text().trimmed();
+	return d->m_ui.m_edit->text().simplified();
 }
 
 void
 NameDlg::textChanged( const QString & text )
 {
-	if( !text.isEmpty() && !d->m_names.contains( text.trimmed() ) )
+	if( !text.simplified().isEmpty() && !d->m_names.contains( text.simplified() ) )
 	{
 		QPalette p = d->m_ui.m_edit->palette();
 		p.setColor( QPalette::Text, d->m_color );
@@ -121,7 +121,7 @@ NameDlg::textChanged( const QString & text )
 	}
 	else
 	{
-		if( text.isEmpty() )
+		if( text.simplified().isEmpty() )
 		{
 			QPalette p = d->m_ui.m_edit->palette();
 			p.setColor( QPalette::Text, d->m_color );
