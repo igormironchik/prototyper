@@ -104,6 +104,12 @@ FormObject::postDeletion()
 {
 }
 
+QSizeF
+FormObject::defaultSize() const
+{
+	return QSizeF( -1.0, -1.0 );
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

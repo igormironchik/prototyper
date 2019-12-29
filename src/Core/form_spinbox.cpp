@@ -80,11 +80,11 @@ FormSpinBoxPrivate::init()
 
 	setRect( m_rect );
 
-	m_proxy->setMinSize( QSizeF( 45.0, 25.0 ) );
+	m_proxy->setMinSize( q->defaultSize() );
 
 	m_font = QApplication::font();
 
-	m_font.setPointSize( 10.0 );
+	m_font.setPointSize( 14.0 );
 }
 
 void
@@ -354,6 +354,12 @@ FormSpinBox::properties()
 
 		update();
 	}
+}
+
+QSizeF
+FormSpinBox::defaultSize() const
+{
+	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 4.0 ) );
 }
 
 } /* namespace Core */

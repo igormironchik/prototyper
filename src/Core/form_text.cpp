@@ -42,6 +42,8 @@
 #include <QEvent>
 #include <QGraphicsScene>
 
+#include <QDebug>
+
 
 namespace Prototyper {
 
@@ -58,6 +60,7 @@ public:
 		,	m_rect( rect )
 		,	m_proxy( 0 )
 		,	m_opts( 0 )
+		,	m_isFirstPaint( true )
 	{
 	}
 
@@ -74,6 +77,8 @@ public:
 	QScopedPointer< FormResizableProxy > m_proxy;
 	//! Text options.
 	QScopedPointer< FormTextOpts > m_opts;
+	//! First paint.
+	bool m_isFirstPaint;
 }; // class FormTextPrivate
 
 void
@@ -93,7 +98,7 @@ FormTextPrivate::init()
 
 	QFont f = q->font();
 
-	f.setPointSize( 10.0 );
+	f.setPointSize( 14.0 );
 
 	q->setFont( f );
 
@@ -102,7 +107,7 @@ FormTextPrivate::init()
 	QTextCursor c = q->textCursor();
 
 	QTextCharFormat fmt = c.charFormat();
-	fmt.setFontPointSize( 10.0 );
+	fmt.setFontPointSize( 14.0 );
 
 	c.setCharFormat( fmt );
 
@@ -110,9 +115,7 @@ FormTextPrivate::init()
 
 	q->setPlainText( FormText::tr( "Text" ) );
 
-	QFontMetrics m( f );
-	m_proxy->setMinSize(
-		QSizeF( m.boundingRect( QLatin1Char( 'a' ) ).size() ) );
+	m_proxy->setMinSize( q->boundingRect().size() );
 
 	FormText::connect( q->document(), &QTextDocument::cursorPositionChanged,
 		q, &FormText::p_cursorChanged );
@@ -179,6 +182,7 @@ FormText::p_contentChanged()
 	r.moveTo( pos() );
 
 	d->m_proxy->setRect( r );
+	d->m_proxy->setMinSize( r.size() );
 }
 
 Cfg::Text
@@ -314,6 +318,13 @@ void
 FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	QWidget * widget )
 {
+	if( d->m_isFirstPaint )
+	{
+		p_contentChanged();
+
+		d->m_isFirstPaint = false;
+	}
+
 	QGraphicsTextItem::paint( painter, option, widget );
 
 	if( isSelected() && !group() )
@@ -695,6 +706,12 @@ FormText::sceneEvent( QEvent * e )
 		default :
 			return QGraphicsTextItem::sceneEvent( e );
 	}
+}
+
+QSizeF
+FormText::defaultSize() const
+{
+	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 6.0 ) );
 }
 
 } /* namespace Core */

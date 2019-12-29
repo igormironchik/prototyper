@@ -98,6 +98,9 @@ public:
 	void setRectangle( const QRectF & rect,
 		bool pushUndoCommand ) Q_DECL_OVERRIDE;
 
+	//! \return Default size.
+	virtual QSizeF defaultSize() const override;
+
 protected:
 	//! Resize.
 	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;

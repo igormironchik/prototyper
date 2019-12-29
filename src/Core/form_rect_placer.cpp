@@ -41,6 +41,9 @@ public:
 	explicit FormRectPlacerPrivate( FormRectPlacer * parent )
 		:	q( parent )
 		,	m_rect( 0.0, 0.0, 0.0, 0.0 )
+		,	m_startPos( 0.0, 0.0 )
+		,	m_width( 0.0 )
+		,	m_height( 0.0 )
 	{
 	}
 
@@ -51,6 +54,12 @@ public:
 	FormRectPlacer * q;
 	//! Rect.
 	QRectF m_rect;
+	//! Start pos.
+	QPointF m_startPos;
+	//! Width.
+	qreal m_width;
+	//! Height.
+	qreal m_height;
 }; // class FormRectPlacerPrivate
 
 void
@@ -82,7 +91,8 @@ FormRectPlacer::~FormRectPlacer()
 void
 FormRectPlacer::setStartPos( const QPointF & pos )
 {
-	d->m_rect.setTopLeft( pos );
+	d->m_startPos = pos;
+	d->m_rect = QRectF( pos.x(), pos.y(), 0.0, 0.0 );
 
 	update();
 }
@@ -98,7 +108,10 @@ FormRectPlacer::setEndPos( const QPointF & pos )
 {
 	const QRectF tmp = d->m_rect.adjusted( -20.0, -20.0, 20.0, 20.0 );
 
-	d->m_rect.setBottomRight( pos );
+	d->m_width = pos.x() - d->m_startPos.x();
+	d->m_height = pos.y() - d->m_startPos.y();
+
+	d->m_rect = QRectF( d->m_startPos.x(), d->m_startPos.y(), d->m_width, d->m_height );
 
 	update();
 

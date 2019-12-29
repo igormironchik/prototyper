@@ -111,6 +111,9 @@ public:
 	virtual void setRectangle( const QRectF & rect,
 		bool pushUndoCommand = true ) = 0;
 
+	//! \return Default size.
+	virtual QSizeF defaultSize() const;
+
 	//! \return Form.
 	Page * form() const;
 

@@ -26,6 +26,7 @@
 #include "form_resize_handle.hpp"
 #include "form_with_resize_and_move_handles.hpp"
 
+#include <QDebug>
 
 namespace Prototyper {
 
@@ -127,7 +128,8 @@ WithResizeAndMoveHandles::hide()
 bool
 WithResizeAndMoveHandles::checkConstraint( const QSizeF & s )
 {
-	return ( s.width() >= m_min.width() && s.height() >= m_min.height() );
+	return ( ( s.width() > m_min.width() || qAbs( s.width() - m_min.width() ) < 0.001 ) &&
+		( s.height() > m_min.height() || qAbs( s.height() - m_min.height() ) < 0.001 ) );
 }
 
 void

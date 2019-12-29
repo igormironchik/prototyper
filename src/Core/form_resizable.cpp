@@ -219,6 +219,8 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, delta.y(), 0.0, 0.0 );
 
+		qDebug() << d->m_handles->m_min << d->m_rect << d->m_handles->checkConstraint( r.size() );
+
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
@@ -232,6 +234,8 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 	else if( handle == d->m_handles->m_right.data() )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, delta.x(), 0.0 );
+
+		qDebug() << d->m_handles->m_min << d->m_rect << d->m_handles->checkConstraint( r.size() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
@@ -247,6 +251,8 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, 0.0, delta.y() );
 
+		qDebug() << d->m_handles->m_min << d->m_rect << d->m_handles->checkConstraint( r.size() );
+
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
@@ -260,6 +266,8 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 	else if( handle == d->m_handles->m_left.data() )
 	{
 		const QRectF r = d->m_rect.adjusted( delta.x(), 0.0, 0.0, 0.0 );
+
+		qDebug() << d->m_handles->m_min << d->m_rect << d->m_handles->checkConstraint( r.size() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );

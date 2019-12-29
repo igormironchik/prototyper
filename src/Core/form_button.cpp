@@ -83,7 +83,7 @@ FormButtonPrivate::init()
 
 	m_font = QApplication::font();
 
-	m_font.setPointSize( 10.0 );
+	m_font.setPointSize( 14.0 );
 
 	QFontMetrics m( m_font );
 	m_proxy->setMinSize(
@@ -321,6 +321,12 @@ FormButton::properties()
 
 		update();
 	}
+}
+
+QSizeF
+FormButton::defaultSize() const
+{
+	return QSizeF( MmPx::instance().fromMmX( 10.0 ), MmPx::instance().fromMmY( 5.0 ) );
 }
 
 } /* namespace Core */

@@ -94,6 +94,9 @@ public:
 	void setObjectPen( const QPen & p,
 		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
+	//! \return Default size.
+	virtual QSizeF defaultSize() const override;
+
 public slots:
 	//! Less font size.
 	void lessFontSize();

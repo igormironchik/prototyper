@@ -67,9 +67,13 @@ FormCheckBoxPrivate::init()
 {
 	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->form() ) );
 
-	m_handles->setMinSize( QSizeF( 20.0, 20.0 ) );
+	m_handles->setMinSize( q->defaultSize() );
 
 	m_handles->hide();
+
+	m_font = QApplication::font();
+
+	m_font.setPointSize( 14.0 );
 
 	setRect( m_rect );
 }
@@ -378,6 +382,12 @@ FormCheckBox::properties()
 
 		update();
 	}
+}
+
+QSizeF
+FormCheckBox::defaultSize() const
+{
+	return QSizeF( MmPx::instance().fromMmX( 20.0 ), MmPx::instance().fromMmY( 3.5 ) );
 }
 
 } /* namespace Core */

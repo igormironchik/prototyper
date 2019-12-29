@@ -70,7 +70,7 @@ FormComboBoxPrivate::init()
 
 	setRect( m_rect );
 
-	m_proxy->setMinSize( QSizeF( 45.0, 25.0 ) );
+	m_proxy->setMinSize( q->defaultSize() );
 }
 
 void
@@ -242,6 +242,12 @@ void
 FormComboBox::moveResizable( const QPointF & delta )
 {
 	moveBy( delta.x(), delta.y() );
+}
+
+QSizeF
+FormComboBox::defaultSize() const
+{
+	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 4.0 ) );
 }
 
 } /* namespace Core */

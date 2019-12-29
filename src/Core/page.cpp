@@ -1737,9 +1737,36 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, PagePrivate * d,
 			p = d->m_snap->snapPos();
 
 		QRectF r = rect->rect();
-		r.setBottomRight( p );
+		r = QRectF( r.x(), r.y(), p.x() - r.x(), p.y() - r.y() );
+		r = r.normalized();
 
 		elem = new Elem( r, form, form );
+
+		if( elem->defaultSize().width() > 0.0 )
+		{
+			const auto s = elem->defaultSize();
+			const auto r = elem->rectangle();
+
+			auto w = r.width();
+			auto h = r.height();
+
+			bool resize = false;
+
+			if( r.width() < s.width() )
+			{
+				w = s.width();
+				resize = true;
+			}
+
+			if( r.height() < s.height() )
+			{
+				h = s.height();
+				resize = true;
+			}
+
+			if( resize )
+				elem->setRectangle( QRectF( r.topLeft().x(), r.topLeft().y(), w, h ), false );
+		}
 
 		const QString id = d->id();
 

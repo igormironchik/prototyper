@@ -69,7 +69,7 @@ FormVSliderPrivate::init()
 
 	setRect( m_rect );
 
-	m_proxy->setMinSize( QSizeF( 25.0, 45.0 ) );
+	m_proxy->setMinSize( q->defaultSize() );
 }
 
 void
@@ -241,6 +241,12 @@ void
 FormVSlider::moveResizable( const QPointF & delta )
 {
 	moveBy( delta.x(), delta.y() );
+}
+
+QSizeF
+FormVSlider::defaultSize() const
+{
+	return QSizeF( MmPx::instance().fromMmX( 4.0 ), MmPx::instance().fromMmY( 15.0 ) );
 }
 
 } /* namespace Core */
