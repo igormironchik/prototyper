@@ -25,8 +25,8 @@
 #include <QIcon>
 
 // Prototyper include.
-#include <Prototyper/Core/top_gui.hpp>
-#include <Prototyper/Core/project_window.hpp>
+#include <Core/top_gui.hpp>
+#include <Core/project_window.hpp>
 
 
 using namespace Prototyper::Core;

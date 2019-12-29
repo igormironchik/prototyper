@@ -42,9 +42,9 @@ macx {
 
 TEMPLATE = subdirs
 
-SUBDIRS = Prototyper \
+SUBDIRS = src \
 		  3rdparty
 
-Prototyper.depends = 3rdparty
+src.depends = 3rdparty
 
 OTHER_FILES = LICENSE README.md

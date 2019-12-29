@@ -1,6 +1,6 @@
 
 TEMPLATE = app
-TARGET = Prototyper.App
+TARGET = Prototyper
 DESTDIR = ../..
 QT += core gui widgets
 VERSION = 1.0.0
@@ -26,5 +26,5 @@ macx {
 
 unix|win32: LIBS += -L$$OUT_PWD/../../ -lPrototyper.Core
 
-INCLUDEPATH += $$PWD/../..
-DEPENDPATH += $$PWD/../..
+INCLUDEPATH += $$PWD/..
+DEPENDPATH += $$PWD/..
