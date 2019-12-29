@@ -42,8 +42,6 @@
 #include <QEvent>
 #include <QGraphicsScene>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 

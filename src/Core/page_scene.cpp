@@ -38,8 +38,6 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 

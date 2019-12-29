@@ -59,8 +59,6 @@
 #include <algorithm>
 #include <type_traits>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 

@@ -26,7 +26,6 @@
 #include "form_resize_handle.hpp"
 #include "form_with_resize_and_move_handles.hpp"
 
-#include <QDebug>
 
 namespace Prototyper {
 
