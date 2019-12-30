@@ -65,7 +65,7 @@ FormCheckBoxPrivate::~FormCheckBoxPrivate()
 void
 FormCheckBoxPrivate::init()
 {
-	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->form() ) );
+	m_handles.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
 
 	m_handles->setMinSize( q->defaultSize() );
 
@@ -290,8 +290,7 @@ FormCheckBox::boundingRect() const
 	const qreal dy = ( fm.height() > d->m_rect.height() ?
 		( fm.height() - d->m_rect.height() ) / 2.0 : 0.0 );
 
-	return QRectF( d->m_rect.topLeft().x(), d->m_rect.topLeft().y() - dy,
-		d->m_width, d->m_rect.height() + dy * 2.0 );
+	return QRectF( 0.0, -dy, d->m_width, d->m_rect.height() + dy * 2.0 );
 }
 
 void
@@ -336,12 +335,6 @@ void
 FormCheckBox::resize( const QRectF & rect )
 {
 	setPos( rect.topLeft() );
-
-	QSizeF s = d->m_rect.size().scaled( rect.width(), rect.height(),
-		( d->m_handles->isKeepAspectRatio() ? Qt::KeepAspectRatio :
-			Qt::IgnoreAspectRatio ) );
-
-	d->m_rect = QRectF( 0.0, 0.0, s.width(), s.height() );
 
 	d->m_width = rect.width();
 

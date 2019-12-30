@@ -132,7 +132,7 @@ PageScenePrivate::itemUnderMouse() const
 
 	for( const auto & item : children )
 	{
-		if( item->isUnderMouse() )
+		if( item->isUnderMouse() && item->isVisible() )
 		{
 			if( !selected )
 				selected = item;

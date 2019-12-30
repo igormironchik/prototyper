@@ -65,7 +65,7 @@ public:
 	//! Checked?
 	bool m_checked;
 	//! Handles.
-	QScopedPointer< FormImageHandles > m_handles;
+	QScopedPointer< FormResizableProxy > m_handles;
 	//! Font.
 	QFont m_font;
 	//! Text.
