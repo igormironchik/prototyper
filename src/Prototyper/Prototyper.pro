@@ -3,7 +3,8 @@ TEMPLATE = app
 TARGET = Prototyper
 DESTDIR = ../..
 QT += core gui widgets
-VERSION = 1.0.0
+CONFIG += c++14
+VERSION = 2.0.0
 
 SOURCES = main.cpp
 

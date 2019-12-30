@@ -27,19 +27,6 @@ defineTest(minQtVersion) {
     error("Use at least Qt 5.14.0.")
 }
 
-CONFIG += c++11
-
-macx {
-    QMAKE_LFLAGS += -Wl,-rpath,@loader_path/../,-rpath,@executable_path/../
-} else:linux-* {
-    QMAKE_RPATHDIR += \$\$ORIGIN
-    QMAKE_RPATHDIR += \$\$ORIGIN/../lib
-    RPATH = $$join( QMAKE_RPATHDIR, ":" )
-
-    QMAKE_LFLAGS += -Wl,-z,origin \'-Wl,-rpath,$${RPATH}\'
-    QMAKE_RPATHDIR =
-}
-
 TEMPLATE = subdirs
 
 SUBDIRS = src \
