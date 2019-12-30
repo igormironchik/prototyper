@@ -188,7 +188,7 @@ FormCheckBox::cfg() const
 {
 	Cfg::CheckBox c;
 
-	c.set_width( d->m_width );
+	c.set_width( MmPx::instance().toMmX( d->m_width ) );
 
 	c.set_isChecked( d->m_checked );
 	c.set_objectId( objectId() );
