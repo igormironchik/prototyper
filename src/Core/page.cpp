@@ -1349,6 +1349,8 @@ Page::deleteItems( const QList< QGraphicsItem* > & items,
 
 		delete item;
 	}
+
+	scene()->update();
 }
 
 QRectF
