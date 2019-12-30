@@ -1240,11 +1240,11 @@ ProjectWindow::p_exportToPDf()
 			QStandardPaths::DocumentsLocation ).first(),
 		tr( "PDF (*.pdf)" ) );
 
-	if( !fileName.endsWith( QLatin1String( ".pdf" ), Qt::CaseInsensitive ) )
-		fileName.append( QLatin1String( ".pdf" ) );
-
 	if( !fileName.isEmpty() )
 	{
+		if( !fileName.endsWith( QLatin1String( ".pdf" ), Qt::CaseInsensitive ) )
+			fileName.append( QLatin1String( ".pdf" ) );
+
 		d->updateCfg();
 
 		PdfExporter exporter( d->m_cfg );
@@ -1273,12 +1273,12 @@ ProjectWindow::p_exportToHtml()
 			QStandardPaths::DocumentsLocation ).first(),
 		tr( "HTML (*.htm *.html)" ) );
 
-	if( !fileName.endsWith( QLatin1String( ".htm" ), Qt::CaseInsensitive ) &&
-		!fileName.endsWith( QLatin1String( ".html" ), Qt::CaseInsensitive ) )
-		fileName.append( QLatin1String( ".html" ) );
-
 	if( !fileName.isEmpty() )
 	{
+		if( !fileName.endsWith( QLatin1String( ".htm" ), Qt::CaseInsensitive ) &&
+			!fileName.endsWith( QLatin1String( ".html" ), Qt::CaseInsensitive ) )
+				fileName.append( QLatin1String( ".html" ) );
+
 		d->updateCfg();
 
 		HtmlExporter exporter( d->m_cfg );
