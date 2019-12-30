@@ -1245,11 +1245,27 @@ ProjectWindow::p_exportToPDf()
 		if( !fileName.endsWith( QLatin1String( ".pdf" ), Qt::CaseInsensitive ) )
 			fileName.append( QLatin1String( ".pdf" ) );
 
-		d->updateCfg();
+		QFile file( fileName );
 
-		PdfExporter exporter( d->m_cfg );
+		bool canModify = true;
 
-		exporter.exportToDoc( fileName );
+		if( !file.open( QIODevice::WriteOnly ) )
+			canModify = false;
+
+		file.close();
+
+		if( canModify )
+		{
+			d->updateCfg();
+
+			PdfExporter exporter( d->m_cfg );
+
+			exporter.exportToDoc( fileName );
+		}
+		else
+			QMessageBox::critical( this, tr( "Unable to export..." ),
+				tr( "Unable to save file %1.\nFile is not writable." )
+					.arg( fileName ) );
 	}
 }
 
@@ -1279,11 +1295,27 @@ ProjectWindow::p_exportToHtml()
 			!fileName.endsWith( QLatin1String( ".html" ), Qt::CaseInsensitive ) )
 				fileName.append( QLatin1String( ".html" ) );
 
-		d->updateCfg();
+		QFile file( fileName );
 
-		HtmlExporter exporter( d->m_cfg );
+		bool canModify = true;
 
-		exporter.exportToDoc( fileName );
+		if( !file.open( QIODevice::WriteOnly ) )
+			canModify = false;
+
+		file.close();
+
+		if( canModify )
+		{
+			d->updateCfg();
+
+			HtmlExporter exporter( d->m_cfg );
+
+			exporter.exportToDoc( fileName );
+		}
+		else
+			QMessageBox::critical( this, tr( "Unable to export..." ),
+				tr( "Unable to save file %1.\nFile is not writable." )
+					.arg( fileName ) );
 	}
 }
 
@@ -1308,11 +1340,18 @@ ProjectWindow::p_exportToSvg()
 
 	if( !dirName.isEmpty() )
 	{
-		d->updateCfg();
+		try {
+			d->updateCfg();
 
-		SvgExporter exporter( d->m_cfg );
+			SvgExporter exporter( d->m_cfg );
 
-		exporter.exportToDoc( dirName );
+			exporter.exportToDoc( dirName );
+		}
+		catch( const SvgExporterException & e )
+		{
+			QMessageBox::critical( this, tr( "Unable to export..." ),
+				e.what() );
+		}
 	}
 }
 

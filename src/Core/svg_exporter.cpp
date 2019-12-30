@@ -28,6 +28,7 @@
 #include <QSvgGenerator>
 #include <QSvgRenderer>
 #include <QPainter>
+#include <QFile>
 
 
 namespace Prototyper {
@@ -61,13 +62,30 @@ SvgExporterPrivate::createImages( const QString & dir )
 		const QString fileName = dir + QLatin1String( "/" ) +
 			QString::number( i ) + QLatin1String( ".svg" );
 
-		QSvgGenerator svg;
-		svg.setFileName( fileName );
-		svg.setResolution( 150 );
+		QFile file( fileName );
 
-		drawForm( svg, form, 150.0 );
+		bool canModify = true;
 
-		++i;
+		if( !file.open( QIODevice::WriteOnly ) )
+			canModify = false;
+
+		file.close();
+
+		if( canModify )
+		{
+			QSvgGenerator svg;
+			svg.setFileName( fileName );
+			svg.setResolution( 150 );
+
+			drawForm( svg, form, 150.0 );
+
+			++i;
+		}
+		else
+			throw SvgExporterException(
+				QObject::tr( "Unable to export SVG into %1.\n"
+								"File is not writable." )
+					.arg( fileName ) );
 	}
 }
 
@@ -92,6 +110,22 @@ SvgExporter::exportToDoc( const QString & fileName )
 	SvgExporterPrivate * d = d_ptr();
 
 	d->createImages( fileName );
+}
+
+
+//
+// SvgExporterException
+//
+
+SvgExporterException::SvgExporterException( const QString & w )
+	:	m_what( w )
+{
+}
+
+const QString &
+SvgExporterException::what() const noexcept
+{
+	return m_what;
 }
 
 } /* namespace Core */

@@ -60,6 +60,22 @@ private:
 	Q_DISABLE_COPY( SvgExporter )
 }; // class SvgExporter
 
+
+//
+// SvgExporterException
+//
+
+class SvgExporterException final
+{
+public:
+	explicit SvgExporterException( const QString & w );
+
+	const QString & what() const noexcept;
+
+private:
+	QString m_what;
+}; // class SvgExporterException
+
 } /* namespace Core */
 
 } /* namespace Prototyper */
