@@ -47,7 +47,7 @@ namespace Core {
 
 FormRadioButton::FormRadioButton( const QRectF & rect, Page * form,
 	QGraphicsItem * parent )
-	:	FormCheckBox( rect, form, 15.0, FormObject::RadioButtonType, parent )
+	:	FormCheckBox( rect, form, FormObject::RadioButtonType, parent )
 {
 }
 
@@ -86,19 +86,28 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 
 	painter->setPen( pen );
 
-	painter->drawEllipse( rect );
+	QRectF r = rect;
+
+	if( r.height() > boxHeight() )
+	{
+		r.setTopLeft( QPointF( r.topLeft().x(),
+			r.topLeft().y() + ( r.height() - boxHeight() ) / 2.0 ) );
+		r.setHeight( boxHeight() );
+	}
+
+	painter->drawEllipse( r );
 
 	if( isChecked )
 	{
 		painter->setBrush( QBrush( pen.color() ) );
 
-		painter->drawEllipse( rect.adjusted( 2.0, 2.0, -2.0, -2.0 ) );
+		painter->drawEllipse( r.adjusted( 2.0, 2.0, -2.0, -2.0 ) );
 	}
 
 	painter->setFont( font );
 
-	QRectF r = boundingRect;
-	r.moveLeft( rect.x() + rect.height() + 4.0 );
+	r = boundingRect;
+	r.moveLeft( r.x() + boxHeight() + 4.0 );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
 }

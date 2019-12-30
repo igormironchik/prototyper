@@ -47,10 +47,10 @@ namespace Core {
 //
 
 FormCheckBoxPrivate::FormCheckBoxPrivate( FormCheckBox * parent,
-	const QRectF & rect, qreal defaultSize )
+	const QRectF & rect )
 	:	q( parent )
 	,	m_rect( QRectF( rect.topLeft().x(), rect.topLeft().y(),
-			rect.width(), defaultSize ) )
+			q->boxHeight(), q->boxHeight() ) )
 	,	m_checked( true )
 	,	m_handles( 0 )
 	,	m_text( FormCheckBox::tr( "Text" ) )
@@ -83,7 +83,7 @@ FormCheckBoxPrivate::setRect( const QRectF & rect )
 {
 	const QRectF r = rect;
 
-	m_rect = QRectF( 0.0, 0.0, r.height(), r.height() );
+	m_rect = QRectF( 0.0, 0.0, q->boxHeight(), rect.height() );
 
 	m_width = r.width();
 
@@ -109,11 +109,11 @@ FormCheckBox::FormCheckBox( const QRectF & rect, Page * form,
 	d->init();
 }
 
-FormCheckBox::FormCheckBox( const QRectF & rect, Page * form, qreal defaultSize,
+FormCheckBox::FormCheckBox( const QRectF & rect, Page * form,
 	FormObject::ObjectType type, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
 	,	FormObject( type, form )
-	,	d( new FormCheckBoxPrivate( this, rect, defaultSize ) )
+	,	d( new FormCheckBoxPrivate( this, rect ) )
 {
 	d->init();
 }
@@ -155,28 +155,44 @@ FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
 
 	painter->setPen( pen );
 
-	painter->drawRect( rect );
+	QRectF r = rect;
+	r.setWidth( boxHeight() );
+
+	if( r.height() > boxHeight() )
+	{
+		r.setTopLeft( QPointF( r.topLeft().x(),
+			r.topLeft().y() + ( r.height() - boxHeight() ) / 2.0 ) );
+		r.setHeight( boxHeight() );
+	}
+
+	painter->drawRect( r );
 
 	if( isChecked )
 	{
-		painter->drawLine( QLineF( rect.topLeft().x() + 4.0,
-			rect.topLeft().y() + rect.height() / 2.0,
-			rect.topLeft().x() + rect.width() / 2.0,
-			rect.bottomLeft().y() - 4.0 ) );
+		painter->drawLine( QLineF( r.topLeft().x() + 4.0,
+			r.topLeft().y() + boxHeight() / 2.0,
+			r.topLeft().x() + boxHeight() / 2.0,
+			r.bottomLeft().y() - 4.0 ) );
 
 		painter->drawLine( QLineF(
-			rect.topLeft().x() + rect.width() / 2.0,
-			rect.bottomLeft().y() - 4.0,
-			rect.topRight().x() - 4.0,
-			rect.topRight().y() + 4.0 ) );
+			r.topLeft().x() + boxHeight() / 2.0,
+			r.bottomLeft().y() - 4.0,
+			r.topRight().x() - 4.0,
+			r.topRight().y() + 4.0 ) );
 	}
 
 	painter->setFont( font );
 
-	QRectF r = boundingRect;
-	r.moveLeft( rect.x() + rect.height() + 4.0 );
+	r = boundingRect;
+	r.moveLeft( r.x() + boxHeight() + 4.0 );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
+}
+
+qreal
+FormCheckBox::boxHeight()
+{
+	return MmPx::instance().fromMmY( 3.5 );
 }
 
 void
@@ -338,6 +354,8 @@ FormCheckBox::resize( const QRectF & rect )
 
 	d->m_width = rect.width();
 
+	d->m_rect.setHeight( rect.height() );
+
 	QRectF r = boundingRect();
 	r.moveTopLeft( rect.topLeft() );
 
@@ -390,7 +408,7 @@ FormCheckBox::properties()
 QSizeF
 FormCheckBox::defaultSize() const
 {
-	return QSizeF( MmPx::instance().fromMmX( 20.0 ), MmPx::instance().fromMmY( 3.5 ) );
+	return QSizeF( MmPx::instance().fromMmX( 20.0 ), boxHeight() );
 }
 
 } /* namespace Core */

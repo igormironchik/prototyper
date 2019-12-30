@@ -49,8 +49,7 @@ class TextWithOpts;
 
 class FormCheckBoxPrivate {
 public:
-	FormCheckBoxPrivate( FormCheckBox * parent, const QRectF & rect,
-		qreal defaultSize = 20.0 );
+	FormCheckBoxPrivate( FormCheckBox * parent, const QRectF & rect );
 	virtual ~FormCheckBoxPrivate();
 
 	//! Init.
@@ -103,6 +102,8 @@ public:
 		const QRectF & rect, qreal width, bool isChecked, const QString & text,
 		const QRectF & boundingRect );
 
+	static qreal boxHeight();
+
 	//! Set pen.
 	void setObjectPen( const QPen & p,
 		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
@@ -150,7 +151,7 @@ private slots:
 	void properties();
 
 protected:
-	FormCheckBox( const QRectF & rect, Page * form, qreal defaultSize,
+	FormCheckBox( const QRectF & rect, Page * form,
 		FormObject::ObjectType type, QGraphicsItem * parent = 0 );
 
 protected:
