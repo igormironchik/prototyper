@@ -184,9 +184,9 @@ PdfExporterPrivate::printDocument( const QTextDocument & doc, QPdfWriter & pdf,
 			QSize s = svg.viewBox().size();
 
 			if( s.width() > body.size().width() ||
-				s.height() > body.size().height() )
+				s.height() > body.size().height() - y )
 					s.scale( QSize( body.size().width(),
-						body.size().height() ), Qt::KeepAspectRatio );
+						body.size().height() - y ), Qt::KeepAspectRatio );
 
 			if( ( y + s.height() ) > body.height() )
 			{
