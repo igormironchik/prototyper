@@ -24,6 +24,8 @@
 #include "form_radio_button.hpp"
 #include "form_checkbox_properties.hpp"
 #include "form_image_handles.hpp"
+#include "page.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QWidget>
@@ -66,7 +68,8 @@ FormRadioButton::paint( QPainter * painter,
 		QRectF( 0.0, 0.0, d->m_rect.width(), d->m_rect.height() ),
 		d->m_width,
 		d->m_checked,
-		d->m_text );
+		d->m_text,
+		boundingRect() );
 
 	if( isSelected() && !group() )
 		d->m_handles->show();
@@ -76,8 +79,11 @@ FormRadioButton::paint( QPainter * painter,
 
 void
 FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
-	const QRectF & rect, qreal width, bool isChecked, const QString & text )
+	const QRectF & rect, qreal width, bool isChecked, const QString & text,
+	const QRectF & boundingRect )
 {
+	Q_UNUSED( width )
+
 	painter->setPen( pen );
 
 	painter->drawEllipse( rect );
@@ -91,9 +97,7 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 
 	painter->setFont( font );
 
-	QRectF r = rect;
-
-	r.setRight( rect.x() + width );
+	QRectF r = boundingRect;
 	r.moveLeft( rect.x() + rect.height() + 4.0 );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
@@ -121,6 +125,9 @@ FormRadioButton::properties()
 	if( dlg.exec() == QDialog::Accepted )
 	{
 		Cfg::CheckBox c = dlg.cfg();
+
+		form()->undoStack()->push( new UndoChangeTextWithOpts( form(),
+			objectId(), text(), c.text() ) );
 
 		setText( c.text() );
 

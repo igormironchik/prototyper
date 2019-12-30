@@ -55,7 +55,8 @@ public:
 
 	//! Draw radio button.
 	static void draw( QPainter * painter, const QPen & pen, const QFont & font,
-		const QRectF & rect, qreal width, bool isChecked, const QString & text );
+		const QRectF & rect, qreal width, bool isChecked, const QString & text,
+		const QRectF & boundingRect );
 
 protected:
 	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )

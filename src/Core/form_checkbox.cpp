@@ -129,13 +129,16 @@ FormCheckBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 	Q_UNUSED( option )
 	Q_UNUSED( widget )
 
+	painter->setClipRect( boundingRect() );
+
 	draw( painter,
 		objectPen(),
 		d->m_font,
 		QRectF( 0.0, 0.0, d->m_rect.width(), d->m_rect.height() ),
 		d->m_width,
 		d->m_checked,
-		d->m_text );
+		d->m_text,
+		boundingRect() );
 
 	if( isSelected() && !group() )
 		d->m_handles->show();
@@ -145,8 +148,11 @@ FormCheckBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 void
 FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
-	const QRectF & rect, qreal width, bool isChecked, const QString & text )
+	const QRectF & rect, qreal width, bool isChecked, const QString & text,
+	const QRectF & boundingRect )
 {
+	Q_UNUSED( width )
+
 	painter->setPen( pen );
 
 	painter->drawRect( rect );
@@ -167,9 +173,7 @@ FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
 
 	painter->setFont( font );
 
-	QRectF r = rect;
-
-	r.setRight( rect.x() + width );
+	QRectF r = boundingRect;
 	r.moveLeft( rect.x() + rect.height() + 4.0 );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
@@ -274,14 +278,20 @@ FormCheckBox::setText( const Cfg::TextStyle & c )
 
 	d->m_text = c.text();
 
-	update();
+	if( scene() )
+		scene()->update();
 }
 
 QRectF
 FormCheckBox::boundingRect() const
 {
-	return QRectF( d->m_rect.topLeft().x(), d->m_rect.topLeft().y(),
-		d->m_width, d->m_rect.height() );
+	const QFontMetrics fm( d->m_font );
+
+	const qreal dy = ( fm.height() > d->m_rect.height() ?
+		( fm.height() - d->m_rect.height() ) / 2.0 : 0.0 );
+
+	return QRectF( d->m_rect.topLeft().x(), d->m_rect.topLeft().y() - dy,
+		d->m_width, d->m_rect.height() + dy * 2.0 );
 }
 
 void

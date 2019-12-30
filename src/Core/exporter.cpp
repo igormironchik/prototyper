@@ -154,15 +154,18 @@ static inline void drawCheckBox( const Cfg::CheckBox & chk, QPainter & p, qreal 
 {
 	p.save();
 
+	const QRectF r = QRectF( MmPx::instance().fromMm( chk.pos().x(), dpi ),
+		MmPx::instance().fromMm( chk.pos().y(), dpi ),
+		MmPx::instance().fromMm( chk.size().width(), dpi ),
+		MmPx::instance().fromMm( chk.size().height(), dpi ) );
+
 	FormCheckBox::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
 		font( chk.text(), p ),
-		QRectF( MmPx::instance().fromMm( chk.pos().x(), dpi ),
-			MmPx::instance().fromMm( chk.pos().y(), dpi ),
-			MmPx::instance().fromMm( chk.size().width(), dpi ),
-			MmPx::instance().fromMm( chk.size().height(), dpi ) ),
-		MmPx::instance().fromMm( chk.width(), dpi ),
+		r,
+		MmPx::instance().fromMm( chk.size().width(), dpi ),
 		chk.isChecked(),
-		chk.text().text() );
+		chk.text().text(),
+		r );
 
 	p.restore();
 }
@@ -171,15 +174,18 @@ static inline void drawRadioButton( const Cfg::CheckBox & chk, QPainter & p, qre
 {
 	p.save();
 
+	const QRectF r = QRectF( MmPx::instance().fromMm( chk.pos().x(), dpi ),
+		MmPx::instance().fromMm( chk.pos().y(), dpi ),
+		MmPx::instance().fromMm( chk.size().width(), dpi ),
+		MmPx::instance().fromMm( chk.size().height(), dpi ) );
+
 	FormRadioButton::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
 		font( chk.text(), p ),
-		QRectF( MmPx::instance().fromMm( chk.pos().x(), dpi ),
-			MmPx::instance().fromMm( chk.pos().y(), dpi ),
-			MmPx::instance().fromMm( chk.size().width(), dpi ),
-			MmPx::instance().fromMm( chk.size().height(), dpi ) ),
+		r,
 		MmPx::instance().fromMm( chk.width(), dpi ),
 		chk.isChecked(),
-		chk.text().text() );
+		chk.text().text(),
+		r );
 
 	p.restore();
 }
