@@ -124,21 +124,36 @@ FormComboBox::draw( QPainter * painter, const QRectF & rect,
 {
 	painter->setPen( pen );
 
-	painter->drawRoundedRect( rect, 2.0, 2.0 );
+	QRectF r = rect;
 
-	const qreal h = rect.height();
-	const qreal leftX = rect.x() + rect.width() - h;
+	if( r.height() > boxHeight() )
+	{
+		r.setHeight( boxHeight() );
+		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
+			( rect.height() - boxHeight() ) / 2.0 ) );
+	}
 
-	painter->drawLine( QLineF( leftX, rect.y(), leftX, rect.y() + h ) );
+	painter->drawRoundedRect( r, 2.0, 2.0 );
+
+	const qreal h = r.height();
+	const qreal leftX = r.x() + r.width() - h;
+
+	painter->drawLine( QLineF( leftX, r.y(), leftX, r.y() + h ) );
 
 	QPainterPath path;
-	path.moveTo( leftX + 5.0, rect.y() + 5.0 );
-	path.lineTo( leftX + h - 5.0, rect.y() + 5.0 );
-	path.lineTo( leftX + h / 2.0, rect.y() + h - 5.0 );
+	path.moveTo( leftX + 5.0, r.y() + 5.0 );
+	path.lineTo( leftX + h - 5.0, r.y() + 5.0 );
+	path.lineTo( leftX + h / 2.0, r.y() + h - 5.0 );
 
 	painter->setBrush( QBrush( pen.color() ) );
 
 	painter->drawPath( path );
+}
+
+qreal
+FormComboBox::boxHeight()
+{
+	return MmPx::instance().fromMmY( 4.0 );
 }
 
 void
@@ -247,7 +262,7 @@ FormComboBox::moveResizable( const QPointF & delta )
 QSizeF
 FormComboBox::defaultSize() const
 {
-	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 4.0 ) );
+	return QSizeF( MmPx::instance().fromMmX( 15.0 ), boxHeight() );
 }
 
 } /* namespace Core */
