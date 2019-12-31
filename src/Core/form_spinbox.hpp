@@ -68,6 +68,8 @@ public:
 	static void draw( QPainter * painter, const QRectF & rect,
 		const QPen & pen, const QFont & font, const QString & text );
 
+	static qreal boxHeight();
+
 	//! Set pen.
 	void setObjectPen( const QPen & p,
 		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;

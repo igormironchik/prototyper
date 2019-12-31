@@ -138,37 +138,52 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 {
 	painter->setPen( pen );
 
-	painter->drawRoundedRect( rect, 2.0, 2.0 );
+	QRectF r = rect;
 
-	const qreal h = rect.height();
+	if( r.height() > boxHeight() )
+	{
+		r.setHeight( boxHeight() );
+		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
+			( rect.height() - boxHeight() ) / 2.0 ) );
+	}
+
+	painter->drawRoundedRect( r, 2.0, 2.0 );
+
+	const qreal h = r.height();
 	const qreal w = h * 0.75;
-	const qreal leftX = rect.x() + rect.width() - w;
+	const qreal leftX = r.x() + r.width() - w;
 
-	painter->drawLine( QLineF( leftX, rect.y(), leftX, rect.y() + h ) );
+	painter->drawLine( QLineF( leftX, r.y(), leftX, r.y() + h ) );
 
 	QPainterPath top;
-	top.moveTo( leftX + 5.0, rect.y() + rect.height() / 2.0 - 2.5 );
-	top.lineTo( leftX + w - 5.0, rect.y() + rect.height() / 2.0 - 2.5 );
-	top.lineTo( leftX + w / 2.0, rect.y() + 5.0 );
+	top.moveTo( leftX + 5.0, r.y() + r.height() / 2.0 - 2.5 );
+	top.lineTo( leftX + w - 5.0, r.y() + r.height() / 2.0 - 2.5 );
+	top.lineTo( leftX + w / 2.0, r.y() + 5.0 );
 
 	painter->setBrush( QBrush( pen.color() ) );
 
 	painter->drawPath( top );
 
 	QPainterPath bottom;
-	bottom.moveTo( leftX + 5.0, rect.y() + rect.height() / 2.0 + 2.5 );
-	bottom.lineTo( leftX + w - 5.0, rect.y() + rect.height() / 2.0 + 2.5 );
-	bottom.lineTo( leftX + w / 2.0, rect.y() + h - 5.0 );
+	bottom.moveTo( leftX + 5.0, r.y() + r.height() / 2.0 + 2.5 );
+	bottom.lineTo( leftX + w - 5.0, r.y() + r.height() / 2.0 + 2.5 );
+	bottom.lineTo( leftX + w / 2.0, r.y() + h - 5.0 );
 
 	painter->drawPath( bottom );
 
-	QRectF textR = rect;
+	QRectF textR = r;
 	textR.setRight( leftX - 5.0 );
 
 	painter->setFont( font );
 
 	painter->drawText( textR, Qt::AlignRight | Qt::AlignVCenter,
 		text );
+}
+
+qreal
+FormSpinBox::boxHeight()
+{
+	return MmPx::instance().fromMmY( 4.0 );
 }
 
 void
@@ -359,7 +374,7 @@ FormSpinBox::properties()
 QSizeF
 FormSpinBox::defaultSize() const
 {
-	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 4.0 ) );
+	return QSizeF( MmPx::instance().fromMmX( 15.0 ), boxHeight() );
 }
 
 } /* namespace Core */
