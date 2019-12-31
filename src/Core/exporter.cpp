@@ -36,6 +36,7 @@
 #include <QSvgGenerator>
 #include <QPainter>
 #include <QTextDocument>
+#include <QAbstractTextDocumentLayout>
 
 // C++ include.
 #include <algorithm>
@@ -333,6 +334,7 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dp
 	svg.setViewBox( QRect( -1, 0,
 		MmPx::instance().fromMm( form.size().width(), dpi ) + 1,
 		MmPx::instance().fromMm( form.size().height(), dpi ) ) );
+	svg.setResolution( dpi );
 
 	QPainter p;
 	p.begin( &svg );
@@ -377,6 +379,7 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dp
 		p.save();
 
 		QTextDocument doc;
+		doc.documentLayout()->setPaintDevice( &svg );
 		doc.setTextWidth( MmPx::instance().fromMm( text.textWidth(), dpi ) );
 
 		Cfg::fillTextDocument( &doc, text.text() );
