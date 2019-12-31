@@ -151,28 +151,29 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 
 	const qreal h = r.height();
 	const qreal w = h * 0.75;
+	const qreal o = w / 5.0;
 	const qreal leftX = r.x() + r.width() - w;
 
 	painter->drawLine( QLineF( leftX, r.y(), leftX, r.y() + h ) );
 
 	QPainterPath top;
-	top.moveTo( leftX + 5.0, r.y() + r.height() / 2.0 - 2.5 );
-	top.lineTo( leftX + w - 5.0, r.y() + r.height() / 2.0 - 2.5 );
-	top.lineTo( leftX + w / 2.0, r.y() + 5.0 );
+	top.moveTo( leftX + o, r.y() + r.height() / 2.0 - o / 2.0 );
+	top.lineTo( leftX + w - o, r.y() + r.height() / 2.0 - o / 2.0 );
+	top.lineTo( leftX + w / 2.0, r.y() + o );
 
 	painter->setBrush( QBrush( pen.color() ) );
 
 	painter->drawPath( top );
 
 	QPainterPath bottom;
-	bottom.moveTo( leftX + 5.0, r.y() + r.height() / 2.0 + 2.5 );
-	bottom.lineTo( leftX + w - 5.0, r.y() + r.height() / 2.0 + 2.5 );
-	bottom.lineTo( leftX + w / 2.0, r.y() + h - 5.0 );
+	bottom.moveTo( leftX + o, r.y() + r.height() / 2.0 + o / 2.0 );
+	bottom.lineTo( leftX + w - o, r.y() + r.height() / 2.0 + o / 2.0 );
+	bottom.lineTo( leftX + w / 2.0, r.y() + h - o );
 
 	painter->drawPath( bottom );
 
 	QRectF textR = r;
-	textR.setRight( leftX - 5.0 );
+	textR.setRight( leftX - o );
 
 	painter->setFont( font );
 
