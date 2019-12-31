@@ -232,7 +232,7 @@ static inline void drawHSlider( const Cfg::HSlider & hs, QPainter & p, qreal dpi
 			MmPx::instance().fromMm( hs.pos().y(), dpi ),
 			MmPx::instance().fromMm( hs.size().width(), dpi ),
 			MmPx::instance().fromMm( hs.size().height(), dpi ) ),
-		Cfg::fromPen( hs.pen(), dpi ) );
+		Cfg::fromPen( hs.pen(), dpi ), dpi );
 
 	p.restore();
 }
@@ -246,7 +246,7 @@ static inline void drawVSlider( const Cfg::VSlider & vs, QPainter & p, qreal dpi
 			MmPx::instance().fromMm( vs.pos().y(), dpi ),
 			MmPx::instance().fromMm( vs.size().width(), dpi ),
 			MmPx::instance().fromMm( vs.size().height(), dpi ) ),
-		Cfg::fromPen( vs.pen(), dpi ) );
+		Cfg::fromPen( vs.pen(), dpi ), dpi );
 
 	p.restore();
 }

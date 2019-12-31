@@ -44,7 +44,7 @@ class FormHSliderPrivate {
 public:
 	FormHSliderPrivate( FormHSlider * parent, const QRectF & rect )
 		:	q( parent )
-		,	m_rect( QRectF( rect.x(), rect.y(), rect.width(), 25.0 ) )
+		,	m_rect( rect )
 		,	m_proxy( 0 )
 	{
 	}
@@ -119,25 +119,43 @@ FormHSlider::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 
 void
 FormHSlider::draw( QPainter * painter, const QRectF & rect,
-	const QPen & pen )
+	const QPen & pen, int dpi )
 {
 	painter->setPen( pen );
 	painter->setBrush( QBrush( pen.color() ) );
 
-	const qreal gh = rect.height() * 0.15;
-	const qreal hw = rect.height() * 0.5;
-	const qreal sx = rect.width() * 0.2 + rect.x();
+	QRectF r = rect;
 
-	const QRectF groove( rect.x(), rect.y() + rect.height() / 2.0 - gh / 2.0,
-		rect.width(), gh );
+	if( r.height() > boxHeight( dpi ) )
+	{
+		r.setHeight( boxHeight( dpi ) );
+		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
+			( rect.height() - boxHeight( dpi ) ) / 2.0 ) );
+	}
 
-	const QRectF handle( sx, rect.y(), hw, rect.height() );
+	const qreal gh = r.height() * 0.15;
+	const qreal hw = r.height() * 0.5;
+	const qreal sx = r.width() * 0.2 + rect.x();
+
+	const QRectF groove( r.x(), r.y() + r.height() / 2.0 - gh / 2.0,
+		r.width(), gh );
+
+	const QRectF handle( sx, r.y(), hw, r.height() );
 
 	painter->drawRoundedRect( groove, 2.0, 2.0 );
 
 	painter->setBrush( Qt::white );
 
 	painter->drawRoundedRect( handle, 2.0, 2.0 );
+}
+
+qreal
+FormHSlider::boxHeight( int dpi )
+{
+	if( !dpi )
+		return MmPx::instance().fromMmY( 4.0 );
+	else
+		return MmPx::instance().fromMm( 4.0, dpi );
 }
 
 void
@@ -246,7 +264,7 @@ FormHSlider::moveResizable( const QPointF & delta )
 QSizeF
 FormHSlider::defaultSize() const
 {
-	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 4.0 ) );
+	return QSizeF( MmPx::instance().fromMmX( 15.0 ), boxHeight() );
 }
 
 } /* namespace Core */
