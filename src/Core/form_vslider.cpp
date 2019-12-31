@@ -136,17 +136,18 @@ FormVSlider::draw( QPainter * painter, const QRectF & rect,
 	const qreal gw = r.width() * 0.15;
 	const qreal hh = r.width() * 0.5;
 	const qreal sy = r.height() * 0.2 + r.y();
+	const qreal ro = r.width() / 10.0;
 
 	const QRectF groove( r.x() + r.width() / 2.0 - gw / 2.0, r.y(),
 		gw, r.height() );
 
 	const QRectF handle( r.x(), sy, r.width(), hh );
 
-	painter->drawRoundedRect( groove, 2.0, 2.0 );
+	painter->drawRoundedRect( groove, ro, ro );
 
 	painter->setBrush( Qt::white );
 
-	painter->drawRoundedRect( handle, 2.0, 2.0 );
+	painter->drawRoundedRect( handle, ro, ro );
 }
 
 qreal

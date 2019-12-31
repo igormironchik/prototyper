@@ -147,7 +147,9 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 			( rect.height() - boxHeight( dpi ) ) / 2.0 ) );
 	}
 
-	painter->drawRoundedRect( r, 2.0, 2.0 );
+	const qreal ro = r.height() / 10.0;
+
+	painter->drawRoundedRect( r, ro, ro );
 
 	const qreal h = r.height();
 	const qreal w = h * 0.75;

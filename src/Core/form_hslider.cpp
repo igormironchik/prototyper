@@ -140,13 +140,15 @@ FormHSlider::draw( QPainter * painter, const QRectF & rect,
 	const QRectF groove( r.x(), r.y() + r.height() / 2.0 - gh / 2.0,
 		r.width(), gh );
 
+	const qreal ro = r.height() / 10.0;
+
 	const QRectF handle( sx, r.y(), hw, r.height() );
 
-	painter->drawRoundedRect( groove, 2.0, 2.0 );
+	painter->drawRoundedRect( groove, ro, ro );
 
 	painter->setBrush( Qt::white );
 
-	painter->drawRoundedRect( handle, 2.0, 2.0 );
+	painter->drawRoundedRect( handle, ro, ro );
 }
 
 qreal
