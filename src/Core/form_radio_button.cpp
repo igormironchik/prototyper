@@ -80,7 +80,7 @@ FormRadioButton::paint( QPainter * painter,
 void
 FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	const QRectF & rect, qreal width, bool isChecked, const QString & text,
-	const QRectF & boundingRect )
+	const QRectF & boundingRect, int dpi )
 {
 	Q_UNUSED( width )
 
@@ -88,11 +88,11 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 
 	QRectF r = rect;
 
-	if( r.height() > boxHeight() )
+	if( r.height() > boxHeight( dpi ) )
 	{
 		r.setTopLeft( QPointF( r.topLeft().x(),
-			r.topLeft().y() + ( r.height() - boxHeight() ) / 2.0 ) );
-		r.setHeight( boxHeight() );
+			r.topLeft().y() + ( r.height() - boxHeight( dpi ) ) / 2.0 ) );
+		r.setHeight( boxHeight( dpi ) );
 	}
 
 	painter->drawEllipse( r );
@@ -107,7 +107,7 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	painter->setFont( font );
 
 	r = boundingRect;
-	r.moveLeft( r.x() + boxHeight() + 4.0 );
+	r.moveLeft( r.x() + boxHeight( dpi ) + 4.0 );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
 }

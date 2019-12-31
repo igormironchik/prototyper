@@ -120,17 +120,17 @@ FormComboBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 void
 FormComboBox::draw( QPainter * painter, const QRectF & rect,
-	const QPen & pen )
+	const QPen & pen, int dpi )
 {
 	painter->setPen( pen );
 
 	QRectF r = rect;
 
-	if( r.height() > boxHeight() )
+	if( r.height() > boxHeight( dpi ) )
 	{
-		r.setHeight( boxHeight() );
+		r.setHeight( boxHeight( dpi ) );
 		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
-			( rect.height() - boxHeight() ) / 2.0 ) );
+			( rect.height() - boxHeight( dpi ) ) / 2.0 ) );
 	}
 
 	painter->drawRoundedRect( r, 2.0, 2.0 );
@@ -151,9 +151,12 @@ FormComboBox::draw( QPainter * painter, const QRectF & rect,
 }
 
 qreal
-FormComboBox::boxHeight()
+FormComboBox::boxHeight( int dpi )
 {
-	return MmPx::instance().fromMmY( 4.0 );
+	if( !dpi )
+		return MmPx::instance().fromMmY( 4.0 );
+	else
+		return MmPx::instance().fromMm( 4.0, dpi );
 }
 
 void

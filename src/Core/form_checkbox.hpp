@@ -100,9 +100,9 @@ public:
 	//! Draw checkbox.
 	static void draw( QPainter * painter, const QPen & pen, const QFont & font,
 		const QRectF & rect, qreal width, bool isChecked, const QString & text,
-		const QRectF & boundingRect );
+		const QRectF & boundingRect, int dpi = 0 );
 
-	static qreal boxHeight();
+	static qreal boxHeight( int dpi = 0 );
 
 	//! Set pen.
 	void setObjectPen( const QPen & p,
