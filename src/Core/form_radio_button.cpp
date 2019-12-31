@@ -97,17 +97,19 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 
 	painter->drawEllipse( r );
 
+	const qreal o = r.height() / 10.0;
+
 	if( isChecked )
 	{
 		painter->setBrush( QBrush( pen.color() ) );
 
-		painter->drawEllipse( r.adjusted( 2.0, 2.0, -2.0, -2.0 ) );
+		painter->drawEllipse( r.adjusted( o, o, -o, -o ) );
 	}
 
 	painter->setFont( font );
 
 	r = boundingRect;
-	r.moveLeft( r.x() + boxHeight( dpi ) + 4.0 );
+	r.moveLeft( r.x() + boxHeight( dpi ) + o * 2.0 );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
 }
