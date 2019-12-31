@@ -160,31 +160,33 @@ FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
 
 	if( r.height() > boxHeight( dpi ) )
 	{
-		r.setTopLeft( QPointF( r.topLeft().x(),
+		r.setTopLeft( QPointF( r.topLeft().x() + pen.widthF(),
 			r.topLeft().y() + ( r.height() - boxHeight( dpi ) ) / 2.0 ) );
 		r.setHeight( boxHeight( dpi ) );
 	}
 
 	painter->drawRect( r );
 
+	const qreal o = r.height() / 5.0;
+
 	if( isChecked )
 	{
-		painter->drawLine( QLineF( r.topLeft().x() + 4.0,
+		painter->drawLine( QLineF( r.topLeft().x() + o,
 			r.topLeft().y() + boxHeight( dpi ) / 2.0,
 			r.topLeft().x() + boxHeight( dpi ) / 2.0,
-			r.bottomLeft().y() - 4.0 ) );
+			r.bottomLeft().y() - o ) );
 
 		painter->drawLine( QLineF(
 			r.topLeft().x() + boxHeight( dpi ) / 2.0,
-			r.bottomLeft().y() - 4.0,
-			r.topRight().x() - 4.0,
-			r.topRight().y() + 4.0 ) );
+			r.bottomLeft().y() - o,
+			r.topRight().x() - o,
+			r.topRight().y() + o ) );
 	}
 
 	painter->setFont( font );
 
 	r = boundingRect;
-	r.moveLeft( r.x() + boxHeight( dpi ) + 4.0 );
+	r.moveLeft( r.x() + boxHeight( dpi ) + o );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
 }
