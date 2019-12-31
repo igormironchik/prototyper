@@ -253,7 +253,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 	QPdfWriter pdf( fileName );
 
-	pdf.setResolution( 150 );
+	pdf.setResolution( 96 );
 
 	QPageLayout layout = pdf.pageLayout();
 	layout.setUnits( QPageLayout::Point );
@@ -267,11 +267,10 @@ PdfExporter::exportToDoc( const QString & fileName )
 	d->createImages();
 
 	QTextDocument doc;
+	doc.documentLayout()->setPaintDevice( &pdf );
 	doc.setPageSize( body.size() );
 
 	d->fillDocument( doc );
-
-	doc.documentLayout()->setPaintDevice( &pdf );
 
 	doc.setPageSize( body.size() );
 

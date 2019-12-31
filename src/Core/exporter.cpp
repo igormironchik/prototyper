@@ -109,8 +109,10 @@ static inline void drawRect( const Cfg::Rect & rect, QPainter & p, qreal dpi )
 	p.restore();
 }
 
-static inline QFont font( const Cfg::TextStyle & s, QPainter & p )
+static inline QFont font( const Cfg::TextStyle & s, QPainter & p, qreal dpi )
 {
+	Q_UNUSED( dpi )
+
 	QFont f = p.font();
 
 	if( std::find( s.style().cbegin(), s.style().cend(), Cfg::c_boldStyle ) !=
@@ -137,7 +139,7 @@ static inline void drawButton( const Cfg::Button & btn, QPainter & p, qreal dpi 
 	p.setPen( QPen( QColor( btn.pen().color() ),
 		MmPx::instance().fromMm( btn.pen().width(), dpi ) ) );
 
-	p.setFont( font( btn.text(), p ) );
+	p.setFont( font( btn.text(), p, dpi ) );
 
 	const QRect r( MmPx::instance().fromMm( btn.pos().x(), dpi ),
 		MmPx::instance().fromMm( btn.pos().y(), dpi ),
@@ -161,7 +163,7 @@ static inline void drawCheckBox( const Cfg::CheckBox & chk, QPainter & p, qreal 
 		MmPx::instance().fromMm( chk.size().height(), dpi ) );
 
 	FormCheckBox::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
-		font( chk.text(), p ),
+		font( chk.text(), p, dpi ),
 		r,
 		MmPx::instance().fromMm( chk.size().width(), dpi ),
 		chk.isChecked(),
@@ -182,7 +184,7 @@ static inline void drawRadioButton( const Cfg::CheckBox & chk, QPainter & p, qre
 		MmPx::instance().fromMm( chk.size().height(), dpi ) );
 
 	FormRadioButton::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
-		font( chk.text(), p ),
+		font( chk.text(), p, dpi ),
 		r,
 		MmPx::instance().fromMm( chk.width(), dpi ),
 		chk.isChecked(),
@@ -217,7 +219,7 @@ static inline void drawSpinBox( const Cfg::SpinBox & s, QPainter & p, qreal dpi 
 			MmPx::instance().fromMm( s.size().width(), dpi ),
 			MmPx::instance().fromMm( s.size().height(), dpi ) ),
 		Cfg::fromPen( s.pen(), dpi ),
-		font( s.text(), p ),
+		font( s.text(), p, dpi ),
 		s.text().text(),
 		dpi );
 
@@ -252,7 +254,8 @@ static inline void drawVSlider( const Cfg::VSlider & vs, QPainter & p, qreal dpi
 	p.restore();
 }
 
-static inline void drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi )
+static inline void drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi,
+	QSvgGenerator & svg )
 {
 	p.save();
 
@@ -260,7 +263,7 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi 
 		MmPx::instance().fromMm( group.pos().y(), dpi ) );
 
 	foreach( const Cfg::Group & group, group.group() )
-		drawGroup( group, p, dpi );
+		drawGroup( group, p, dpi, svg );
 
 	foreach( const Cfg::Line & line, group.line() )
 		drawLine( line, p, dpi );
@@ -273,6 +276,7 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi 
 		p.save();
 
 		QTextDocument doc;
+		doc.documentLayout()->setPaintDevice( &svg );
 		doc.setTextWidth( text.textWidth() );
 
 		Cfg::fillTextDocument( &doc, text.text() );
@@ -345,7 +349,7 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dp
 		MmPx::instance().fromMm( form.size().height(), dpi ), 0, false );
 
 	foreach( const Cfg::Group & group, form.group() )
-		drawGroup( group, p, dpi );
+		drawGroup( group, p, dpi, svg );
 
 	foreach( const Cfg::Line & line, form.line() )
 		drawLine( line, p, dpi );
