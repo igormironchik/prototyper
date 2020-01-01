@@ -122,7 +122,9 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 		{
 			Cfg::TextStyle style;
 			style.set_style( textStyle( f, b ) );
-			style.set_fontSize( f.fontPointSize() < 1.0 ? 10.0 : f.fontPointSize() );
+			QFont font = f.font();
+			style.set_fontSize( font.pixelSize() < MmPx::instance().fromPtY( 1.0 ) ?
+				MmPx::instance().fromPtY( 10.0 ) : MmPx::instance().toPtY( font.pixelSize() ) );
 			style.set_text( t );
 
 			blocks.push_back( style );
@@ -141,7 +143,9 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 	{
 		Cfg::TextStyle style;
 		style.set_style( textStyle( f, b ) );
-		style.set_fontSize( f.fontPointSize() < 1.0 ? 10.0 : f.fontPointSize() );
+		QFont font = f.font();
+		style.set_fontSize( font.pixelSize() < MmPx::instance().fromPtY( 1.0 ) ?
+			MmPx::instance().fromPtY( 10.0 ) : MmPx::instance().toPtY( font.pixelSize() ) );
 		style.set_text( t );
 
 		blocks.push_back( style );
@@ -229,7 +233,7 @@ void initBlockFormat( QTextBlockFormat & b,
 //
 
 void fillTextDocument( QTextDocument * doc,
-	const std::vector< Cfg::TextStyle > & text, qreal scale )
+	const std::vector< Cfg::TextStyle > & text, qreal dpi, qreal scale )
 {
 	QTextCursor c( doc );
 
@@ -270,7 +274,9 @@ void fillTextDocument( QTextDocument * doc,
 
 		initBlockFormat( b, s );
 
-		fmt.setFontPointSize( s.fontSize() * scale );
+		QFont f = fmt.font();
+		f.setPixelSize( MmPx::instance().fromPt( s.fontSize() * scale, dpi ) );
+		fmt.setFont( f );
 
 		c.setCharFormat( fmt );
 
@@ -309,7 +315,7 @@ textStyleFromFont( const QFont & f )
 		style.push_back( Cfg::c_normalStyle );
 
 	textStyle.set_style( style );
-	textStyle.set_fontSize( f.pointSize() );
+	textStyle.set_fontSize( MmPx::instance().toPtY( f.pixelSize() ) );
 
 	return textStyle;
 }
@@ -369,6 +375,30 @@ qreal
 MmPx::fromMm( qreal mm, qreal dpi ) const
 {
 	return ( ( dpi / 25.4 ) * mm );
+}
+
+int
+MmPx::fromPtY( qreal pt ) const
+{
+	return qRound( ( m_ydots / 72.0 ) * pt );
+}
+
+int
+MmPx::fromPt( qreal pt, qreal dpi ) const
+{
+	return qRound( ( dpi / 72.0 ) * pt );
+}
+
+qreal
+MmPx::toPtY( int px ) const
+{
+	return ( ( static_cast< qreal > ( px ) / m_ydots ) * 72.0 );
+}
+
+qreal
+MmPx::yDpi() const
+{
+	return m_ydots;
 }
 
 } /* namespace Core */

@@ -84,7 +84,7 @@ FormSpinBoxPrivate::init()
 
 	m_font = QApplication::font();
 
-	m_font.setPointSize( 14.0 );
+	m_font.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
 }
 
 void
@@ -282,7 +282,7 @@ FormSpinBox::setText( const Cfg::TextStyle & c )
 			d->m_font.setUnderline( false );
 	}
 
-	d->m_font.setPointSize( c.fontSize() );
+	d->m_font.setPixelSize( MmPx::instance().fromPtY( c.fontSize() ) );
 
 	d->m_text = c.text();
 

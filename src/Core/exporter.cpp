@@ -279,7 +279,7 @@ static inline void drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi,
 		doc.documentLayout()->setPaintDevice( &svg );
 		doc.setTextWidth( text.textWidth() );
 
-		Cfg::fillTextDocument( &doc, text.text() );
+		Cfg::fillTextDocument( &doc, text.text(), dpi );
 
 		p.translate( MmPx::instance().fromMm( text.pos().x(), dpi ),
 			MmPx::instance().fromMm( text.pos().y(), dpi ) );
@@ -386,7 +386,7 @@ ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dp
 		doc.documentLayout()->setPaintDevice( &svg );
 		doc.setTextWidth( MmPx::instance().fromMm( text.textWidth(), dpi ) );
 
-		Cfg::fillTextDocument( &doc, text.text() );
+		Cfg::fillTextDocument( &doc, text.text(), dpi );
 
 		p.translate( MmPx::instance().fromMm( text.pos().x(), dpi ),
 			MmPx::instance().fromMm( text.pos().y(), dpi ) );

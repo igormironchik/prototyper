@@ -64,7 +64,7 @@ public:
 	//! Create tmp images.
 	void createImages();
 	//! Fill document.
-	void fillDocument( QTextDocument & doc );
+	void fillDocument( QTextDocument & doc, qreal dpi );
 	//! Print document.
 	void printDocument( const QTextDocument & doc, QPdfWriter & pdf,
 		const QRectF & body );
@@ -94,9 +94,9 @@ PdfExporterPrivate::createImages()
 }
 
 void
-PdfExporterPrivate::fillDocument( QTextDocument & doc )
+PdfExporterPrivate::fillDocument( QTextDocument & doc, qreal dpi )
 {
-	Cfg::fillTextDocument( &doc, m_cfg.description().text() );
+	Cfg::fillTextDocument( &doc, m_cfg.description().text(), dpi );
 
 	QTextCursor c( &doc );
 
@@ -270,7 +270,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 	doc.documentLayout()->setPaintDevice( &pdf );
 	doc.setPageSize( body.size() );
 
-	d->fillDocument( doc );
+	d->fillDocument( doc, 150.0 );
 
 	doc.setPageSize( body.size() );
 

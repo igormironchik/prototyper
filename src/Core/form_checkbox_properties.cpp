@@ -131,7 +131,7 @@ CheckBoxProperties::setCfg( const Cfg::CheckBox & c )
 	else
 		d->m_ui.m_underline->setChecked( false );
 
-	d->m_ui.m_fontSize->setValue( c.text().fontSize() );
+	d->m_ui.m_fontSize->setValue( qRound( c.text().fontSize() ) );
 
 	d->m_ui.m_text->setText( c.text().text() );
 

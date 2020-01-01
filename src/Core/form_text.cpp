@@ -96,7 +96,7 @@ FormTextPrivate::init()
 
 	QFont f = q->font();
 
-	f.setPointSize( 14.0 );
+	f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
 
 	q->setFont( f );
 
@@ -266,9 +266,9 @@ FormText::setCfg( const Cfg::Text & c )
 
 		Cfg::initBlockFormat( b, s );
 
-		f.setPointSize( s.fontSize() );
+		f.setPixelSize( MmPx::instance().fromPtY( s.fontSize() ) );
 
-		fmt.setFontPointSize( s.fontSize() );
+		fmt.setFont( f );
 
 		setFont( f );
 
@@ -413,12 +413,15 @@ FormText::lessFontSize()
 		QTextCharFormat fmt = c.charFormat();
 
 		qreal s = fmt.fontPointSize();
-		s -= 1.0;
+		s -= MmPx::instance().fromPtY( 1.0 );
 
-		if( s < 5.0 )
-			s = 5.0;
+		if( s < MmPx::instance().fromPtY( 5.0 ) )
+			s = MmPx::instance().fromPtY( 5.0 );
 
-		fmt.setFontPointSize( s );
+		QFont f = fmt.font();
+		f.setPixelSize( s );
+
+		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
 	}
@@ -426,13 +429,13 @@ FormText::lessFontSize()
 	{
 		QFont f = font();
 
-		qreal s = f.pointSize();
-		s -= 1.0;
+		int s = f.pixelSize();
+		s -= MmPx::instance().fromPtY( 1.0 );
 
-		if( s < 5.0 )
-			s = 5.0;
+		if( s < MmPx::instance().fromPtY( 5.0 ) )
+			s = MmPx::instance().fromPtY( 5.0 );
 
-		f.setPointSize( s );
+		f.setPixelSize( s );
 
 		setFont( f );
 	}
@@ -455,10 +458,14 @@ FormText::moreFontSize()
 
 		QTextCharFormat fmt = c.charFormat();
 
-		qreal s = fmt.fontPointSize();
+		QFont f = fmt.font();
 
-		s += 1.0;
-		fmt.setFontPointSize( s );
+		int s = f.pixelSize();
+
+		s += MmPx::instance().fromPtY( 1.0 );
+		f.setPixelSize( s );
+
+		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
 	}
@@ -466,11 +473,11 @@ FormText::moreFontSize()
 	{
 		QFont f = font();
 
-		qreal s = f.pointSize();
+		int s = f.pixelSize();
 
-		s += 1.0;
+		s += MmPx::instance().fromPtY( 1.0 );
 
-		f.setPointSize( s );
+		f.setPixelSize( s );
 
 		setFont( f );
 	}
@@ -597,7 +604,9 @@ FormText::clearFormat()
 		fmt.setFontUnderline( false );
 		fmt.setFontItalic( false );
 		fmt.setFontWeight( QFont::Normal );
-		fmt.setFontPointSize( 10 );
+		QFont f = fmt.font();
+		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
 	}
@@ -607,7 +616,7 @@ FormText::clearFormat()
 		f.setUnderline( false );
 		f.setItalic( false );
 		f.setWeight( QFont::Normal );
-		f.setPointSize( 10.0 );
+		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
 
 		setFont( f );
 	}

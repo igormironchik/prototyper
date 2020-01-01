@@ -57,12 +57,18 @@ TextEditorPrivate::init()
 {
 	q->setUndoRedoEnabled( true );
 
-	q->setFontPointSize( 10.0 );
+	{
+		QFont f = q->font();
+		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		q->setFont( f );
+	}
 
 	QTextCursor c = q->textCursor();
 
 	QTextCharFormat fmt = c.charFormat();
-	fmt.setFontPointSize( 10.0 );
+	QFont f = fmt.font();
+	f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+	fmt.setFont( f );
 
 	c.setCharFormat( fmt );
 
@@ -145,7 +151,9 @@ TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 			Cfg::c_center ) != s.style().cend() )
 				setAlignment( Qt::AlignCenter );
 
-		setFontPointSize( s.fontSize() );
+		QFont f = font();
+		f.setPixelSize( MmPx::instance().fromPtY( s.fontSize() ) );
+		setFont( f );
 
 		insertPlainText( s.text() );
 
@@ -176,29 +184,33 @@ TextEditor::lessFontSize()
 
 		QTextCharFormat fmt = c.charFormat();
 
-		qreal s = fmt.fontPointSize();
+		QFont f = fmt.font();
+		int s = f.pixelSize();
 
-		if( s < 1.0 )
-			s = 10.0;
+		if( s < MmPx::instance().fromPtY( 1.0 ) )
+			s = MmPx::instance().fromPtY( 10.0 );
 
-		s -= 1.0;
+		s -= MmPx::instance().fromPtY( 1.0 );
 
-		if( s < 5.0 )
-			s = 5.0;
+		if( s < MmPx::instance().fromPtY( 5.0 ) )
+			s = MmPx::instance().fromPtY( 5.0 );
 
-		fmt.setFontPointSize( s );
+		f.setPixelSize( s );
+		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
 	}
 	else
 	{
-		qreal s = fontPointSize();
-		s -= 1.0;
+		QFont f = font();
+		int s = f.pixelSize();
+		s -= MmPx::instance().fromPtY( 1.0 );
 
-		if( s < 5.0 )
-			s = 5.0;
+		if( s < MmPx::instance().fromPtY( 5.0 ) )
+			s = MmPx::instance().fromPtY( 5.0 );
 
-		setFontPointSize( s );
+		f.setPixelSize( s );
+		setFont( f );
 	}
 
 	emit changed();
@@ -216,21 +228,25 @@ TextEditor::moreFontSize()
 
 		QTextCharFormat fmt = c.charFormat();
 
-		qreal s = fmt.fontPointSize();
+		QFont f = fmt.font();
+		int s = f.pixelSize();
 
-		if( s < 1.0 )
-			s = 10.0;
+		if( s < MmPx::instance().fromPtY( 1.0 ) )
+			s = MmPx::instance().fromPtY( 10.0 );
 
-		s += 1.0;
-		fmt.setFontPointSize( s );
+		s += MmPx::instance().fromPtY( 1.0 );
+		f.setPixelSize( s );
+		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
 	}
 	else
 	{
-		qreal s = fontPointSize();
-		s += 1.0;
-		setFontPointSize( s );
+		QFont f = font();
+		int s = f.pixelSize();
+		s += MmPx::instance().fromPtY( 1.0 );
+		f.setPixelSize( s );
+		setFont( f );
 	}
 
 	emit changed();
@@ -326,7 +342,9 @@ TextEditor::clearFormat()
 		fmt.setFontUnderline( false );
 		fmt.setFontItalic( false );
 		fmt.setFontWeight( QFont::Normal );
-		fmt.setFontPointSize( 10 );
+		QFont f = fmt.font();
+		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
 	}
@@ -335,7 +353,9 @@ TextEditor::clearFormat()
 		setFontUnderline( false );
 		setFontItalic( false );
 		setFontWeight( QFont::Normal );
-		setFontPointSize( 10 );
+		QFont f = font();
+		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		setFont( f );
 	}
 
 	emit changed();

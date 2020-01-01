@@ -127,7 +127,7 @@ SpinBoxProperties::setCfg( const Cfg::SpinBox & s )
 	else
 		d->m_ui.m_underline->setChecked( false );
 
-	d->m_ui.m_size->setValue( s.text().fontSize() );
+	d->m_ui.m_size->setValue( qRound( s.text().fontSize() ) );
 
 	d->m_ui.m_value->setValue( s.text().text().toInt() );
 }

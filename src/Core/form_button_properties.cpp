@@ -125,7 +125,7 @@ ButtonProperties::setCfg( const Cfg::TextStyle & c )
 	else
 		d->m_ui.m_underline->setChecked( false );
 
-	d->m_ui.m_fontSize->setValue( c.fontSize() );
+	d->m_ui.m_fontSize->setValue( qRound( c.fontSize() ) );
 
 	d->m_ui.m_text->setText( c.text() );
 }

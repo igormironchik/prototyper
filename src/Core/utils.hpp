@@ -42,6 +42,39 @@ namespace Prototyper {
 
 namespace Core {
 
+
+//
+// MmPx
+//
+
+class MmPx {
+public:
+	static const MmPx & instance();
+
+	qreal toMmX( qreal px ) const;
+	qreal fromMmX( qreal mm ) const;
+
+	qreal toMmY( qreal px ) const;
+	qreal fromMmY( qreal mm ) const;
+
+	QSizeF a4() const;
+
+	qreal fromMm( qreal mm, qreal dpi ) const;
+
+	int fromPtY( qreal pt ) const;
+	qreal toPtY( int px ) const;
+
+	int fromPt( qreal pt, qreal dpi ) const;
+
+	qreal yDpi() const;
+
+private:
+	MmPx();
+
+	qreal m_xdots;
+	qreal m_ydots;
+}; // class MmPx
+
 namespace Cfg {
 
 static const QString c_boldStyle = QLatin1String( "bold" );
@@ -116,7 +149,9 @@ void initBlockFormat( QTextBlockFormat & b,
 //
 
 void fillTextDocument( QTextDocument * doc,
-	const std::vector< Cfg::TextStyle > & text, qreal scale = 1.0 );
+	const std::vector< Cfg::TextStyle > & text,
+	qreal dpi = MmPx::instance().yDpi(),
+	qreal scale = 1.0 );
 
 
 //
@@ -126,32 +161,6 @@ void fillTextDocument( QTextDocument * doc,
 TextStyle textStyleFromFont( const QFont & f );
 
 } /* namespace Cfg */
-
-
-//
-// MmPx
-//
-
-class MmPx {
-public:
-	static const MmPx & instance();
-
-	qreal toMmX( qreal px ) const;
-	qreal fromMmX( qreal mm ) const;
-
-	qreal toMmY( qreal px ) const;
-	qreal fromMmY( qreal mm ) const;
-
-	QSizeF a4() const;
-
-	qreal fromMm( qreal mm, qreal dpi ) const;
-
-private:
-	MmPx();
-
-	qreal m_xdots;
-	qreal m_ydots;
-}; // class MmPx
 
 } /* namespace Core */
 
