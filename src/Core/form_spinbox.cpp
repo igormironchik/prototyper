@@ -162,6 +162,7 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 	top.moveTo( leftX + o, r.y() + r.height() / 2.0 - o / 2.0 );
 	top.lineTo( leftX + w - o, r.y() + r.height() / 2.0 - o / 2.0 );
 	top.lineTo( leftX + w / 2.0, r.y() + o );
+	top.lineTo( leftX + o, r.y() + r.height() / 2.0 - o / 2.0 );
 
 	painter->setBrush( QBrush( pen.color() ) );
 
@@ -171,6 +172,7 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 	bottom.moveTo( leftX + o, r.y() + r.height() / 2.0 + o / 2.0 );
 	bottom.lineTo( leftX + w - o, r.y() + r.height() / 2.0 + o / 2.0 );
 	bottom.lineTo( leftX + w / 2.0, r.y() + h - o );
+	bottom.lineTo( leftX + o, r.y() + r.height() / 2.0 + o / 2.0 );
 
 	painter->drawPath( bottom );
 

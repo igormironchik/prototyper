@@ -147,6 +147,7 @@ FormComboBox::draw( QPainter * painter, const QRectF & rect,
 	path.moveTo( leftX + o, r.y() + o );
 	path.lineTo( leftX + h - o, r.y() + o );
 	path.lineTo( leftX + h / 2.0, r.y() + h - o );
+	path.lineTo( leftX + o, r.y() + o );
 
 	painter->setBrush( QBrush( pen.color() ) );
 
