@@ -26,6 +26,7 @@
 #include "page.hpp"
 #include "form_spinbox_properties.hpp"
 #include "form_undo_commands.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -85,6 +86,11 @@ FormSpinBoxPrivate::init()
 	m_font = QApplication::font();
 
 	m_font.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+		false );
+
+	q->setObjectBrush( Qt::transparent );
 }
 
 void

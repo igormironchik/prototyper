@@ -26,6 +26,7 @@
 #include "form_button_properties.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QFontMetrics>
@@ -88,6 +89,11 @@ FormButtonPrivate::init()
 	QFontMetrics m( m_font );
 	m_proxy->setMinSize(
 		QSizeF( m.boundingRect( QLatin1Char( 'a' ) ).size() ) );
+
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+		false );
+
+	q->setObjectBrush( Qt::transparent );
 }
 
 void

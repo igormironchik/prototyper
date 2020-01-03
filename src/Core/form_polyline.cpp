@@ -510,7 +510,10 @@ FormPolyline::pointUnderHandle( const QPointF & p, bool & intersected ) const
 void
 FormPolyline::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p, pushUndoCommand );
+	QPen newPen = p;
+	newPen.setWidth( 2 );
+
+	FormObject::setObjectPen( newPen, pushUndoCommand );
 
 	setPen( p );
 }

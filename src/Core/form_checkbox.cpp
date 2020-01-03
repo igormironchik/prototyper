@@ -27,6 +27,7 @@
 #include "form_checkbox_properties.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -76,6 +77,11 @@ FormCheckBoxPrivate::init()
 	m_font.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
 
 	setRect( m_rect );
+
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+		false );
+
+	q->setObjectBrush( Qt::transparent );
 }
 
 void

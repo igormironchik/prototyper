@@ -250,7 +250,10 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 void
 FormLine::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p, pushUndoCommand );
+	QPen newPen = p;
+	newPen.setWidth( 2 );
+
+	FormObject::setObjectPen( newPen, pushUndoCommand );
 
 	setPen( p );
 }

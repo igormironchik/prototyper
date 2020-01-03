@@ -1191,7 +1191,7 @@ ProjectWindow::p_strokeColor()
 					FormObject * obj = dynamic_cast< FormObject* > ( item );
 
 					if( obj )
-						obj->setObjectPen( QPen( c, 2.0 ) );
+						obj->setObjectPen( QPen( c ) );
 				}
 			}
 		}

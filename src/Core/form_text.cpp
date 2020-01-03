@@ -28,6 +28,7 @@
 #include "utils.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -114,6 +115,11 @@ FormTextPrivate::init()
 	q->setPlainText( FormText::tr( "Text" ) );
 
 	m_proxy->setMinSize( q->boundingRect().size() );
+
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+		false );
+
+	q->setObjectBrush( Qt::transparent );
 
 	FormText::connect( q->document(), &QTextDocument::cursorPositionChanged,
 		q, &FormText::p_cursorChanged );

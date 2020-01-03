@@ -25,6 +25,7 @@
 #include "utils.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "form_actions.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -70,6 +71,11 @@ FormHSliderPrivate::init()
 	setRect( m_rect );
 
 	m_proxy->setMinSize( q->defaultSize() );
+
+	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+		false );
+
+	q->setObjectBrush( Qt::transparent );
 }
 
 void
