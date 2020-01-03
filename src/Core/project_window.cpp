@@ -1177,8 +1177,6 @@ ProjectWindow::p_strokeColor()
 
 	if( c.isValid() )
 	{
-		FormAction::instance()->setStrokeColor( c );
-
 		if( FormAction::instance()->form() )
 		{
 			QList< QGraphicsItem* > selected =
@@ -1194,6 +1192,8 @@ ProjectWindow::p_strokeColor()
 						obj->setObjectPen( QPen( c ) );
 				}
 			}
+			else
+				FormAction::instance()->setStrokeColor( c );
 		}
 	}
 }
