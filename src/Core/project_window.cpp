@@ -1017,6 +1017,8 @@ ProjectWindow::p_drawLine()
 void
 ProjectWindow::p_drawRect()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawRect );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1038,6 +1040,8 @@ ProjectWindow::p_drawPolyline( bool on )
 void
 ProjectWindow::p_insertText()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::InsertText );
 
 	d->prepareDrawingWithRectPlacer( true );
@@ -1046,6 +1050,8 @@ ProjectWindow::p_insertText()
 void
 ProjectWindow::p_insertImage()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Image" ),
 			QStandardPaths::standardLocations(
@@ -1116,6 +1122,8 @@ ProjectWindow::p_select( bool checked )
 	d->m_alignVertTop->setEnabled( checked );
 	d->m_alignVertCenter->setEnabled( checked );
 	d->m_alignVertBottom->setEnabled( checked );
+
+	d->m_drawPolyLine->setChecked( false );
 
 	if( checked )
 	{
@@ -1374,6 +1382,8 @@ ProjectWindow::p_aboutQt()
 void
 ProjectWindow::p_drawButton()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawButton );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1382,6 +1392,8 @@ ProjectWindow::p_drawButton()
 void
 ProjectWindow::p_drawComboBox()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawComboBox );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1390,6 +1402,8 @@ ProjectWindow::p_drawComboBox()
 void
 ProjectWindow::p_drawRadioButton()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawRadioButton );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1398,6 +1412,8 @@ ProjectWindow::p_drawRadioButton()
 void
 ProjectWindow::p_drawCheckBox()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawCheckBox );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1406,6 +1422,8 @@ ProjectWindow::p_drawCheckBox()
 void
 ProjectWindow::p_drawHSlider()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawHSlider );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1414,6 +1432,8 @@ ProjectWindow::p_drawHSlider()
 void
 ProjectWindow::p_drawVSlider()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawVSlider );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1422,6 +1442,8 @@ ProjectWindow::p_drawVSlider()
 void
 ProjectWindow::p_drawSpinbox()
 {
+	d->m_drawPolyLine->setChecked( false );
+
 	FormAction::instance()->setMode( FormAction::DrawSpinBox );
 
 	d->prepareDrawingWithRectPlacer();
