@@ -1319,6 +1319,7 @@ ProjectWindow::p_tabChanged( int index )
 	{
 		d->m_formToolBar->hide();
 		d->m_stdItemsToolBar->hide();
+		d->m_zoomToolBar->hide();
 		d->m_widget->descriptionTab()->toolBar()->show();
 
 		FormAction::instance()->setForm( 0 );
