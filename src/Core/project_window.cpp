@@ -80,6 +80,7 @@ public:
 		,	m_gridStep( Q_NULLPTR )
 		,	m_formToolBar( Q_NULLPTR )
 		,	m_stdItemsToolBar( Q_NULLPTR )
+		,	m_zoomToolBar( nullptr )
 		,	m_formToolBarGroup( Q_NULLPTR )
 		,	m_tabsList( Q_NULLPTR )
 		,	m_drawLine( Q_NULLPTR )
@@ -106,6 +107,9 @@ public:
 		,	m_drawHSlider( nullptr )
 		,	m_drawVSlider( nullptr )
 		,	m_drawSpinbox( nullptr )
+		,	m_zoomIn( nullptr )
+		,	m_zoomOut( nullptr )
+		,	m_zoomOriginal( nullptr )
 	{
 	}
 
@@ -145,6 +149,8 @@ public:
 	QToolBar * m_formToolBar;
 	//! Standard items' toolbar.
 	QToolBar * m_stdItemsToolBar;
+	//! Zoom toolbar.
+	QToolBar * m_zoomToolBar;
 	//! Form toolbar group.
 	QActionGroup * m_formToolBarGroup;
 	//! Tabs list.
@@ -181,6 +187,9 @@ public:
 	QAction * m_drawHSlider;
 	QAction * m_drawVSlider;
 	QAction * m_drawSpinbox;
+	QAction * m_zoomIn;
+	QAction * m_zoomOut;
+	QAction * m_zoomOriginal;
 	//! Added forms.
 	QList< PageView* > m_addedForms;
 	//! Deleted forms.
@@ -276,6 +285,9 @@ ProjectWindowPrivate::init()
 
 	m_stdItemsToolBar = new QToolBar( ProjectWindow::tr( "Standard Items" ), q );
 	m_stdItemsToolBar->setObjectName( QLatin1String( "m_stdItemsToolBar" ) );
+
+	m_zoomToolBar = new QToolBar( ProjectWindow::tr( "Zoom Tools" ), q );
+	m_zoomToolBar->setObjectName( QStringLiteral( "m_zoomToolBar" ) );
 
 	m_formToolBarGroup = new QActionGroup( q );
 	m_formToolBarGroup->setExclusive( true );
@@ -443,13 +455,35 @@ ProjectWindowPrivate::init()
 	m_alignVertBottom->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignVertBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+B" ) );
 
+	m_zoomIn = m_zoomToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/zoom-in.png" ) ),
+		ProjectWindow::tr( "Zoom In" ) );
+	m_zoomIn->setShortcutContext( Qt::ApplicationShortcut );
+	m_zoomIn->setShortcut( ProjectWindow::tr( "Ctrl++" ) );
+
+	m_zoomOriginal = m_zoomToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/zoom-original.png" ) ),
+		ProjectWindow::tr( "Zoom Original" ) );
+	m_zoomOriginal->setShortcutContext( Qt::ApplicationShortcut );
+	m_zoomOriginal->setShortcut( ProjectWindow::tr( "Ctrl+1" ) );
+
+	m_zoomOut = m_zoomToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/zoom-out.png" ) ),
+		ProjectWindow::tr( "Zoom Out" ) );
+	m_zoomOut->setShortcutContext( Qt::ApplicationShortcut );
+	m_zoomOut->setShortcut( ProjectWindow::tr( "Ctrl+-" ) );
+
 	q->addToolBar( Qt::TopToolBarArea, m_formToolBar );
 
 	q->addToolBar( Qt::TopToolBarArea, m_stdItemsToolBar );
 
+	q->addToolBar( Qt::TopToolBarArea, m_zoomToolBar );
+
 	m_formToolBar->hide();
 
 	m_stdItemsToolBar->hide();
+
+	m_zoomToolBar->hide();
 
 	QMenu * form = q->menuBar()->addMenu( ProjectWindow::tr( "D&rawing" ) );
 
@@ -476,6 +510,12 @@ ProjectWindowPrivate::init()
 	snapGrid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
 	snapGrid->setCheckable( true );
 	snapGrid->setChecked( true );
+
+	form->addSeparator();
+
+	form->addAction( m_zoomIn );
+	form->addAction( m_zoomOriginal );
+	form->addAction( m_zoomOut );
 
 	form->addSeparator();
 
@@ -605,6 +645,12 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_alignVerticalCenter );
 	ProjectWindow::connect( m_alignVertBottom, &QAction::triggered,
 		q, &ProjectWindow::p_alignVerticalBottom );
+	ProjectWindow::connect( m_zoomIn, &QAction::triggered,
+		q, &ProjectWindow::p_zoomIn );
+	ProjectWindow::connect( m_zoomOriginal, &QAction::triggered,
+		q, &ProjectWindow::p_zoomOriginal );
+	ProjectWindow::connect( m_zoomOut, &QAction::triggered,
+		q, &ProjectWindow::p_zoomOut );
 	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::cleanChanged,
 		q, &ProjectWindow::p_canUndoChanged );
 	ProjectWindow::connect( m_widget->descriptionTab()->editor(),
@@ -1239,6 +1285,7 @@ ProjectWindow::p_tabChanged( int index )
 	{
 		d->m_formToolBar->show();
 		d->m_stdItemsToolBar->show();
+		d->m_zoomToolBar->show();
 		d->m_widget->descriptionTab()->toolBar()->hide();
 
 		FormAction::instance()->setForm(
@@ -1265,6 +1312,21 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_drawHSlider->setEnabled( true );
 		d->m_drawVSlider->setEnabled( true );
 		d->m_drawSpinbox->setEnabled( true );
+
+		if( d->m_widget->pages().at( index - 1 )->scaleValue() < 4.0 )
+			d->m_zoomIn->setEnabled( true );
+		else
+			d->m_zoomIn->setEnabled( false );
+
+		if( d->m_widget->pages().at( index - 1 )->scaleValue() > 0.1 )
+			d->m_zoomOut->setEnabled( true );
+		else
+			d->m_zoomOut->setEnabled( false );
+
+		if( qAbs( d->m_widget->pages().at( index - 1 )->scaleValue() - 1.0 ) > 0.1 )
+			d->m_zoomOriginal->setEnabled( true );
+		else
+			d->m_zoomOriginal->setEnabled( false );
 	}
 	else
 	{
@@ -1295,6 +1357,9 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_drawHSlider->setEnabled( false );
 		d->m_drawVSlider->setEnabled( false );
 		d->m_drawSpinbox->setEnabled( false );
+		d->m_zoomIn->setEnabled( false );
+		d->m_zoomOut->setEnabled( false );
+		d->m_zoomOriginal->setEnabled( false );
 	}
 }
 
@@ -1604,6 +1669,46 @@ ProjectWindow::p_formDeleted( PageView * form )
 
 	if( d->m_addedForms.contains( form ) )
 		d->m_addedForms.removeOne( form );
+}
+
+void
+ProjectWindow::p_zoomIn()
+{
+	const int index = d->m_widget->tabs()->currentIndex() - 1;
+
+	d->m_widget->pages().at( index )->setScaleValue(
+		d->m_widget->pages().at( index )->scaleValue() + 0.1 );
+
+	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 4.0 ) < 0.01 )
+		d->m_zoomIn->setEnabled( false );
+
+	d->m_zoomOriginal->setEnabled( true );
+}
+
+void
+ProjectWindow::p_zoomOut()
+{
+	const int index = d->m_widget->tabs()->currentIndex() - 1;
+
+	d->m_widget->pages().at( index )->setScaleValue(
+		d->m_widget->pages().at( index )->scaleValue() - 0.1 );
+
+	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 0.1 ) < 0.01 )
+		d->m_zoomOut->setEnabled( false );
+
+	d->m_zoomOriginal->setEnabled( true );
+}
+
+void
+ProjectWindow::p_zoomOriginal()
+{
+	const int index = d->m_widget->tabs()->currentIndex() - 1;
+
+	d->m_widget->pages().at( index )->setScaleValue( 1.0 );
+
+	d->m_zoomIn->setEnabled( true );
+	d->m_zoomOut->setEnabled( true );
+	d->m_zoomOriginal->setEnabled( false );
 }
 
 } /* namespace Core */

@@ -44,6 +44,7 @@ public:
 		,	m_scene( 0 )
 		,	m_form( 0 )
 		,	m_cfg( cfg )
+		,	m_scale( 1.0 )
 	{
 	}
 
@@ -58,6 +59,8 @@ public:
 	Page * m_form;
 	//! Cfg.
 	Cfg::Page m_cfg;
+	//! Scale.
+	qreal m_scale;
 }; // class FormViewPrivate
 
 void
@@ -121,6 +124,23 @@ PageView::enableSelection( bool on )
 		setDragMode( QGraphicsView::RubberBandDrag );
 	else
 		setDragMode( QGraphicsView::NoDrag );
+}
+
+qreal
+PageView::scaleValue() const
+{
+	return d->m_scale;
+}
+
+void
+PageView::setScaleValue( qreal s )
+{
+	d->m_scale = s;
+
+	QMatrix m;
+	m.scale( d->m_scale, d->m_scale );
+
+	setMatrix( m );
 }
 
 } /* namespace Core */

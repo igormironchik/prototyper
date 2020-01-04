@@ -165,6 +165,12 @@ private slots:
 	void p_formAdded( PageView * form );
 	//! Form deleted.
 	void p_formDeleted( PageView * form );
+	//! Zoom in.
+	void p_zoomIn();
+	//! Zoom out.
+	void p_zoomOut();
+	//! Zoom original.
+	void p_zoomOriginal();
 
 private:
 	friend class ProjectWindowPrivate;

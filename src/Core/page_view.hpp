@@ -66,7 +66,14 @@ public:
 	//! Enable/disable selection.
 	void enableSelection( bool on = true );
 
+	//! \return Scale.
+	qreal scaleValue() const;
+	//! Scale.
+	void setScaleValue( qreal s );
+
 private:
+	friend class PageViewPrivate;
+
 	Q_DISABLE_COPY( PageView )
 
 	QScopedPointer< PageViewPrivate > d;
