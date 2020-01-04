@@ -1314,6 +1314,7 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_drawSpinbox->setEnabled( true );
 
 		p_zoomChanged();
+		p_selectionChanged();
 	}
 	else
 	{
@@ -1370,6 +1371,43 @@ ProjectWindow::p_zoomChanged()
 		d->m_zoomOriginal->setEnabled( true );
 	else
 		d->m_zoomOriginal->setEnabled( false );
+}
+
+void
+ProjectWindow::p_selectionChanged()
+{
+	const auto index = d->m_widget->tabs()->currentIndex();
+
+	if( index > 0 )
+	{
+		const auto s = d->m_widget->pages().at( index - 1 )->formScene()->selectedItems();
+
+		if( s.size() > 1 )
+		{
+			d->m_alignHorizLeft->setEnabled( true );
+			d->m_alignHorizRight->setEnabled( true );
+			d->m_alignVertBottom->setEnabled( true );
+			d->m_alignHorizCenter->setEnabled( true );
+			d->m_alignVertCenter->setEnabled( true );
+			d->m_alignVertTop->setEnabled( true );
+			d->m_group->setEnabled( true );
+		}
+		else
+		{
+			d->m_alignHorizLeft->setEnabled( false );
+			d->m_alignHorizRight->setEnabled( false );
+			d->m_alignVertBottom->setEnabled( false );
+			d->m_alignHorizCenter->setEnabled( false );
+			d->m_alignVertCenter->setEnabled( false );
+			d->m_alignVertTop->setEnabled( false );
+			d->m_group->setEnabled( false );
+		}
+
+		if( s.size() == 1 && dynamic_cast< FormGroup* > ( s.first() ) )
+			d->m_ungroup->setEnabled( true );
+		else
+			d->m_ungroup->setEnabled( false );
+	}
 }
 
 void

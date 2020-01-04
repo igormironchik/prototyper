@@ -173,6 +173,8 @@ private slots:
 	void p_zoomOriginal();
 	//! Zoom changed.
 	void p_zoomChanged();
+	//! Selection changed.
+	void p_selectionChanged();
 
 private:
 	friend class ProjectWindowPrivate;
