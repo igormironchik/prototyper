@@ -1685,7 +1685,7 @@ ProjectWindow::p_zoomIn()
 	const int index = d->m_widget->tabs()->currentIndex() - 1;
 
 	d->m_widget->pages().at( index )->setScaleValue(
-		d->m_widget->pages().at( index )->scaleValue() + 0.1 );
+		d->m_widget->pages().at( index )->scaleValue() + PageView::zoomFactor() );
 
 	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 4.0 ) < 0.01 )
 		d->m_zoomIn->setEnabled( false );
@@ -1699,7 +1699,7 @@ ProjectWindow::p_zoomOut()
 	const int index = d->m_widget->tabs()->currentIndex() - 1;
 
 	d->m_widget->pages().at( index )->setScaleValue(
-		d->m_widget->pages().at( index )->scaleValue() - 0.1 );
+		d->m_widget->pages().at( index )->scaleValue() - PageView::zoomFactor() );
 
 	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 0.1 ) < 0.01 )
 		d->m_zoomOut->setEnabled( false );

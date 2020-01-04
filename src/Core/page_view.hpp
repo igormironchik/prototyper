@@ -75,6 +75,11 @@ public:
 	//! Scale.
 	void setScaleValue( qreal s );
 
+	static qreal zoomFactor();
+
+protected:
+	void wheelEvent( QWheelEvent * event ) override;
+
 private:
 	friend class PageViewPrivate;
 

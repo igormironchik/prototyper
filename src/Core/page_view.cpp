@@ -27,6 +27,7 @@
 
 // Qt include.
 #include <QApplication>
+#include <QWheelEvent>
 
 
 namespace Prototyper {
@@ -141,6 +142,42 @@ PageView::setScaleValue( qreal s )
 	m.scale( d->m_scale, d->m_scale );
 
 	setMatrix( m );
+}
+
+qreal
+PageView::zoomFactor()
+{
+	return 0.05;
+}
+
+void
+PageView::wheelEvent( QWheelEvent * event )
+{
+	if( event->modifiers() & Qt::ControlModifier )
+	{
+		if( event->angleDelta().y() != 0 )
+		{
+			const qreal dy = ( event->angleDelta().y() > 0 ? zoomFactor() : -zoomFactor() );
+			const qreal scale = scaleValue() + dy;
+
+			if( qAbs( scale - 0.1 ) < 0.01 || qAbs( scale - 4.0 ) < 0.01 )
+				event->accept();
+			else
+			{
+				setScaleValue( scale );
+
+				ensureVisible( QRectF( event->position(), QSizeF( 10, 10 ) ) );
+
+				event->accept();
+
+				emit zoomChanged();
+			}
+		}
+		else
+			QGraphicsView::wheelEvent( event );
+	}
+	else
+		QGraphicsView::wheelEvent( event );
 }
 
 } /* namespace Core */
