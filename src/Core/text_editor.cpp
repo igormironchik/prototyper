@@ -151,9 +151,9 @@ TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 			Cfg::c_center ) != s.style().cend() )
 				setAlignment( Qt::AlignCenter );
 
-		QFont f = font();
+		QFont f = currentFont();
 		f.setPixelSize( MmPx::instance().fromPtY( s.fontSize() ) );
-		setFont( f );
+		setCurrentFont( f );
 
 		insertPlainText( s.text() );
 
@@ -202,7 +202,7 @@ TextEditor::lessFontSize()
 	}
 	else
 	{
-		QFont f = font();
+		QFont f = currentFont();
 		int s = f.pixelSize();
 		s -= MmPx::instance().fromPtY( 1.0 );
 
@@ -210,7 +210,7 @@ TextEditor::lessFontSize()
 			s = MmPx::instance().fromPtY( 5.0 );
 
 		f.setPixelSize( s );
-		setFont( f );
+		setCurrentFont( f );
 	}
 
 	emit changed();
@@ -242,11 +242,11 @@ TextEditor::moreFontSize()
 	}
 	else
 	{
-		QFont f = font();
+		QFont f = currentFont();
 		int s = f.pixelSize();
 		s += MmPx::instance().fromPtY( 1.0 );
 		f.setPixelSize( s );
-		setFont( f );
+		setCurrentFont( f );
 	}
 
 	emit changed();
@@ -353,9 +353,9 @@ TextEditor::clearFormat()
 		setFontUnderline( false );
 		setFontItalic( false );
 		setFontWeight( QFont::Normal );
-		QFont f = font();
+		QFont f = currentFont();
 		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
-		setFont( f );
+		setCurrentFont( f );
 	}
 
 	emit changed();
