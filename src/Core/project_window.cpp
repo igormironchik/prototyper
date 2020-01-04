@@ -1313,20 +1313,7 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_drawVSlider->setEnabled( true );
 		d->m_drawSpinbox->setEnabled( true );
 
-		if( d->m_widget->pages().at( index - 1 )->scaleValue() < 4.0 )
-			d->m_zoomIn->setEnabled( true );
-		else
-			d->m_zoomIn->setEnabled( false );
-
-		if( d->m_widget->pages().at( index - 1 )->scaleValue() > 0.1 )
-			d->m_zoomOut->setEnabled( true );
-		else
-			d->m_zoomOut->setEnabled( false );
-
-		if( qAbs( d->m_widget->pages().at( index - 1 )->scaleValue() - 1.0 ) > 0.1 )
-			d->m_zoomOriginal->setEnabled( true );
-		else
-			d->m_zoomOriginal->setEnabled( false );
+		p_zoomChanged();
 	}
 	else
 	{
@@ -1361,6 +1348,27 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_zoomOut->setEnabled( false );
 		d->m_zoomOriginal->setEnabled( false );
 	}
+}
+
+void
+ProjectWindow::p_zoomChanged()
+{
+	const int index = d->m_widget->tabs()->currentIndex() - 1;
+
+	if( d->m_widget->pages().at( index )->scaleValue() < 4.0 )
+		d->m_zoomIn->setEnabled( true );
+	else
+		d->m_zoomIn->setEnabled( false );
+
+	if( d->m_widget->pages().at( index )->scaleValue() > 0.1 )
+		d->m_zoomOut->setEnabled( true );
+	else
+		d->m_zoomOut->setEnabled( false );
+
+	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 1.0 ) > 0.1 )
+		d->m_zoomOriginal->setEnabled( true );
+	else
+		d->m_zoomOriginal->setEnabled( false );
 }
 
 void

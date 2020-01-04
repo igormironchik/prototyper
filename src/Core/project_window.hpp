@@ -171,10 +171,14 @@ private slots:
 	void p_zoomOut();
 	//! Zoom original.
 	void p_zoomOriginal();
+	//! Zoom changed.
+	void p_zoomChanged();
 
 private:
 	friend class ProjectWindowPrivate;
 	friend class TopGuiPrivate;
+	friend class ProjectWidget;
+	friend class ProjectWidgetPrivate;
 
 	Q_DISABLE_COPY( ProjectWindow )
 

@@ -53,6 +53,10 @@ class PageView
 {
 	Q_OBJECT
 
+signals:
+	//! Zoom changed.
+	void zoomChanged();
+
 public:
 	PageView( Cfg::Page & cfg, QWidget * parent = 0 );
 	~PageView();

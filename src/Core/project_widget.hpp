@@ -45,6 +45,7 @@ class Project;
 
 class PageView;
 class ProjectDescTab;
+class ProjectWindow;
 
 //
 // ProjectWidget
@@ -68,7 +69,7 @@ signals:
 
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,
-		QWidget * parent = 0, Qt::WindowFlags f = 0 );
+		ProjectWindow * parent = 0, Qt::WindowFlags f = 0 );
 	~ProjectWidget();
 
 	//! \return Pages.

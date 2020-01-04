@@ -78,8 +78,9 @@ public:
 
 class ProjectWidgetPrivate {
 public:
-	ProjectWidgetPrivate( Cfg::Project & cfg, ProjectWidget * parent )
+	ProjectWidgetPrivate( Cfg::Project & cfg, ProjectWidget * parent, ProjectWindow * w )
 		:	q( parent )
+		,	m_window( w )
 		,	m_cfg( cfg )
 		,	m_tabs( 0 )
 		,	m_desc( 0 )
@@ -98,6 +99,8 @@ public:
 
 	//! Parent.
 	ProjectWidget * q;
+	//! Window.
+	ProjectWindow * m_window;
 	//! Cfg.
 	Cfg::Project & m_cfg;
 	//! Tabs.
@@ -196,6 +199,9 @@ ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 {
 	PageView * form = new PageView( cfg, m_tabs );
 
+	ProjectWidget::connect( form, &PageView::zoomChanged,
+		m_window, &ProjectWindow::p_zoomChanged );
+
 	form->page()->setGridMode( showGrid ?
 		ShowGrid : NoGrid );
 
@@ -219,9 +225,9 @@ ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 //
 
 ProjectWidget::ProjectWidget( Cfg::Project & cfg,
-	QWidget * parent, Qt::WindowFlags f )
+	ProjectWindow * parent, Qt::WindowFlags f )
 	:	QWidget( parent, f )
-	,	d( new ProjectWidgetPrivate( cfg, this ) )
+	,	d( new ProjectWidgetPrivate( cfg, this, parent ) )
 {
 	d->init();
 }
