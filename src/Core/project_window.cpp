@@ -96,6 +96,16 @@ public:
 		,	m_alignVertTop( nullptr )
 		,	m_alignVertCenter( nullptr )
 		,	m_alignVertBottom( nullptr )
+		,	m_drawRect( nullptr )
+		,	m_insertText( nullptr )
+		,	m_insertImage( nullptr )
+		,	m_drawButton( nullptr )
+		,	m_drawComboBox( nullptr )
+		,	m_drawRadioButton( nullptr )
+		,	m_drawCheckBox( nullptr )
+		,	m_drawHSlider( nullptr )
+		,	m_drawVSlider( nullptr )
+		,	m_drawSpinbox( nullptr )
 	{
 	}
 
@@ -161,6 +171,16 @@ public:
 	QAction * m_alignVertTop;
 	QAction * m_alignVertCenter;
 	QAction * m_alignVertBottom;
+	QAction * m_drawRect;
+	QAction * m_insertText;
+	QAction * m_insertImage;
+	QAction * m_drawButton;
+	QAction * m_drawComboBox;
+	QAction * m_drawRadioButton;
+	QAction * m_drawCheckBox;
+	QAction * m_drawHSlider;
+	QAction * m_drawVSlider;
+	QAction * m_drawSpinbox;
 	//! Added forms.
 	QList< PageView* > m_addedForms;
 	//! Deleted forms.
@@ -283,27 +303,27 @@ ProjectWindowPrivate::init()
 	m_drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
 	m_drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
 
-	QAction * drawRect = m_formToolBar->addAction(
+	m_drawRect = m_formToolBar->addAction(
 		QIcon( ":/Core/img/draw-rectangle.png" ),
 		ProjectWindow::tr( "Draw Rect" ) );
-	drawRect->setCheckable( true );
-	m_formToolBarGroup->addAction( drawRect );
-	drawRect->setShortcutContext( Qt::ApplicationShortcut );
-	drawRect->setShortcut( ProjectWindow::tr( "Alt+R" ) );
+	m_drawRect->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawRect );
+	m_drawRect->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawRect->setShortcut( ProjectWindow::tr( "Alt+R" ) );
 
-	QAction * insertText = m_formToolBar->addAction(
+	m_insertText = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-text.png" ),
 		ProjectWindow::tr( "Insert Text" ) );
-	insertText->setCheckable( true );
-	m_formToolBarGroup->addAction( insertText );
-	insertText->setShortcutContext( Qt::ApplicationShortcut );
-	insertText->setShortcut( ProjectWindow::tr( "Alt+T" ) );
+	m_insertText->setCheckable( true );
+	m_formToolBarGroup->addAction( m_insertText );
+	m_insertText->setShortcutContext( Qt::ApplicationShortcut );
+	m_insertText->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
-	QAction * insertImage = m_formToolBar->addAction(
+	m_insertImage = m_formToolBar->addAction(
 		QIcon( ":/Core/img/insert-image.png" ),
 		ProjectWindow::tr( "Insert Image" ) );
-	insertImage->setShortcutContext( Qt::ApplicationShortcut );
-	insertImage->setShortcut( ProjectWindow::tr( "Alt+I" ) );
+	m_insertImage->setShortcutContext( Qt::ApplicationShortcut );
+	m_insertImage->setShortcut( ProjectWindow::tr( "Alt+I" ) );
 
 	m_formToolBar->addSeparator();
 
@@ -329,61 +349,61 @@ ProjectWindowPrivate::init()
 //		QIcon( ":/Core/img/fill-color.png" ),
 //		ProjectWindow::tr( "Fill Color" ) );
 
-	QAction * drawButton = m_stdItemsToolBar->addAction(
+	m_drawButton = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-pushbutton.png" ),
 		ProjectWindow::tr( "Draw Button" ) );
-	drawButton->setCheckable( true );
-	m_formToolBarGroup->addAction( drawButton );
-	drawButton->setShortcutContext( Qt::ApplicationShortcut );
-	drawButton->setShortcut( ProjectWindow::tr( "Alt+B" ) );
+	m_drawButton->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawButton );
+	m_drawButton->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawButton->setShortcut( ProjectWindow::tr( "Alt+B" ) );
 
-	QAction * drawComboBox = m_stdItemsToolBar->addAction(
+	m_drawComboBox = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-combobox.png" ),
 		ProjectWindow::tr( "Draw ComboBox" ) );
-	drawComboBox->setCheckable( true );
-	m_formToolBarGroup->addAction( drawComboBox );
-	drawComboBox->setShortcutContext( Qt::ApplicationShortcut );
-	drawComboBox->setShortcut( ProjectWindow::tr( "Alt+C" ) );
+	m_drawComboBox->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawComboBox );
+	m_drawComboBox->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawComboBox->setShortcut( ProjectWindow::tr( "Alt+C" ) );
 
-	QAction * drawRadioButton = m_stdItemsToolBar->addAction(
+	m_drawRadioButton = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-radiobutton.png" ),
 		ProjectWindow::tr( "Draw Radio Button" ) );
-	drawRadioButton->setCheckable( true );
-	m_formToolBarGroup->addAction( drawRadioButton );
-	drawRadioButton->setShortcutContext( Qt::ApplicationShortcut );
-	drawRadioButton->setShortcut( ProjectWindow::tr( "Alt+R" ) );
+	m_drawRadioButton->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawRadioButton );
+	m_drawRadioButton->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawRadioButton->setShortcut( ProjectWindow::tr( "Alt+R" ) );
 
-	QAction * drawCheckBox = m_stdItemsToolBar->addAction(
+	m_drawCheckBox = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-checkbox.png" ),
 		ProjectWindow::tr( "Draw Check Box" ) );
-	drawCheckBox->setCheckable( true );
-	m_formToolBarGroup->addAction( drawCheckBox );
-	drawCheckBox->setShortcutContext( Qt::ApplicationShortcut );
-	drawCheckBox->setShortcut( ProjectWindow::tr( "Alt+K" ) );
+	m_drawCheckBox->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawCheckBox );
+	m_drawCheckBox->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawCheckBox->setShortcut( ProjectWindow::tr( "Alt+K" ) );
 
-	QAction * drawHSlider = m_stdItemsToolBar->addAction(
+	m_drawHSlider = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-hslider.png" ),
 		ProjectWindow::tr( "Draw Horizontal Slider" ) );
-	drawHSlider->setCheckable( true );
-	m_formToolBarGroup->addAction( drawHSlider );
-	drawHSlider->setShortcutContext( Qt::ApplicationShortcut );
-	drawHSlider->setShortcut( ProjectWindow::tr( "Alt+H" ) );
+	m_drawHSlider->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawHSlider );
+	m_drawHSlider->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawHSlider->setShortcut( ProjectWindow::tr( "Alt+H" ) );
 
-	QAction * drawVSlider = m_stdItemsToolBar->addAction(
+	m_drawVSlider = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-vslider.png" ),
 		ProjectWindow::tr( "Draw Vertical Slider" ) );
-	drawVSlider->setCheckable( true );
-	m_formToolBarGroup->addAction( drawVSlider );
-	drawVSlider->setShortcutContext( Qt::ApplicationShortcut );
-	drawVSlider->setShortcut( ProjectWindow::tr( "Alt+V" ) );
+	m_drawVSlider->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawVSlider );
+	m_drawVSlider->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawVSlider->setShortcut( ProjectWindow::tr( "Alt+V" ) );
 
-	QAction * drawSpinbox = m_stdItemsToolBar->addAction(
+	m_drawSpinbox = m_stdItemsToolBar->addAction(
 		QIcon( ":/Core/img/draw-spinbox.png" ),
 		ProjectWindow::tr( "Draw Spinbox" ) );
-	drawSpinbox->setCheckable( true );
-	m_formToolBarGroup->addAction( drawSpinbox );
-	drawSpinbox->setShortcutContext( Qt::ApplicationShortcut );
-	drawSpinbox->setShortcut( ProjectWindow::tr( "Alt+S" ) );
+	m_drawSpinbox->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawSpinbox );
+	m_drawSpinbox->setShortcutContext( Qt::ApplicationShortcut );
+	m_drawSpinbox->setShortcut( ProjectWindow::tr( "Alt+S" ) );
 
 	m_formToolBar->addSeparator();
 
@@ -462,16 +482,16 @@ ProjectWindowPrivate::init()
 	form->addAction( m_select );
 	form->addAction( m_drawLine );
 	form->addAction( m_drawPolyLine );
-	form->addAction( drawRect );
-	form->addAction( insertText );
-	form->addAction( insertImage );
-	form->addAction( drawButton );
-	form->addAction( drawComboBox );
-	form->addAction( drawRadioButton );
-	form->addAction( drawCheckBox );
-	form->addAction( drawHSlider );
-	form->addAction( drawVSlider );
-	form->addAction( drawSpinbox );
+	form->addAction( m_drawRect );
+	form->addAction( m_insertText );
+	form->addAction( m_insertImage );
+	form->addAction( m_drawButton );
+	form->addAction( m_drawComboBox );
+	form->addAction( m_drawRadioButton );
+	form->addAction( m_drawCheckBox );
+	form->addAction( m_drawHSlider );
+	form->addAction( m_drawVSlider );
+	form->addAction( m_drawSpinbox );
 
 	form->addSeparator();
 
@@ -531,13 +551,13 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_select );
 	ProjectWindow::connect( m_drawLine, &QAction::triggered,
 		q, &ProjectWindow::p_drawLine );
-	ProjectWindow::connect( drawRect, &QAction::triggered,
+	ProjectWindow::connect( m_drawRect, &QAction::triggered,
 		q, &ProjectWindow::p_drawRect );
 	ProjectWindow::connect( m_drawPolyLine, &QAction::toggled,
 		q, &ProjectWindow::p_drawPolyline );
-	ProjectWindow::connect( insertText, &QAction::triggered,
+	ProjectWindow::connect( m_insertText, &QAction::triggered,
 		q, &ProjectWindow::p_insertText );
-	ProjectWindow::connect( insertImage, &QAction::triggered,
+	ProjectWindow::connect( m_insertImage, &QAction::triggered,
 		q, &ProjectWindow::p_insertImage );
 	ProjectWindow::connect( m_group, &QAction::triggered,
 		q, &ProjectWindow::p_group );
@@ -559,19 +579,19 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_about );
 	ProjectWindow::connect( aboutQt, &QAction::triggered,
 		q, &ProjectWindow::p_aboutQt );
-	ProjectWindow::connect( drawButton, &QAction::triggered,
+	ProjectWindow::connect( m_drawButton, &QAction::triggered,
 		q, &ProjectWindow::p_drawButton );
-	ProjectWindow::connect( drawComboBox, &QAction::triggered,
+	ProjectWindow::connect( m_drawComboBox, &QAction::triggered,
 		q, &ProjectWindow::p_drawComboBox );
-	ProjectWindow::connect( drawRadioButton, &QAction::triggered,
+	ProjectWindow::connect( m_drawRadioButton, &QAction::triggered,
 		q, &ProjectWindow::p_drawRadioButton );
-	ProjectWindow::connect( drawCheckBox, &QAction::triggered,
+	ProjectWindow::connect( m_drawCheckBox, &QAction::triggered,
 		q, &ProjectWindow::p_drawCheckBox );
-	ProjectWindow::connect( drawHSlider, &QAction::triggered,
+	ProjectWindow::connect( m_drawHSlider, &QAction::triggered,
 		q, &ProjectWindow::p_drawHSlider );
-	ProjectWindow::connect( drawVSlider, &QAction::triggered,
+	ProjectWindow::connect( m_drawVSlider, &QAction::triggered,
 		q, &ProjectWindow::p_drawVSlider );
-	ProjectWindow::connect( drawSpinbox, &QAction::triggered,
+	ProjectWindow::connect( m_drawSpinbox, &QAction::triggered,
 		q, &ProjectWindow::p_drawSpinbox );
 	ProjectWindow::connect( m_alignHorizLeft, &QAction::triggered,
 		q, &ProjectWindow::p_alignHorizontalLeft );
@@ -596,6 +616,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::p_formDeleted );
 
 	q->switchToSelectMode();
+
+	q->p_tabChanged( 0 );
 }
 
 void
@@ -750,6 +772,7 @@ ProjectWindow::readProject( const QString & fileName )
 			switchToSelectMode();
 			d->m_addedForms.clear();
 			d->m_deletedForms.clear();
+			p_tabChanged( 0 );
 		}
 		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 		{
@@ -910,6 +933,9 @@ ProjectWindow::p_newProject()
 	setWindowModified( false );
 
 	switchToSelectMode();
+	d->m_addedForms.clear();
+	d->m_deletedForms.clear();
+	p_tabChanged( 0 );
 }
 
 void
@@ -1217,6 +1243,28 @@ ProjectWindow::p_tabChanged( int index )
 
 		FormAction::instance()->setForm(
 			d->m_widget->pages().at( index - 1 )->page() );
+
+		d->m_group->setEnabled( true );
+		d->m_select->setEnabled( true );
+		d->m_ungroup->setEnabled( true );
+		d->m_drawLine->setEnabled( true );
+		d->m_alignVertTop->setEnabled( true );
+		d->m_drawPolyLine->setEnabled( true );
+		d->m_alignHorizLeft->setEnabled( true );
+		d->m_alignHorizRight->setEnabled( true );
+		d->m_alignVertBottom->setEnabled( true );
+		d->m_alignHorizCenter->setEnabled( true );
+		d->m_alignVertCenter->setEnabled( true );
+		d->m_drawRect->setEnabled( true );
+		d->m_insertText->setEnabled( true );
+		d->m_insertImage->setEnabled( true );
+		d->m_drawButton->setEnabled( true );
+		d->m_drawComboBox->setEnabled( true );
+		d->m_drawRadioButton->setEnabled( true );
+		d->m_drawCheckBox->setEnabled( true );
+		d->m_drawHSlider->setEnabled( true );
+		d->m_drawVSlider->setEnabled( true );
+		d->m_drawSpinbox->setEnabled( true );
 	}
 	else
 	{
@@ -1225,6 +1273,28 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_widget->descriptionTab()->toolBar()->show();
 
 		FormAction::instance()->setForm( 0 );
+
+		d->m_group->setEnabled( false );
+		d->m_select->setEnabled( false );
+		d->m_ungroup->setEnabled( false );
+		d->m_drawLine->setEnabled( false );
+		d->m_alignVertTop->setEnabled( false );
+		d->m_drawPolyLine->setEnabled( false );
+		d->m_alignHorizLeft->setEnabled( false );
+		d->m_alignHorizRight->setEnabled( false );
+		d->m_alignVertBottom->setEnabled( false );
+		d->m_alignHorizCenter->setEnabled( false );
+		d->m_alignVertCenter->setEnabled( false );
+		d->m_drawRect->setEnabled( false );
+		d->m_insertText->setEnabled( false );
+		d->m_insertImage->setEnabled( false );
+		d->m_drawButton->setEnabled( false );
+		d->m_drawComboBox->setEnabled( false );
+		d->m_drawRadioButton->setEnabled( false );
+		d->m_drawCheckBox->setEnabled( false );
+		d->m_drawHSlider->setEnabled( false );
+		d->m_drawVSlider->setEnabled( false );
+		d->m_drawSpinbox->setEnabled( false );
 	}
 }
 
