@@ -400,8 +400,14 @@ PageScene::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 
 		if( d->m_dist < 5.0 && item && !d->m_isHandlePressed )
 		{
-			clearSelection();
-			item->setSelected( true );
+			if( !( event->modifiers() & Qt::ShiftModifier ) &&
+				!( event->modifiers() & Qt::ControlModifier ) )
+					clearSelection();
+
+			if( !( event->modifiers() & Qt::ControlModifier ) )
+				item->setSelected( true );
+			else
+				item->setSelected( false );
 		}
 
 		d->m_dist = 0.0;
