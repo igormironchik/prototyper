@@ -173,7 +173,7 @@ TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 }
 
 void
-TextEditor::lessFontSize()
+TextEditor::setFontSize( int s )
 {
 	QTextCursor c = textCursor();
 
@@ -185,17 +185,7 @@ TextEditor::lessFontSize()
 		QTextCharFormat fmt = c.charFormat();
 
 		QFont f = fmt.font();
-		int s = f.pixelSize();
-
-		if( s < MmPx::instance().fromPtY( 1.0 ) )
-			s = MmPx::instance().fromPtY( 10.0 );
-
-		s -= MmPx::instance().fromPtY( 1.0 );
-
-		if( s < MmPx::instance().fromPtY( 5.0 ) )
-			s = MmPx::instance().fromPtY( 5.0 );
-
-		f.setPixelSize( s );
+		f.setPixelSize( MmPx::instance().fromPtY( s ) );
 		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
@@ -203,49 +193,7 @@ TextEditor::lessFontSize()
 	else
 	{
 		QFont f = currentFont();
-		int s = f.pixelSize();
-		s -= MmPx::instance().fromPtY( 1.0 );
-
-		if( s < MmPx::instance().fromPtY( 5.0 ) )
-			s = MmPx::instance().fromPtY( 5.0 );
-
-		f.setPixelSize( s );
-		setCurrentFont( f );
-	}
-
-	emit changed();
-}
-
-void
-TextEditor::moreFontSize()
-{
-	QTextCursor c = textCursor();
-
-	if( c.hasSelection() )
-	{
-		if( c.position() != c.selectionEnd() )
-			c.setPosition( c.selectionEnd() );
-
-		QTextCharFormat fmt = c.charFormat();
-
-		QFont f = fmt.font();
-		int s = f.pixelSize();
-
-		if( s < MmPx::instance().fromPtY( 1.0 ) )
-			s = MmPx::instance().fromPtY( 10.0 );
-
-		s += MmPx::instance().fromPtY( 1.0 );
-		f.setPixelSize( s );
-		fmt.setFont( f );
-
-		textCursor().setCharFormat( fmt );
-	}
-	else
-	{
-		QFont f = currentFont();
-		int s = f.pixelSize();
-		s += MmPx::instance().fromPtY( 1.0 );
-		f.setPixelSize( s );
+		f.setPixelSize( MmPx::instance().fromPtY( s ) );
 		setCurrentFont( f );
 	}
 

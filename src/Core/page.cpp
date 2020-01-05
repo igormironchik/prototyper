@@ -1465,6 +1465,20 @@ Page::renameForm( const QString & name )
 }
 
 void
+Page::clearEditModeInTexts()
+{
+	const auto items = childItems();
+
+	for( const auto & i : items )
+	{
+		auto * t = dynamic_cast< FormText* > ( i );
+
+		if( t )
+			t->clearEditMode();
+	}
+}
+
+void
 Page::slotSetGridStep()
 {
 	TopGui::instance()->projectWindow()->setGridStep(

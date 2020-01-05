@@ -22,12 +22,15 @@
 
 // Prototyper include.
 #include "text_opts_bar.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QAction>
 #include <QTextCursor>
 #include <QTextCharFormat>
 #include <QActionGroup>
+#include <QComboBox>
+#include <QIntValidator>
 
 
 namespace Prototyper {
@@ -49,6 +52,7 @@ public:
 		,	m_alignCenter( 0 )
 		,	m_alignRight( 0 )
 		,	m_iconSize( s )
+		,	m_fontSize( nullptr )
 	{
 	}
 
@@ -71,33 +75,40 @@ public:
 	QAction * m_alignRight;
 	//! Icon size.
 	TextOptsBar::IconSize m_iconSize;
+	//! Font size.
+	QComboBox * m_fontSize;
 }; // class TextOptsBarPrivate;
 
 void
 TextOptsBarPrivate::init()
 {
-	const QString fontLessTip = TextOptsBar::tr( "Less Size of the Font" );
-	QAction * fontLess = q->addAction(
-		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/format-font-size-less.png" ) :
-			QIcon( ":/Core/img/format-font-size-less-small.png" ) ),
-		fontLessTip );
-	fontLess->setShortcut( TextOptsBar::tr( "Ctrl+-" ) );
-	fontLess->setToolTip( fontLessTip );
-	fontLess->setStatusTip( fontLessTip );
+	m_fontSize = new QComboBox( q );
+	m_fontSize->addItems( QStringList() << QString::number( 8 )
+		<< QString::number( 9 )
+		<< QString::number( 10 )
+		<< QString::number( 11 )
+		<< QString::number( 12 )
+		<< QString::number( 14 )
+		<< QString::number( 16 )
+		<< QString::number( 18 )
+		<< QString::number( 20 )
+		<< QString::number( 22 )
+		<< QString::number( 24 )
+		<< QString::number( 26 )
+		<< QString::number( 28 )
+		<< QString::number( 36 )
+		<< QString::number( 48 )
+		<< QString::number( 72 ) );
+	QIntValidator * v = new QIntValidator( 1, 72 * 5, m_fontSize );
+	m_fontSize->setValidator( v );
+	m_fontSize->setEditable( true );
+	const QString fontSizeTip = TextOptsBar::tr( "Font Size" );
+	m_fontSize->setToolTip( fontSizeTip );
 
-	if( m_iconSize == TextOptsBar::Small )
-		q->setIconSize( QSize( 16, 16 ) );
+	TextOptsBar::connect( m_fontSize, &QComboBox::currentTextChanged,
+		[this] ( const QString & txt ) { emit q->setFontSize( txt.toInt() ); } );
 
-	const QString fontMoreTip = TextOptsBar::tr( "More Size of the Font" );
-	QAction * fontMore = q->addAction(
-		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/format-font-size-more.png" ) :
-			QIcon( ":/Core/img/format-font-size-more-small.png" ) ),
-		fontMoreTip );
-	fontMore->setShortcut( TextOptsBar::tr( "Ctrl+=" ) );
-	fontMore->setToolTip( fontMoreTip );
-	fontMore->setStatusTip( fontMoreTip );
+	q->addWidget( m_fontSize );
 
 	q->addSeparator();
 
@@ -171,17 +182,6 @@ TextOptsBarPrivate::init()
 	m_alignRight->setCheckable( true );
 	alignGroup->addAction( m_alignRight );
 
-//	q->addSeparator();
-
-//	const QString fontColorTip = TextOptsBar::tr( "Color of the Text" );
-//	QAction * fontColor = q->addAction(
-//		( m_iconSize == TextOptsBar::Large ?
-//			QIcon( ":/Core/img/format-text-color.png" ) :
-//			QIcon( ":/Core/img/format-text-color-small.png" ) ),
-//		fontColorTip );
-//	fontColor->setToolTip( fontColorTip );
-//	fontColor->setStatusTip( fontColorTip );
-
 	q->addSeparator();
 
 	const QString clearFormatTip = TextOptsBar::tr( "Clear Format" );
@@ -193,18 +193,12 @@ TextOptsBarPrivate::init()
 	clearFormat->setToolTip( clearFormatTip );
 	clearFormat->setStatusTip( clearFormatTip );
 
-	TextOptsBar::connect( fontLess, &QAction::triggered,
-		q, &TextOptsBar::lessFontSize );
-	TextOptsBar::connect( fontMore, &QAction::triggered,
-		q, &TextOptsBar::moreFontSize );
 	TextOptsBar::connect( m_fontBold, &QAction::triggered,
 		q, &TextOptsBar::bold );
 	TextOptsBar::connect( m_fontItalic, &QAction::triggered,
 		q, &TextOptsBar::italic );
 	TextOptsBar::connect( m_fontUnderline, &QAction::triggered,
 		q, &TextOptsBar::underline );
-//	TextOptsBar::connect( fontColor, &QAction::triggered,
-//		q, &TextOptsBar::textColor );
 	TextOptsBar::connect( clearFormat, &QAction::triggered,
 		q, &TextOptsBar::slotClearFormat );
 	TextOptsBar::connect( m_alignLeft, &QAction::triggered,
@@ -250,6 +244,14 @@ TextOptsBar::updateState( const QTextCursor & cursor )
 	d->m_fontItalic->setChecked( fmt.fontItalic() );
 	d->m_fontUnderline->setChecked( fmt.fontUnderline() );
 
+	disconnect( d->m_fontSize, &QComboBox::currentTextChanged, 0, 0 );
+
+	d->m_fontSize->setCurrentText( QString::number(
+		qRound( MmPx::instance().toPtY( fmt.font().pixelSize() ) ) ) );
+
+	connect( d->m_fontSize, &QComboBox::currentTextChanged,
+		[this] ( const QString & txt ) { emit setFontSize( txt.toInt() ); } );
+
 	QTextBlockFormat b = cursor.blockFormat();
 
 	switch( b.alignment() )
@@ -283,6 +285,7 @@ TextOptsBar::slotClearFormat()
 	d->m_fontBold->setChecked( false );
 	d->m_fontItalic->setChecked( false );
 	d->m_fontUnderline->setChecked( false );
+	d->m_fontSize->setCurrentText( QString::number( 10 ) );
 
 	d->m_alignLeft->setChecked( true );
 

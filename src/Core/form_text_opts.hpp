@@ -45,10 +45,8 @@ class FormTextOpts
 	Q_OBJECT
 
 signals:
-	//! Less font size.
-	void lessFontSize();
-	//! More font size.
-	void moreFontSize();
+	//! Set font size.
+	void setFontSize( int s );
 	//! Bold.
 	void bold( bool on );
 	//! Italic.

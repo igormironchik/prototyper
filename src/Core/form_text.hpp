@@ -98,10 +98,8 @@ public:
 	virtual QSizeF defaultSize() const override;
 
 public slots:
-	//! Less font size.
-	void lessFontSize();
-	//! More font size.
-	void moreFontSize();
+	//! Set font size.
+	void setFontSize( int s );
 	//! Bold.
 	void bold( bool on );
 	//! Italic.
@@ -119,6 +117,9 @@ public slots:
 	//! Align right.
 	void alignRight();
 
+	//! Clear edit mode.
+	void clearEditMode();
+
 private slots:
 	void p_cursorChanged( const QTextCursor & cursor );
 	void p_contentChanged();
@@ -130,9 +131,11 @@ protected:
 	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
 
 protected:
-	void focusOutEvent( QFocusEvent * event ) Q_DECL_OVERRIDE;
+	void focusInEvent( QFocusEvent * e ) override;
 	void keyPressEvent( QKeyEvent * e ) Q_DECL_OVERRIDE;
 	bool sceneEvent( QEvent * e ) Q_DECL_OVERRIDE;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
+	void keyReleaseEvent( QKeyEvent * event ) override;
 
 private:
 	friend class FormTextPrivate;

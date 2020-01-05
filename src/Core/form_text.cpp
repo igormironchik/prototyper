@@ -60,6 +60,7 @@ public:
 		,	m_proxy( 0 )
 		,	m_opts( 0 )
 		,	m_isFirstPaint( true )
+		,	m_showToolBar( false )
 	{
 	}
 
@@ -78,6 +79,8 @@ public:
 	QScopedPointer< FormTextOpts > m_opts;
 	//! First paint.
 	bool m_isFirstPaint;
+	//! Show tool bar.
+	bool m_showToolBar;
 }; // class FormTextPrivate
 
 void
@@ -89,9 +92,8 @@ FormTextPrivate::init()
 
 	m_opts.reset( new FormTextOpts( q->parentItem() ) );
 
-	m_opts->setFocusProxy( q );
-
 	m_opts->hide();
+	m_opts->setZValue( 999 );
 
 	setRect( m_rect );
 
@@ -106,7 +108,7 @@ FormTextPrivate::init()
 	QTextCursor c = q->textCursor();
 
 	QTextCharFormat fmt = c.charFormat();
-	fmt.setFontPointSize( 14.0 );
+	fmt.setFont( f );
 
 	c.setCharFormat( fmt );
 
@@ -121,14 +123,10 @@ FormTextPrivate::init()
 
 	q->setObjectBrush( Qt::transparent );
 
-	FormText::connect( q->document(), &QTextDocument::cursorPositionChanged,
-		q, &FormText::p_cursorChanged );
 	FormText::connect( q->document(), &QTextDocument::contentsChanged,
 		q, &FormText::p_contentChanged );
-	FormText::connect( m_opts.data(), &FormTextOpts::lessFontSize,
-		q, &FormText::lessFontSize );
-	FormText::connect( m_opts.data(), &FormTextOpts::moreFontSize,
-		q, &FormText::moreFontSize );
+	FormText::connect( m_opts.data(), &FormTextOpts::setFontSize,
+		q, &FormText::setFontSize );
 	FormText::connect( m_opts.data(), &FormTextOpts::bold,
 		q, &FormText::bold );
 	FormText::connect( m_opts.data(), &FormTextOpts::italic,
@@ -177,6 +175,16 @@ FormText::FormText( const QRectF & rect, Page * form, QGraphicsItem * parent )
 
 FormText::~FormText()
 {
+}
+
+void
+FormText::clearEditMode()
+{
+	clearSelection();
+
+	d->m_showToolBar = false;
+
+	update();
 }
 
 void
@@ -344,7 +352,7 @@ FormText::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		if( !isSelected() && !group() )
 			setCursor( Qt::IBeamCursor );
 
-		if( !group() && hasFocus() )
+		if( !group() && d->m_showToolBar )
 		{
 			d->m_opts->setPos( pos() +
 				QPointF( 0.0, -d->m_opts->size().height() ) );
@@ -407,53 +415,7 @@ FormText::setObjectPen( const QPen & p, bool pushUndoCommand )
 }
 
 void
-FormText::lessFontSize()
-{
-	QTextCursor c = textCursor();
-
-	if( c.hasSelection() )
-	{
-		if( c.position() != c.selectionEnd() )
-			c.setPosition( c.selectionEnd() );
-
-		QTextCharFormat fmt = c.charFormat();
-
-		qreal s = fmt.fontPointSize();
-		s -= MmPx::instance().fromPtY( 1.0 );
-
-		if( s < MmPx::instance().fromPtY( 5.0 ) )
-			s = MmPx::instance().fromPtY( 5.0 );
-
-		QFont f = fmt.font();
-		f.setPixelSize( s );
-
-		fmt.setFont( f );
-
-		textCursor().setCharFormat( fmt );
-	}
-	else
-	{
-		QFont f = font();
-
-		int s = f.pixelSize();
-		s -= MmPx::instance().fromPtY( 1.0 );
-
-		if( s < MmPx::instance().fromPtY( 5.0 ) )
-			s = MmPx::instance().fromPtY( 5.0 );
-
-		f.setPixelSize( s );
-
-		setFont( f );
-	}
-
-	QRectF r = boundingRect();
-	r.moveTo( pos() );
-
-	d->m_proxy->setRect( r );
-}
-
-void
-FormText::moreFontSize()
+FormText::setFontSize( int s )
 {
 	QTextCursor c = textCursor();
 
@@ -465,12 +427,7 @@ FormText::moreFontSize()
 		QTextCharFormat fmt = c.charFormat();
 
 		QFont f = fmt.font();
-
-		int s = f.pixelSize();
-
-		s += MmPx::instance().fromPtY( 1.0 );
-		f.setPixelSize( s );
-
+		f.setPixelSize( MmPx::instance().fromPtY( s ) );
 		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
@@ -478,13 +435,7 @@ FormText::moreFontSize()
 	else
 	{
 		QFont f = font();
-
-		int s = f.pixelSize();
-
-		s += MmPx::instance().fromPtY( 1.0 );
-
-		f.setPixelSize( s );
-
+		f.setPixelSize( MmPx::instance().fromPtY( s ) );
 		setFont( f );
 	}
 
@@ -678,13 +629,13 @@ FormText::moveResizable( const QPointF & delta )
 }
 
 void
-FormText::focusOutEvent( QFocusEvent * event )
+FormText::focusInEvent( QFocusEvent * e )
 {
-	QTextCursor c = textCursor();
-	c.clearSelection();
-	setTextCursor( c );
+	FormAction::instance()->form()->clearEditModeInTexts();
 
-	QGraphicsTextItem::focusOutEvent( event );
+	d->m_showToolBar = true;
+
+	QGraphicsTextItem::focusInEvent( e );
 }
 
 void
@@ -725,6 +676,22 @@ QSizeF
 FormText::defaultSize() const
 {
 	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 6.0 ) );
+}
+
+void
+FormText::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
+{
+	QGraphicsTextItem::mouseReleaseEvent( event );
+
+	p_cursorChanged( textCursor() );
+}
+
+void
+FormText::keyReleaseEvent( QKeyEvent * event )
+{
+	QGraphicsTextItem::keyReleaseEvent( event );
+
+	p_cursorChanged( textCursor() );
 }
 
 } /* namespace Core */

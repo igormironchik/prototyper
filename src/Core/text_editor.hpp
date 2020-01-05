@@ -63,10 +63,8 @@ public:
 	void setText( const std::vector< Cfg::TextStyle > & blocks );
 
 public slots:
-	//! Less font size.
-	void lessFontSize();
-	//! More font size.
-	void moreFontSize();
+	//! Set font size.
+	void setFontSize( int s );
 	//! Bold.
 	void bold( bool on );
 	//! Italic.

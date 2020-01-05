@@ -73,10 +73,8 @@ ProjectDescTabPrivate::init()
 
 	ProjectDescTab::connect( m_editor, &TextEditor::cursorChanged,
 		m_bar, &TextOptsBar::updateState );
-	ProjectDescTab::connect( m_bar, &TextOptsBar::lessFontSize,
-		m_editor, &TextEditor::lessFontSize );
-	ProjectDescTab::connect( m_bar, &TextOptsBar::moreFontSize,
-		m_editor, &TextEditor::moreFontSize );
+	ProjectDescTab::connect( m_bar, &TextOptsBar::setFontSize,
+		m_editor, &TextEditor::setFontSize );
 	ProjectDescTab::connect( m_bar, &TextOptsBar::bold,
 		m_editor, &TextEditor::bold );
 	ProjectDescTab::connect( m_bar, &TextOptsBar::italic,

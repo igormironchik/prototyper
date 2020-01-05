@@ -315,6 +315,8 @@ public:
 public slots:
 	//! Rename form.
 	void renameForm( const QString & name );
+	//! Clear edit mode in texts.
+	void clearEditModeInTexts();
 
 private slots:
 	//! Set grid step.

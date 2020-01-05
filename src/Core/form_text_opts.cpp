@@ -57,10 +57,8 @@ FormTextOptsPrivate::init()
 
 	q->setWidget( m_bar );
 
-	FormTextOpts::connect( m_bar, &TextOptsBar::lessFontSize,
-		q, &FormTextOpts::lessFontSize );
-	FormTextOpts::connect( m_bar, &TextOptsBar::moreFontSize,
-		q, &FormTextOpts::moreFontSize );
+	FormTextOpts::connect( m_bar, &TextOptsBar::setFontSize,
+		q, &FormTextOpts::setFontSize );
 	FormTextOpts::connect( m_bar, &TextOptsBar::bold,
 		q, &FormTextOpts::bold );
 	FormTextOpts::connect( m_bar, &TextOptsBar::italic,

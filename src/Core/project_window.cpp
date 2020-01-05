@@ -130,6 +130,8 @@ public:
 	void updateCfg();
 	//! Prepare to draw with rect placer.
 	void prepareDrawingWithRectPlacer( bool editable = false );
+	//! Clear edit mode in texts.
+	void clearEditModeInTexts();
 
 	//! Parent.
 	ProjectWindow * q;
@@ -667,6 +669,13 @@ ProjectWindowPrivate::init()
 }
 
 void
+ProjectWindowPrivate::clearEditModeInTexts()
+{
+	for( const auto & p : qAsConst( m_widget->pages() ) )
+		p->page()->clearEditModeInTexts();
+}
+
+void
 ProjectWindowPrivate::setFlag( PageView * view,
 	QGraphicsItem::GraphicsItemFlag f, bool enabled )
 {
@@ -1081,6 +1090,8 @@ ProjectWindow::p_projectChanged()
 void
 ProjectWindow::p_drawLine()
 {
+	d->clearEditModeInTexts();
+
 	FormAction::instance()->setMode( FormAction::DrawLine );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1089,6 +1100,8 @@ ProjectWindow::p_drawLine()
 void
 ProjectWindow::p_drawRect()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawRect );
@@ -1099,6 +1112,8 @@ ProjectWindow::p_drawRect()
 void
 ProjectWindow::p_drawPolyline( bool on )
 {
+	d->clearEditModeInTexts();
+
 	if( on )
 	{
 		d->m_drawLine->trigger();
@@ -1112,6 +1127,8 @@ ProjectWindow::p_drawPolyline( bool on )
 void
 ProjectWindow::p_insertText()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::InsertText );
@@ -1122,6 +1139,8 @@ ProjectWindow::p_insertText()
 void
 ProjectWindow::p_insertImage()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	const QString fileName =
@@ -1196,6 +1215,8 @@ ProjectWindow::p_select( bool checked )
 	d->m_alignVertBottom->setEnabled( checked );
 
 	d->m_drawPolyLine->setChecked( false );
+
+	d->clearEditModeInTexts();
 
 	if( checked )
 	{
@@ -1281,6 +1302,8 @@ ProjectWindow::p_strokeColor()
 void
 ProjectWindow::p_tabChanged( int index )
 {
+	d->clearEditModeInTexts();
+
 	if( index > 0 )
 	{
 		d->m_formToolBar->show();
@@ -1564,6 +1587,8 @@ ProjectWindow::p_aboutQt()
 void
 ProjectWindow::p_drawButton()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawButton );
@@ -1574,6 +1599,8 @@ ProjectWindow::p_drawButton()
 void
 ProjectWindow::p_drawComboBox()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawComboBox );
@@ -1584,6 +1611,8 @@ ProjectWindow::p_drawComboBox()
 void
 ProjectWindow::p_drawRadioButton()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawRadioButton );
@@ -1594,6 +1623,8 @@ ProjectWindow::p_drawRadioButton()
 void
 ProjectWindow::p_drawCheckBox()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawCheckBox );
@@ -1604,6 +1635,8 @@ ProjectWindow::p_drawCheckBox()
 void
 ProjectWindow::p_drawHSlider()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawHSlider );
@@ -1614,6 +1647,8 @@ ProjectWindow::p_drawHSlider()
 void
 ProjectWindow::p_drawVSlider()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawVSlider );
@@ -1624,6 +1659,8 @@ ProjectWindow::p_drawVSlider()
 void
 ProjectWindow::p_drawSpinbox()
 {
+	d->clearEditModeInTexts();
+
 	d->m_drawPolyLine->setChecked( false );
 
 	FormAction::instance()->setMode( FormAction::DrawSpinBox );
