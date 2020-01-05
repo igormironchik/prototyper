@@ -352,8 +352,8 @@ FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg, qreal dpi )
 
 	const QRectF b = polygon.boundingRect();
 
-	const qreal mx = b.width() / cfg.size().width();
-	const qreal my = b.height() / cfg.size().height();
+	const qreal mx = b.width() / MmPx::instance().fromMm( cfg.size().width(), dpi );
+	const qreal my = b.height() / MmPx::instance().fromMm( cfg.size().height(), dpi );
 
 	const QPointF p( MmPx::instance().fromMm( cfg.pos().x(), dpi ),
 		MmPx::instance().fromMm( cfg.pos().y(), dpi ) );
