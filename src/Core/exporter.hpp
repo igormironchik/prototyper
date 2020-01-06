@@ -87,10 +87,12 @@ private:
 }; // class Exporter
 
 namespace impl {
+
 	void
 	drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi,
 		QSvgGenerator & svg );
-}
+
+} /* namespace impl */
 
 } /* namespace Core */
 
