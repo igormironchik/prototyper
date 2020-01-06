@@ -712,6 +712,8 @@ FormPolyline::handleReleased( FormMoveHandle * handle )
 		form()->undoStack()->push( new UndoResize( form(),
 			objectId(), d->m_subsidiaryRect, d->m_resized ) );
 
+	updatePropertiesValues();
+
 	form()->emitChanged();
 }
 

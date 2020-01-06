@@ -78,7 +78,12 @@ public:
 		SpinBoxType = 14
 	}; // enum ObjectType
 
-	FormObject( ObjectType t, Page * parent, bool enableResizeInProps = true );
+	enum ResizeProperty {
+		ResizeWidth = 1,
+		ResizeHeight = 2
+	};
+
+	FormObject( ObjectType t, Page * parent, int props = ResizeWidth | ResizeHeight );
 	virtual ~FormObject();
 
 	//! \return Type.
@@ -128,6 +133,9 @@ public:
 
 	//! \return Pointer to default properties widget if set.
 	const QPointer< ObjectProperties > & defaultProperties() const;
+
+	//! Update values of properties.
+	virtual void updatePropertiesValues();
 
 private:
 	Q_DISABLE_COPY( FormObject )

@@ -284,6 +284,8 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 				d->m_subsidiaryRect, d->m_rect ) );
 
 			obj->form()->emitChanged();
+
+			obj->updatePropertiesValues();
 		}
 	}
 	else
@@ -297,6 +299,8 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 				d->m_rect.topLeft() - d->m_subsidiaryRect.topLeft() ) );
 
 			obj->form()->emitChanged();
+
+			obj->updatePropertiesValues();
 		}
 	}
 }

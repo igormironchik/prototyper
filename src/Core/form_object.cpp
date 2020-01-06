@@ -41,12 +41,12 @@ namespace Core {
 class FormObjectPrivate {
 public:
 	FormObjectPrivate( FormObject * parent, FormObject::ObjectType t, Page * form,
-		bool enableResizeInProps )
+		int props )
 		:	q( parent )
 		,	m_id( QString::number( 0 ) )
 		,	m_form( form )
 		,	m_type( t )
-		,	m_enableResizeInProps( enableResizeInProps )
+		,	m_resizeProps( props )
 	{
 	}
 
@@ -65,7 +65,7 @@ public:
 	//! Default properties.
 	QPointer< ObjectProperties > m_props;
 	//! Enable resize in properties.
-	bool m_enableResizeInProps;
+	int m_resizeProps;
 }; // class FormObjectPrivate
 
 
@@ -73,8 +73,8 @@ public:
 // FormObject
 //
 
-FormObject::FormObject( ObjectType t, Page * form, bool enableResizeInProps )
-	:	d( new FormObjectPrivate( this, t, form, enableResizeInProps ) )
+FormObject::FormObject( ObjectType t, Page * form, int props )
+	:	d( new FormObjectPrivate( this, t, form, props ) )
 {
 }
 
@@ -90,20 +90,29 @@ FormObject::properties( QWidget * parent )
 
 	d->m_props = new ObjectProperties( this, parent );
 
-	if( !d->m_enableResizeInProps )
+	if( !( d->m_resizeProps & ResizeWidth ) )
 	{
 		d->m_props->ui()->m_width->setEnabled( false );
-		d->m_props->ui()->m_height->setEnabled( false );
 		d->m_props->ui()->m_width->setMinimum( 0 );
-		d->m_props->ui()->m_height->setMinimum( 0 );
 		d->m_props->ui()->m_width->setValue( 0 );
+	}
+
+	if( !( d->m_resizeProps & ResizeHeight ) )
+	{
+		d->m_props->ui()->m_height->setEnabled( false );
+		d->m_props->ui()->m_height->setMinimum( 0 );
 		d->m_props->ui()->m_height->setValue( 0 );
 	}
-	else
+
+	if( d->m_resizeProps & ResizeWidth )
 	{
 		d->m_props->ui()->m_width->setValue( rectangle().width() );
-		d->m_props->ui()->m_height->setValue( rectangle().height() );
 		d->m_props->ui()->m_width->setMinimum( defaultSize().width() );
+	}
+
+	if( d->m_resizeProps & ResizeHeight )
+	{
+		d->m_props->ui()->m_height->setValue( rectangle().height() );
 		d->m_props->ui()->m_height->setMinimum( defaultSize().height() );
 	}
 
@@ -119,6 +128,22 @@ const QPointer< ObjectProperties > &
 FormObject::defaultProperties() const
 {
 	return d->m_props;
+}
+
+void
+FormObject::updatePropertiesValues()
+{
+	if( d->m_props )
+	{
+		if( d->m_resizeProps & ResizeWidth )
+			d->m_props->ui()->m_width->setValue( rectangle().width() );
+
+		if( d->m_resizeProps & ResizeHeight )
+			d->m_props->ui()->m_height->setValue( rectangle().height() );
+
+		d->m_props->ui()->m_x->setValue( position().x() );
+		d->m_props->ui()->m_y->setValue( position().y() );
+	}
 }
 
 FormObject::ObjectType

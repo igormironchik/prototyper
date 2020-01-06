@@ -133,7 +133,7 @@ FormLinePrivate::createHandles()
 
 FormLine::FormLine( Page * form, QGraphicsItem * parent )
 	:	QGraphicsLineItem( parent )
-	,	FormObject( FormObject::LineType, form, false )
+	,	FormObject( FormObject::LineType, form, 0 )
 	,	d( new FormLinePrivate( this ) )
 {
 	d->init();
@@ -400,6 +400,8 @@ FormLine::handleReleased( FormMoveHandle * handle )
 
 		form()->emitChanged();
 	}
+
+	updatePropertiesValues();
 }
 
 void

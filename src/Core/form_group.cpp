@@ -135,7 +135,7 @@ FormGroupPrivate::init()
 
 FormGroup::FormGroup( Page * form, QGraphicsItem * parent )
 	:	QGraphicsItemGroup( parent )
-	,	FormObject( FormObject::GroupType, form, false )
+	,	FormObject( FormObject::GroupType, form, 0 )
 	,	d( new FormGroupPrivate( this ) )
 {
 	d->init();
@@ -523,6 +523,8 @@ FormGroup::handleReleased( FormMoveHandle * handle )
 	form()->undoStack()->push( new UndoMove(
 		form(), objectId(),
 		position() - d->m_oldPos ) );
+
+	updatePropertiesValues();
 
 	form()->emitChanged();
 }

@@ -353,6 +353,8 @@ FormRect::handleReleased( FormMoveHandle * handle )
 			objectId(), d->m_subsidiaryRect, r ) );
 	}
 
+	updatePropertiesValues();
+
 	form()->emitChanged();
 }
 
