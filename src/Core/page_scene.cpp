@@ -142,7 +142,7 @@ PageScenePrivate::itemUnderMouse() const
 
 				if( dz > 0.5 )
 					selected = item;
-				else if( qAbs( dz ) < 0.5 )
+				else if( qAbs( dz ) < 0.5 || qAbs( qAbs( dz ) - 0.5 ) < 0.01 )
 				{
 					auto br1 = selected->boundingRect();
 					br1.moveTopLeft( selected->pos() );
