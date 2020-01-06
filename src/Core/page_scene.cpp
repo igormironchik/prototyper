@@ -132,7 +132,7 @@ PageScenePrivate::itemUnderMouse() const
 
 	for( const auto & item : children )
 	{
-		if( item->isUnderMouse() && item->isVisible() )
+		if( item->isUnderMouse() && item->isVisible() && dynamic_cast< FormObject* > ( item ) )
 		{
 			if( !selected )
 				selected = item;
