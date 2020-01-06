@@ -162,6 +162,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class Line
@@ -207,6 +208,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class Polyline
@@ -241,6 +243,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class Text
@@ -282,6 +285,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class Image
@@ -327,6 +331,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class Rect
@@ -367,6 +372,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class Button
@@ -419,6 +425,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class CheckBox
@@ -454,6 +461,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class ComboBox
@@ -494,6 +502,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class SpinBox
@@ -528,6 +537,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class HSlider
@@ -562,6 +572,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class VSlider
@@ -650,6 +661,7 @@
 
 					{tagScalar
 						{valueType qreal}
+						{defaultValue 0.0}
 						{name z}
 					}
 				} || class Group
