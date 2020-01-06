@@ -279,7 +279,7 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 
 		if( obj )
 		{
-			d->m_form->undoStack()->push( new UndoResize< FormObject > (
+			d->m_form->undoStack()->push( new UndoResize(
 				obj->form(), obj->objectId(),
 				d->m_subsidiaryRect, d->m_rect ) );
 
@@ -292,7 +292,7 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 
 		if( obj )
 		{
-			d->m_form->undoStack()->push( new UndoMove< FormObject > (
+			d->m_form->undoStack()->push( new UndoMove(
 				obj->form(), obj->objectId(),
 				d->m_rect.topLeft() - d->m_subsidiaryRect.topLeft() ) );
 

@@ -1428,7 +1428,7 @@ void
 Page::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		d->m_undoStack->push( new UndoResize< Page >( this, objectId(),
+		d->m_undoStack->push( new UndoResize( this, objectId(),
 			QRectF( 0.0, 0.0, d->m_cfg.size().width(), d->m_cfg.size().height() ),
 			rect ) );
 

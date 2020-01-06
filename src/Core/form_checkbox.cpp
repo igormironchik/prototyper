@@ -328,7 +328,7 @@ void
 FormCheckBox::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove< FormCheckBox > ( form(),
+		form()->undoStack()->push( new UndoMove( form(),
 			objectId(), pos - position() ) );
 
 	QRectF r = boundingRect();

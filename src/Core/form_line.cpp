@@ -133,7 +133,7 @@ FormLinePrivate::createHandles()
 
 FormLine::FormLine( Page * form, QGraphicsItem * parent )
 	:	QGraphicsLineItem( parent )
-	,	FormObject( FormObject::LineType, form )
+	,	FormObject( FormObject::LineType, form, false )
 	,	d( new FormLinePrivate( this ) )
 {
 	d->init();
@@ -330,9 +330,7 @@ FormLine::handleMouseMoveInHandles( const QPointF & point )
 void
 FormLine::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove< FormLine > ( form(),
-			objectId(), pos - position() ) );
+	FormObject::setPosition( pos, pushUndoCommand );
 
 	setPos( pos - QGraphicsLineItem::boundingRect().topLeft() );
 
@@ -394,7 +392,7 @@ FormLine::handleReleased( FormMoveHandle * handle )
 	if( isSelected() )
 	{
 		if( handle == d->m_move.data() )
-			form()->undoStack()->push( new UndoMove< FormLine > ( form(),
+			form()->undoStack()->push( new UndoMove( form(),
 				objectId(), position() - d->m_oldPos ) );
 		else
 			form()->undoStack()->push( new UndoChangeLine( form(), objectId(),

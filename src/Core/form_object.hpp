@@ -34,11 +34,14 @@ namespace Prototyper {
 namespace Core {
 
 class Page;
+class ObjectProperties;
 
 
 //
 // FormObject
 //
+
+class FormObjectPrivate;
 
 //! Object on the form.
 class FormObject {
@@ -75,7 +78,7 @@ public:
 		SpinBoxType = 14
 	}; // enum ObjectType
 
-	FormObject( ObjectType t, Page * parent );
+	FormObject( ObjectType t, Page * parent, bool enableResizeInProps = true );
 	virtual ~FormObject();
 
 	//! \return Type.
@@ -99,7 +102,7 @@ public:
 
 	//! Position elements.
 	virtual void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) = 0;
+		bool pushUndoCommand = true );
 
 	//! \return Position of the element.
 	virtual QPointF position() const = 0;
@@ -109,7 +112,7 @@ public:
 
 	//! Set rectangle.
 	virtual void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true ) = 0;
+		bool pushUndoCommand = true );
 
 	//! \return Default size.
 	virtual QSizeF defaultSize() const;
@@ -120,21 +123,16 @@ public:
 	//! Post deletion.
 	virtual void postDeletion();
 
+	//! \return WIdget with properties of object.
 	virtual QWidget * properties( QWidget * parent );
+
+	//! \return Pointer to default properties widget if set.
+	const QPointer< ObjectProperties > & defaultProperties() const;
 
 private:
 	Q_DISABLE_COPY( FormObject )
 
-	//! ID.
-	QString m_id;
-	//! Pen.
-	QPen m_pen;
-	//! Brush.
-	QBrush m_brush;
-	//! Form.
-	Page * m_form;
-	//! Type.
-	ObjectType m_type;
+	QScopedPointer< FormObjectPrivate > d;
 }; // class FormObject
 
 } /* namespace Core */

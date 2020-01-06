@@ -223,9 +223,7 @@ FormVSlider::boundingRect() const
 void
 FormVSlider::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove< FormVSlider > ( form(),
-			objectId(), pos - position() ) );
+	FormObject::setPosition( pos, pushUndoCommand );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -251,7 +249,7 @@ FormVSlider::rectangle() const
 void
 FormVSlider::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
-	Q_UNUSED( pushUndoCommand )
+	FormObject::setRectangle( rect, pushUndoCommand );
 
 	resize( rect );
 

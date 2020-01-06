@@ -256,7 +256,7 @@ void
 FormButton::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove< FormButton > ( form(),
+		form()->undoStack()->push( new UndoMove( form(),
 			objectId(), pos - position() ) );
 
 	QRectF r = boundingRect();

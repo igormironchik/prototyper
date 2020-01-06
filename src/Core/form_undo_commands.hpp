@@ -227,7 +227,6 @@ private:
 //
 
 //! Undo move.
-template< class Elem >
 class UndoMove
 	:	public QUndoCommand
 {
@@ -287,7 +286,6 @@ private:
 //
 
 //! Undo resize.
-template< class Elem >
 class UndoResize
 	:	public QUndoCommand
 {

@@ -208,9 +208,7 @@ FormRect::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 void
 FormRect::setPosition( const QPointF & p, bool pushUndoCommand )
 {
-	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove< FormRect > ( form(),
-			objectId(), p ) );
+	FormObject::setPosition( p, pushUndoCommand );
 
 	setPos( p );
 
@@ -226,7 +224,7 @@ FormRect::position() const
 void
 FormRect::setRectangle( const QRectF & r, bool pushUndoCommand )
 {
-	Q_UNUSED( pushUndoCommand )
+	FormObject::setRectangle( r, pushUndoCommand );
 
 	setPos( r.topLeft() );
 
@@ -345,13 +343,13 @@ FormRect::handleReleased( FormMoveHandle * handle )
 	d->m_isHandleMoved = false;
 
 	if( handle == d->m_handles->m_move.data() )
-		form()->undoStack()->push( new UndoMove< FormRect > ( form(),
+		form()->undoStack()->push( new UndoMove( form(),
 			objectId(), position() - d->m_subsidiaryRect.topLeft() ) );
 	else
 	{
 		QRectF r = rectangle();
 
-		form()->undoStack()->push( new UndoResize< FormRect > ( form(),
+		form()->undoStack()->push( new UndoResize( form(),
 			objectId(), d->m_subsidiaryRect, r ) );
 	}
 

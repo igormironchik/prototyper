@@ -135,7 +135,7 @@ FormGroupPrivate::init()
 
 FormGroup::FormGroup( Page * form, QGraphicsItem * parent )
 	:	QGraphicsItemGroup( parent )
-	,	FormObject( FormObject::GroupType, form )
+	,	FormObject( FormObject::GroupType, form, false )
 	,	d( new FormGroupPrivate( this ) )
 {
 	d->init();
@@ -470,9 +470,7 @@ FormGroup::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 void
 FormGroup::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove< FormGroup > ( form(),
-			objectId(), pos - position() ) );
+	FormObject::setPosition( pos, pushUndoCommand );
 
 	setPos( pos - QGraphicsItemGroup::boundingRect().topLeft() );
 
@@ -497,8 +495,7 @@ FormGroup::rectangle() const
 void
 FormGroup::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
-	Q_UNUSED( rect )
-	Q_UNUSED( pushUndoCommand )
+	FormObject::setRectangle( rect, pushUndoCommand );
 }
 
 void
@@ -523,7 +520,7 @@ FormGroup::handleReleased( FormMoveHandle * handle )
 
 	d->m_handleMoved = false;
 
-	form()->undoStack()->push( new UndoMove< FormObject > (
+	form()->undoStack()->push( new UndoMove(
 		form(), objectId(),
 		position() - d->m_oldPos ) );
 

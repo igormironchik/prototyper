@@ -88,7 +88,8 @@ HEADERS +=	exporter.hpp \
 			form_spinbox_properties.hpp \
 			svg_exporter.hpp \
 			form_undo_commands.hpp \
-			constants.hpp
+			constants.hpp \
+			form_object_properties.hpp
 
 SOURCES +=	exporter.cpp \
 			form_actions.cpp \
@@ -135,13 +136,15 @@ SOURCES +=	exporter.cpp \
 			form_checkbox_properties.cpp \
 			form_spinbox_properties.cpp \
 			svg_exporter.cpp \
-			form_undo_commands.cpp
+			form_undo_commands.cpp \
+			form_object_properties.cpp
 
 FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui \
 			form_button_properties.ui \
 			form_checkbox_properties.ui \
 			form_spinbox_properties.ui \
+			form_object_properties.ui
 
 INCLUDEPATH += $$PWD/../../3rdparty/cfgfile
 DEPENDPATH += $$PWD/../../3rdparty/cfgfile

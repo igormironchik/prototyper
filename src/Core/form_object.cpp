@@ -23,6 +23,8 @@
 // Prototyper include.
 #include "form_object.hpp"
 #include "form_undo_commands.hpp"
+#include "form_object_properties.hpp"
+#include "ui_form_object_properties.h"
 
 // Qt include.
 #include <QUndoStack>
@@ -33,13 +35,46 @@ namespace Prototyper {
 namespace Core {
 
 //
+// FormObjectPrivate
+//
+
+class FormObjectPrivate {
+public:
+	FormObjectPrivate( FormObject * parent, FormObject::ObjectType t, Page * form,
+		bool enableResizeInProps )
+		:	q( parent )
+		,	m_id( QString::number( 0 ) )
+		,	m_form( form )
+		,	m_type( t )
+		,	m_enableResizeInProps( enableResizeInProps )
+	{
+	}
+
+	//! Parent.
+	FormObject * q;
+	//! ID.
+	QString m_id;
+	//! Pen.
+	QPen m_pen;
+	//! Brush.
+	QBrush m_brush;
+	//! Form.
+	Page * m_form;
+	//! Type.
+	FormObject::ObjectType m_type;
+	//! Default properties.
+	QPointer< ObjectProperties > m_props;
+	//! Enable resize in properties.
+	bool m_enableResizeInProps;
+}; // class FormObjectPrivate
+
+
+//
 // FormObject
 //
 
-FormObject::FormObject( ObjectType t, Page * form )
-	:	m_id( QString::number( 0 ) )
-	,	m_form( form )
-	,	m_type( t )
+FormObject::FormObject( ObjectType t, Page * form, bool enableResizeInProps )
+	:	d( new FormObjectPrivate( this, t, form, enableResizeInProps ) )
 {
 }
 
@@ -50,61 +85,86 @@ FormObject::~FormObject()
 QWidget *
 FormObject::properties( QWidget * parent )
 {
-	Q_UNUSED( parent )
+	if( d->m_props )
+		d->m_props->deleteLater();
 
-	return nullptr;
+	d->m_props = new ObjectProperties( this, parent );
+
+	if( !d->m_enableResizeInProps )
+	{
+		d->m_props->ui()->m_width->setEnabled( false );
+		d->m_props->ui()->m_height->setEnabled( false );
+	}
+	else
+	{
+		d->m_props->ui()->m_width->setValue( rectangle().width() );
+		d->m_props->ui()->m_height->setValue( rectangle().height() );
+	}
+
+	d->m_props->ui()->m_x->setValue( position().x() );
+	d->m_props->ui()->m_y->setValue( position().y() );
+
+	d->m_props->connectProperties();
+
+	return d->m_props.data();
+}
+
+const QPointer< ObjectProperties > &
+FormObject::defaultProperties() const
+{
+	return d->m_props;
 }
 
 FormObject::ObjectType
 FormObject::objectType() const
 {
-	return m_type;
+	return d->m_type;
 }
 
 const QString &
 FormObject::objectId() const
 {
-	return m_id;
+	return d->m_id;
 }
 
 void
 FormObject::setObjectId( const QString & i )
 {
-	m_id = i;
+	d->m_id = i;
 }
 
 const QPen &
 FormObject::objectPen() const
 {
-	return m_pen;
+	return d->m_pen;
 }
 
 void
 FormObject::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		m_form->undoStack()->push(
-			new UndoChangePen( m_form, m_id, m_pen, p ) );
+		d->m_form->undoStack()->push(
+			new UndoChangePen( d->m_form, d->m_id, d->m_pen, p ) );
 
-	m_pen = p;
+	d->m_pen = p;
 }
 
 const QBrush &
 FormObject::objectBrush() const
 {
-	return m_brush;
+	return d->m_brush;
 }
 
 void
 FormObject::setObjectBrush( const QBrush & b )
 {
-	m_brush = b;
+	d->m_brush = b;
 }
 
 Page *
 FormObject::form() const
 {
-	return m_form;
+	return d->m_form;
 }
 
 void
@@ -116,6 +176,39 @@ QSizeF
 FormObject::defaultSize() const
 {
 	return QSizeF( -1.0, -1.0 );
+}
+
+void
+FormObject::setPosition( const QPointF & pos,
+	bool pushUndoCommand )
+{
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoMove( form(), objectId(), pos - position() ) );
+
+	if( d->m_props )
+	{
+		d->m_props->disconnectProperties();
+		d->m_props->ui()->m_x->setValue( pos.x() );
+		d->m_props->ui()->m_y->setValue( pos.y() );
+		d->m_props->connectProperties();
+	}
+}
+
+void
+FormObject::setRectangle( const QRectF & rect,
+	bool pushUndoCommand )
+{
+	if( pushUndoCommand )
+		form()->undoStack()->push( new UndoResize( form(), objectId(),
+			rectangle(), rect ) );
+
+	if( d->m_props )
+	{
+		d->m_props->disconnectProperties();
+		d->m_props->ui()->m_width->setValue( rect.width() );
+		d->m_props->ui()->m_height->setValue( rect.height() );
+		d->m_props->connectProperties();
+	}
 }
 
 } /* namespace Core */
