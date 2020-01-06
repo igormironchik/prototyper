@@ -117,7 +117,7 @@ PageScenePrivate::isSomethingUnderMouse() const
 
 	for( const auto & item : children )
 	{
-		if( item->isUnderMouse() )
+		if( item->isUnderMouse() && item->isVisible() )
 			return true;
 	}
 
@@ -138,20 +138,27 @@ PageScenePrivate::itemUnderMouse() const
 				selected = item;
 			else
 			{
-				auto br1 = selected->boundingRect();
-				br1.moveTopLeft( selected->pos() );
-				auto br2 = item->boundingRect();
-				br2.moveTopLeft( item->pos() );
-				const auto r = br1.intersected( br2 ).normalized();
-				const auto s = r.width() * r.height();
+				const auto dz = item->zValue() - selected->zValue();
 
-				const auto r1 = selected->boundingRect().normalized();
-				const auto r2 = item->boundingRect().normalized();
-				const auto s1 = r1.width() * r1.height();
-				const auto s2 = r2.width() * r2.height();
-
-				if( s / s2 > s / s1 )
+				if( dz > 0.5 )
 					selected = item;
+				else if( qAbs( dz ) < 0.5 )
+				{
+					auto br1 = selected->boundingRect();
+					br1.moveTopLeft( selected->pos() );
+					auto br2 = item->boundingRect();
+					br2.moveTopLeft( item->pos() );
+					const auto r = br1.intersected( br2 ).normalized();
+					const auto s = r.width() * r.height();
+
+					const auto r1 = selected->boundingRect().normalized();
+					const auto r2 = item->boundingRect().normalized();
+					const auto s1 = r1.width() * r1.height();
+					const auto s2 = r2.width() * r2.height();
+
+					if( s / s2 > s / s1 )
+						selected = item;
+				}
 			}
 		}
 	}
