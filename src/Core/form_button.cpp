@@ -255,9 +255,7 @@ FormButton::boundingRect() const
 void
 FormButton::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove( form(),
-			objectId(), pos - position() ) );
+	FormObject::setPosition( pos, pushUndoCommand );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -283,7 +281,7 @@ FormButton::rectangle() const
 void
 FormButton::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
-	Q_UNUSED( pushUndoCommand )
+	FormObject::setRectangle( rect, pushUndoCommand );
 
 	resize( rect );
 

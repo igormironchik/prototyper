@@ -327,9 +327,7 @@ FormCheckBox::boundingRect() const
 void
 FormCheckBox::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
-	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove( form(),
-			objectId(), pos - position() ) );
+	FormObject::setPosition( pos, pushUndoCommand );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -355,7 +353,7 @@ FormCheckBox::rectangle() const
 void
 FormCheckBox::setRectangle( const QRectF & rect, bool pushUndoCommand )
 {
-	Q_UNUSED( pushUndoCommand )
+	FormObject::setRectangle( rect, pushUndoCommand );
 
 	resize( rect );
 
