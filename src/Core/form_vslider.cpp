@@ -194,6 +194,8 @@ FormVSlider::cfg() const
 
 	c.set_pen( Cfg::pen( objectPen() ) );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -206,6 +208,8 @@ FormVSlider::setCfg( const Cfg::VSlider & c )
 		MmPx::instance().fromMmY( c.pos().y() ),
 		MmPx::instance().fromMmX( c.size().width() ),
 		MmPx::instance().fromMmY( c.size().height() ) ) );
+
+	setZValue( c.z() );
 
 	update();
 }

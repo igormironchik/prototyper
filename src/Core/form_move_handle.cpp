@@ -95,7 +95,7 @@ FormMoveHandlePrivate::init()
 
 	q->setCursor( m_cursor );
 
-	q->setZValue( 999 );
+	q->setZValue( 999999999999 );
 }
 
 

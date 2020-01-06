@@ -239,6 +239,8 @@ FormCheckBox::cfg() const
 
 	c.set_text( text() );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -256,6 +258,8 @@ FormCheckBox::setCfg( const Cfg::CheckBox & c )
 		MmPx::instance().fromMmY( c.size().height() ) ) );
 
 	setText( c.text() );
+
+	setZValue( c.z() );
 
 	update();
 }

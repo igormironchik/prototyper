@@ -104,27 +104,27 @@ FormGroupPrivate::init()
 {
 	m_center.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
 		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
-	m_center->setZValue( 999 );
+	m_center->setZValue( 999999999999 );
 	m_center->hide();
 
 	m_topLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 6.0 ), q,
 		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
-	m_topLeft->setZValue( 999 );
+	m_topLeft->setZValue( 999999999999 );
 	m_topLeft->hide();
 
 	m_topRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 6.0 ), q,
 		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
-	m_topRight->setZValue( 999 );
+	m_topRight->setZValue( 999999999999 );
 	m_topRight->hide();
 
 	m_bottomRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 0.0 ), q,
 		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
-	m_bottomRight->setZValue( 999 );
+	m_bottomRight->setZValue( 999999999999 );
 	m_bottomRight->hide();
 
 	m_bottomLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 0.0 ), q,
 		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
-	m_bottomLeft->setZValue( 999 );
+	m_bottomLeft->setZValue( 999999999999 );
 	m_bottomLeft->hide();
 }
 
@@ -289,6 +289,8 @@ FormGroup::cfg() const
 
 	c.set_pos( p );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -373,6 +375,8 @@ FormGroup::setCfg( const Cfg::Group & c )
 		createElemWithRect< FormSpinBox > ( cfg );
 
 	setObjectId( c.objectId() );
+
+	setZValue( c.z() );
 
 	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ) ) );

@@ -231,6 +231,8 @@ FormSpinBox::cfg() const
 
 	c.set_text( text() );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -245,6 +247,8 @@ FormSpinBox::setCfg( const Cfg::SpinBox & c )
 		MmPx::instance().fromMmY( c.size().height() ) ) );
 
 	setText( c.text() );
+
+	setZValue( c.z() );
 
 	update();
 }

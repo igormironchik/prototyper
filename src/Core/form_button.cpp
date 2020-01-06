@@ -176,6 +176,8 @@ FormButton::cfg() const
 
 	c.set_pen( Cfg::pen( objectPen() ) );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -190,6 +192,8 @@ FormButton::setCfg( const Cfg::Button & c )
 		MmPx::instance().fromMmY( c.size().height() ) ) );
 
 	setText( c.text() );
+
+	setZValue( c.z() );
 
 	update();
 }

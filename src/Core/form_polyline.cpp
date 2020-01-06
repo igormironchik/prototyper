@@ -278,6 +278,8 @@ FormPolyline::cfg() const
 
 	c.set_size( s );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -305,6 +307,8 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
 	setObjectBrush( Cfg::fromBrush( c.brush() ) );
+
+	setZValue( c.z() );
 
 	const QRectF b = d->boundingRect();
 

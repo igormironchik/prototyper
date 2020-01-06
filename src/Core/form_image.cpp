@@ -113,6 +113,8 @@ FormImage::cfg() const
 
 	c.set_data( QString::fromLatin1( byteArray.toBase64().data() ) );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -136,6 +138,8 @@ FormImage::setCfg( const Cfg::Image & c )
 
 	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ) ) );
+
+	setZValue( c.z() );
 
 	QRectF r = pixmap().rect();
 	r.moveTop( pos().y() );

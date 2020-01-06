@@ -94,7 +94,7 @@ FormResizableProxyPrivate::init()
 
 	m_handles->show();
 
-	q->setZValue( 999 );
+	q->setZValue( 999999999999 );
 }
 
 void

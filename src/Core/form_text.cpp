@@ -93,7 +93,7 @@ FormTextPrivate::init()
 	m_opts.reset( new FormTextOpts( q->parentItem() ) );
 
 	m_opts->hide();
-	m_opts->setZValue( 999 );
+	m_opts->setZValue( 999999999999 );
 
 	setRect( m_rect );
 
@@ -214,6 +214,8 @@ FormText::cfg() const
 
 	c.set_text( Cfg::text( textCursor(), toPlainText() ) );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -302,6 +304,8 @@ FormText::setCfg( const Cfg::Text & c )
 
 	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ) ) );
+
+	setZValue( c.z() );
 
 	QRectF r = boundingRect();
 	r.moveTo( pos() );

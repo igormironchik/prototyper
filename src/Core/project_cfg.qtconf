@@ -159,6 +159,11 @@
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
 					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
+					}
 				} || class Line
 
 
@@ -199,6 +204,11 @@
 						{name size}
 						{required}
 					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
+					}
 				} || class Polyline
 
 
@@ -227,6 +237,11 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
 					}
 				} || class Text
 
@@ -263,6 +278,11 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
 					}
 				} || class Image
 
@@ -304,6 +324,11 @@
 						{valueType Prototyper::Core::Cfg::Brush}
 						{name brush}
 					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
+					}
 				} || class Rect
 
 
@@ -338,6 +363,11 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
 					}
 				} || class Button
 
@@ -386,6 +416,11 @@
 						{name objectId}
 						{required}
 					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
+					}
 				} || class CheckBox
 
 
@@ -415,6 +450,11 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
 					}
 				} || class ComboBox
 
@@ -451,6 +491,11 @@
 						{name objectId}
 						{required}
 					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
+					}
 				} || class SpinBox
 
 
@@ -480,6 +525,11 @@
 						{name objectId}
 						{required}
 					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
+					}
 				} || class HSlider
 
 
@@ -508,6 +558,11 @@
 						{valueType QString}
 						{name objectId}
 						{required}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
 					}
 				} || class VSlider
 
@@ -591,6 +646,11 @@
 						{valueType Prototyper::Core::Cfg::Point}
 						{name pos}
 						{required}
+					}
+
+					{tagScalar
+						{valueType qreal}
+						{name z}
 					}
 				} || class Group
 

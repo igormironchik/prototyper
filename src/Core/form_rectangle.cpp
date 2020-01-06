@@ -148,6 +148,8 @@ FormRect::cfg() const
 
 	c.set_size( s );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -167,6 +169,8 @@ FormRect::setCfg( const Cfg::Rect & c )
 
 	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ) ) );
+
+	setZValue( c.z() );
 
 	d->updateRect( r );
 }

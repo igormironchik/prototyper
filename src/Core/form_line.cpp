@@ -171,6 +171,8 @@ FormLine::cfg() const
 
 	c.set_pen( Cfg::pen( objectPen() ) );
 
+	c.set_z( zValue() );
+
 	return c;
 }
 
@@ -192,6 +194,8 @@ FormLine::setCfg( const Cfg::Line & c )
 	setObjectId( c.objectId() );
 
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
+
+	setZValue( c.z() );
 }
 
 QRectF
