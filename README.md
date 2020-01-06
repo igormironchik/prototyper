@@ -29,7 +29,6 @@ git submodule update --init --recursive
 # TODO
 
  - [ ] Add possibility to copy text format
- - [ ] Save last project file location to be used in open project dialog
  - [ ] Add comments to drawing area (pages)
  - [ ] Add right dock with all properties of the currently selected item on page
 
