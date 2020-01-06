@@ -276,8 +276,6 @@ PageScene::keyPressEvent( QKeyEvent * event )
 					clearSelection();
 
 					event->accept();
-
-					emit changed();
 				}
 					break;
 
