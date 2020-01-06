@@ -147,6 +147,8 @@ public:
 	Cfg::Project m_cfg;
 	//! File name.
 	QString m_fileName;
+	//! Open folder path.
+	QString m_openFolder;
 	//! Form toolbar.
 	QToolBar * m_formToolBar;
 	//! Standard items' toolbar.
@@ -817,6 +819,8 @@ ProjectWindow::readProject( const QString & fileName )
 
 			d->m_fileName = fileName;
 
+			d->m_openFolder = QFileInfo( fileName ).absolutePath();
+
 			d->m_widget->setProject( tag.get_cfg() );
 
 			setWindowModified( false );
@@ -957,8 +961,8 @@ ProjectWindow::p_openProject()
 {
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Project to Open..." ),
-			QStandardPaths::standardLocations(
-				QStandardPaths::DocumentsLocation ).first(),
+			( d->m_openFolder.isEmpty() ? QStandardPaths::standardLocations(
+				QStandardPaths::DocumentsLocation ).first() : d->m_openFolder ),
 			tr( "Prototyper Project (*.prototyper)" ) );
 
 	if( !fileName.isEmpty() )
@@ -1068,8 +1072,8 @@ ProjectWindow::p_saveProjectAs()
 {
 	const QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select File to Save Project..." ),
-		QStandardPaths::standardLocations(
-			QStandardPaths::DocumentsLocation ).first(),
+		( d->m_openFolder.isEmpty() ? QStandardPaths::standardLocations(
+			QStandardPaths::DocumentsLocation ).first() : d->m_openFolder ),
 		tr( "Prototyper Project (*.prototyper)" ) );
 
 	if( !fileName.isEmpty() )
