@@ -120,6 +120,8 @@ public:
 	//! Post deletion.
 	virtual void postDeletion();
 
+	virtual QWidget * properties( QWidget * parent );
+
 private:
 	Q_DISABLE_COPY( FormObject )
 

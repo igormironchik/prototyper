@@ -103,18 +103,13 @@ public:
 	//! \return Default size.
 	virtual QSizeF defaultSize() const override;
 
+	QWidget * properties( QWidget * parent ) override;
+
 protected:
 	//! Resize.
 	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
 	//! Move resizable.
 	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
-
-	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
-		Q_DECL_OVERRIDE;
-
-private slots:
-	//! Properties.
-	void properties();
 
 private:
 	friend class FormSpinBoxPrivate;

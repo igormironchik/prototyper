@@ -65,8 +65,8 @@ SpinBoxPropertiesPrivate::init()
 // SpinBoxProperties
 //
 
-SpinBoxProperties::SpinBoxProperties( QWidget * parent, Qt::WindowFlags f )
-	:	QDialog( parent, f )
+SpinBoxProperties::SpinBoxProperties( QWidget * parent )
+	:	QWidget( parent )
 	,	d( new SpinBoxPropertiesPrivate( this ) )
 {
 	d->init();
@@ -76,60 +76,10 @@ SpinBoxProperties::~SpinBoxProperties()
 {
 }
 
-Cfg::SpinBox
-SpinBoxProperties::cfg() const
+Ui::SpinBoxProperties *
+SpinBoxProperties::ui() const
 {
-	Cfg::SpinBox s;
-
-	Cfg::TextStyle c;
-
-	std::vector< QString > style;
-
-	if( d->m_ui.m_bold->isChecked() )
-		style.push_back( Cfg::c_boldStyle );
-
-	if( d->m_ui.m_italic->isChecked() )
-		style.push_back( Cfg::c_italicStyle );
-
-	if( d->m_ui.m_underline->isChecked() )
-		style.push_back( Cfg::c_underlineStyle );
-
-	if( style.empty() )
-		style.push_back( Cfg::c_normalStyle );
-
-	c.set_style( style );
-	c.set_fontSize( d->m_ui.m_size->value() );
-	c.set_text( QString::number( d->m_ui.m_value->value() ) );
-
-	s.set_text( c );
-
-	return s;
-}
-
-void
-SpinBoxProperties::setCfg( const Cfg::SpinBox & s )
-{
-	if( std::find( s.text().style().cbegin(), s.text().style().cend(),
-		Cfg::c_boldStyle ) != s.text().style().cend() )
-			d->m_ui.m_bold->setChecked( true );
-	else
-		d->m_ui.m_bold->setChecked( false );
-
-	if( std::find( s.text().style().cbegin(), s.text().style().cend(),
-		Cfg::c_italicStyle ) != s.text().style().cend() )
-			d->m_ui.m_italic->setChecked( true );
-	else
-		d->m_ui.m_italic->setChecked( false );
-
-	if( std::find( s.text().style().cbegin(), s.text().style().cend(),
-		Cfg::c_underlineStyle ) != s.text().style().cend() )
-			d->m_ui.m_underline->setChecked( true );
-	else
-		d->m_ui.m_underline->setChecked( false );
-
-	d->m_ui.m_size->setValue( qRound( s.text().fontSize() ) );
-
-	d->m_ui.m_value->setValue( s.text().text().toInt() );
+	return &d->m_ui;
 }
 
 } /* namespace Core */

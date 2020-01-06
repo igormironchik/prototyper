@@ -24,11 +24,15 @@
 #define PROTOTYPER__CORE__FORM_SPINBOX_PROPERTIES_HPP__INCLUDED
 
 // Qt include.
-#include <QDialog>
+#include <QWidget>
 #include <QScopedPointer>
 
 // Prototyper include.
 #include "project_cfg.hpp"
+
+namespace Ui {
+	class SpinBoxProperties;
+}
 
 
 namespace Prototyper {
@@ -43,19 +47,15 @@ class SpinBoxPropertiesPrivate;
 
 //! Properties of the button on the form.
 class SpinBoxProperties
-	:	public QDialog
+	:	public QWidget
 {
 	Q_OBJECT
 
 public:
-	SpinBoxProperties( QWidget * parent = Q_NULLPTR,
-		Qt::WindowFlags f = Qt::WindowFlags() );
+	SpinBoxProperties( QWidget * parent = nullptr );
 	~SpinBoxProperties();
 
-	//! \return Cfg.
-	Cfg::SpinBox cfg() const;
-	//! Set cfg.
-	void setCfg( const Cfg::SpinBox & c );
+	Ui::SpinBoxProperties * ui() const;
 
 private:
 	Q_DISABLE_COPY( SpinBoxProperties )

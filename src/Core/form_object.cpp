@@ -47,6 +47,14 @@ FormObject::~FormObject()
 {
 }
 
+QWidget *
+FormObject::properties( QWidget * parent )
+{
+	Q_UNUSED( parent )
+
+	return nullptr;
+}
+
 FormObject::ObjectType
 FormObject::objectType() const
 {

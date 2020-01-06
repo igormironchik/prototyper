@@ -60,6 +60,7 @@
 #include <QTextStream>
 #include <QFile>
 #include <QStringListModel>
+#include <QScrollArea>
 
 
 namespace Prototyper {
@@ -110,6 +111,8 @@ public:
 		,	m_zoomIn( nullptr )
 		,	m_zoomOut( nullptr )
 		,	m_zoomOriginal( nullptr )
+		,	m_propertiesDock( nullptr )
+		,	m_propertiesScrollArea( nullptr )
 	{
 	}
 
@@ -194,6 +197,10 @@ public:
 	QAction * m_zoomIn;
 	QAction * m_zoomOut;
 	QAction * m_zoomOriginal;
+	//! Properties dock.
+	QDockWidget * m_propertiesDock;
+	//! Scroll area for properties.
+	QScrollArea * m_propertiesScrollArea;
 	//! Added forms.
 	QList< PageView* > m_addedForms;
 	//! Deleted forms.
@@ -270,13 +277,30 @@ ProjectWindowPrivate::init()
 
 	m_tabsList->model()->setStringList( QStringList() << m_widget->projectTabName() );
 
+	m_propertiesDock = new QDockWidget( q );
+	m_propertiesDock->setWindowTitle( ProjectWindow::tr( "Properties" ) );
+	m_propertiesDock->setObjectName( QStringLiteral( "m_propertiesDock" ) );
+	m_propertiesScrollArea = new QScrollArea( m_propertiesDock );
+	m_propertiesScrollArea->setWidgetResizable( true );
+	m_propertiesDock->setWidget( m_propertiesScrollArea );
+	m_propertiesDock->setMinimumWidth( 250 );
+
 	q->addDockWidget( Qt::LeftDockWidgetArea, m_tabsList );
+	q->addDockWidget( Qt::RightDockWidgetArea, m_propertiesDock );
+
+	m_propertiesDock->hide();
 
 	view->addAction( m_tabsList->toggleViewAction() );
 	m_tabsList->toggleViewAction()->setShortcutContext(
 		Qt::ApplicationShortcut );
 	m_tabsList->toggleViewAction()->setShortcut(
 		ProjectWindow::tr( "Ctrl+Alt+T" ) );
+
+	view->addAction( m_propertiesDock->toggleViewAction() );
+	m_propertiesDock->toggleViewAction()->setShortcutContext(
+		Qt::ApplicationShortcut );
+	m_propertiesDock->toggleViewAction()->setShortcut(
+		ProjectWindow::tr( "Ctrl+Alt+P" ) );
 
 	QAction * newForm = new QAction( QIcon( ":/Core/img/list-add.png" ),
 		ProjectWindow::tr( "Add Page" ), q );
@@ -1376,6 +1400,8 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_zoomIn->setEnabled( false );
 		d->m_zoomOut->setEnabled( false );
 		d->m_zoomOriginal->setEnabled( false );
+
+		d->m_propertiesDock->hide();
 	}
 }
 
@@ -1434,6 +1460,42 @@ ProjectWindow::p_selectionChanged()
 			d->m_ungroup->setEnabled( true );
 		else
 			d->m_ungroup->setEnabled( false );
+
+		if( s.size() == 1 )
+		{
+			auto * o = dynamic_cast< FormObject* > ( s.first() );
+
+			if( o )
+			{
+				auto * widget = o->properties( this );
+
+				if( widget )
+				{
+					if( d->m_propertiesScrollArea->widget() )
+						d->m_propertiesScrollArea->widget()->deleteLater();
+
+					d->m_propertiesScrollArea->setWidget( widget );
+					widget->show();
+					d->m_propertiesDock->show();
+					d->m_propertiesDock->toggleViewAction()->setEnabled( true );
+				}
+				else
+				{
+					d->m_propertiesDock->hide();
+					d->m_propertiesDock->toggleViewAction()->setEnabled( false );
+				}
+			}
+			else
+			{
+				d->m_propertiesDock->hide();
+				d->m_propertiesDock->toggleViewAction()->setEnabled( false );
+			}
+		}
+		else
+		{
+			d->m_propertiesDock->hide();
+			d->m_propertiesDock->toggleViewAction()->setEnabled( false );
+		}
 	}
 }
 
