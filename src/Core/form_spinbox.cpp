@@ -276,10 +276,12 @@ FormSpinBox::updatePropertiesValues()
 {
 	if( d->m_properties )
 	{
+		d->disconnectProperties();
 		d->m_properties->ui()->m_x->setValue( position().x() );
 		d->m_properties->ui()->m_y->setValue( position().y() );
 		d->m_properties->ui()->m_width->setValue( rectangle().width() );
 		d->m_properties->ui()->m_height->setValue( rectangle().height() );
+		d->connectProperties();
 	}
 }
 

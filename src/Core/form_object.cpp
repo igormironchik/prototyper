@@ -135,6 +135,8 @@ FormObject::updatePropertiesValues()
 {
 	if( d->m_props )
 	{
+		d->m_props->disconnectProperties();
+
 		if( d->m_resizeProps & ResizeWidth )
 			d->m_props->ui()->m_width->setValue( rectangle().width() );
 
@@ -143,6 +145,8 @@ FormObject::updatePropertiesValues()
 
 		d->m_props->ui()->m_x->setValue( position().x() );
 		d->m_props->ui()->m_y->setValue( position().y() );
+
+		d->m_props->connectProperties();
 	}
 }
 
