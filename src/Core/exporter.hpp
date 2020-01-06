@@ -31,6 +31,7 @@
 
 QT_BEGIN_NAMESPACE
 class QSvgGenerator;
+class QPainter;
 QT_END_NAMESPACE
 
 
@@ -84,6 +85,12 @@ protected:
 private:
 	Q_DISABLE_COPY( Exporter )
 }; // class Exporter
+
+namespace impl {
+	void
+	drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi,
+		QSvgGenerator & svg );
+}
 
 } /* namespace Core */
 
