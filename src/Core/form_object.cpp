@@ -94,11 +94,17 @@ FormObject::properties( QWidget * parent )
 	{
 		d->m_props->ui()->m_width->setEnabled( false );
 		d->m_props->ui()->m_height->setEnabled( false );
+		d->m_props->ui()->m_width->setMinimum( 0 );
+		d->m_props->ui()->m_height->setMinimum( 0 );
+		d->m_props->ui()->m_width->setValue( 0 );
+		d->m_props->ui()->m_height->setValue( 0 );
 	}
 	else
 	{
 		d->m_props->ui()->m_width->setValue( rectangle().width() );
 		d->m_props->ui()->m_height->setValue( rectangle().height() );
+		d->m_props->ui()->m_width->setMinimum( defaultSize().width() );
+		d->m_props->ui()->m_height->setMinimum( defaultSize().height() );
 	}
 
 	d->m_props->ui()->m_x->setValue( position().x() );
@@ -175,7 +181,7 @@ FormObject::postDeletion()
 QSizeF
 FormObject::defaultSize() const
 {
-	return QSizeF( -1.0, -1.0 );
+	return QSizeF( 1.0, 1.0 );
 }
 
 void
