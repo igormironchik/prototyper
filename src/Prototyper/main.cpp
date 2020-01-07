@@ -23,6 +23,7 @@
 // Qt include.
 #include <QApplication>
 #include <QIcon>
+#include <QTranslator>
 
 // Prototyper include.
 #include <Core/top_gui.hpp>
@@ -44,6 +45,10 @@ int main( int argc, char ** argv )
 	appIcon.addFile( ":/img/Prototyper_22x22.png" );
 	appIcon.addFile( ":/img/Prototyper_16x16.png" );
 	app.setWindowIcon( appIcon );
+
+	QTranslator appTranslator;
+	appTranslator.load( "./tr/Prototyper_" + QLocale::system().name() );
+	app.installTranslator( &appTranslator );
 
 	TopGui::instance()->projectWindow()->show();
 
