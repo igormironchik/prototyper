@@ -25,6 +25,7 @@
 #include "page.hpp"
 #include "form_grid_snap.hpp"
 #include "form_actions.hpp"
+#include "form_move_handle_private.hpp"
 
 // Qt include.
 #include <QPainter>

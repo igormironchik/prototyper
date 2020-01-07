@@ -91,7 +91,8 @@ HEADERS +=	exporter.hpp \
 			constants.hpp \
 			form_object_properties.hpp \
 			form_checkbox_private.hpp \
-			exporter_private.hpp
+			exporter_private.hpp \
+			form_move_handle_private.hpp
 
 SOURCES +=	exporter.cpp \
 			form_actions.cpp \

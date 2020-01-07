@@ -60,47 +60,7 @@ private:
 
 
 class Page;
-
-
-//
-// FormMoveHandlePrivate
-//
-
-class FormMoveHandlePrivate {
-public:
-	FormMoveHandlePrivate( qreal halfSize, const QPointF & zero,
-		FormWithHandle * object, FormMoveHandle * parent, Page * form,
-		const QCursor & c );
-	virtual ~FormMoveHandlePrivate();
-
-	//! Init.
-	virtual void init();
-
-	//! Parent.
-	FormMoveHandle * q;
-	//! Object.
-	FormWithHandle * m_object;
-	//! Half of the size.
-	qreal m_size;
-	//! Hovered.
-	bool m_hovered;
-	//! Pressed.
-	bool m_pressed;
-	//! Mouse point.
-	QPointF m_pos;
-	//! Ignore mouse events?
-	bool m_ignoreMouse;
-	//! Zero point.
-	QPointF m_zero;
-	//! Additional delta to zero.
-	QPointF m_addToZero;
-	//! Touch delta.
-	QPointF m_touchDelta;
-	//! Cursor.
-	QCursor m_cursor;
-	//! Form.
-	Page * m_form;
-}; // class FormMoveHandlerPrivate
+class FormMoveHandlePrivate;
 
 
 //

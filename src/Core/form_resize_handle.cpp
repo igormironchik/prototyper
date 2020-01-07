@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "form_resize_handle.hpp"
+#include "form_move_handle_private.hpp"
 
 // Qt include.
 #include <QPainter>
