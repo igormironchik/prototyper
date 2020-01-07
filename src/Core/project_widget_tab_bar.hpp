@@ -60,7 +60,7 @@ private slots:
 	//! Rename tab.
 	void renameTab();
 	//! Add form.
-	void addForm();
+	void addPage();
 	//! Delete form.
 	void deleteForm();
 

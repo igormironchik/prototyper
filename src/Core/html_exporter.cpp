@@ -56,9 +56,9 @@ public:
 
 static inline QString printStyle( const Cfg::TextStyle & style )
 {
-	return QString( "style=\"font-size: ") +
+	return QStringLiteral( "style=\"font-size: " ) +
 		QString::number( qRound( style.fontSize() ) )
-		+ QLatin1String( "pt;\"" );
+		+ QStringLiteral( "pt;\"" );
 }
 
 static inline void printText( QTextStream & stream,
@@ -66,34 +66,34 @@ static inline void printText( QTextStream & stream,
 {
 	foreach( const Cfg::TextStyle & t, text )
 	{
-		stream << QLatin1String( "<span " )
+		stream << QStringLiteral( "<span " )
 			<< printStyle( t )
-			<< QLatin1String( ">" )
+			<< QStringLiteral( ">" )
 			<< ( std::find( t.style().cbegin(), t.style().cend(),
 					Cfg::c_boldStyle ) != t.style().cend() ?
-						QLatin1String( "<b>" ) : QString() )
+						QStringLiteral( "<b>" ) : QString() )
 			<< ( std::find( t.style().cbegin(), t.style().cend(),
 					Cfg::c_italicStyle ) != t.style().cend() ?
-						QLatin1String( "<i>" ) : QString() )
+						QStringLiteral( "<i>" ) : QString() )
 			<< ( std::find( t.style().cbegin(), t.style().cend(),
-						Cfg::c_underlineStyle ) != t.style().cend() ?
-							QLatin1String( "<ins>" ) : QString() );
+					Cfg::c_underlineStyle ) != t.style().cend() ?
+						QStringLiteral( "<ins>" ) : QString() );
 
 		QStringList strings = t.text().split( QLatin1Char( '\n' ) );
 
 		foreach( const QString & str, strings )
-			stream << str << QLatin1String( "<br>" ) << endl;
+			stream << str << QStringLiteral( "<br>" ) << endl;
 
 		stream << ( std::find( t.style().cbegin(), t.style().cend(),
-						Cfg::c_underlineStyle ) != t.style().cend()  ?
-							QLatin1String( "</ins>" ) : QString() )
+					Cfg::c_underlineStyle ) != t.style().cend()  ?
+						QStringLiteral( "</ins>" ) : QString() )
 			<< ( std::find( t.style().cbegin(), t.style().cend(),
 					Cfg::c_italicStyle ) != t.style().cend() ?
-						QLatin1String( "</i>" ) : QString() )
+						QStringLiteral( "</i>" ) : QString() )
 			<< ( std::find( t.style().cbegin(), t.style().cend(),
 					Cfg::c_boldStyle ) != t.style().cend() ?
-						QLatin1String( "</b>" ) : QString() )
-			<< QLatin1String( "</span>" )
+						QStringLiteral( "</b>" ) : QString() )
+			<< QStringLiteral( "</span>" )
 			<< endl;
 	}
 }
@@ -101,13 +101,13 @@ static inline void printText( QTextStream & stream,
 void
 HtmlExporterPrivate::printDocument( QTextStream & stream )
 {
-	stream << QLatin1String( "<!DOCTYPE html><head></head>" )
-		<< endl << QLatin1String( "<body>" ) << endl
-		<< QLatin1String( "<div style=\"width: 800px; margin: auto;\">" ) ;
+	stream << QStringLiteral( "<!DOCTYPE html><head></head>" )
+		<< endl << QStringLiteral( "<body>" ) << endl
+		<< QStringLiteral( "<div style=\"width: 800px; margin: auto;\">" ) ;
 
 	printText( stream, m_cfg.description().text() );
 
-	stream << QLatin1String( "<br><br>" ) << endl;
+	stream << QStringLiteral( "<br><br>" ) << endl;
 
 	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
@@ -118,12 +118,12 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 		head.text() = form.tabName();
 		headList.push_back( head );
 
-		stream << QLatin1String( "<a name=\"" )
-			<< form.tabName() << QLatin1String( "\">" );
+		stream << QStringLiteral( "<a name=\"" )
+			<< form.tabName() << QStringLiteral( "\">" );
 
 		printText( stream, headList );
 
-		stream << QLatin1String( "</a>" ) << QLatin1String( "<br><br>" );
+		stream << QStringLiteral( "</a>" ) << QStringLiteral( "<br><br>" );
 
 		QByteArray data;
 		QBuffer buff( &data );
@@ -134,17 +134,17 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 
 		drawForm( svg, form, 150.0 );
 
-		const int i = data.indexOf( QLatin1String( "\n" ) );
+		const int i = data.indexOf( QStringLiteral( "\n" ) );
 
 		if( i != -1 )
 			data.remove( 0, i );
 
 		stream
-			<< QLatin1String( "<div>" )
-			<< data << QLatin1String( "</div><br>" );
+			<< QStringLiteral( "<div>" )
+			<< data << QStringLiteral( "</div><br>" );
 	}
 
-	stream << QLatin1String( "</div></body>" ) << endl;
+	stream << QStringLiteral( "</div></body>" ) << endl;
 }
 
 

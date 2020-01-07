@@ -107,7 +107,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc, qreal dpi )
 	{
 		c.movePosition( QTextCursor::End );
 
-		c.insertText( QString( "\n" ) );
+		c.insertText( QStringLiteral( "\n" ) );
 
 		c.movePosition( QTextCursor::End );
 
@@ -115,7 +115,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc, qreal dpi )
 		fmt.setObjectType( c_pageBreakType );
 
 		c.insertText( QString( QChar::ObjectReplacementCharacter ) +
-			QString( "\n" ), fmt );
+			QStringLiteral( "\n" ), fmt );
 
 		c.movePosition( QTextCursor::End );
 
@@ -125,7 +125,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc, qreal dpi )
 
 		c.setCharFormat( header );
 
-		c.insertText( form.tabName() + QLatin1String( "\n\n" ) );
+		c.insertText( form.tabName() + QStringLiteral( "\n\n" ) );
 
 		c.movePosition( QTextCursor::End );
 

@@ -81,7 +81,7 @@ ProjectTabBar::renameTab()
 }
 
 void
-ProjectTabBar::addForm()
+ProjectTabBar::addPage()
 {
 	emit formAddRequest();
 }
@@ -100,15 +100,15 @@ ProjectTabBar::contextMenuEvent( QContextMenuEvent * event )
 	QMenu menu;
 
 	if( d->m_menuTabIndex >= 0 )
-		menu.addAction( QIcon( ":/Core/img/edit-rename.png" ),
-			tr( "Rename" ), this, SLOT( renameTab() ) );
+		menu.addAction( QIcon( QStringLiteral( ":/Core/img/edit-rename.png" ) ),
+			tr( "Rename" ), this, &ProjectTabBar::renameTab );
 
-	menu.addAction( QIcon( ":/Core/img/list-add.png" ),
-		tr( "Add Page" ), this, SLOT( addForm() ) );
+	menu.addAction( QIcon( QStringLiteral( ":/Core/img/list-add.png" ) ),
+		tr( "Add Page" ), this, &ProjectTabBar::addPage );
 
 	if( d->m_menuTabIndex != 0 )
-		menu.addAction( QIcon( ":/Core/img/edit-delete.png" ),
-			tr( "Delete Form" ), this, SLOT( deleteForm() ) );
+		menu.addAction( QIcon( QStringLiteral( ":/Core/img/edit-delete.png" ) ),
+			tr( "Delete Form" ), this, &ProjectTabBar::deleteForm );
 
 	menu.exec( event->globalPos() );
 

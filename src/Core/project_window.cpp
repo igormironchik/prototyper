@@ -222,13 +222,13 @@ ProjectWindowPrivate::init()
 	QMenu * file = q->menuBar()->addMenu( ProjectWindow::tr( "&File" ) );
 
 	QAction * newProject = file->addAction(
-		QIcon( ":/Core/img/document-new.png" ),
+		QIcon( QStringLiteral( ":/Core/img/document-new.png" ) ),
 		ProjectWindow::tr( "New Project" ) );
 	newProject->setShortcutContext( Qt::ApplicationShortcut );
 	newProject->setShortcut( ProjectWindow::tr( "Ctrl+N" ) );
 
 	QAction * openProject = file->addAction(
-		QIcon( ":/Core/img/document-open.png" ),
+		QIcon( QStringLiteral( ":/Core/img/document-open.png" ) ),
 		ProjectWindow::tr( "Open Project" ) );
 	openProject->setShortcutContext( Qt::ApplicationShortcut );
 	openProject->setShortcut( ProjectWindow::tr( "Ctrl+O" ) );
@@ -236,37 +236,37 @@ ProjectWindowPrivate::init()
 	file->addSeparator();
 
 	m_saveProject = file->addAction(
-		QIcon( ":/Core/img/document-save.png" ),
+		QIcon( QStringLiteral( ":/Core/img/document-save.png" ) ),
 		ProjectWindow::tr( "Save Project" ) );
 	m_saveProject->setShortcutContext( Qt::ApplicationShortcut );
 	m_saveProject->setShortcut( ProjectWindow::tr( "Ctrl+S" ) );
 
 	QAction * saveProjectAs = file->addAction(
-		QIcon( ":/Core/img/document-save-as.png" ),
+		QIcon( QStringLiteral( ":/Core/img/document-save-as.png" ) ),
 		ProjectWindow::tr( "Save Project As" ) );
 
 	file->addSeparator();
 
 	QMenu * exportMenu = file->addMenu(
-		QIcon( ":/Core/img/document-export.png" ),
+		QIcon( QStringLiteral( ":/Core/img/document-export.png" ) ),
 		ProjectWindow::tr( "Export To" ) );
 
 	QAction * exportToPdf = exportMenu->addAction(
-		QIcon( ":/Core/img/application-pdf.png" ),
+		QIcon( QStringLiteral( ":/Core/img/application-pdf.png" ) ),
 		ProjectWindow::tr( "PDF" ) );
 
 	QAction * exportToHtml = exportMenu->addAction(
-		QIcon( ":/Core/img/text-html.png" ),
+		QIcon( QStringLiteral( ":/Core/img/text-html.png" ) ),
 		ProjectWindow::tr( "HTML" ) );
 
 	QAction * exportToSvg = exportMenu->addAction(
-		QIcon( ":/Core/img/image-svg+xml.png" ),
+		QIcon( QStringLiteral( ":/Core/img/image-svg+xml.png" ) ),
 		ProjectWindow::tr( "SVG Images" ) );
 
 	file->addSeparator();
 
 	QAction * quitAction = file->addAction(
-		QIcon( ":/Core/img/application-exit.png" ),
+		QIcon( QStringLiteral( ":/Core/img/application-exit.png" ) ),
 		ProjectWindow::tr( "Quit" ) );
 	quitAction->setShortcutContext( Qt::ApplicationShortcut );
 	quitAction->setShortcut( ProjectWindow::tr( "Ctrl+Q" ) );
@@ -274,7 +274,7 @@ ProjectWindowPrivate::init()
 	QMenu * view = q->menuBar()->addMenu( ProjectWindow::tr( "&Dock" ) );
 
 	m_tabsList = new TabsList( q );
-	m_tabsList->setObjectName( QLatin1String( "m_tabsList" ) );
+	m_tabsList->setObjectName( QStringLiteral( "m_tabsList" ) );
 
 	m_tabsList->model()->setStringList( QStringList() << m_widget->projectTabName() );
 
@@ -303,17 +303,17 @@ ProjectWindowPrivate::init()
 	m_propertiesDock->toggleViewAction()->setShortcut(
 		ProjectWindow::tr( "Ctrl+Alt+P" ) );
 
-	QAction * newForm = new QAction( QIcon( ":/Core/img/list-add.png" ),
+	QAction * newForm = new QAction( QIcon( QStringLiteral( ":/Core/img/list-add.png" ) ),
 		ProjectWindow::tr( "Add Page" ), q );
 	newForm->setShortcutContext( Qt::ApplicationShortcut );
 	newForm->setShortcut( ProjectWindow::tr( "Ctrl+T" ) );
 	q->addAction( newForm );
 
 	m_formToolBar = new QToolBar( ProjectWindow::tr( "Drawing Tools" ), q );
-	m_formToolBar->setObjectName( QLatin1String( "m_formToolBar" ) );
+	m_formToolBar->setObjectName( QStringLiteral( "m_formToolBar" ) );
 
 	m_stdItemsToolBar = new QToolBar( ProjectWindow::tr( "Standard Items" ), q );
-	m_stdItemsToolBar->setObjectName( QLatin1String( "m_stdItemsToolBar" ) );
+	m_stdItemsToolBar->setObjectName( QStringLiteral( "m_stdItemsToolBar" ) );
 
 	m_zoomToolBar = new QToolBar( ProjectWindow::tr( "Zoom Tools" ), q );
 	m_zoomToolBar->setObjectName( QStringLiteral( "m_zoomToolBar" ) );
@@ -322,7 +322,7 @@ ProjectWindowPrivate::init()
 	m_formToolBarGroup->setExclusive( true );
 
 	m_select = m_formToolBar->addAction(
-		QIcon( ":/Core/img/edit-select.png" ),
+		QIcon( QStringLiteral( ":/Core/img/edit-select.png" ) ),
 		ProjectWindow::tr( "Select" ) );
 	m_select->setCheckable( true );
 	m_formToolBarGroup->addAction( m_select );
@@ -330,7 +330,7 @@ ProjectWindowPrivate::init()
 	m_select->setShortcut( ProjectWindow::tr( "Alt+S" ) );
 
 	m_drawLine = m_formToolBar->addAction(
-		QIcon( ":/Core/img/draw-freehand.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-freehand.png" ) ),
 		ProjectWindow::tr( "Draw Line" ) );
 	m_drawLine->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawLine );
@@ -338,14 +338,14 @@ ProjectWindowPrivate::init()
 	m_drawLine->setShortcut( ProjectWindow::tr( "Alt+L" ) );
 
 	m_drawPolyLine = m_formToolBar->addAction(
-		QIcon( ":/Core/img/draw-polyline.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-polyline.png" ) ),
 		ProjectWindow::tr( "Draw Polyline" ) );
 	m_drawPolyLine->setCheckable( true );
 	m_drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
 	m_drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
 
 	m_drawRect = m_formToolBar->addAction(
-		QIcon( ":/Core/img/draw-rectangle.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-rectangle.png" ) ),
 		ProjectWindow::tr( "Draw Rect" ) );
 	m_drawRect->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawRect );
@@ -353,7 +353,7 @@ ProjectWindowPrivate::init()
 	m_drawRect->setShortcut( ProjectWindow::tr( "Alt+R" ) );
 
 	m_insertText = m_formToolBar->addAction(
-		QIcon( ":/Core/img/insert-text.png" ),
+		QIcon( QStringLiteral( ":/Core/img/insert-text.png" ) ),
 		ProjectWindow::tr( "Insert Text" ) );
 	m_insertText->setCheckable( true );
 	m_formToolBarGroup->addAction( m_insertText );
@@ -361,7 +361,7 @@ ProjectWindowPrivate::init()
 	m_insertText->setShortcut( ProjectWindow::tr( "Alt+T" ) );
 
 	m_insertImage = m_formToolBar->addAction(
-		QIcon( ":/Core/img/insert-image.png" ),
+		QIcon( QStringLiteral( ":/Core/img/insert-image.png" ) ),
 		ProjectWindow::tr( "Insert Image" ) );
 	m_insertImage->setShortcutContext( Qt::ApplicationShortcut );
 	m_insertImage->setShortcut( ProjectWindow::tr( "Alt+I" ) );
@@ -369,13 +369,13 @@ ProjectWindowPrivate::init()
 	m_formToolBar->addSeparator();
 
 	m_group = m_formToolBar->addAction(
-		QIcon( ":/Core/img/merge.png" ),
+		QIcon( QStringLiteral( ":/Core/img/merge.png" ) ),
 		ProjectWindow::tr( "Group" ) );
 	m_group->setShortcutContext( Qt::ApplicationShortcut );
 	m_group->setShortcut( ProjectWindow::tr( "Ctrl+G" ) );
 
 	m_ungroup = m_formToolBar->addAction(
-		QIcon( ":/Core/img/split.png" ),
+		QIcon( QStringLiteral( ":/Core/img/split.png" ) ),
 		ProjectWindow::tr( "Ungroup" ) );
 	m_ungroup->setShortcutContext( Qt::ApplicationShortcut );
 	m_ungroup->setShortcut( ProjectWindow::tr( "Ctrl+U" ) );
@@ -383,15 +383,11 @@ ProjectWindowPrivate::init()
 	m_formToolBar->addSeparator();
 
 	m_strokeColor = m_formToolBar->addAction(
-		QIcon( ":/Core/img/format-stroke-color.png" ),
+		QIcon( QStringLiteral( ":/Core/img/format-stroke-color.png" ) ),
 		ProjectWindow::tr( "Line Color" ) );
 
-//	QAction * fillColor = m_formToolBar->addAction(
-//		QIcon( ":/Core/img/fill-color.png" ),
-//		ProjectWindow::tr( "Fill Color" ) );
-
 	m_drawButton = m_stdItemsToolBar->addAction(
-		QIcon( ":/Core/img/draw-pushbutton.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-pushbutton.png" ) ),
 		ProjectWindow::tr( "Draw Button" ) );
 	m_drawButton->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawButton );
@@ -399,7 +395,7 @@ ProjectWindowPrivate::init()
 	m_drawButton->setShortcut( ProjectWindow::tr( "Alt+B" ) );
 
 	m_drawComboBox = m_stdItemsToolBar->addAction(
-		QIcon( ":/Core/img/draw-combobox.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-combobox.png" ) ),
 		ProjectWindow::tr( "Draw ComboBox" ) );
 	m_drawComboBox->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawComboBox );
@@ -407,7 +403,7 @@ ProjectWindowPrivate::init()
 	m_drawComboBox->setShortcut( ProjectWindow::tr( "Alt+C" ) );
 
 	m_drawRadioButton = m_stdItemsToolBar->addAction(
-		QIcon( ":/Core/img/draw-radiobutton.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-radiobutton.png" ) ),
 		ProjectWindow::tr( "Draw Radio Button" ) );
 	m_drawRadioButton->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawRadioButton );
@@ -415,7 +411,7 @@ ProjectWindowPrivate::init()
 	m_drawRadioButton->setShortcut( ProjectWindow::tr( "Alt+R" ) );
 
 	m_drawCheckBox = m_stdItemsToolBar->addAction(
-		QIcon( ":/Core/img/draw-checkbox.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-checkbox.png" ) ),
 		ProjectWindow::tr( "Draw Check Box" ) );
 	m_drawCheckBox->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawCheckBox );
@@ -423,7 +419,7 @@ ProjectWindowPrivate::init()
 	m_drawCheckBox->setShortcut( ProjectWindow::tr( "Alt+K" ) );
 
 	m_drawHSlider = m_stdItemsToolBar->addAction(
-		QIcon( ":/Core/img/draw-hslider.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-hslider.png" ) ),
 		ProjectWindow::tr( "Draw Horizontal Slider" ) );
 	m_drawHSlider->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawHSlider );
@@ -431,7 +427,7 @@ ProjectWindowPrivate::init()
 	m_drawHSlider->setShortcut( ProjectWindow::tr( "Alt+H" ) );
 
 	m_drawVSlider = m_stdItemsToolBar->addAction(
-		QIcon( ":/Core/img/draw-vslider.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-vslider.png" ) ),
 		ProjectWindow::tr( "Draw Vertical Slider" ) );
 	m_drawVSlider->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawVSlider );
@@ -439,7 +435,7 @@ ProjectWindowPrivate::init()
 	m_drawVSlider->setShortcut( ProjectWindow::tr( "Alt+V" ) );
 
 	m_drawSpinbox = m_stdItemsToolBar->addAction(
-		QIcon( ":/Core/img/draw-spinbox.png" ),
+		QIcon( QStringLiteral( ":/Core/img/draw-spinbox.png" ) ),
 		ProjectWindow::tr( "Draw Spinbox" ) );
 	m_drawSpinbox->setCheckable( true );
 	m_formToolBarGroup->addAction( m_drawSpinbox );
@@ -449,37 +445,37 @@ ProjectWindowPrivate::init()
 	m_formToolBar->addSeparator();
 
 	m_alignHorizLeft = m_formToolBar->addAction(
-		QIcon( ":/Core/img/align-horizontal-left.png" ),
+		QIcon( QStringLiteral( ":/Core/img/align-horizontal-left.png" ) ),
 		ProjectWindow::tr( "Align Horizontal Left" ) );
 	m_alignHorizLeft->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignHorizLeft->setShortcut( ProjectWindow::tr( "Ctrl+Alt+L" ) );
 
 	m_alignHorizCenter = m_formToolBar->addAction(
-		QIcon( ":/Core/img/align-horizontal-center.png" ),
+		QIcon( QStringLiteral( ":/Core/img/align-horizontal-center.png" ) ),
 		ProjectWindow::tr( "Align Horizontal Center" ) );
 	m_alignHorizCenter->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignHorizCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+C" ) );
 
 	m_alignHorizRight = m_formToolBar->addAction(
-		QIcon( ":/Core/img/align-horizontal-right.png" ),
+		QIcon( QStringLiteral( ":/Core/img/align-horizontal-right.png" ) ),
 		ProjectWindow::tr( "Align Horizontal Right" ) );
 	m_alignHorizRight->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignHorizRight->setShortcut( ProjectWindow::tr( "Ctrl+Alt+R" ) );
 
 	m_alignVertTop = m_formToolBar->addAction(
-		QIcon( ":/Core/img/align-vertical-top.png" ),
+		QIcon( QStringLiteral( ":/Core/img/align-vertical-top.png" ) ),
 		ProjectWindow::tr( "Align Vertical Top" ) );
 	m_alignVertTop->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignVertTop->setShortcut( ProjectWindow::tr( "Ctrl+Alt+T" ) );
 
 	m_alignVertCenter = m_formToolBar->addAction(
-		QIcon( ":/Core/img/align-vertical-center.png" ),
+		QIcon( QStringLiteral( ":/Core/img/align-vertical-center.png" ) ),
 		ProjectWindow::tr( "Align Vertical Center" ) );
 	m_alignVertCenter->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignVertCenter->setShortcut( ProjectWindow::tr( "Ctrl+Alt+V" ) );
 
 	m_alignVertBottom = m_formToolBar->addAction(
-		QIcon( ":/Core/img/align-vertical-bottom.png" ),
+		QIcon( QStringLiteral( ":/Core/img/align-vertical-bottom.png" ) ),
 		ProjectWindow::tr( "Align Vertical Bottom" ) );
 	m_alignVertBottom->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignVertBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+B" ) );
@@ -521,7 +517,7 @@ ProjectWindowPrivate::init()
 	form->addSeparator();
 
 	m_grid = form->addAction(
-		QIcon( ":/Core/img/view-grid.png" ),
+		QIcon( QStringLiteral( ":/Core/img/view-grid.png" ) ),
 		ProjectWindow::tr( "Show Grid" ) );
 	m_grid->setShortcutContext( Qt::ApplicationShortcut );
 	m_grid->setShortcut( ProjectWindow::tr( "Ctrl+Alt+G" ) );
@@ -529,11 +525,11 @@ ProjectWindowPrivate::init()
 	m_grid->setChecked( true );
 
 	m_gridStep = form->addAction(
-		QIcon( ":/Core/img/measure.png" ),
+		QIcon( QStringLiteral( ":/Core/img/measure.png" ) ),
 		ProjectWindow::tr( "Grid Step" ) );
 
 	QAction * snapGrid = form->addAction(
-		QIcon( ":/Core/img/snap-intersection.png" ),
+		QIcon( QStringLiteral( ":/Core/img/snap-intersection.png" ) ),
 		ProjectWindow::tr( "Snap Grid" ) );
 	snapGrid->setShortcutContext( Qt::ApplicationShortcut );
 	snapGrid->setShortcut( ProjectWindow::tr( "Alt+G" ) );
@@ -581,19 +577,19 @@ ProjectWindowPrivate::init()
 	QAction * undoAction = m_widget->undoGroup()->createUndoAction( q );
 	undoAction->setShortcutContext( Qt::ApplicationShortcut );
 	undoAction->setShortcut( ProjectWindow::tr( "Ctrl+Z" ) );
-	undoAction->setIcon( QIcon( ":/Core/img/edit-undo.png" ) );
+	undoAction->setIcon( QIcon( QStringLiteral( ":/Core/img/edit-undo.png" ) ) );
 	form->addAction( undoAction );
 
 	QAction * redoAction = m_widget->undoGroup()->createRedoAction( q );
 	redoAction->setShortcutContext( Qt::ApplicationShortcut );
 	redoAction->setShortcut( ProjectWindow::tr( "Ctrl+Y" ) );
-	redoAction->setIcon( QIcon( ":/Core/img/edit-redo.png" ) );
+	redoAction->setIcon( QIcon( QStringLiteral( ":/Core/img/edit-redo.png" ) ) );
 	form->addAction( redoAction );
 
 	QMenu * help = q->menuBar()->addMenu( ProjectWindow::tr( "&Help" ) );
-	QAction * about = help->addAction( QIcon( ":/Core/img/prototyper.png" ),
+	QAction * about = help->addAction( QIcon( QStringLiteral( ":/Core/img/prototyper.png" ) ),
 		ProjectWindow::tr( "About" ) );
-	QAction * aboutQt = help->addAction( QIcon( ":/Core/img/qt.png" ),
+	QAction * aboutQt = help->addAction( QIcon( QStringLiteral( ":/Core/img/qt.png" ) ),
 		ProjectWindow::tr( "About Qt" ) );
 
 	ProjectWindow::connect( quitAction, &QAction::triggered,
@@ -634,8 +630,6 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::ungroup );
 	ProjectWindow::connect( m_strokeColor, &QAction::triggered,
 		q, &ProjectWindow::strokeColor );
-//	ProjectWindow::connect( fillColor, &QAction::triggered,
-//		q, &ProjectWindow::p_fillColor );
 	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
 		q, &ProjectWindow::tabChanged );
 	ProjectWindow::connect( exportToPdf, &QAction::triggered,
@@ -1025,7 +1019,7 @@ ProjectWindow::newProject()
 void
 ProjectWindow::saveProjectImpl( const QString & fileName )
 {
-	static const QString ext = QLatin1String( ".prototyper" );
+	static const QString ext = QStringLiteral( ".prototyper" );
 
 	if( !fileName.isEmpty() )
 		d->m_fileName = fileName;
@@ -1522,8 +1516,8 @@ ProjectWindow::exportToPDf()
 
 	if( !fileName.isEmpty() )
 	{
-		if( !fileName.endsWith( QLatin1String( ".pdf" ), Qt::CaseInsensitive ) )
-			fileName.append( QLatin1String( ".pdf" ) );
+		if( !fileName.endsWith( QStringLiteral( ".pdf" ), Qt::CaseInsensitive ) )
+			fileName.append( QStringLiteral( ".pdf" ) );
 
 		QFile file( fileName );
 
@@ -1571,9 +1565,9 @@ ProjectWindow::exportToHtml()
 
 	if( !fileName.isEmpty() )
 	{
-		if( !fileName.endsWith( QLatin1String( ".htm" ), Qt::CaseInsensitive ) &&
-			!fileName.endsWith( QLatin1String( ".html" ), Qt::CaseInsensitive ) )
-				fileName.append( QLatin1String( ".html" ) );
+		if( !fileName.endsWith( QStringLiteral( ".htm" ), Qt::CaseInsensitive ) &&
+			!fileName.endsWith( QStringLiteral( ".html" ), Qt::CaseInsensitive ) )
+				fileName.append( QStringLiteral( ".html" ) );
 
 		QFile file( fileName );
 

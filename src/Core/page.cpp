@@ -86,7 +86,7 @@ namespace Core {
 void
 PagePrivate::init()
 {
-	m_gridStepAction = new QAction( QIcon( ":/Core/img/measure.png" ),
+	m_gridStepAction = new QAction( QIcon( QStringLiteral( ":/Core/img/measure.png" ) ),
 		ProjectWindow::tr( "Grid Step" ), q );
 
 	Page::connect( m_gridStepAction, &QAction::triggered,
@@ -1618,7 +1618,7 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	QMenu menu;
 	menu.addAction( TopGui::instance()->projectWindow()->showHideGridAction() );
 	menu.addAction( d->m_gridStepAction );
-	menu.addAction( QIcon( ":/Core/img/transform-scale.png" ),
+	menu.addAction( QIcon( QStringLiteral( ":/Core/img/transform-scale.png" ) ),
 		tr( "Resize" ), this, SLOT( resizeForm() ) );
 
 	menu.exec( event->screenPos() );

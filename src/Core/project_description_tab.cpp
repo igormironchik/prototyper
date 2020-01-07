@@ -65,7 +65,7 @@ ProjectDescTabPrivate::init()
 	layout->setSpacing( 0 );
 
 	m_bar = new TextOptsBar( TextOptsBar::Large, q );
-	m_bar->setObjectName( QLatin1String( "m_textOptsBar" ) );
+	m_bar->setObjectName( QStringLiteral( "m_textOptsBar" ) );
 
 	m_editor = new TextEditor( q );
 	m_editor->setFrameStyle( QFrame::NoFrame );

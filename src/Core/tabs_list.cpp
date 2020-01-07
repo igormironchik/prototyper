@@ -140,19 +140,19 @@ TabsView::contextMenuEvent( QContextMenuEvent * event )
 		menu.addAction( d->m_activate );
 
 		if( d->m_index.row() >= 0 )
-			menu.addAction( QIcon( ":/Core/img/edit-rename.png" ),
-				tr( "Rename" ), this, SLOT( p_renameTab() ) );
+			menu.addAction( QIcon( QStringLiteral( ":/Core/img/edit-rename.png" ) ),
+				tr( "Rename" ), this, &TabsView::p_renameTab );
 
-		menu.addAction( QIcon( ":/Core/img/list-add.png" ),
-			tr( "Add Page" ), this, SLOT( p_addForm() ) );
+		menu.addAction( QIcon( QStringLiteral( ":/Core/img/list-add.png" ) ),
+			tr( "Add Page" ), this, &TabsView::p_addForm );
 
 		if( d->m_index.row() != 0 )
-			menu.addAction( QIcon( ":/Core/img/edit-delete.png" ),
-				tr( "Delete Form" ), this, SLOT( p_deleteForm() ) );
+			menu.addAction( QIcon( QStringLiteral( ":/Core/img/edit-delete.png" ) ),
+				tr( "Delete Form" ), this, &TabsView::p_deleteForm );
 	}
 	else
-		menu.addAction( QIcon( ":/Core/img/list-add.png" ),
-			tr( "Add Page" ), this, SLOT( p_addForm() ) );
+		menu.addAction( QIcon( QStringLiteral( ":/Core/img/list-add.png" ) ),
+			tr( "Add Page" ), this, &TabsView::p_addForm );
 
 	menu.exec( event->globalPos() );
 

@@ -37,13 +37,13 @@ int main( int argc, char ** argv )
 {
 	QApplication app( argc, argv );
 
-	QIcon appIcon( ":/img/Prototyper_256x256.png" );
-	appIcon.addFile( ":/img/Prototyper_128x128.png" );
-	appIcon.addFile( ":/img/Prototyper_64x64.png" );
-	appIcon.addFile( ":/img/Prototyper_48x48.png" );
-	appIcon.addFile( ":/img/Prototyper_32x32.png" );
-	appIcon.addFile( ":/img/Prototyper_22x22.png" );
-	appIcon.addFile( ":/img/Prototyper_16x16.png" );
+	QIcon appIcon( QStringLiteral( ":/img/Prototyper_256x256.png" ) );
+	appIcon.addFile( QStringLiteral( ":/img/Prototyper_128x128.png" ) );
+	appIcon.addFile( QStringLiteral( ":/img/Prototyper_64x64.png" ) );
+	appIcon.addFile( QStringLiteral( ":/img/Prototyper_48x48.png" ) );
+	appIcon.addFile( QStringLiteral( ":/img/Prototyper_32x32.png" ) );
+	appIcon.addFile( QStringLiteral( ":/img/Prototyper_22x22.png" ) );
+	appIcon.addFile( QStringLiteral( ":/img/Prototyper_16x16.png" ) );
 	app.setWindowIcon( appIcon );
 
 	QTranslator appTranslator;

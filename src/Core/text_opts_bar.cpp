@@ -115,8 +115,8 @@ TextOptsBarPrivate::init()
 	const QString fontBoldTip = TextOptsBar::tr( "Bold" );
 	m_fontBold = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/format-text-bold.png" ) :
-			QIcon( ":/Core/img/format-text-bold-small.png" ) ),
+			QIcon( QStringLiteral( ":/Core/img/format-text-bold.png" ) ) :
+			QIcon( QStringLiteral( ":/Core/img/format-text-bold-small.png" ) ) ),
 		fontBoldTip );
 	m_fontBold->setShortcut( TextOptsBar::tr( "Ctrl+B" ) );
 	m_fontBold->setToolTip( fontBoldTip );
@@ -126,8 +126,8 @@ TextOptsBarPrivate::init()
 	const QString fontItalicTip = TextOptsBar::tr( "Italic" );
 	m_fontItalic = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/format-text-italic.png" ) :
-			QIcon( ":/Core/img/format-text-italic-small.png" ) ),
+			QIcon( QStringLiteral( ":/Core/img/format-text-italic.png" ) ) :
+			QIcon( QStringLiteral( ":/Core/img/format-text-italic-small.png" ) ) ),
 		fontItalicTip );
 	m_fontItalic->setShortcut( TextOptsBar::tr( "Ctrl+I" ) );
 	m_fontItalic->setToolTip( fontItalicTip );
@@ -137,8 +137,8 @@ TextOptsBarPrivate::init()
 	const QString fontUnderlineTip = TextOptsBar::tr( "Underline" );
 	m_fontUnderline = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/format-text-underline.png" ) :
-			QIcon( ":/Core/img/format-text-underline-small.png" ) ),
+			QIcon( QStringLiteral( ":/Core/img/format-text-underline.png" ) ) :
+			QIcon( QStringLiteral( ":/Core/img/format-text-underline-small.png" ) ) ),
 		fontUnderlineTip );
 	m_fontUnderline->setShortcut( TextOptsBar::tr( "Ctrl+U" ) );
 	m_fontUnderline->setToolTip( fontUnderlineTip );
@@ -152,8 +152,8 @@ TextOptsBarPrivate::init()
 	const QString alignLeftTip = TextOptsBar::tr( "Align Left" );
 	m_alignLeft = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/align-horizontal-left.png" ) :
-			QIcon( ":/Core/img/align-horizontal-left-small.png" ) ),
+			QIcon( QStringLiteral( ":/Core/img/align-horizontal-left.png" ) ) :
+			QIcon( QStringLiteral( ":/Core/img/align-horizontal-left-small.png" ) ) ),
 		alignLeftTip );
 	m_alignLeft->setToolTip( alignLeftTip );
 	m_alignLeft->setStatusTip( alignLeftTip );
@@ -163,8 +163,8 @@ TextOptsBarPrivate::init()
 	const QString alignCenterTip = TextOptsBar::tr( "Align Center" );
 	m_alignCenter = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/align-horizontal-center.png" ) :
-			QIcon( ":/Core/img/align-horizontal-center-small.png" ) ),
+			QIcon( QStringLiteral( ":/Core/img/align-horizontal-center.png" ) ) :
+			QIcon( QStringLiteral( ":/Core/img/align-horizontal-center-small.png" ) ) ),
 		alignCenterTip );
 	m_alignCenter->setToolTip( alignCenterTip );
 	m_alignCenter->setStatusTip( alignCenterTip );
@@ -174,8 +174,8 @@ TextOptsBarPrivate::init()
 	const QString alignRightTip = TextOptsBar::tr( "Align Right" );
 	m_alignRight = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/align-horizontal-right.png" ) :
-			QIcon( ":/Core/img/align-horizontal-right-small.png" ) ),
+			QIcon( QStringLiteral( ":/Core/img/align-horizontal-right.png" ) ) :
+			QIcon( QStringLiteral( ":/Core/img/align-horizontal-right-small.png" ) ) ),
 		alignRightTip );
 	m_alignRight->setToolTip( alignRightTip );
 	m_alignRight->setStatusTip( alignRightTip );
@@ -187,8 +187,8 @@ TextOptsBarPrivate::init()
 	const QString clearFormatTip = TextOptsBar::tr( "Clear Format" );
 	QAction * clearFormat = q->addAction(
 		( m_iconSize == TextOptsBar::Large ?
-			QIcon( ":/Core/img/edit-clear.png" ) :
-			QIcon( ":/Core/img/edit-clear-small.png" ) ),
+			QIcon( QStringLiteral( ":/Core/img/edit-clear.png" ) ) :
+			QIcon( QStringLiteral( ":/Core/img/edit-clear-small.png" ) ) ),
 		clearFormatTip );
 	clearFormat->setToolTip( clearFormatTip );
 	clearFormat->setStatusTip( clearFormatTip );
