@@ -39,6 +39,7 @@
 #include <QGraphicsSceneContextMenuEvent>
 #include <QUndoStack>
 #include <QGraphicsScene>
+#include <QGroupBox>
 
 
 namespace Prototyper {
@@ -594,6 +595,8 @@ FormCheckBox::properties( QWidget * parent )
 	d->m_props->ui()->m_width->setMinimum( defaultSize().width() );
 	d->m_props->ui()->m_height->setMinimum( defaultSize().height() );
 
+	d->m_props->ui()->m_checkGroup->setTitle( typeName() );
+
 	d->connectProperties();
 
 	return d->m_props.data();
@@ -611,6 +614,12 @@ FormCheckBox::updatePropertiesValues()
 		d->m_props->ui()->m_height->setValue( rectangle().height() );
 		d->connectProperties();
 	}
+}
+
+QString
+FormCheckBox::typeName() const
+{
+	return tr( "Check Box" );
 }
 
 bool

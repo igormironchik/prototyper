@@ -110,6 +110,8 @@ public:
 	QWidget * properties( QWidget * parent ) override;
 	void updatePropertiesValues() override;
 
+	virtual QString typeName() const;
+
 	//! Is checked?
 	bool isChecked() const;
 	//! Set check state.

@@ -115,6 +115,12 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
 }
 
+QString
+FormRadioButton::typeName() const
+{
+	return tr( "Radio Button" );
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

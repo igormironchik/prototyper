@@ -186,7 +186,7 @@
     </widget>
    </item>
    <item>
-    <widget class="QGroupBox" name="groupBox_5">
+    <widget class="QGroupBox" name="m_checkGroup">
      <property name="title">
       <string>CheckBox</string>
      </property>

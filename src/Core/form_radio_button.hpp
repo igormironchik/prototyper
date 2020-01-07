@@ -58,6 +58,8 @@ public:
 		const QRectF & rect, qreal width, bool isChecked, const QString & text,
 		const QRectF & boundingRect, int dpi = 0 );
 
+	QString typeName() const override;
+
 private:
 	Q_DISABLE_COPY( FormRadioButton )
 }; // class FormRadioButton
