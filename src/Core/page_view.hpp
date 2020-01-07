@@ -61,8 +61,8 @@ public:
 	PageView( Cfg::Page & cfg, QWidget * parent = 0 );
 	~PageView();
 
-	//! \return Form scene.
-	PageScene * formScene() const;
+	//! \return Page scene.
+	PageScene * pageScene() const;
 
 	//! \return Form.
 	Page * page() const;

@@ -201,7 +201,7 @@ ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 
 	ProjectWidget::connect( form, &PageView::zoomChanged,
 		m_window, &ProjectWindow::zoomChanged );
-	ProjectWidget::connect( form->formScene(), &PageScene::selectionChanged,
+	ProjectWidget::connect( form->pageScene(), &PageScene::selectionChanged,
 		m_window, &ProjectWindow::selectionChanged );
 
 	form->page()->setGridMode( showGrid ?
@@ -213,7 +213,7 @@ ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 
 	m_forms.append( form );
 
-	ProjectWidget::connect( form->formScene(), &PageScene::changed,
+	ProjectWidget::connect( form->pageScene(), &PageScene::changed,
 		q, &ProjectWidget::changed );
 	ProjectWidget::connect( form->page(), &Page::changed,
 		q, &ProjectWidget::changed );

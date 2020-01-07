@@ -1433,7 +1433,7 @@ ProjectWindow::selectionChanged()
 
 	if( index > 0 )
 	{
-		const auto s = d->m_widget->pages().at( index - 1 )->formScene()->selectedItems();
+		const auto s = d->m_widget->pages().at( index - 1 )->pageScene()->selectedItems();
 
 		if( s.size() > 1 )
 		{

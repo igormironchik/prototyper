@@ -105,7 +105,7 @@ PageView::~PageView()
 }
 
 PageScene *
-PageView::formScene() const
+PageView::pageScene() const
 {
 	return d->m_scene;
 }
