@@ -59,39 +59,8 @@ private:
 }; // class FormResizable
 
 
-//
-// FormResizableProxyPrivate
-//
-
 class FormResizableProxy;
-
-class FormResizableProxyPrivate {
-public:
-	FormResizableProxyPrivate( FormResizable * resizable,
-		FormResizableProxy * parent, Page * form );
-
-	virtual ~FormResizableProxyPrivate();
-
-	//! Init.
-	virtual void init();
-	//! Place handles.
-	virtual void place( const QRectF & rect );
-
-	//! Parent.
-	FormResizableProxy * q;
-	//! Object.
-	FormResizable * m_object;
-	//! Rect.
-	QRectF m_rect;
-	//! Handles.
-	QScopedPointer< WithResizeAndMoveHandles > m_handles;
-	//! Form.
-	Page * m_form;
-	//! Subsidiary rect.
-	QRectF m_subsidiaryRect;
-	//! Is hadnle moved.
-	bool m_handleMoved;
-}; // class FormResizableProxyPrivate;
+class FormResizableProxyPrivate;
 
 
 //

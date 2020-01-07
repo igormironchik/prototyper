@@ -27,6 +27,7 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_object.hpp"
+#include "form_resizable_private.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>

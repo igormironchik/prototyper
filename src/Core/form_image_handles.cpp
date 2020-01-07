@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "form_image_handles.hpp"
 #include "form_aspect_ratio_handle.hpp"
+#include "form_resizable_private.hpp"
 
 
 namespace Prototyper {
