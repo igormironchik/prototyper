@@ -110,9 +110,9 @@ public:
 	//! Set current mode.
 	void setMode( Mode m );
 
-	//! \return Current form.
+	//! \return Current page.
 	Page * page() const;
-	//! Set current form.
+	//! Set current page.
 	void setPage( Page * f );
 
 	//! \return Fill color.
