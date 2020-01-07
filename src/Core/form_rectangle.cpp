@@ -73,7 +73,7 @@ void
 FormRectPrivate::init()
 {
 	m_handles.reset( new WithResizeAndMoveHandles( q, q->parentItem(),
-		q->form() ) );
+		q->page() ) );
 
 	m_handles->setDeltaToZero( 1.0 );
 
@@ -334,7 +334,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 			d->updateRect( r );
 	}
 
-	form()->update();
+	page()->update();
 }
 
 void
@@ -343,19 +343,19 @@ FormRect::handleReleased( FormMoveHandle * handle )
 	d->m_isHandleMoved = false;
 
 	if( handle == d->m_handles->m_move.data() )
-		form()->undoStack()->push( new UndoMove( form(),
+		page()->undoStack()->push( new UndoMove( page(),
 			objectId(), position() - d->m_subsidiaryRect.topLeft() ) );
 	else
 	{
 		QRectF r = rectangle();
 
-		form()->undoStack()->push( new UndoResize( form(),
+		page()->undoStack()->push( new UndoResize( page(),
 			objectId(), d->m_subsidiaryRect, r ) );
 	}
 
 	updatePropertiesValues();
 
-	form()->emitChanged();
+	page()->emitChanged();
 }
 
 } /* namespace Core */

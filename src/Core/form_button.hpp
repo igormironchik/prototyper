@@ -55,7 +55,7 @@ class FormButton
 	Q_OBJECT
 
 public:
-	FormButton( const QRectF & rect, Page * form, QGraphicsItem * parent = 0 );
+	FormButton( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
 	~FormButton();
 
 	//! \return Type.

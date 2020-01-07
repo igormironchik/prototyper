@@ -122,8 +122,8 @@ public:
 	//! \return Default size.
 	virtual QSizeF defaultSize() const;
 
-	//! \return Form.
-	Page * form() const;
+	//! \return Page.
+	Page * page() const;
 
 	//! Post deletion.
 	virtual void postDeletion();

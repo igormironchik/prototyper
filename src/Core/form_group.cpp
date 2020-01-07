@@ -103,27 +103,27 @@ void
 FormGroupPrivate::init()
 {
 	m_center.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
+		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
 	m_center->setZValue( 999999999999 );
 	m_center->hide();
 
 	m_topLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 6.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
+		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
 	m_topLeft->setZValue( 999999999999 );
 	m_topLeft->hide();
 
 	m_topRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 6.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
+		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
 	m_topRight->setZValue( 999999999999 );
 	m_topRight->hide();
 
 	m_bottomRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 0.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
+		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
 	m_bottomRight->setZValue( 999999999999 );
 	m_bottomRight->hide();
 
 	m_bottomLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 0.0 ), q,
-		q->parentItem(), q->form(), Qt::SizeAllCursor ) );
+		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
 	m_bottomLeft->setZValue( 999999999999 );
 	m_bottomLeft->hide();
 }
@@ -299,7 +299,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 {
 	foreach( const Cfg::Line & cfg, c.line() )
 	{
-		FormLine * line = new FormLine( form(), form() );
+		FormLine * line = new FormLine( page(), page() );
 
 		line->setCfg( cfg );
 
@@ -308,7 +308,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Polyline & cfg, c.polyline() )
 	{
-		FormPolyline * poly = new FormPolyline( form(), form() );
+		FormPolyline * poly = new FormPolyline( page(), page() );
 
 		poly->setCfg( cfg );
 
@@ -319,7 +319,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 	{
 		const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
 
-		FormText * text = new FormText( r, form(), form() );
+		FormText * text = new FormText( r, page(), page() );
 
 		text->setCfg( cfg );
 
@@ -328,7 +328,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Image & cfg, c.image() )
 	{
-		FormImage * image = new FormImage( form(), form() );
+		FormImage * image = new FormImage( page(), page() );
 
 		image->setCfg( cfg );
 
@@ -337,7 +337,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Rect & cfg, c.rect() )
 	{
-		FormRect * rect = new FormRect( form(), form() );
+		FormRect * rect = new FormRect( page(), page() );
 
 		rect->setCfg( cfg );
 
@@ -346,7 +346,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Group & cfg, c.group() )
 	{
-		FormGroup * group = new FormGroup( form(), form() );
+		FormGroup * group = new FormGroup( page(), page() );
 
 		group->setCfg( cfg );
 
@@ -520,13 +520,13 @@ FormGroup::handleReleased( FormMoveHandle * handle )
 
 	d->m_handleMoved = false;
 
-	form()->undoStack()->push( new UndoMove(
-		form(), objectId(),
+	page()->undoStack()->push( new UndoMove(
+		page(), objectId(),
 		position() - d->m_oldPos ) );
 
 	updatePropertiesValues();
 
-	form()->emitChanged();
+	page()->emitChanged();
 }
 
 template< class Elem, class Config >
@@ -534,7 +534,7 @@ inline
 void
 FormGroup::createElemWithRect( const Config & cfg )
 {
-	Elem * e = new Elem( QRectF(), form(), form() );
+	Elem * e = new Elem( QRectF(), page(), page() );
 
 	e->setCfg( cfg );
 

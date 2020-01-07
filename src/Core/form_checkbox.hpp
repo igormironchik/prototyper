@@ -57,7 +57,7 @@ class FormCheckBox
 	Q_OBJECT
 
 public:
-	FormCheckBox( const QRectF & rect, Page * form, QGraphicsItem * parent = 0 );
+	FormCheckBox( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
 	~FormCheckBox();
 
 	//! \return Type.
@@ -124,7 +124,7 @@ protected:
 	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
 
 protected:
-	FormCheckBox( const QRectF & rect, Page * form,
+	FormCheckBox( const QRectF & rect, Page * page,
 		FormObject::ObjectType type, QGraphicsItem * parent = 0 );
 
 protected:

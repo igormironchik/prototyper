@@ -52,7 +52,7 @@ class FormGroup
 	,	public FormWithHandle
 {
 public:
-	explicit FormGroup( Page * form, QGraphicsItem * parent = 0 );
+	explicit FormGroup( Page * page, QGraphicsItem * parent = 0 );
 	~FormGroup();
 
 	//! \return Type.

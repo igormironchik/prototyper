@@ -85,7 +85,7 @@ public:
 void
 FormSpinBoxPrivate::init()
 {
-	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
+	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->page() ) );
 
 	setRect( m_rect );
 
@@ -122,14 +122,14 @@ FormSpinBoxPrivate::connectProperties()
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				q->setPosition( QPointF( v, q->position().y() ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_y,
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				q->setPosition( QPointF( q->position().x(), v ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_width,
@@ -139,7 +139,7 @@ FormSpinBoxPrivate::connectProperties()
 				r.setWidth( v );
 				r.moveTopLeft( q->position() );
 				q->setRectangle( r, true );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_height,
@@ -149,7 +149,7 @@ FormSpinBoxPrivate::connectProperties()
 				r.setHeight( v );
 				r.moveTopLeft( q->position() );
 				q->setRectangle( r, true );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_value,
@@ -157,9 +157,9 @@ FormSpinBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_text = QString::number( v );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -170,9 +170,9 @@ FormSpinBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -183,9 +183,9 @@ FormSpinBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -196,9 +196,9 @@ FormSpinBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setItalic( ( v == Qt::Checked ? true : false ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -209,9 +209,9 @@ FormSpinBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setUnderline( ( v == Qt::Checked ? true : false ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -484,7 +484,7 @@ void
 FormSpinBox::setPosition( const QPointF & pos, bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove( form(), objectId(), pos - position() ) );
+		page()->undoStack()->push( new UndoMove( page(), objectId(), pos - position() ) );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
@@ -520,7 +520,7 @@ FormSpinBox::setRectangle( const QRectF & rect,
 	bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoResize( form(), objectId(),
+		page()->undoStack()->push( new UndoResize( page(), objectId(),
 			rectangle(), rect ) );
 
 	if( d->m_properties )
@@ -541,7 +541,7 @@ FormSpinBox::resize( const QRectF & rect )
 {
 	d->setRect( rect );
 
-	form()->update();
+	page()->update();
 }
 
 void

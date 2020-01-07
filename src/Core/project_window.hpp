@@ -82,99 +82,99 @@ protected:
 
 private slots:
 	//! Quit.
-	void p_quit();
+	void quit();
 	//! Show/hide grid.
-	void p_showHideGrid( bool show );
+	void showHideGrid( bool show );
 	//! Enable/disable snap to grid.
-	void p_snapGrid( bool on );
+	void snapGrid( bool on );
 	//! Set grid step.
-	void p_setGridStep();
+	void setGridStep();
 	//! Open project.
-	void p_openProject();
+	void openProject();
 	//! New project.
-	void p_newProject();
+	void newProject();
 	//! Save project.
-	void p_saveProjectImpl( const QString & fileName = QString() );
+	void saveProjectImpl( const QString & fileName = QString() );
 	//! Save project.
-	void p_saveProject();
+	void saveProject();
 	//! Save project as.
-	void p_saveProjectAs();
+	void saveProjectAs();
 	//! Project changed.
-	void p_projectChanged();
+	void projectChanged();
 	//! Draw line.
-	void p_drawLine();
+	void drawLine();
 	//! Draw rect.
-	void p_drawRect();
+	void drawRect();
 	//! Draw polyline.
-	void p_drawPolyline( bool on );
+	void drawPolyline( bool on );
 	//! Insert text.
-	void p_insertText();
+	void insertText();
 	//! Insert image.
-	void p_insertImage();
+	void insertImage();
 	//! Group.
-	void p_group();
+	void group();
 	//! Ungroup.
-	void p_ungroup();
+	void ungroup();
 	//! Select.
-	void p_select( bool checked );
+	void select( bool checked );
 	//! Fill color.
-	void p_fillColor();
+	void fillColor();
 	//! Stroke color.
-	void p_strokeColor();
+	void strokeColor();
 	//! Tab changed.
-	void p_tabChanged( int index );
+	void tabChanged( int index );
 	//! Export to PDF.
-	void p_exportToPDf();
+	void exportToPDf();
 	//! Export to HTML.
-	void p_exportToHtml();
+	void exportToHtml();
 	//! Export to SVG images.
-	void p_exportToSvg();
+	void exportToSvg();
 	//! Show about dialog.
-	void p_about();
+	void about();
 	//! Show about Qt dialog.
-	void p_aboutQt();
+	void aboutQt();
 	//! Draw button.
-	void p_drawButton();
+	void drawButton();
 	//! Draw combobox.
-	void p_drawComboBox();
+	void drawComboBox();
 	//! Draw radio button.
-	void p_drawRadioButton();
+	void drawRadioButton();
 	//! Draw check box.
-	void p_drawCheckBox();
+	void drawCheckBox();
 	//! Draw horizontal slider.
-	void p_drawHSlider();
+	void drawHSlider();
 	//! Draw vertical slider.
-	void p_drawVSlider();
+	void drawVSlider();
 	//! Draw spinbox.
-	void p_drawSpinbox();
+	void drawSpinbox();
 	//! Align vertical top.
-	void p_alignVerticalTop();
+	void alignVerticalTop();
 	//! Align vertical center.
-	void p_alignVerticalCenter();
+	void alignVerticalCenter();
 	//! Align vertical bottom.
-	void p_alignVerticalBottom();
+	void alignVerticalBottom();
 	//! Align horizontal left.
-	void p_alignHorizontalLeft();
+	void alignHorizontalLeft();
 	//! Align horizontal center.
-	void p_alignHorizontalCenter();
+	void alignHorizontalCenter();
 	//! Align horizontal right.
-	void p_alignHorizontalRight();
+	void alignHorizontalRight();
 	//! Can undo changed.
-	void p_canUndoChanged( bool canUndo );
-	//! Form added.
-	void p_formAdded( PageView * form );
-	//! Form deleted.
-	void p_formDeleted( PageView * form );
+	void canUndoChanged( bool canUndo );
+	//! Page added.
+	void pageAdded( PageView * form );
+	//! Page deleted.
+	void pageDeleted( PageView * form );
 	//! Zoom in.
-	void p_zoomIn();
+	void zoomIn();
 	//! Zoom out.
-	void p_zoomOut();
+	void zoomOut();
 	//! Zoom original.
-	void p_zoomOriginal();
+	void zoomOriginal();
 	//! Zoom changed.
-	void p_zoomChanged();
+	void zoomChanged();
 	//! Selection changed.
-	void p_selectionChanged();
+	void selectionChanged();
 
 private:
 	friend class ProjectWindowPrivate;

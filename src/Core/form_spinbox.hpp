@@ -55,7 +55,7 @@ class FormSpinBox
 	Q_OBJECT
 
 public:
-	FormSpinBox( const QRectF & rect, Page * form, QGraphicsItem * parent = 0 );
+	FormSpinBox( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
 	~FormSpinBox();
 
 	//! \return Type.

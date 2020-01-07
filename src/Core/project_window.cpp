@@ -596,102 +596,102 @@ ProjectWindowPrivate::init()
 		ProjectWindow::tr( "About Qt" ) );
 
 	ProjectWindow::connect( quitAction, &QAction::triggered,
-		q, &ProjectWindow::p_quit );
+		q, &ProjectWindow::quit );
 	ProjectWindow::connect( m_grid, &QAction::toggled,
-		q, &ProjectWindow::p_showHideGrid );
+		q, &ProjectWindow::showHideGrid );
 	ProjectWindow::connect( snapGrid, &QAction::toggled,
-		q, &ProjectWindow::p_snapGrid );
+		q, &ProjectWindow::snapGrid );
 	ProjectWindow::connect( m_gridStep, &QAction::triggered,
-		q, &ProjectWindow::p_setGridStep );
+		q, QOverload<>::of( &ProjectWindow::setGridStep ) );
 	ProjectWindow::connect( newForm, &QAction::triggered,
 		m_widget, &ProjectWidget::addPage );
 	ProjectWindow::connect( newProject, &QAction::triggered,
-		q, &ProjectWindow::p_newProject );
+		q, &ProjectWindow::newProject );
 	ProjectWindow::connect( openProject, &QAction::triggered,
-		q, &ProjectWindow::p_openProject );
+		q, &ProjectWindow::openProject );
 	ProjectWindow::connect( m_saveProject, &QAction::triggered,
-		q, &ProjectWindow::p_saveProject );
+		q, &ProjectWindow::saveProject );
 	ProjectWindow::connect( saveProjectAs, &QAction::triggered,
-		q, &ProjectWindow::p_saveProjectAs );
+		q, &ProjectWindow::saveProjectAs );
 	ProjectWindow::connect( m_widget, &ProjectWidget::changed,
-		q, &ProjectWindow::p_projectChanged );
+		q, &ProjectWindow::projectChanged );
 	ProjectWindow::connect( m_select, &QAction::toggled,
-		q, &ProjectWindow::p_select );
+		q, &ProjectWindow::select );
 	ProjectWindow::connect( m_drawLine, &QAction::triggered,
-		q, &ProjectWindow::p_drawLine );
+		q, &ProjectWindow::drawLine );
 	ProjectWindow::connect( m_drawRect, &QAction::triggered,
-		q, &ProjectWindow::p_drawRect );
+		q, &ProjectWindow::drawRect );
 	ProjectWindow::connect( m_drawPolyLine, &QAction::toggled,
-		q, &ProjectWindow::p_drawPolyline );
+		q, &ProjectWindow::drawPolyline );
 	ProjectWindow::connect( m_insertText, &QAction::triggered,
-		q, &ProjectWindow::p_insertText );
+		q, &ProjectWindow::insertText );
 	ProjectWindow::connect( m_insertImage, &QAction::triggered,
-		q, &ProjectWindow::p_insertImage );
+		q, &ProjectWindow::insertImage );
 	ProjectWindow::connect( m_group, &QAction::triggered,
-		q, &ProjectWindow::p_group );
+		q, &ProjectWindow::group );
 	ProjectWindow::connect( m_ungroup, &QAction::triggered,
-		q, &ProjectWindow::p_ungroup );
+		q, &ProjectWindow::ungroup );
 	ProjectWindow::connect( m_strokeColor, &QAction::triggered,
-		q, &ProjectWindow::p_strokeColor );
+		q, &ProjectWindow::strokeColor );
 //	ProjectWindow::connect( fillColor, &QAction::triggered,
 //		q, &ProjectWindow::p_fillColor );
 	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
-		q, &ProjectWindow::p_tabChanged );
+		q, &ProjectWindow::tabChanged );
 	ProjectWindow::connect( exportToPdf, &QAction::triggered,
-		q, &ProjectWindow::p_exportToPDf );
+		q, &ProjectWindow::exportToPDf );
 	ProjectWindow::connect( exportToHtml, &QAction::triggered,
-		q, &ProjectWindow::p_exportToHtml );
+		q, &ProjectWindow::exportToHtml );
 	ProjectWindow::connect( exportToSvg, &QAction::triggered,
-		q, &ProjectWindow::p_exportToSvg );
+		q, &ProjectWindow::exportToSvg );
 	ProjectWindow::connect( about, &QAction::triggered,
-		q, &ProjectWindow::p_about );
+		q, &ProjectWindow::about );
 	ProjectWindow::connect( aboutQt, &QAction::triggered,
-		q, &ProjectWindow::p_aboutQt );
+		q, &ProjectWindow::aboutQt );
 	ProjectWindow::connect( m_drawButton, &QAction::triggered,
-		q, &ProjectWindow::p_drawButton );
+		q, &ProjectWindow::drawButton );
 	ProjectWindow::connect( m_drawComboBox, &QAction::triggered,
-		q, &ProjectWindow::p_drawComboBox );
+		q, &ProjectWindow::drawComboBox );
 	ProjectWindow::connect( m_drawRadioButton, &QAction::triggered,
-		q, &ProjectWindow::p_drawRadioButton );
+		q, &ProjectWindow::drawRadioButton );
 	ProjectWindow::connect( m_drawCheckBox, &QAction::triggered,
-		q, &ProjectWindow::p_drawCheckBox );
+		q, &ProjectWindow::drawCheckBox );
 	ProjectWindow::connect( m_drawHSlider, &QAction::triggered,
-		q, &ProjectWindow::p_drawHSlider );
+		q, &ProjectWindow::drawHSlider );
 	ProjectWindow::connect( m_drawVSlider, &QAction::triggered,
-		q, &ProjectWindow::p_drawVSlider );
+		q, &ProjectWindow::drawVSlider );
 	ProjectWindow::connect( m_drawSpinbox, &QAction::triggered,
-		q, &ProjectWindow::p_drawSpinbox );
+		q, &ProjectWindow::drawSpinbox );
 	ProjectWindow::connect( m_alignHorizLeft, &QAction::triggered,
-		q, &ProjectWindow::p_alignHorizontalLeft );
+		q, &ProjectWindow::alignHorizontalLeft );
 	ProjectWindow::connect( m_alignHorizCenter, &QAction::triggered,
-		q, &ProjectWindow::p_alignHorizontalCenter );
+		q, &ProjectWindow::alignHorizontalCenter );
 	ProjectWindow::connect( m_alignHorizRight, &QAction::triggered,
-		q, &ProjectWindow::p_alignHorizontalRight );
+		q, &ProjectWindow::alignHorizontalRight );
 	ProjectWindow::connect( m_alignVertTop, &QAction::triggered,
-		q, &ProjectWindow::p_alignVerticalTop );
+		q, &ProjectWindow::alignVerticalTop );
 	ProjectWindow::connect( m_alignVertCenter, &QAction::triggered,
-		q, &ProjectWindow::p_alignVerticalCenter );
+		q, &ProjectWindow::alignVerticalCenter );
 	ProjectWindow::connect( m_alignVertBottom, &QAction::triggered,
-		q, &ProjectWindow::p_alignVerticalBottom );
+		q, &ProjectWindow::alignVerticalBottom );
 	ProjectWindow::connect( m_zoomIn, &QAction::triggered,
-		q, &ProjectWindow::p_zoomIn );
+		q, &ProjectWindow::zoomIn );
 	ProjectWindow::connect( m_zoomOriginal, &QAction::triggered,
-		q, &ProjectWindow::p_zoomOriginal );
+		q, &ProjectWindow::zoomOriginal );
 	ProjectWindow::connect( m_zoomOut, &QAction::triggered,
-		q, &ProjectWindow::p_zoomOut );
+		q, &ProjectWindow::zoomOut );
 	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::cleanChanged,
-		q, &ProjectWindow::p_canUndoChanged );
+		q, &ProjectWindow::canUndoChanged );
 	ProjectWindow::connect( m_widget->descriptionTab()->editor(),
 		&TextEditor::undoAvailable,
-		q, &ProjectWindow::p_canUndoChanged );
-	ProjectWindow::connect( m_widget, &ProjectWidget::formAdded,
-		q, &ProjectWindow::p_formAdded );
-	ProjectWindow::connect( m_widget, &ProjectWidget::formDeleted,
-		q, &ProjectWindow::p_formDeleted );
+		q, &ProjectWindow::canUndoChanged );
+	ProjectWindow::connect( m_widget, &ProjectWidget::pageAdded,
+		q, &ProjectWindow::pageAdded );
+	ProjectWindow::connect( m_widget, &ProjectWidget::pageDeleted,
+		q, &ProjectWindow::pageDeleted );
 
 	q->switchToSelectMode();
 
-	q->p_tabChanged( 0 );
+	q->tabChanged( 0 );
 }
 
 void
@@ -839,7 +839,7 @@ ProjectWindow::readProject( const QString & fileName )
 
 			file.close();
 
-			p_newProject();
+			newProject();
 
 			d->m_fileName = fileName;
 
@@ -855,7 +855,7 @@ ProjectWindow::readProject( const QString & fileName )
 			switchToSelectMode();
 			d->m_addedForms.clear();
 			d->m_deletedForms.clear();
-			p_tabChanged( 0 );
+			tabChanged( 0 );
 		}
 		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
 		{
@@ -875,7 +875,7 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 {
 	e->accept();
 
-	p_quit();
+	quit();
 }
 
 void
@@ -890,11 +890,11 @@ ProjectWindow::switchToSelectMode()
 	if( !d->m_select->isChecked() )
 		d->m_select->setChecked( true );
 	else
-		p_select( true );
+		select( true );
 }
 
 void
-ProjectWindow::p_quit()
+ProjectWindow::quit()
 {
 	if( isWindowModified() )
 	{
@@ -904,7 +904,7 @@ ProjectWindow::p_quit()
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
 		if( btn == QMessageBox::Yes )
-			p_saveProjectImpl();
+			saveProjectImpl();
 	}
 
 	d->m_widget->tabs()->setCurrentIndex( 0 );
@@ -915,7 +915,7 @@ ProjectWindow::p_quit()
 }
 
 void
-ProjectWindow::p_showHideGrid( bool show )
+ProjectWindow::showHideGrid( bool show )
 {
 	GridMode mode = ( show ? ShowGrid : NoGrid );
 
@@ -928,7 +928,7 @@ ProjectWindow::p_showHideGrid( bool show )
 }
 
 void
-ProjectWindow::p_snapGrid( bool on )
+ProjectWindow::snapGrid( bool on )
 {
 	foreach( PageView * view, d->m_widget->pages() )
 		view->page()->enableSnap( on );
@@ -965,7 +965,7 @@ ProjectWindow::setGridStep( int step, bool forAll )
 }
 
 void
-ProjectWindow::p_setGridStep()
+ProjectWindow::setGridStep()
 {
 	const int index = d->m_widget->tabs()->currentIndex();
 
@@ -981,7 +981,7 @@ ProjectWindow::p_setGridStep()
 }
 
 void
-ProjectWindow::p_openProject()
+ProjectWindow::openProject()
 {
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Project to Open..." ),
@@ -994,7 +994,7 @@ ProjectWindow::p_openProject()
 }
 
 void
-ProjectWindow::p_newProject()
+ProjectWindow::newProject()
 {
 	if( isWindowModified() )
 	{
@@ -1004,7 +1004,7 @@ ProjectWindow::p_newProject()
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
 		if( btn == QMessageBox::Yes )
-			p_saveProjectImpl();
+			saveProjectImpl();
 	}
 
 	d->m_widget->newProject();
@@ -1018,11 +1018,11 @@ ProjectWindow::p_newProject()
 	switchToSelectMode();
 	d->m_addedForms.clear();
 	d->m_deletedForms.clear();
-	p_tabChanged( 0 );
+	tabChanged( 0 );
 }
 
 void
-ProjectWindow::p_saveProjectImpl( const QString & fileName )
+ProjectWindow::saveProjectImpl( const QString & fileName )
 {
 	static const QString ext = QLatin1String( ".prototyper" );
 
@@ -1082,17 +1082,17 @@ ProjectWindow::p_saveProjectImpl( const QString & fileName )
 		d->m_deletedForms.clear();
 	}
 	else
-		p_saveProjectAs();
+		saveProjectAs();
 }
 
 void
-ProjectWindow::p_saveProject()
+ProjectWindow::saveProject()
 {
-	p_saveProjectImpl();
+	saveProjectImpl();
 }
 
 void
-ProjectWindow::p_saveProjectAs()
+ProjectWindow::saveProjectAs()
 {
 	const QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select File to Save Project..." ),
@@ -1105,18 +1105,18 @@ ProjectWindow::p_saveProjectAs()
 		setWindowTitle( tr( "Prototyper - %1[*]" )
 			.arg( QFileInfo( fileName ).baseName() ) );
 
-		p_saveProjectImpl( fileName );
+		saveProjectImpl( fileName );
 	}
 }
 
 void
-ProjectWindow::p_projectChanged()
+ProjectWindow::projectChanged()
 {
 	setWindowModified( true );
 }
 
 void
-ProjectWindow::p_drawLine()
+ProjectWindow::drawLine()
 {
 	d->clearEditModeInTexts();
 
@@ -1126,7 +1126,7 @@ ProjectWindow::p_drawLine()
 }
 
 void
-ProjectWindow::p_drawRect()
+ProjectWindow::drawRect()
 {
 	d->clearEditModeInTexts();
 
@@ -1138,7 +1138,7 @@ ProjectWindow::p_drawRect()
 }
 
 void
-ProjectWindow::p_drawPolyline( bool on )
+ProjectWindow::drawPolyline( bool on )
 {
 	d->clearEditModeInTexts();
 
@@ -1153,7 +1153,7 @@ ProjectWindow::p_drawPolyline( bool on )
 }
 
 void
-ProjectWindow::p_insertText()
+ProjectWindow::insertText()
 {
 	d->clearEditModeInTexts();
 
@@ -1165,7 +1165,7 @@ ProjectWindow::p_insertText()
 }
 
 void
-ProjectWindow::p_insertImage()
+ProjectWindow::insertImage()
 {
 	d->clearEditModeInTexts();
 
@@ -1218,19 +1218,19 @@ ProjectWindow::p_insertImage()
 }
 
 void
-ProjectWindow::p_group()
+ProjectWindow::group()
 {
 	FormAction::instance()->form()->group();
 }
 
 void
-ProjectWindow::p_ungroup()
+ProjectWindow::ungroup()
 {
 	FormAction::instance()->form()->ungroup();
 }
 
 void
-ProjectWindow::p_select( bool checked )
+ProjectWindow::select( bool checked )
 {
 	d->m_strokeColor->setEnabled( checked  );
 	d->m_group->setEnabled( checked );
@@ -1266,7 +1266,7 @@ ProjectWindow::p_select( bool checked )
 }
 
 void
-ProjectWindow::p_fillColor()
+ProjectWindow::fillColor()
 {
 	const QColor c = QColorDialog::getColor(
 		FormAction::instance()->fillColor(),
@@ -1297,7 +1297,7 @@ ProjectWindow::p_fillColor()
 }
 
 void
-ProjectWindow::p_strokeColor()
+ProjectWindow::strokeColor()
 {
 	const QColor c = QColorDialog::getColor(
 		FormAction::instance()->strokeColor(),
@@ -1328,7 +1328,7 @@ ProjectWindow::p_strokeColor()
 }
 
 void
-ProjectWindow::p_tabChanged( int index )
+ProjectWindow::tabChanged( int index )
 {
 	d->clearEditModeInTexts();
 
@@ -1364,8 +1364,8 @@ ProjectWindow::p_tabChanged( int index )
 		d->m_drawVSlider->setEnabled( true );
 		d->m_drawSpinbox->setEnabled( true );
 
-		p_zoomChanged();
-		p_selectionChanged();
+		zoomChanged();
+		selectionChanged();
 	}
 	else
 	{
@@ -1406,7 +1406,7 @@ ProjectWindow::p_tabChanged( int index )
 }
 
 void
-ProjectWindow::p_zoomChanged()
+ProjectWindow::zoomChanged()
 {
 	const int index = d->m_widget->tabs()->currentIndex() - 1;
 
@@ -1427,7 +1427,7 @@ ProjectWindow::p_zoomChanged()
 }
 
 void
-ProjectWindow::p_selectionChanged()
+ProjectWindow::selectionChanged()
 {
 	const auto index = d->m_widget->tabs()->currentIndex();
 
@@ -1500,7 +1500,7 @@ ProjectWindow::p_selectionChanged()
 }
 
 void
-ProjectWindow::p_exportToPDf()
+ProjectWindow::exportToPDf()
 {
 	if( isWindowModified() )
 	{
@@ -1510,7 +1510,7 @@ ProjectWindow::p_exportToPDf()
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
 		if( btn == QMessageBox::Yes )
-			p_saveProjectImpl();
+			saveProjectImpl();
 	}
 
 	QString fileName = QFileDialog::getSaveFileName( this,
@@ -1549,7 +1549,7 @@ ProjectWindow::p_exportToPDf()
 }
 
 void
-ProjectWindow::p_exportToHtml()
+ProjectWindow::exportToHtml()
 {
 	if( isWindowModified() )
 	{
@@ -1559,7 +1559,7 @@ ProjectWindow::p_exportToHtml()
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
 		if( btn == QMessageBox::Yes )
-			p_saveProjectImpl();
+			saveProjectImpl();
 	}
 
 	QString fileName = QFileDialog::getSaveFileName( this,
@@ -1599,7 +1599,7 @@ ProjectWindow::p_exportToHtml()
 }
 
 void
-ProjectWindow::p_exportToSvg()
+ProjectWindow::exportToSvg()
 {
 	if( isWindowModified() )
 	{
@@ -1609,7 +1609,7 @@ ProjectWindow::p_exportToSvg()
 				QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes );
 
 		if( btn == QMessageBox::Yes )
-			p_saveProjectImpl();
+			saveProjectImpl();
 	}
 
 	QString dirName = QFileDialog::getExistingDirectory( this,
@@ -1635,7 +1635,7 @@ ProjectWindow::p_exportToSvg()
 }
 
 void
-ProjectWindow::p_about()
+ProjectWindow::about()
 {
 	QMessageBox::about( this, tr( "About Prototyper" ),
 		tr( "Prototyper - Simple UI prototyping software.\n\n"
@@ -1645,13 +1645,13 @@ ProjectWindow::p_about()
 }
 
 void
-ProjectWindow::p_aboutQt()
+ProjectWindow::aboutQt()
 {
 	QMessageBox::aboutQt( this );
 }
 
 void
-ProjectWindow::p_drawButton()
+ProjectWindow::drawButton()
 {
 	d->clearEditModeInTexts();
 
@@ -1663,7 +1663,7 @@ ProjectWindow::p_drawButton()
 }
 
 void
-ProjectWindow::p_drawComboBox()
+ProjectWindow::drawComboBox()
 {
 	d->clearEditModeInTexts();
 
@@ -1675,7 +1675,7 @@ ProjectWindow::p_drawComboBox()
 }
 
 void
-ProjectWindow::p_drawRadioButton()
+ProjectWindow::drawRadioButton()
 {
 	d->clearEditModeInTexts();
 
@@ -1687,7 +1687,7 @@ ProjectWindow::p_drawRadioButton()
 }
 
 void
-ProjectWindow::p_drawCheckBox()
+ProjectWindow::drawCheckBox()
 {
 	d->clearEditModeInTexts();
 
@@ -1699,7 +1699,7 @@ ProjectWindow::p_drawCheckBox()
 }
 
 void
-ProjectWindow::p_drawHSlider()
+ProjectWindow::drawHSlider()
 {
 	d->clearEditModeInTexts();
 
@@ -1711,7 +1711,7 @@ ProjectWindow::p_drawHSlider()
 }
 
 void
-ProjectWindow::p_drawVSlider()
+ProjectWindow::drawVSlider()
 {
 	d->clearEditModeInTexts();
 
@@ -1723,7 +1723,7 @@ ProjectWindow::p_drawVSlider()
 }
 
 void
-ProjectWindow::p_drawSpinbox()
+ProjectWindow::drawSpinbox()
 {
 	d->clearEditModeInTexts();
 
@@ -1735,43 +1735,43 @@ ProjectWindow::p_drawSpinbox()
 }
 
 void
-ProjectWindow::p_alignVerticalTop()
+ProjectWindow::alignVerticalTop()
 {
 	FormAction::instance()->form()->alignVerticalTop();
 }
 
 void
-ProjectWindow::p_alignVerticalCenter()
+ProjectWindow::alignVerticalCenter()
 {
 	FormAction::instance()->form()->alignVerticalCenter();
 }
 
 void
-ProjectWindow::p_alignVerticalBottom()
+ProjectWindow::alignVerticalBottom()
 {
 	FormAction::instance()->form()->alignVerticalBottom();
 }
 
 void
-ProjectWindow::p_alignHorizontalLeft()
+ProjectWindow::alignHorizontalLeft()
 {
 	FormAction::instance()->form()->alignHorizontalLeft();
 }
 
 void
-ProjectWindow::p_alignHorizontalCenter()
+ProjectWindow::alignHorizontalCenter()
 {
 	FormAction::instance()->form()->alignHorizontalCenter();
 }
 
 void
-ProjectWindow::p_alignHorizontalRight()
+ProjectWindow::alignHorizontalRight()
 {
 	FormAction::instance()->form()->alignHorizontalRight();
 }
 
 void
-ProjectWindow::p_canUndoChanged( bool canUndo )
+ProjectWindow::canUndoChanged( bool canUndo )
 {
 	Q_UNUSED( canUndo )
 
@@ -1807,13 +1807,13 @@ ProjectWindow::p_canUndoChanged( bool canUndo )
 }
 
 void
-ProjectWindow::p_formAdded( PageView * form )
+ProjectWindow::pageAdded( PageView * form )
 {
 	d->m_addedForms.append( form );
 }
 
 void
-ProjectWindow::p_formDeleted( PageView * form )
+ProjectWindow::pageDeleted( PageView * form )
 {
 	d->m_deletedForms.append( form );
 
@@ -1822,7 +1822,7 @@ ProjectWindow::p_formDeleted( PageView * form )
 }
 
 void
-ProjectWindow::p_zoomIn()
+ProjectWindow::zoomIn()
 {
 	const int index = d->m_widget->tabs()->currentIndex() - 1;
 
@@ -1836,7 +1836,7 @@ ProjectWindow::p_zoomIn()
 }
 
 void
-ProjectWindow::p_zoomOut()
+ProjectWindow::zoomOut()
 {
 	const int index = d->m_widget->tabs()->currentIndex() - 1;
 
@@ -1850,7 +1850,7 @@ ProjectWindow::p_zoomOut()
 }
 
 void
-ProjectWindow::p_zoomOriginal()
+ProjectWindow::zoomOriginal()
 {
 	const int index = d->m_widget->tabs()->currentIndex() - 1;
 

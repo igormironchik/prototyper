@@ -280,10 +280,10 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 		if( obj )
 		{
 			d->m_form->undoStack()->push( new UndoResize(
-				obj->form(), obj->objectId(),
+				obj->page(), obj->objectId(),
 				d->m_subsidiaryRect, d->m_rect ) );
 
-			obj->form()->emitChanged();
+			obj->page()->emitChanged();
 
 			obj->updatePropertiesValues();
 		}
@@ -295,10 +295,10 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 		if( obj )
 		{
 			d->m_form->undoStack()->push( new UndoMove(
-				obj->form(), obj->objectId(),
+				obj->page(), obj->objectId(),
 				d->m_rect.topLeft() - d->m_subsidiaryRect.topLeft() ) );
 
-			obj->form()->emitChanged();
+			obj->page()->emitChanged();
 
 			obj->updatePropertiesValues();
 		}

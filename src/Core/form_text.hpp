@@ -55,7 +55,7 @@ class FormText
 	Q_OBJECT
 
 public:
-	FormText( const QRectF & rect, Page * form, QGraphicsItem * parent = 0 );
+	FormText( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
 	~FormText();
 
 	//! \return Type.

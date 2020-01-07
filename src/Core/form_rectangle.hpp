@@ -53,7 +53,7 @@ class FormRect
 	,	public FormWithHandle
 {
 public:
-	explicit FormRect( Page * form, QGraphicsItem * parent = 0 );
+	explicit FormRect( Page * page, QGraphicsItem * parent = 0 );
 	~FormRect();
 
 	//! \return Type.

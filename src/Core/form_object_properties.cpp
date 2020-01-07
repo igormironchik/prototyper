@@ -94,14 +94,14 @@ ObjectProperties::connectProperties()
 		QOverload< int >::of( &QSpinBox::valueChanged ),
 		[this]( int v ) {
 			d->m_obj->setPosition( QPointF( v, d->m_obj->position().y() ) );
-			d->m_obj->form()->emitChanged();
+			d->m_obj->page()->emitChanged();
 		} );
 
 	connect( d->m_ui.m_y,
 		QOverload< int >::of( &QSpinBox::valueChanged ),
 		[this]( int v ) {
 			d->m_obj->setPosition( QPointF( d->m_obj->position().x(), v ) );
-			d->m_obj->form()->emitChanged();
+			d->m_obj->page()->emitChanged();
 		} );
 
 	connect( d->m_ui.m_width,
@@ -110,7 +110,7 @@ ObjectProperties::connectProperties()
 			QRectF r = d->m_obj->rectangle();
 			r.setWidth( v );
 			d->m_obj->setRectangle( r, true );
-			d->m_obj->form()->emitChanged();
+			d->m_obj->page()->emitChanged();
 		} );
 
 	connect( d->m_ui.m_height,
@@ -119,7 +119,7 @@ ObjectProperties::connectProperties()
 			QRectF r = d->m_obj->rectangle();
 			r.setHeight( v );
 			d->m_obj->setRectangle( r, true );
-			d->m_obj->form()->emitChanged();
+			d->m_obj->page()->emitChanged();
 		} );
 }
 

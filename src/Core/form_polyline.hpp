@@ -53,7 +53,7 @@ class FormPolyline
 	,	public FormWithHandle
 {
 public:
-	explicit FormPolyline( Page * form, QGraphicsItem * parent = 0 );
+	explicit FormPolyline( Page * page, QGraphicsItem * parent = 0 );
 	~FormPolyline();
 
 	//! \return Type.

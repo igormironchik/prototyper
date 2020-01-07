@@ -117,13 +117,13 @@ void
 FormLinePrivate::createHandles()
 {
 	m_h1.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
-		q->form(), Qt::CrossCursor ) );
+		q->page(), Qt::CrossCursor ) );
 
 	m_h2.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q->parentItem(),
-		q->form(), Qt::CrossCursor ) );
+		q->page(), Qt::CrossCursor ) );
 
 	m_move.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
-		q->form(), Qt::SizeAllCursor ) );
+		q->page(), Qt::SizeAllCursor ) );
 }
 
 
@@ -392,13 +392,13 @@ FormLine::handleReleased( FormMoveHandle * handle )
 	if( isSelected() )
 	{
 		if( handle == d->m_move.data() )
-			form()->undoStack()->push( new UndoMove( form(),
+			page()->undoStack()->push( new UndoMove( page(),
 				objectId(), position() - d->m_oldPos ) );
 		else
-			form()->undoStack()->push( new UndoChangeLine( form(), objectId(),
+			page()->undoStack()->push( new UndoChangeLine( page(), objectId(),
 				d->m_oldLine, line() ) );
 
-		form()->emitChanged();
+		page()->emitChanged();
 	}
 
 	updatePropertiesValues();

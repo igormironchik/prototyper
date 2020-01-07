@@ -42,7 +42,7 @@ class FormRadioButton
 	Q_OBJECT
 
 public:
-	FormRadioButton( const QRectF & rect, Page * form,
+	FormRadioButton( const QRectF & rect, Page * page,
 		QGraphicsItem * parent = 0 );
 	~FormRadioButton();
 

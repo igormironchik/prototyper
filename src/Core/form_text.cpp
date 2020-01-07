@@ -88,7 +88,7 @@ FormTextPrivate::init()
 {
 	q->enableEditing( true );
 
-	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
+	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->page() ) );
 
 	m_opts.reset( new FormTextOpts( q->parentItem() ) );
 
@@ -621,7 +621,7 @@ FormText::resize( const QRectF & rect )
 {
 	d->setRect( rect );
 
-	form()->update();
+	page()->update();
 }
 
 void

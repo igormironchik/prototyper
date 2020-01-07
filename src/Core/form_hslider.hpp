@@ -50,7 +50,7 @@ class FormHSlider
 	,	public FormResizable
 {
 public:
-	FormHSlider( const QRectF & rect, Page * form, QGraphicsItem * parent = 0 );
+	FormHSlider( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
 	~FormHSlider();
 
 	//! \return Type.

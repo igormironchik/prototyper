@@ -181,7 +181,7 @@ TabsView::p_addForm()
 void
 TabsView::p_deleteForm()
 {
-	TopGui::instance()->projectWindow()->projectWidget()->deleteForm(
+	TopGui::instance()->projectWindow()->projectWidget()->deletePage(
 		d->m_index.data().toString() );
 }
 

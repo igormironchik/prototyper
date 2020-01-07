@@ -197,7 +197,7 @@ FormObject::setObjectBrush( const QBrush & b )
 }
 
 Page *
-FormObject::form() const
+FormObject::page() const
 {
 	return d->m_form;
 }
@@ -218,7 +218,7 @@ FormObject::setPosition( const QPointF & pos,
 	bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoMove( form(), objectId(), pos - position() ) );
+		page()->undoStack()->push( new UndoMove( page(), objectId(), pos - position() ) );
 
 	if( d->m_props )
 	{
@@ -234,7 +234,7 @@ FormObject::setRectangle( const QRectF & rect,
 	bool pushUndoCommand )
 {
 	if( pushUndoCommand )
-		form()->undoStack()->push( new UndoResize( form(), objectId(),
+		page()->undoStack()->push( new UndoResize( page(), objectId(),
 			rectangle(), rect ) );
 
 	if( d->m_props )

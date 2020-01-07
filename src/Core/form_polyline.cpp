@@ -94,12 +94,12 @@ void
 FormPolylinePrivate::init()
 {
 	m_start.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
-		q->parentItem(), q->form() ) );
+		q->parentItem(), q->page() ) );
 	m_start->ignoreMouseEvents( true );
 	m_start->unsetCursor();
 
 	m_end.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
-		q->parentItem(), q->form() ) );
+		q->parentItem(), q->page() ) );
 	m_end->ignoreMouseEvents( true );
 	m_end->unsetCursor();
 
@@ -107,7 +107,7 @@ FormPolylinePrivate::init()
 	m_end->hide();
 
 	QScopedPointer< WithResizeAndMoveHandles > tmp(
-		new WithResizeAndMoveHandles( q, q->parentItem(), q->form() ) );
+		new WithResizeAndMoveHandles( q, q->parentItem(), q->page() ) );
 
 	m_handles.swap( tmp );
 
@@ -697,7 +697,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 			d->updateLines( d->boundingRect(), r );
 	}
 
-	form()->update();
+	page()->update();
 }
 
 void
@@ -706,15 +706,15 @@ FormPolyline::handleReleased( FormMoveHandle * handle )
 	d->m_handleMoved = false;
 
 	if( handle == d->m_handles->m_move.data() )
-		form()->undoStack()->push( new UndoMove( form(),
+		page()->undoStack()->push( new UndoMove( page(),
 			objectId(), d->m_resized.topLeft() - d->m_subsidiaryRect.topLeft() ) );
 	else
-		form()->undoStack()->push( new UndoResize( form(),
+		page()->undoStack()->push( new UndoResize( page(),
 			objectId(), d->m_subsidiaryRect, d->m_resized ) );
 
 	updatePropertiesValues();
 
-	form()->emitChanged();
+	page()->emitChanged();
 }
 
 } /* namespace Core */

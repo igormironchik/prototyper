@@ -69,7 +69,7 @@ FormCheckBoxPrivate::~FormCheckBoxPrivate()
 void
 FormCheckBoxPrivate::init()
 {
-	m_handles.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
+	m_handles.reset( new FormResizableProxy( q, q->parentItem(), q->page() ) );
 
 	m_handles->setMinSize( q->defaultSize() );
 
@@ -113,14 +113,14 @@ FormCheckBoxPrivate::connectProperties()
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				q->setPosition( QPointF( v, q->position().y() ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_y,
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				q->setPosition( QPointF( q->position().x(), v ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_width,
@@ -130,7 +130,7 @@ FormCheckBoxPrivate::connectProperties()
 				r.setWidth( v );
 				r.moveTopLeft( q->position() );
 				q->setRectangle( r, true );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_height,
@@ -140,7 +140,7 @@ FormCheckBoxPrivate::connectProperties()
 				r.setHeight( v );
 				r.moveTopLeft( q->position() );
 				q->setRectangle( r, true );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_text,
@@ -148,9 +148,9 @@ FormCheckBoxPrivate::connectProperties()
 			[this]( const QString & t ) {
 				const auto oldText = q->text();
 				m_text = t;
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -161,9 +161,9 @@ FormCheckBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -174,9 +174,9 @@ FormCheckBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -187,9 +187,9 @@ FormCheckBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setItalic( ( v == Qt::Checked ? true : false ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -200,9 +200,9 @@ FormCheckBoxPrivate::connectProperties()
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setUnderline( ( v == Qt::Checked ? true : false ) );
-				q->form()->emitChanged();
+				q->page()->emitChanged();
 
-				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
 					q->objectId(), oldText, q->text() ) );
 
 				q->update();
@@ -213,7 +213,7 @@ FormCheckBoxPrivate::connectProperties()
 			[this]( int v ) {
 				m_checked = ( v == Qt::Checked ? true : false );
 
-				q->form()->undoStack()->push( new UndoChangeCheckState( q->form(),
+				q->page()->undoStack()->push( new UndoChangeCheckState( q->page(),
 					q->objectId() ) );
 
 				q->update();
@@ -561,7 +561,7 @@ FormCheckBox::resize( const QRectF & rect )
 
 	update();
 
-	form()->update();
+	page()->update();
 }
 
 void

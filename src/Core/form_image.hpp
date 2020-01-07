@@ -53,7 +53,7 @@ class FormImage
 	,	public FormResizable
 {
 public:
-	explicit FormImage( Page * form, QGraphicsItem * parent = 0 );
+	explicit FormImage( Page * page, QGraphicsItem * parent = 0 );
 	~FormImage();
 
 	//! \return Type.

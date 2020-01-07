@@ -145,7 +145,7 @@ ProjectWidgetPrivate::init()
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formAddRequest,
 		q, &ProjectWidget::addPage );
 	ProjectWidget::connect( m_tabBar, &ProjectTabBar::formDeleteRequest,
-		q, &ProjectWidget::deleteForm );
+		q, &ProjectWidget::deletePage );
 	ProjectWidget::connect( m_desc->editor(), &TextEditor::changed,
 		q, &ProjectWidget::changed );
 	ProjectWidget::connect( m_tabs, &QTabWidget::currentChanged,
@@ -200,9 +200,9 @@ ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 	PageView * form = new PageView( cfg, m_tabs );
 
 	ProjectWidget::connect( form, &PageView::zoomChanged,
-		m_window, &ProjectWindow::p_zoomChanged );
+		m_window, &ProjectWindow::zoomChanged );
 	ProjectWidget::connect( form->formScene(), &PageScene::selectionChanged,
-		m_window, &ProjectWindow::p_selectionChanged );
+		m_window, &ProjectWindow::selectionChanged );
 
 	form->page()->setGridMode( showGrid ?
 		ShowGrid : NoGrid );
@@ -218,7 +218,7 @@ ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 	ProjectWidget::connect( form->page(), &Page::changed,
 		q, &ProjectWidget::changed );
 
-	emit q->formAdded( form );
+	emit q->pageAdded( form );
 }
 
 
@@ -377,7 +377,7 @@ ProjectWidget::renameTab( const QString & oldName )
 }
 
 void
-ProjectWidget::deleteForm( const QString & name )
+ProjectWidget::deletePage( const QString & name )
 {
 	if( d->m_tabNames.contains( name ) )
 	{
@@ -414,7 +414,7 @@ ProjectWidget::deleteForm( const QString & name )
 
 			emit changed();
 
-			emit formDeleted( form );
+			emit pageDeleted( form );
 		}
 	}
 }

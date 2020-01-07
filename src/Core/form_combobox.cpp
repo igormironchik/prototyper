@@ -67,7 +67,7 @@ public:
 void
 FormComboBoxPrivate::init()
 {
-	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->form() ) );
+	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->page() ) );
 
 	setRect( m_rect );
 
@@ -265,7 +265,7 @@ FormComboBox::resize( const QRectF & rect )
 {
 	d->setRect( rect );
 
-	form()->update();
+	page()->update();
 }
 
 void

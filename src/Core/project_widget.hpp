@@ -62,10 +62,10 @@ class ProjectWidget
 signals:
 	//! Project has been modified.
 	void changed();
-	//! Form added.
-	void formAdded( PageView * );
-	//! Form deleted.
-	void formDeleted( PageView * );
+	//! Page added.
+	void pageAdded( PageView * );
+	//! Page deleted.
+	void pageDeleted( PageView * );
 
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,
@@ -109,8 +109,8 @@ public slots:
 	void addPage();
 	//! Rename tab.
 	void renameTab( const QString & oldName );
-	//! Delete form.
-	void deleteForm( const QString & name );
+	//! Delete page.
+	void deletePage( const QString & name );
 	//! New project.
 	void newProject();
 	//! Activate tabe.

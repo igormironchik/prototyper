@@ -54,7 +54,7 @@ class FormLine
 	,	public FormWithHandle
 {
 public:
-	explicit FormLine( Page * form, QGraphicsItem * parent = 0 );
+	explicit FormLine( Page * page, QGraphicsItem * parent = 0 );
 	~FormLine();
 
 	//! \return Type.

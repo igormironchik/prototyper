@@ -66,7 +66,7 @@ public:
 void
 FormImagePrivate::init()
 {
-	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->form() ) );
+	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->page() ) );
 }
 
 
@@ -234,7 +234,7 @@ FormImage::resize( const QRectF & rect )
 
 	d->m_handles->setRect( r );
 
-	form()->update();
+	page()->update();
 }
 
 void
