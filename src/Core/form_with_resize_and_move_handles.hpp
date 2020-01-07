@@ -26,10 +26,12 @@
 // Qt include.
 #include <QtGlobal>
 #include <QScopedPointer>
+#include <QSizeF>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsItem;
 class QSizeF;
+class QRectF;
 QT_END_NAMESPACE
 
 
