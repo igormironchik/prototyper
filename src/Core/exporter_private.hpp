@@ -20,18 +20,14 @@
 	along with this program.  If not, see <http://www.gnu.org/licenses/>.
 */
 
-#ifndef PROTOTYPER__CORE__EXPORTER_HPP__INCLUDED
-#define PROTOTYPER__CORE__EXPORTER_HPP__INCLUDED
-
-// Qt include.
-#include <QScopedPointer>
+#ifndef PROTOTYPER__CORE__EXPORTER_PRIVATE_HPP__INCLUDED
+#define PROTOTYPER__CORE__EXPORTER_PRIVATE_HPP__INCLUDED
 
 // Prototyper include.
 #include "project_cfg.hpp"
 
 QT_BEGIN_NAMESPACE
 class QSvgGenerator;
-class QPainter;
 QT_END_NAMESPACE
 
 
@@ -39,41 +35,31 @@ namespace Prototyper {
 
 namespace Core {
 
-class ExporterPrivate;
+class Exporter;
+
 
 //
-// Exporter
+// ExporterPrivate
 //
 
-//! Base class for exporters to the doc.
-class Exporter {
+class ExporterPrivate {
 public:
-	explicit Exporter( const Cfg::Project & project );
-	virtual ~Exporter();
+	ExporterPrivate( const Cfg::Project & cfg, Exporter * parent );
+	virtual ~ExporterPrivate() = default;
 
-	//! Export documentation.
-	virtual void exportToDoc( const QString & fileName ) = 0;
+	//! Init.
+	virtual void init();
+	//! Draw form.
+	void drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dpi );
 
-protected:
-	explicit Exporter( QScopedPointer< ExporterPrivate > && dd );
-
-protected:
-	QScopedPointer< ExporterPrivate > d;
-
-private:
-	Q_DISABLE_COPY( Exporter )
-}; // class Exporter
-
-namespace impl {
-
-	void
-	drawGroup( const Cfg::Group & group, QPainter & p, qreal dpi,
-		QSvgGenerator & svg );
-
-} /* namespace impl */
+	//! Parent.
+	Exporter * q;
+	//! Cfg.
+	Cfg::Project m_cfg;
+}; // class ExporterPrivate
 
 } /* namespace Core */
 
 } /* namespace Prototyper */
 
-#endif // PROTOTYPER__CORE__EXPORTER_HPP__INCLUDED
+#endif // PROTOTYPER__CORE__EXPORTER_PRIVATE_HPP__INCLUDED

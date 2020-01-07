@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "html_exporter.hpp"
 #include "utils.hpp"
+#include "exporter_private.hpp"
 
 // Qt include.
 #include <QTextStream>

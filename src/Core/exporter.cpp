@@ -31,6 +31,7 @@
 #include "form_vslider.hpp"
 #include "page.hpp"
 #include "form_polyline.hpp"
+#include "exporter_private.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -53,10 +54,6 @@ namespace Core {
 ExporterPrivate::ExporterPrivate( const Cfg::Project & cfg, Exporter * parent )
 	:	q( parent )
 	,	m_cfg( cfg )
-{
-}
-
-ExporterPrivate::~ExporterPrivate()
 {
 }
 
