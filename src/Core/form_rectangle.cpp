@@ -79,7 +79,7 @@ FormRectPrivate::init()
 
 	m_handles->hide();
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ),
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), 2.0 ),
 		false );
 
 	q->setObjectBrush( Qt::transparent );

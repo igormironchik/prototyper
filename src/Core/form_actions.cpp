@@ -34,15 +34,15 @@ namespace Prototyper {
 namespace Core {
 
 //
-// FormActionPrivate
+// PageActionPrivate
 //
 
-class FormActionPrivate {
+class PageActionPrivate {
 public:
-	explicit FormActionPrivate( FormAction * parent )
+	explicit PageActionPrivate( PageAction * parent )
 		:	q( parent )
-		,	m_mode( FormAction::Select )
-		,	m_form( 0 )
+		,	m_mode( PageAction::Select )
+		,	m_page( 0 )
 		,	m_fillColor( Qt::transparent )
 		,	m_strokeColor( Qt::black )
 		,	m_snap( true )
@@ -51,11 +51,11 @@ public:
 	}
 
 	//! Parent.
-	FormAction * q;
+	PageAction * q;
 	//! Mode.
-	FormAction::Mode m_mode;
-	//! Form.
-	Page * m_form;
+	PageAction::Mode m_mode;
+	//! Page.
+	Page * m_page;
 	//! Fill color.
 	QColor m_fillColor;
 	//! Stroke color.
@@ -63,132 +63,132 @@ public:
 	//! Is snap enabled?
 	bool m_snap;
 	//! Flags.
-	FormAction::Flags m_flags;
+	PageAction::Flags m_flags;
 }; // class FormActionPrivate
 
 
 //
-// FormAction
+// PageAction
 //
 
-FormAction::FormAction()
-	:	d( new FormActionPrivate( this ) )
+PageAction::PageAction()
+	:	d( new PageActionPrivate( this ) )
 {
 }
 
-FormAction::~FormAction()
+PageAction::~PageAction()
 {
 }
 
-static FormAction * formActionInstance = 0;
+static PageAction * pageActionInstance = 0;
 
 void
-FormAction::cleanup()
+PageAction::cleanup()
 {
-	delete formActionInstance;
+	delete pageActionInstance;
 
-	formActionInstance = 0;
+	pageActionInstance = 0;
 }
 
-FormAction *
-FormAction::instance()
+PageAction *
+PageAction::instance()
 {
-	if( !formActionInstance )
+	if( !pageActionInstance )
 	{
-		formActionInstance = new FormAction;
+		pageActionInstance = new PageAction;
 
-		qAddPostRoutine( &FormAction::cleanup );
+		qAddPostRoutine( &PageAction::cleanup );
 	}
 
-	return formActionInstance;
+	return pageActionInstance;
 }
 
-const FormAction::Flags &
-FormAction::flags() const
+const PageAction::Flags &
+PageAction::flags() const
 {
 	return d->m_flags;
 }
 
 void
-FormAction::setFlags( const Flags & f )
+PageAction::setFlags( const Flags & f )
 {
 	d->m_flags = f;
 }
 
 void
-FormAction::setFlag( Flag f )
+PageAction::setFlag( Flag f )
 {
 	d->m_flags |= f;
 }
 
 bool
-FormAction::testFlag( Flag f ) const
+PageAction::testFlag( Flag f ) const
 {
 	return d->m_flags.testFlag( f );
 }
 
 void
-FormAction::clearFlag( Flag f )
+PageAction::clearFlag( Flag f )
 {
 	d->m_flags &= ~Flags( f );
 }
 
-FormAction::Mode
-FormAction::mode() const
+PageAction::Mode
+PageAction::mode() const
 {
 	return d->m_mode;
 }
 
 void
-FormAction::setMode( Mode m )
+PageAction::setMode( Mode m )
 {
 	d->m_mode = m;
 }
 
 Page *
-FormAction::form() const
+PageAction::page() const
 {
-	return d->m_form;
+	return d->m_page;
 }
 
 void
-FormAction::setForm( Page * f )
+PageAction::setPage( Page * f )
 {
-	d->m_form = f;
+	d->m_page = f;
 }
 
 const QColor &
-FormAction::fillColor() const
+PageAction::fillColor() const
 {
 	return d->m_fillColor;
 }
 
 void
-FormAction::setFillColor( const QColor & c )
+PageAction::setFillColor( const QColor & c )
 {
 	d->m_fillColor = c;
 }
 
 const QColor &
-FormAction::strokeColor() const
+PageAction::strokeColor() const
 {
 	return d->m_strokeColor;
 }
 
 void
-FormAction::setStrokeColor( const QColor & c )
+PageAction::setStrokeColor( const QColor & c )
 {
 	d->m_strokeColor = c;
 }
 
 bool
-FormAction::isSnapEnabled() const
+PageAction::isSnapEnabled() const
 {
 	return d->m_snap;
 }
 
 void
-FormAction::enableSnap( bool on )
+PageAction::enableSnap( bool on )
 {
 	d->m_snap = on;
 }

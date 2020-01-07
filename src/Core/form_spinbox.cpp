@@ -95,7 +95,7 @@ FormSpinBoxPrivate::init()
 
 	m_font.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
 
 	q->setObjectBrush( Qt::transparent );

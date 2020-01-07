@@ -239,7 +239,7 @@ FormMoveHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
 	//d->m_form->scene()->installEventFilter( this );
 
-	FormAction::instance()->form()->snapItem()->setSnapPos(
+	PageAction::instance()->page()->snapItem()->setSnapPos(
 		mapToScene( event->pos() ) );
 
 	d->m_hovered = true;
@@ -252,7 +252,7 @@ FormMoveHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 void
 FormMoveHandle::hoverMoveEvent( QGraphicsSceneHoverEvent * event )
 {
-	FormAction::instance()->form()->snapItem()->setSnapPos(
+	PageAction::instance()->page()->snapItem()->setSnapPos(
 		mapToScene( event->pos() ) );
 
 	QGraphicsItem::hoverMoveEvent( event );
@@ -263,7 +263,7 @@ FormMoveHandle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 {
 	//d->m_form->scene()->removeEventFilter( this );
 
-	FormAction::instance()->form()->snapItem()->setSnapPos(
+	PageAction::instance()->page()->snapItem()->setSnapPos(
 		mapToScene( event->pos() ) );
 
 	d->m_hovered = false;
@@ -276,7 +276,7 @@ FormMoveHandle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
 void
 FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 {
-	FormAction::instance()->form()->snapItem()->setSnapPos(
+	PageAction::instance()->page()->snapItem()->setSnapPos(
 		event->scenePos() );
 
 	if( d->m_pressed && !d->m_ignoreMouse )
@@ -294,7 +294,7 @@ FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 void
 FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
-	FormAction::instance()->form()->snapItem()->setSnapPos(
+	PageAction::instance()->page()->snapItem()->setSnapPos(
 		event->scenePos() );
 
 	if( event->button() == Qt::LeftButton && !d->m_ignoreMouse )
@@ -313,17 +313,17 @@ FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 void
 FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
-	FormAction::instance()->form()->snapItem()->setSnapPos(
+	PageAction::instance()->page()->snapItem()->setSnapPos(
 		event->scenePos() );
 
 	if( event->button() == Qt::LeftButton )
 	{
 		d->m_pressed = false;
 
-		if( FormAction::instance()->isSnapEnabled() )
+		if( PageAction::instance()->isSnapEnabled() )
 		{
 			const QPointF delta =
-				FormAction::instance()->form()->snapItem()->snapPos() -
+				PageAction::instance()->page()->snapItem()->snapPos() -
 				mapToScene( d->m_pos ) + d->m_touchDelta;
 
 			setPos( pos() + delta );

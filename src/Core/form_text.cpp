@@ -118,7 +118,7 @@ FormTextPrivate::init()
 
 	m_proxy->setMinSize( q->boundingRect().size() );
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
 
 	q->setObjectBrush( Qt::transparent );
@@ -633,7 +633,7 @@ FormText::moveResizable( const QPointF & delta )
 void
 FormText::focusInEvent( QFocusEvent * e )
 {
-	FormAction::instance()->form()->clearEditModeInTexts();
+	PageAction::instance()->page()->clearEditModeInTexts();
 
 	d->m_showToolBar = true;
 

@@ -255,9 +255,9 @@ PageScene::deleteSelected()
 void
 PageScene::keyPressEvent( QKeyEvent * event )
 {
-	switch( FormAction::instance()->mode() )
+	switch( PageAction::instance()->mode() )
 	{
-		case FormAction::Select :
+		case PageAction::Select :
 		{
 			qreal delta = 0;
 

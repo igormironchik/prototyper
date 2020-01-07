@@ -40,25 +40,25 @@ namespace Core {
 class Page;
 
 //
-// FormAction
+// PageAction
 //
 
-class FormActionPrivate;
+class PageActionPrivate;
 
-//! Form action - is a singleton with current form mode and so on...
-class FormAction
+//! Page action - is a singleton with current page mode and so on...
+class PageAction
 	:	public QObject
 {
 	Q_OBJECT
 
 private:
-	FormAction();
-	~FormAction();
+	PageAction();
+	~PageAction();
 
 	static void cleanup();
 
 public:
-	static FormAction * instance();
+	static PageAction * instance();
 
 	//! Mode.
 	enum Mode {
@@ -111,9 +111,9 @@ public:
 	void setMode( Mode m );
 
 	//! \return Current form.
-	Page * form() const;
+	Page * page() const;
 	//! Set current form.
-	void setForm( Page * f );
+	void setPage( Page * f );
 
 	//! \return Fill color.
 	const QColor & fillColor() const;
@@ -131,12 +131,12 @@ public:
 	void enableSnap( bool on = true );
 
 private:
-	Q_DISABLE_COPY( FormAction )
+	Q_DISABLE_COPY( PageAction )
 
-	QScopedPointer< FormActionPrivate > d;
+	QScopedPointer< PageActionPrivate > d;
 }; // class FormAction
 
-Q_DECLARE_OPERATORS_FOR_FLAGS( FormAction::Flags )
+Q_DECLARE_OPERATORS_FOR_FLAGS( PageAction::Flags )
 
 } /* namespace Core */
 

@@ -933,7 +933,7 @@ ProjectWindow::snapGrid( bool on )
 	foreach( PageView * view, d->m_widget->pages() )
 		view->page()->enableSnap( on );
 
-	FormAction::instance()->enableSnap( on );
+	PageAction::instance()->enableSnap( on );
 }
 
 void
@@ -1120,7 +1120,7 @@ ProjectWindow::drawLine()
 {
 	d->clearEditModeInTexts();
 
-	FormAction::instance()->setMode( FormAction::DrawLine );
+	PageAction::instance()->setMode( PageAction::DrawLine );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1132,7 +1132,7 @@ ProjectWindow::drawRect()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawRect );
+	PageAction::instance()->setMode( PageAction::DrawRect );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1146,10 +1146,10 @@ ProjectWindow::drawPolyline( bool on )
 	{
 		d->m_drawLine->trigger();
 
-		FormAction::instance()->setFlag( FormAction::Polyline );
+		PageAction::instance()->setFlag( PageAction::Polyline );
 	}
 	else
-		FormAction::instance()->clearFlag( FormAction::Polyline );
+		PageAction::instance()->clearFlag( PageAction::Polyline );
 }
 
 void
@@ -1159,7 +1159,7 @@ ProjectWindow::insertText()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::InsertText );
+	PageAction::instance()->setMode( PageAction::InsertText );
 
 	d->prepareDrawingWithRectPlacer( true );
 }
@@ -1220,13 +1220,13 @@ ProjectWindow::insertImage()
 void
 ProjectWindow::group()
 {
-	FormAction::instance()->form()->group();
+	PageAction::instance()->page()->group();
 }
 
 void
 ProjectWindow::ungroup()
 {
-	FormAction::instance()->form()->ungroup();
+	PageAction::instance()->page()->ungroup();
 }
 
 void
@@ -1248,7 +1248,7 @@ ProjectWindow::select( bool checked )
 
 	if( checked )
 	{
-		FormAction::instance()->setMode( FormAction::Select );
+		PageAction::instance()->setMode( PageAction::Select );
 
 		d->m_widget->enableSelection( true );
 
@@ -1269,18 +1269,18 @@ void
 ProjectWindow::fillColor()
 {
 	const QColor c = QColorDialog::getColor(
-		FormAction::instance()->fillColor(),
+		PageAction::instance()->fillColor(),
 		this, tr( "Select Fill Color..." ),
 		QColorDialog::ShowAlphaChannel );
 
 	if( c.isValid() )
 	{
-		FormAction::instance()->setFillColor( c );
+		PageAction::instance()->setFillColor( c );
 
-		if( FormAction::instance()->form() )
+		if( PageAction::instance()->page() )
 		{
 			QList< QGraphicsItem* > selected =
-				FormAction::instance()->form()->scene()->selectedItems();
+				PageAction::instance()->page()->scene()->selectedItems();
 
 			if( !selected.isEmpty() )
 			{
@@ -1300,16 +1300,16 @@ void
 ProjectWindow::strokeColor()
 {
 	const QColor c = QColorDialog::getColor(
-		FormAction::instance()->strokeColor(),
+		PageAction::instance()->strokeColor(),
 		this, tr( "Select Stroke Color..." ),
 		QColorDialog::ShowAlphaChannel );
 
 	if( c.isValid() )
 	{
-		if( FormAction::instance()->form() )
+		if( PageAction::instance()->page() )
 		{
 			QList< QGraphicsItem* > selected =
-				FormAction::instance()->form()->scene()->selectedItems();
+				PageAction::instance()->page()->scene()->selectedItems();
 
 			if( !selected.isEmpty() )
 			{
@@ -1322,7 +1322,7 @@ ProjectWindow::strokeColor()
 				}
 			}
 			else
-				FormAction::instance()->setStrokeColor( c );
+				PageAction::instance()->setStrokeColor( c );
 		}
 	}
 }
@@ -1339,7 +1339,7 @@ ProjectWindow::tabChanged( int index )
 		d->m_zoomToolBar->show();
 		d->m_widget->descriptionTab()->toolBar()->hide();
 
-		FormAction::instance()->setForm(
+		PageAction::instance()->setPage(
 			d->m_widget->pages().at( index - 1 )->page() );
 
 		d->m_group->setEnabled( true );
@@ -1374,7 +1374,7 @@ ProjectWindow::tabChanged( int index )
 		d->m_zoomToolBar->hide();
 		d->m_widget->descriptionTab()->toolBar()->show();
 
-		FormAction::instance()->setForm( 0 );
+		PageAction::instance()->setPage( 0 );
 
 		d->m_group->setEnabled( false );
 		d->m_select->setEnabled( false );
@@ -1657,7 +1657,7 @@ ProjectWindow::drawButton()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawButton );
+	PageAction::instance()->setMode( PageAction::DrawButton );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1669,7 +1669,7 @@ ProjectWindow::drawComboBox()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawComboBox );
+	PageAction::instance()->setMode( PageAction::DrawComboBox );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1681,7 +1681,7 @@ ProjectWindow::drawRadioButton()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawRadioButton );
+	PageAction::instance()->setMode( PageAction::DrawRadioButton );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1693,7 +1693,7 @@ ProjectWindow::drawCheckBox()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawCheckBox );
+	PageAction::instance()->setMode( PageAction::DrawCheckBox );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1705,7 +1705,7 @@ ProjectWindow::drawHSlider()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawHSlider );
+	PageAction::instance()->setMode( PageAction::DrawHSlider );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1717,7 +1717,7 @@ ProjectWindow::drawVSlider()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawVSlider );
+	PageAction::instance()->setMode( PageAction::DrawVSlider );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1729,7 +1729,7 @@ ProjectWindow::drawSpinbox()
 
 	d->m_drawPolyLine->setChecked( false );
 
-	FormAction::instance()->setMode( FormAction::DrawSpinBox );
+	PageAction::instance()->setMode( PageAction::DrawSpinBox );
 
 	d->prepareDrawingWithRectPlacer();
 }
@@ -1737,37 +1737,37 @@ ProjectWindow::drawSpinbox()
 void
 ProjectWindow::alignVerticalTop()
 {
-	FormAction::instance()->form()->alignVerticalTop();
+	PageAction::instance()->page()->alignVerticalTop();
 }
 
 void
 ProjectWindow::alignVerticalCenter()
 {
-	FormAction::instance()->form()->alignVerticalCenter();
+	PageAction::instance()->page()->alignVerticalCenter();
 }
 
 void
 ProjectWindow::alignVerticalBottom()
 {
-	FormAction::instance()->form()->alignVerticalBottom();
+	PageAction::instance()->page()->alignVerticalBottom();
 }
 
 void
 ProjectWindow::alignHorizontalLeft()
 {
-	FormAction::instance()->form()->alignHorizontalLeft();
+	PageAction::instance()->page()->alignHorizontalLeft();
 }
 
 void
 ProjectWindow::alignHorizontalCenter()
 {
-	FormAction::instance()->form()->alignHorizontalCenter();
+	PageAction::instance()->page()->alignHorizontalCenter();
 }
 
 void
 ProjectWindow::alignHorizontalRight()
 {
-	FormAction::instance()->form()->alignHorizontalRight();
+	PageAction::instance()->page()->alignHorizontalRight();
 }
 
 void

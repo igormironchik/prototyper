@@ -81,7 +81,7 @@ FormCheckBoxPrivate::init()
 
 	setRect( m_rect );
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
 
 	q->setObjectBrush( Qt::transparent );

@@ -99,7 +99,7 @@ FormButtonPrivate::init()
 	m_proxy->setMinSize(
 		QSizeF( m.boundingRect( QLatin1Char( 'a' ) ).size() ) );
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor() ),
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
 
 	q->setObjectBrush( Qt::transparent );

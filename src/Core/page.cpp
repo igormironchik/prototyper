@@ -194,7 +194,7 @@ PagePrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 		{
 			tmp->removeFromGroup( item );
 
-			if( FormAction::instance()->mode() == FormAction::Select )
+			if( PageAction::instance()->mode() == PageAction::Select )
 			{
 				item->setFlag( QGraphicsItem::ItemIsSelectable, true );
 
@@ -988,7 +988,7 @@ Page::group( const QList< QGraphicsItem* > & items,
 		if( pushUndoCommand )
 			d->m_undoStack->push( new UndoGroup( this, group->objectId() ) );
 
-		if( FormAction::instance()->mode() == FormAction::Select )
+		if( PageAction::instance()->mode() == PageAction::Select )
 		{
 			group->setFlag( QGraphicsItem::ItemIsSelectable );
 
@@ -1525,9 +1525,9 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 		d->m_snap->setSnapPos( d->m_pos );
 
-		switch( FormAction::instance()->mode() )
+		switch( PageAction::instance()->mode() )
 		{
-			case FormAction::DrawLine :
+			case PageAction::DrawLine :
 			{
 				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
 
@@ -1550,14 +1550,14 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::InsertText :
-			case FormAction::DrawButton :
-			case FormAction::DrawCheckBox :
-			case FormAction::DrawRadioButton :
-			case FormAction::DrawComboBox :
-			case FormAction::DrawSpinBox :
-			case FormAction::DrawHSlider :
-			case FormAction::DrawVSlider :
+			case PageAction::InsertText :
+			case PageAction::DrawButton :
+			case PageAction::DrawCheckBox :
+			case PageAction::DrawRadioButton :
+			case PageAction::DrawComboBox :
+			case PageAction::DrawSpinBox :
+			case PageAction::DrawHSlider :
+			case PageAction::DrawVSlider :
 			{
 				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
 					( d->m_current );
@@ -1573,7 +1573,7 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawRect :
+			case PageAction::DrawRect :
 			{
 				FormRect * rect = dynamic_cast< FormRect* > ( d->m_current );
 
@@ -1610,9 +1610,9 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 		d->m_snap->setSnapPos( d->m_pos );
 
-		switch( FormAction::instance()->mode() )
+		switch( PageAction::instance()->mode() )
 		{
-			case FormAction::DrawLine :
+			case PageAction::DrawLine :
 			{
 				if( d->m_current != d->m_currentPoly )
 					d->hideHandlesOfCurrent();
@@ -1628,13 +1628,13 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				QPointF p = d->lineStartPoint( mouseEvent->pos(),
 					intersected, intersectedEnds, intersectedLine );
 
-				if( !intersected && FormAction::instance()->isSnapEnabled() )
+				if( !intersected && PageAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
 
 				line->setLine( p.x(), p.y(), p.x(), p.y() );
 
 				if( intersectedEnds && d->m_currentLines.size() == 1 &&
-					FormAction::instance()->testFlag( FormAction::Polyline ) )
+					PageAction::instance()->testFlag( PageAction::Polyline ) )
 						d->m_polyline = true;
 
 				const QString id = d->id();
@@ -1665,14 +1665,14 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::InsertText :
-			case FormAction::DrawButton :
-			case FormAction::DrawCheckBox :
-			case FormAction::DrawRadioButton :
-			case FormAction::DrawComboBox :
-			case FormAction::DrawSpinBox :
-			case FormAction::DrawHSlider :
-			case FormAction::DrawVSlider :
+			case PageAction::InsertText :
+			case PageAction::DrawButton :
+			case PageAction::DrawCheckBox :
+			case PageAction::DrawRadioButton :
+			case PageAction::DrawComboBox :
+			case PageAction::DrawSpinBox :
+			case PageAction::DrawHSlider :
+			case PageAction::DrawVSlider :
 			{
 				d->hideHandlesOfCurrent();
 
@@ -1682,7 +1682,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				QPointF p = mouseEvent->pos();
 
-				if( FormAction::instance()->isSnapEnabled() )
+				if( PageAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
 
 				rect->setStartPos( p );
@@ -1695,7 +1695,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawRect :
+			case PageAction::DrawRect :
 			{
 				d->hideHandlesOfCurrent();
 
@@ -1713,7 +1713,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				QPointF p = mouseEvent->pos();
 
-				if( FormAction::instance()->isSnapEnabled() )
+				if( PageAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
 
 				rect->setRectangle( QRectF( p, QSizeF( 0.0, 0.0 ) ) );
@@ -1747,7 +1747,7 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, PagePrivate * d,
 	{
 		QPointF p = mouseEvent->pos();
 
-		if( FormAction::instance()->isSnapEnabled() )
+		if( PageAction::instance()->isSnapEnabled() )
 			p = d->m_snap->snapPos();
 
 		QRectF r = rect->rect();
@@ -1812,9 +1812,9 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 		d->m_snap->setSnapPos( mouseEvent->pos() );
 
-		switch( FormAction::instance()->mode() )
+		switch( PageAction::instance()->mode() )
 		{
-			case FormAction::DrawLine :
+			case PageAction::DrawLine :
 			{
 				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
 
@@ -1832,7 +1832,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QPointF p = d->lineStartPoint( mouseEvent->pos(),
 						intersected, intersectedEnds, intersectedLine );
 
-					if( !intersected && FormAction::instance()->isSnapEnabled() )
+					if( !intersected && PageAction::instance()->isSnapEnabled() )
 						p = d->m_snap->snapPos();
 
 					const QLineF l = line->line();
@@ -1900,7 +1900,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::InsertText :
+			case PageAction::InsertText :
 			{
 				FormText * text =
 					onReleaseWithRectPlacer< FormText, Cfg::Text > (
@@ -1926,7 +1926,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawRect :
+			case PageAction::DrawRect :
 			{
 				FormRect * rect = dynamic_cast< FormRect* > ( d->m_current );
 
@@ -1934,7 +1934,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				{
 					QPointF p = mouseEvent->pos();
 
-					if( FormAction::instance()->isSnapEnabled() )
+					if( PageAction::instance()->isSnapEnabled() )
 						p = d->m_snap->snapPos();
 
 					QRectF r = rect->rectangle();
@@ -1958,7 +1958,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawButton :
+			case PageAction::DrawButton :
 			{
 				onReleaseWithRectPlacer< FormButton, Cfg::Button > (
 					scene(), d.data(), mouseEvent, this );
@@ -1969,7 +1969,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawCheckBox :
+			case PageAction::DrawCheckBox :
 			{
 				onReleaseWithRectPlacer< FormCheckBox, Cfg::CheckBox > (
 					scene(), d.data(), mouseEvent, this );
@@ -1980,7 +1980,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawRadioButton :
+			case PageAction::DrawRadioButton :
 			{
 				onReleaseWithRectPlacer< FormRadioButton, Cfg::CheckBox > (
 					scene(), d.data(), mouseEvent, this );
@@ -1991,7 +1991,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawComboBox :
+			case PageAction::DrawComboBox :
 			{
 				onReleaseWithRectPlacer< FormComboBox, Cfg::ComboBox > (
 					scene(), d.data(), mouseEvent, this );
@@ -2002,7 +2002,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawSpinBox :
+			case PageAction::DrawSpinBox :
 			{
 				onReleaseWithRectPlacer< FormSpinBox, Cfg::SpinBox > (
 					scene(), d.data(), mouseEvent, this );
@@ -2013,7 +2013,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawHSlider :
+			case PageAction::DrawHSlider :
 			{
 				onReleaseWithRectPlacer< FormHSlider, Cfg::HSlider > (
 					scene(), d.data(), mouseEvent, this );
@@ -2024,7 +2024,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			}
 				break;
 
-			case FormAction::DrawVSlider :
+			case PageAction::DrawVSlider :
 			{
 				onReleaseWithRectPlacer< FormVSlider, Cfg::VSlider > (
 					scene(), d.data(), mouseEvent, this );
@@ -2099,7 +2099,7 @@ Page::dropEvent( QGraphicsSceneDragDropEvent * event )
 
 		d->m_ids.append( id );
 
-		if( FormAction::instance()->mode() == FormAction::Select )
+		if( PageAction::instance()->mode() == PageAction::Select )
 		{
 			image->setFlag( QGraphicsItem::ItemIsSelectable, true );
 
@@ -2108,7 +2108,7 @@ Page::dropEvent( QGraphicsSceneDragDropEvent * event )
 
 		d->m_snap->setSnapPos( event->pos() );
 
-		if( FormAction::instance()->isSnapEnabled() )
+		if( PageAction::instance()->isSnapEnabled() )
 			image->setPos( d->m_snap->snapPos() );
 		else
 			image->setPos( event->pos() );

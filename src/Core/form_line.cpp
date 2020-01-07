@@ -92,7 +92,7 @@ FormLinePrivate::init()
 	m_h2->hide();
 	m_move->hide();
 
-	q->setObjectPen( QPen( FormAction::instance()->strokeColor(), 2.0 ), false );
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), 2.0 ), false );
 }
 
 void
