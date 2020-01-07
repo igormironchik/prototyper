@@ -128,7 +128,7 @@ public:
 	//! Post deletion.
 	virtual void postDeletion();
 
-	//! \return WIdget with properties of object.
+	//! \return Widget with properties of object.
 	virtual QWidget * properties( QWidget * parent );
 
 	//! \return Pointer to default properties widget if set.

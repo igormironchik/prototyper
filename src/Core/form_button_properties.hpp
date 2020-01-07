@@ -24,11 +24,15 @@
 #define PROTOTYPER__CORE__FORM_BUTTON_PROPERTIES_HPP__INCLUDED
 
 // Qt include.
-#include <QDialog>
+#include <QWidget>
 #include <QScopedPointer>
 
 // Prototyper include.
 #include "project_cfg.hpp"
+
+namespace Ui {
+	class ButtonProperties;
+}
 
 
 namespace Prototyper {
@@ -43,19 +47,15 @@ class ButtonPropertiesPrivate;
 
 //! Properties of the button on the form.
 class ButtonProperties
-	:	public QDialog
+	:	public QWidget
 {
 	Q_OBJECT
 
 public:
-	ButtonProperties( QWidget * parent = Q_NULLPTR,
-		Qt::WindowFlags f = Qt::WindowFlags() );
+	ButtonProperties( QWidget * parent = Q_NULLPTR );
 	~ButtonProperties();
 
-	//! \return Cfg.
-	Cfg::TextStyle cfg() const;
-	//! Set cfg.
-	void setCfg( const Cfg::TextStyle & c );
+	Ui::ButtonProperties * ui() const;
 
 private:
 	Q_DISABLE_COPY( ButtonProperties )

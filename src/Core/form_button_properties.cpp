@@ -29,7 +29,6 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QCheckBox>
-#include <QDialogButtonBox>
 
 
 namespace Prototyper {
@@ -67,8 +66,8 @@ ButtonPropertiesPrivate::init()
 // ButtonProperties
 //
 
-ButtonProperties::ButtonProperties( QWidget * parent, Qt::WindowFlags f )
-	:	QDialog( parent, f )
+ButtonProperties::ButtonProperties( QWidget * parent )
+	:	QWidget( parent )
 	,	d( new ButtonPropertiesPrivate( this ) )
 {
 	d->init();
@@ -78,56 +77,10 @@ ButtonProperties::~ButtonProperties()
 {
 }
 
-Cfg::TextStyle
-ButtonProperties::cfg() const
+Ui::ButtonProperties *
+ButtonProperties::ui() const
 {
-	Cfg::TextStyle c;
-
-	std::vector< QString > style;
-
-	if( d->m_ui.m_bold->isChecked() )
-		style.push_back( Cfg::c_boldStyle );
-
-	if( d->m_ui.m_italic->isChecked() )
-		style.push_back( Cfg::c_italicStyle );
-
-	if( d->m_ui.m_underline->isChecked() )
-		style.push_back( Cfg::c_underlineStyle );
-
-	if( style.empty() )
-		style.push_back( Cfg::c_normalStyle );
-
-	c.set_style( style );
-	c.set_fontSize( d->m_ui.m_fontSize->value() );
-	c.set_text( d->m_ui.m_text->text() );
-
-	return c;
-}
-
-void
-ButtonProperties::setCfg( const Cfg::TextStyle & c )
-{
-	if( std::find( c.style().cbegin(), c.style().cend(),
-		Cfg::c_boldStyle ) != c.style().cend() )
-			d->m_ui.m_bold->setChecked( true );
-	else
-		d->m_ui.m_bold->setChecked( false );
-
-	if( std::find( c.style().cbegin(), c.style().cend(),
-		Cfg::c_italicStyle ) != c.style().cend() )
-			d->m_ui.m_italic->setChecked( true );
-	else
-		d->m_ui.m_italic->setChecked( false );
-
-	if( std::find( c.style().cbegin(), c.style().cend(),
-		Cfg::c_underlineStyle ) != c.style().cend() )
-			d->m_ui.m_underline->setChecked( true );
-	else
-		d->m_ui.m_underline->setChecked( false );
-
-	d->m_ui.m_fontSize->setValue( qRound( c.fontSize() ) );
-
-	d->m_ui.m_text->setText( c.text() );
+	return &d->m_ui;
 }
 
 } /* namespace Core */
