@@ -24,6 +24,7 @@
 #include "page_view.hpp"
 #include "page_scene.hpp"
 #include "page.hpp"
+#include "project_cfg.hpp"
 
 // Qt include.
 #include <QApplication>

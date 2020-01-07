@@ -38,6 +38,7 @@
 #include "pdf_exporter.hpp"
 #include "html_exporter.hpp"
 #include "svg_exporter.hpp"
+#include "form_group.hpp"
 
 // Qt include.
 #include <QMenuBar>

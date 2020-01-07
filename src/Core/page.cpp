@@ -34,6 +34,21 @@
 #include "utils.hpp"
 #include "form_undo_commands.hpp"
 #include "constants.hpp"
+#include "page_private.hpp"
+#include "form_line.hpp"
+#include "form_polyline.hpp"
+#include "form_group.hpp"
+#include "form_text.hpp"
+#include "form_image.hpp"
+#include "form_rectangle.hpp"
+#include "form_button.hpp"
+#include "form_checkbox.hpp"
+#include "form_radio_button.hpp"
+#include "form_combobox.hpp"
+#include "form_spinbox.hpp"
+#include "form_hslider.hpp"
+#include "form_vslider.hpp"
+#include "form_grid_snap.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -601,7 +616,7 @@ PagePrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 
 
 //
-// Form
+// Page
 //
 
 Page::Page( Cfg::Page & c, QGraphicsItem * parent )
@@ -618,6 +633,103 @@ Page::Page( Cfg::Page & c, QGraphicsItem * parent )
 
 Page::~Page()
 {
+}
+
+template< class Elem >
+FormObject *
+Page::createElement( const QString & id )
+{
+	FormObject * obj = Q_NULLPTR;
+
+	switch( Elem::staticObjectType() )
+	{
+		case FormObject::LineType :
+		{
+			obj = new FormLine( this, this );
+		}
+			break;
+
+		case FormObject::PolylineType :
+		{
+			obj = new FormPolyline( this, this );
+		}
+			break;
+
+		case FormObject::TextType :
+		{
+			obj = new FormText( QRectF(), this, this );
+		}
+			break;
+
+		case FormObject::ImageType :
+		{
+			obj = new FormImage( this, this );
+		}
+			break;
+
+		case FormObject::RectType :
+		{
+			obj = new FormRect( this, this );
+		}
+			break;
+
+		case FormObject::GroupType :
+		{
+			obj = new FormGroup( this, this );
+		}
+			break;
+
+		case FormObject::ButtonType :
+		{
+			obj = new FormButton( QRectF(), this, this );
+		}
+			break;
+
+		case FormObject::ComboBoxType :
+		{
+			obj = new FormComboBox( QRectF(), this, this );
+		}
+			break;
+
+		case FormObject::RadioButtonType :
+		{
+			obj = new FormRadioButton( QRectF(), this, this );
+		}
+			break;
+
+		case FormObject::CheckBoxType :
+		{
+			obj = new FormCheckBox( QRectF(), this, this );
+		}
+			break;
+
+		case FormObject::HSliderType :
+		{
+			obj = new FormHSlider( QRectF(), this, this );
+		}
+			break;
+
+		case FormObject::VSliderType :
+		{
+			obj = new FormVSlider( QRectF(), this, this );
+		}
+			break;
+
+		case FormObject::SpinBoxType :
+		{
+			obj = new FormSpinBox( QRectF(), this, this );
+		}
+			break;
+
+		default :
+			break;
+	}
+
+	obj->setObjectId( id );
+
+	d->m_ids.append( id );
+
+	return obj;
 }
 
 QUndoStack *

@@ -29,21 +29,9 @@
 #include <QTextDocument>
 
 // Prototyper include.
+#include "types.hpp"
 #include "form_object.hpp"
-#include "form_line.hpp"
-#include "form_polyline.hpp"
-#include "form_group.hpp"
-#include "form_text.hpp"
-#include "form_image.hpp"
-#include "form_rectangle.hpp"
-#include "form_button.hpp"
-#include "form_checkbox.hpp"
-#include "form_radio_button.hpp"
-#include "form_combobox.hpp"
-#include "form_spinbox.hpp"
-#include "form_hslider.hpp"
-#include "form_vslider.hpp"
-#include "form_grid_snap.hpp"
+
 
 QT_BEGIN_NAMESPACE
 class QUndoStack;
@@ -59,141 +47,16 @@ namespace Cfg {
 
 class Form;
 class Size;
+class Page;
 
 } /* namespace Cfg */
 
-//
-// GridMode
-//
-
-//! Grid mode.
-enum GridMode {
-	//! Show grid.
-	ShowGrid,
-	//! No grid.
-	NoGrid
-}; // enum GridMode
-
-
-//
-// PagePrivate
-//
-
-class PagePrivate {
-public:
-	PagePrivate( Cfg::Page & cfg, Page * parent )
-		:	q( parent )
-		,	m_gridMode( ShowGrid )
-		,	m_gridStepAction( 0 )
-		,	m_cfg( cfg )
-		,	m_pressed( false )
-		,	m_current( 0 )
-		,	m_id( 0 )
-		,	m_snap( 0 )
-		,	m_polyline( false )
-		,	m_currentPoly( 0 )
-		,	m_undoStack( 0 )
-	{
-	}
-
-	//! Init.
-	void init();
-	//! \return Current Z-value.
-	qreal currentZValue() const;
-	//! \return Current Z-value.
-	void currentZValue( const QList< QGraphicsItem* > & items,
-		qreal & z ) const;
-	//! \return Start point for line.
-	QPointF lineStartPoint( const QPointF & point,
-		bool & intersected, bool & intersectedEnds,
-		FormLine* & intersectedLine ) const;
-	//! Clear current lines.
-	void clearCurrentLines();
-	//! Handle mouse move in current lines.
-	void handleMouseMoveInCurrentLines( const QPointF & point );
-	//! Handle mouse move in current polyline.
-	void handleMouseMoveInCurrentPolyLine( const QPointF & point );
-	//! Ungroup.
-	void ungroup( QGraphicsItem * group, bool pushUndoCommand = true );
-	//! \return Next ID.
-	QString id();
-	//! Update form from the configuration.
-	void updateFromCfg();
-	//! Clear form.
-	void clear();
-	//! Create text.
-	FormText * createText( const Cfg::Text & cfg );
-	//! Create group.
-	FormGroup * createGroup( const Cfg::Group & cfg );
-	//! Create element.
-	template< class Elem, class Config >
-	Elem * createElem( const Config & cfg );
-	//! Create element with rect.
-	template< class Elem, class Config >
-	Elem * createElemWithRect( const Config & cfg, const QRectF & rect );
-	//! Clear IDs.
-	void clearIds( FormGroup * group );
-	//! Add IDs.
-	void addIds( FormGroup * group );
-	//! Set text.
-	void setText( const QSharedPointer< QTextDocument > & doc,
-		const std::vector< Cfg::TextStyle > & text );
-	//! Hide handles of current item.
-	void hideHandlesOfCurrent();
-	//! Selection.
-	QList< QGraphicsItem* > selection();
-
-	//! AlignPoint.
-	enum AlignPoint {
-		//! Align Horizontal Left.
-		AlignHorLeftPoint,
-		//! Align Horizontal Center.
-		AlignHorCenterPoint,
-		//! Align Horizontal Right.
-		AlignHorRightPoint,
-		//! Align Vertical Top.
-		AlignVertTopPoint,
-		//! Align Vertical Center.
-		AlignVertCenterPoint,
-		//! Align Vertical Bottom.
-		AlignVertBottomPoint
-	}; // enum AlignPoint
-
-	//! Search align point.
-	qreal searchAlignPoint( const QList< QGraphicsItem* > & items,
-		AlignPoint point );
-
-	//! Parent.
-	Page * q;
-	//! Grid mode.
-	GridMode m_gridMode;
-	//! Grid step action.
-	QAction * m_gridStepAction;
-	//! Cfg.
-	Cfg::Page & m_cfg;
-	//! Pressed.
-	bool m_pressed;
-	//! Current item.
-	QGraphicsItem * m_current;
-	//! Mouse pos.
-	QPointF m_pos;
-	//! ID.
-	quint64 m_id;
-	//! Current lines.
-	QList< FormLine* > m_currentLines;
-	//! Grid snap.
-	GridSnap * m_snap;
-	//! Make polyline.
-	bool m_polyline;
-	//! Current polyline.
-	FormPolyline * m_currentPoly;
-	//! IDs
-	QStringList m_ids;
-	//! Undo stack.
-	QUndoStack * m_undoStack;
-	//! Map of text documents.
-	QMap< QObject*, FormText* > m_docs;
-}; // class FormPrivate
+class PagePrivate;
+class FormLine;
+class FormPolyline;
+class FormText;
+class FormGroup;
+class GridSnap;
 
 
 //
@@ -360,100 +223,7 @@ protected:
 	void setCurrentPolyLine( FormPolyline * line );
 	//! Create element.
 	template< class Elem >
-	FormObject * createElement( const QString & id )
-	{
-		FormObject * obj = Q_NULLPTR;
-
-		switch( Elem::staticObjectType() )
-		{
-			case FormObject::LineType :
-			{
-				obj = new FormLine( this, this );
-			}
-				break;
-
-			case FormObject::PolylineType :
-			{
-				obj = new FormPolyline( this, this );
-			}
-				break;
-
-			case FormObject::TextType :
-			{
-				obj = new FormText( QRectF(), this, this );
-			}
-				break;
-
-			case FormObject::ImageType :
-			{
-				obj = new FormImage( this, this );
-			}
-				break;
-
-			case FormObject::RectType :
-			{
-				obj = new FormRect( this, this );
-			}
-				break;
-
-			case FormObject::GroupType :
-			{
-				obj = new FormGroup( this, this );
-			}
-				break;
-
-			case FormObject::ButtonType :
-			{
-				obj = new FormButton( QRectF(), this, this );
-			}
-				break;
-
-			case FormObject::ComboBoxType :
-			{
-				obj = new FormComboBox( QRectF(), this, this );
-			}
-				break;
-
-			case FormObject::RadioButtonType :
-			{
-				obj = new FormRadioButton( QRectF(), this, this );
-			}
-				break;
-
-			case FormObject::CheckBoxType :
-			{
-				obj = new FormCheckBox( QRectF(), this, this );
-			}
-				break;
-
-			case FormObject::HSliderType :
-			{
-				obj = new FormHSlider( QRectF(), this, this );
-			}
-				break;
-
-			case FormObject::VSliderType :
-			{
-				obj = new FormVSlider( QRectF(), this, this );
-			}
-				break;
-
-			case FormObject::SpinBoxType :
-			{
-				obj = new FormSpinBox( QRectF(), this, this );
-			}
-				break;
-
-			default :
-				break;
-		}
-
-		obj->setObjectId( id );
-
-		d->m_ids.append( id );
-
-		return obj;
-	}
+	FormObject * createElement( const QString & id );
 
 private:
 	friend class PagePrivate;
