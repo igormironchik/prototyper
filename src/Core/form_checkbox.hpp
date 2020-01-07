@@ -41,37 +41,7 @@ namespace Core {
 class FormCheckBox;
 class FormImageHandles;
 class TextWithOpts;
-
-
-//
-// FormCheckBoxPrivate
-//
-
-class FormCheckBoxPrivate {
-public:
-	FormCheckBoxPrivate( FormCheckBox * parent, const QRectF & rect );
-	virtual ~FormCheckBoxPrivate();
-
-	//! Init.
-	void init();
-	//! Set rect.
-	void setRect( const QRectF & rect );
-
-	//! Parent.
-	FormCheckBox * q;
-	//! Rect.
-	QRectF m_rect;
-	//! Checked?
-	bool m_checked;
-	//! Handles.
-	QScopedPointer< FormResizableProxy > m_handles;
-	//! Font.
-	QFont m_font;
-	//! Text.
-	QString m_text;
-	//! Width.
-	qreal m_width;
-}; // class FormCheckBoxPrivate
+class FormCheckBoxPrivate;
 
 
 //
@@ -137,18 +107,19 @@ public:
 	//! \return Default size.
 	virtual QSizeF defaultSize() const override;
 
+	QWidget * properties( QWidget * parent ) override;
+	void updatePropertiesValues() override;
+
+	//! Is checked?
+	bool isChecked() const;
+	//! Set check state.
+	void setChecked( bool on = true );
+
 protected:
 	//! Resize.
 	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
 	//! Move resizable.
 	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
-
-	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
-		Q_DECL_OVERRIDE;
-
-private slots:
-	//! Properties.
-	void properties();
 
 protected:
 	FormCheckBox( const QRectF & rect, Page * form,

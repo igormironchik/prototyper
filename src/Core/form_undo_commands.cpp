@@ -458,6 +458,63 @@ UndoChangeTextWithOpts::setTextOpts( const Cfg::TextStyle & opts )
 	}
 }
 
+
+//
+// UndoChangeCheckState
+//
+
+UndoChangeCheckState::UndoChangeCheckState( Page * form, const QString & id )
+	:	QUndoCommand( QObject::tr( "Change Check State" ) )
+	,	m_form( form )
+	,	m_id( id )
+	,	m_undone( false )
+	,	m_checked( false )
+{
+	auto * c = find();
+
+	if( c )
+		m_checked = c->isChecked();
+}
+
+void
+UndoChangeCheckState::undo()
+{
+	m_undone = true;
+
+	auto * c = find();
+
+	if( c )
+		c->setChecked( !m_checked );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+}
+
+void
+UndoChangeCheckState::redo()
+{
+	if( m_undone )
+	{
+		auto * c = find();
+
+		if( c )
+			c->setChecked( m_checked );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+}
+
+FormCheckBox *
+UndoChangeCheckState::find() const
+{
+	auto * i = m_form->findItem( m_id );
+
+	if( i )
+		return dynamic_cast< FormCheckBox* > ( i );
+	else
+		return nullptr;
+
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

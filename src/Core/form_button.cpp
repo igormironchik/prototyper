@@ -122,21 +122,21 @@ FormButtonPrivate::connectProperties()
 {
 	if( m_props )
 	{
-		FormSpinBox::connect( m_props->ui()->m_x,
+		FormButton::connect( m_props->ui()->m_x,
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				q->setPosition( QPointF( v, q->position().y() ) );
 				q->form()->emitChanged();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_y,
+		FormButton::connect( m_props->ui()->m_y,
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				q->setPosition( QPointF( q->position().x(), v ) );
 				q->form()->emitChanged();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_width,
+		FormButton::connect( m_props->ui()->m_width,
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				QRectF r = m_rect;
@@ -146,7 +146,7 @@ FormButtonPrivate::connectProperties()
 				q->form()->emitChanged();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_height,
+		FormButton::connect( m_props->ui()->m_height,
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				QRectF r = m_rect;
@@ -156,7 +156,7 @@ FormButtonPrivate::connectProperties()
 				q->form()->emitChanged();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_text,
+		FormButton::connect( m_props->ui()->m_text,
 			&QLineEdit::textChanged,
 			[this]( const QString & t ) {
 				const auto oldText = q->text();
@@ -169,7 +169,7 @@ FormButtonPrivate::connectProperties()
 				q->update();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_size,
+		FormButton::connect( m_props->ui()->m_size,
 			QOverload< int >::of( &QSpinBox::valueChanged ),
 			[this]( int v ) {
 				const auto oldText = q->text();
@@ -182,7 +182,7 @@ FormButtonPrivate::connectProperties()
 				q->update();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_bold,
+		FormButton::connect( m_props->ui()->m_bold,
 			&QCheckBox::stateChanged,
 			[this]( int v ) {
 				const auto oldText = q->text();
@@ -195,7 +195,7 @@ FormButtonPrivate::connectProperties()
 				q->update();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_italic,
+		FormButton::connect( m_props->ui()->m_italic,
 			&QCheckBox::stateChanged,
 			[this]( int v ) {
 				const auto oldText = q->text();
@@ -208,7 +208,7 @@ FormButtonPrivate::connectProperties()
 				q->update();
 			} );
 
-		FormSpinBox::connect( m_props->ui()->m_underline,
+		FormButton::connect( m_props->ui()->m_underline,
 			&QCheckBox::stateChanged,
 			[this]( int v ) {
 				const auto oldText = q->text();
@@ -228,31 +228,31 @@ FormButtonPrivate::disconnectProperties()
 {
 	if( m_props )
 	{
-		FormSpinBox::disconnect( m_props->ui()->m_x,
+		FormButton::disconnect( m_props->ui()->m_x,
 			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_y,
+		FormButton::disconnect( m_props->ui()->m_y,
 			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_width,
+		FormButton::disconnect( m_props->ui()->m_width,
 			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_height,
+		FormButton::disconnect( m_props->ui()->m_height,
 			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_text,
+		FormButton::disconnect( m_props->ui()->m_text,
 			&QLineEdit::textChanged, 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_size,
+		FormButton::disconnect( m_props->ui()->m_size,
 			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_bold,
+		FormButton::disconnect( m_props->ui()->m_bold,
 			&QCheckBox::stateChanged, 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_italic,
+		FormButton::disconnect( m_props->ui()->m_italic,
 			&QCheckBox::stateChanged, 0, 0 );
 
-		FormSpinBox::disconnect( m_props->ui()->m_underline,
+		FormButton::disconnect( m_props->ui()->m_underline,
 			&QCheckBox::stateChanged, 0, 0 );
 	}
 }

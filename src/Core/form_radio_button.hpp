@@ -58,14 +58,6 @@ public:
 		const QRectF & rect, qreal width, bool isChecked, const QString & text,
 		const QRectF & boundingRect, int dpi = 0 );
 
-protected:
-	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
-		Q_DECL_OVERRIDE;
-
-private slots:
-	//! Properties.
-	void properties();
-
 private:
 	Q_DISABLE_COPY( FormRadioButton )
 }; // class FormRadioButton

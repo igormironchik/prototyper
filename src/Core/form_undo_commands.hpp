@@ -719,6 +719,37 @@ private:
 	bool m_undone;
 }; // class UndoChangeTextWithOpts
 
+
+//
+// UndoChangeCheckState
+//
+
+//! Undo changing of check state.
+class UndoChangeCheckState
+	:	public QUndoCommand
+{
+public:
+	UndoChangeCheckState( Page * form, const QString & id );
+	~UndoChangeCheckState() = default;
+
+	void undo() override;
+
+	void redo() override;
+
+private:
+	FormCheckBox * find() const;
+
+private:
+	//! Form.
+	Page * m_form;
+	//! Id.
+	QString m_id;
+	//! Undone?
+	bool m_undone;
+	//! Checked?
+	bool m_checked;
+}; // class UndoChangeCheckState
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

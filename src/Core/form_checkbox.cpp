@@ -28,6 +28,8 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
+#include "form_checkbox_private.hpp"
+#include "ui_form_checkbox_properties.h"
 
 // Qt include.
 #include <QPainter>
@@ -99,6 +101,160 @@ FormCheckBoxPrivate::setRect( const QRectF & rect )
 	hr.moveTopLeft( r.topLeft() );
 
 	m_handles->setRect( hr );
+}
+
+void
+FormCheckBoxPrivate::connectProperties()
+{
+	if( m_props )
+	{
+		FormCheckBox::connect( m_props->ui()->m_x,
+			QOverload< int >::of( &QSpinBox::valueChanged ),
+			[this]( int v ) {
+				q->setPosition( QPointF( v, q->position().y() ) );
+				q->form()->emitChanged();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_y,
+			QOverload< int >::of( &QSpinBox::valueChanged ),
+			[this]( int v ) {
+				q->setPosition( QPointF( q->position().x(), v ) );
+				q->form()->emitChanged();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_width,
+			QOverload< int >::of( &QSpinBox::valueChanged ),
+			[this]( int v ) {
+				QRectF r = m_rect;
+				r.setWidth( v );
+				r.moveTopLeft( q->position() );
+				q->setRectangle( r, true );
+				q->form()->emitChanged();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_height,
+			QOverload< int >::of( &QSpinBox::valueChanged ),
+			[this]( int v ) {
+				QRectF r = m_rect;
+				r.setHeight( v );
+				r.moveTopLeft( q->position() );
+				q->setRectangle( r, true );
+				q->form()->emitChanged();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_text,
+			&QLineEdit::textChanged,
+			[this]( const QString & t ) {
+				const auto oldText = q->text();
+				m_text = t;
+				q->form()->emitChanged();
+
+				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+					q->objectId(), oldText, q->text() ) );
+
+				q->update();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_size,
+			QOverload< int >::of( &QSpinBox::valueChanged ),
+			[this]( int v ) {
+				const auto oldText = q->text();
+				m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
+				q->form()->emitChanged();
+
+				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+					q->objectId(), oldText, q->text() ) );
+
+				q->update();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_bold,
+			&QCheckBox::stateChanged,
+			[this]( int v ) {
+				const auto oldText = q->text();
+				m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
+				q->form()->emitChanged();
+
+				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+					q->objectId(), oldText, q->text() ) );
+
+				q->update();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_italic,
+			&QCheckBox::stateChanged,
+			[this]( int v ) {
+				const auto oldText = q->text();
+				m_font.setItalic( ( v == Qt::Checked ? true : false ) );
+				q->form()->emitChanged();
+
+				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+					q->objectId(), oldText, q->text() ) );
+
+				q->update();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_underline,
+			&QCheckBox::stateChanged,
+			[this]( int v ) {
+				const auto oldText = q->text();
+				m_font.setUnderline( ( v == Qt::Checked ? true : false ) );
+				q->form()->emitChanged();
+
+				q->form()->undoStack()->push( new UndoChangeTextWithOpts( q->form(),
+					q->objectId(), oldText, q->text() ) );
+
+				q->update();
+			} );
+
+		FormCheckBox::connect( m_props->ui()->m_checked,
+			&QCheckBox::stateChanged,
+			[this]( int v ) {
+				m_checked = ( v == Qt::Checked ? true : false );
+
+				q->form()->undoStack()->push( new UndoChangeCheckState( q->form(),
+					q->objectId() ) );
+
+				q->update();
+			} );
+	}
+}
+
+void
+FormCheckBoxPrivate::disconnectProperties()
+{
+	if( m_props )
+	{
+		FormCheckBox::disconnect( m_props->ui()->m_x,
+			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_y,
+			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_width,
+			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_height,
+			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_text,
+			&QLineEdit::textChanged, 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_size,
+			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_bold,
+			&QCheckBox::stateChanged, 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_italic,
+			&QCheckBox::stateChanged, 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_underline,
+			&QCheckBox::stateChanged, 0, 0 );
+
+		FormCheckBox::disconnect( m_props->ui()->m_checked,
+			&QCheckBox::stateChanged, 0, 0 );
+	}
 }
 
 
@@ -309,6 +465,17 @@ FormCheckBox::setText( const Cfg::TextStyle & c )
 
 	d->m_text = c.text();
 
+	if( d->m_props )
+	{
+		d->disconnectProperties();
+		d->m_props->ui()->m_text->setText( d->m_text );
+		d->m_props->ui()->m_size->setValue( qRound( c.fontSize() ) );
+		d->m_props->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
+		d->m_props->ui()->m_italic->setChecked( d->m_font.italic() );
+		d->m_props->ui()->m_underline->setChecked( d->m_font.underline() );
+		d->connectProperties();
+	}
+
 	if( scene() )
 		scene()->update();
 }
@@ -331,6 +498,15 @@ FormCheckBox::setPosition( const QPointF & pos, bool pushUndoCommand )
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( pos );
+
+	if( d->m_props )
+	{
+		d->disconnectProperties();
+		d->m_props->ui()->m_x->setValue( pos.x() );
+		d->m_props->ui()->m_y->setValue( pos.y() );
+		d->connectProperties();
+	}
+
 
 	d->setRect( r );
 }
@@ -356,6 +532,14 @@ FormCheckBox::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	FormObject::setRectangle( rect, pushUndoCommand );
 
 	resize( rect );
+
+	if( d->m_props )
+	{
+		d->disconnectProperties();
+		d->m_props->ui()->m_width->setValue( rect.width() );
+		d->m_props->ui()->m_height->setValue( rect.height() );
+		d->connectProperties();
+	}
 
 	scene()->update();
 }
@@ -385,43 +569,69 @@ FormCheckBox::moveResizable( const QPointF & delta )
 	moveBy( delta.x(), delta.y() );
 }
 
-void
-FormCheckBox::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
-{
-	QMenu menu;
-
-	menu.addAction( QIcon( ":/Core/img/configure.png" ),
-		tr( "Properties" ), this, &FormCheckBox::properties );
-
-	menu.exec( event->screenPos() );
-}
-
-void
-FormCheckBox::properties()
-{
-	CheckBoxProperties dlg;
-
-	dlg.setCfg( cfg() );
-
-	if( dlg.exec() == QDialog::Accepted )
-	{
-		Cfg::CheckBox c = dlg.cfg();
-
-		form()->undoStack()->push( new UndoChangeTextWithOpts( form(),
-			objectId(), text(), c.text() ) );
-
-		setText( c.text() );
-
-		d->m_checked = c.isChecked();
-
-		update();
-	}
-}
-
 QSizeF
 FormCheckBox::defaultSize() const
 {
 	return QSizeF( MmPx::instance().fromMmX( 20.0 ), boxHeight() );
+}
+
+QWidget *
+FormCheckBox::properties( QWidget * parent )
+{
+	d->m_props = new CheckBoxProperties( parent );
+
+	d->m_props->ui()->m_x->setValue( pos().x() );
+	d->m_props->ui()->m_y->setValue( pos().y() );
+	d->m_props->ui()->m_width->setValue( d->m_rect.width() );
+	d->m_props->ui()->m_height->setValue( d->m_rect.height() );
+	d->m_props->ui()->m_text->setText( d->m_text );
+	d->m_props->ui()->m_size->setValue( qRound( MmPx::instance().toPtY( d->m_font.pixelSize() ) ) );
+	d->m_props->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
+	d->m_props->ui()->m_italic->setChecked( d->m_font.italic() );
+	d->m_props->ui()->m_underline->setChecked( d->m_font.underline() );
+	d->m_props->ui()->m_checked->setChecked( d->m_checked );
+
+	d->m_props->ui()->m_width->setMinimum( defaultSize().width() );
+	d->m_props->ui()->m_height->setMinimum( defaultSize().height() );
+
+	d->connectProperties();
+
+	return d->m_props.data();
+}
+
+void
+FormCheckBox::updatePropertiesValues()
+{
+	if( d->m_props )
+	{
+		d->disconnectProperties();
+		d->m_props->ui()->m_x->setValue( position().x() );
+		d->m_props->ui()->m_y->setValue( position().y() );
+		d->m_props->ui()->m_width->setValue( rectangle().width() );
+		d->m_props->ui()->m_height->setValue( rectangle().height() );
+		d->connectProperties();
+	}
+}
+
+bool
+FormCheckBox::isChecked() const
+{
+	return d->m_checked;
+}
+
+void
+FormCheckBox::setChecked( bool on )
+{
+	d->m_checked = on;
+
+	if( d->m_props )
+	{
+		d->disconnectProperties();
+		d->m_props->ui()->m_checked->setChecked( d->m_checked );
+		d->connectProperties();
+	}
+
+	update();
 }
 
 } /* namespace Core */

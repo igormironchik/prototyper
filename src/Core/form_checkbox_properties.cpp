@@ -29,7 +29,6 @@
 #include <QLineEdit>
 #include <QSpinBox>
 #include <QCheckBox>
-#include <QDialogButtonBox>
 
 
 namespace Prototyper {
@@ -67,8 +66,8 @@ CheckBoxPropertiesPrivate::init()
 // FormCheckBoxProperties
 //
 
-CheckBoxProperties::CheckBoxProperties( QWidget * parent, Qt::WindowFlags f )
-	:	QDialog( parent, f )
+CheckBoxProperties::CheckBoxProperties( QWidget * parent )
+	:	QWidget( parent )
 	,	d( new CheckBoxPropertiesPrivate( this ) )
 {
 	d->init();
@@ -78,64 +77,10 @@ CheckBoxProperties::~CheckBoxProperties()
 {
 }
 
-Cfg::CheckBox
-CheckBoxProperties::cfg() const
+Ui::CheckBoxProperties *
+CheckBoxProperties::ui() const
 {
-	Cfg::CheckBox res;
-
-	Cfg::TextStyle c;
-
-	std::vector< QString > style;
-
-	if( d->m_ui.m_bold->isChecked() )
-		style.push_back( Cfg::c_boldStyle );
-
-	if( d->m_ui.m_italic->isChecked() )
-		style.push_back( Cfg::c_italicStyle );
-
-	if( d->m_ui.m_underline->isChecked() )
-		style.push_back( Cfg::c_underlineStyle );
-
-	if( style.empty() )
-		style.push_back( Cfg::c_normalStyle );
-
-	c.set_style( style );
-	c.set_fontSize( d->m_ui.m_fontSize->value() );
-	c.set_text( d->m_ui.m_text->text() );
-
-	res.set_text( c );
-
-	res.set_isChecked( d->m_ui.m_isChecked->isChecked() );
-
-	return res;
-}
-
-void
-CheckBoxProperties::setCfg( const Cfg::CheckBox & c )
-{
-	if( std::find( c.text().style().cbegin(), c.text().style().cend(),
-		Cfg::c_boldStyle ) != c.text().style().cend() )
-			d->m_ui.m_bold->setChecked( true );
-	else
-		d->m_ui.m_bold->setChecked( false );
-
-	if( std::find( c.text().style().cbegin(), c.text().style().cend(),
-		Cfg::c_italicStyle ) != c.text().style().cend() )
-			d->m_ui.m_italic->setChecked( true );
-	else
-		d->m_ui.m_italic->setChecked( false );
-
-	if( std::find( c.text().style().cbegin(), c.text().style().cend(),
-		Cfg::c_underlineStyle ) != c.text().style().cend() )
-			d->m_ui.m_underline->setChecked( true );
-	else
-		d->m_ui.m_underline->setChecked( false );
-
-	d->m_ui.m_fontSize->setValue( qRound( c.text().fontSize() ) );
-
-	d->m_ui.m_text->setText( c.text().text() );
-
-	d->m_ui.m_isChecked->setChecked( c.isChecked() );
+	return &d->m_ui;
 }
 
 } /* namespace Core */

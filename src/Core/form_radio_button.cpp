@@ -26,6 +26,7 @@
 #include "form_image_handles.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "form_checkbox_private.hpp"
 
 // Qt include.
 #include <QWidget>
@@ -112,40 +113,6 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	r.moveLeft( r.x() + boxHeight( dpi ) + o * 2.0 );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
-}
-
-void
-FormRadioButton::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
-{
-	QMenu menu;
-
-	menu.addAction( QIcon( ":/Core/img/configure.png" ),
-		QObject::tr( "Properties" ), this, &FormRadioButton::properties );
-
-	menu.exec( event->screenPos() );
-}
-
-void
-FormRadioButton::properties()
-{
-	CheckBoxProperties dlg;
-	dlg.setWindowTitle( tr( "Radio Button" ) );
-
-	dlg.setCfg( cfg() );
-
-	if( dlg.exec() == QDialog::Accepted )
-	{
-		Cfg::CheckBox c = dlg.cfg();
-
-		form()->undoStack()->push( new UndoChangeTextWithOpts( form(),
-			objectId(), text(), c.text() ) );
-
-		setText( c.text() );
-
-		d->m_checked = c.isChecked();
-
-		update();
-	}
 }
 
 } /* namespace Core */

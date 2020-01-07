@@ -24,11 +24,15 @@
 #define PROTOTYPER__CORE__FORM_CHECKBOX_PROPERTIES_HPP__INCLUDED
 
 // Qt include.
-#include <QDialog>
+#include <QWidget>
 #include <QScopedPointer>
 
 // Prototyper include.
 #include "project_cfg.hpp"
+
+namespace Ui {
+	class CheckBoxProperties;
+}
 
 
 namespace Prototyper {
@@ -43,19 +47,15 @@ class CheckBoxPropertiesPrivate;
 
 //! Properties of the checkbox on the form.
 class CheckBoxProperties
-	:	public QDialog
+	:	public QWidget
 {
 	Q_OBJECT
 
 public:
-	CheckBoxProperties( QWidget * parent = Q_NULLPTR,
-		Qt::WindowFlags f = Qt::WindowFlags() );
+	CheckBoxProperties( QWidget * parent = Q_NULLPTR );
 	~CheckBoxProperties();
 
-	//! \return Cfg.
-	Cfg::CheckBox cfg() const;
-	//! Set cfg.
-	void setCfg( const Cfg::CheckBox & c );
+	Ui::CheckBoxProperties * ui() const;
 
 private:
 	Q_DISABLE_COPY( CheckBoxProperties )

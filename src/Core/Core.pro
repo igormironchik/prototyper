@@ -89,7 +89,8 @@ HEADERS +=	exporter.hpp \
 			svg_exporter.hpp \
 			form_undo_commands.hpp \
 			constants.hpp \
-			form_object_properties.hpp
+			form_object_properties.hpp \
+			form_checkbox_private.hpp
 
 SOURCES +=	exporter.cpp \
 			form_actions.cpp \
