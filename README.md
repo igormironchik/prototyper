@@ -30,5 +30,4 @@ git submodule update --init --recursive
 
  - [ ] Add possibility to copy text format
  - [ ] Add comments to drawing area (pages)
- - [ ] Add right dock with all properties of the currently selected item on page
 
