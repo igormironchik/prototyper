@@ -12,13 +12,13 @@
 				#|
 				{class TextStyle
 					{base tagScalarVector
-						{oneOfConstraint "QLatin1String( \"bold\" )"
-							"QLatin1String( \"italic\" )"
-							"QLatin1String( \"underline\" )"
-							"QLatin1String( \"normal\" )"
-							"QLatin1String( \"left\" )"
-							"QLatin1String( \"right\" )"
-							"QLatin1String( \"center\" )"
+						{oneOfConstraint "QStringLiteral( \"bold\" )"
+							"QStringLiteral( \"italic\" )"
+							"QStringLiteral( \"underline\" )"
+							"QStringLiteral( \"normal\" )"
+							"QStringLiteral( \"left\" )"
+							"QStringLiteral( \"right\" )"
+							"QStringLiteral( \"center\" )"
 						}
 						{valueType QString}
 						{name style}
@@ -110,7 +110,7 @@
 						{valueType QString}
 						{name color}
 						{required}
-						{defaultValue "QLatin1String( \"black\" )"}
+						{defaultValue "QStringLiteral( \"black\" )"}
 					}
 				} || class Pen
 
@@ -123,7 +123,7 @@
 						{valueType QString}
 						{name color}
 						{required}
-						{defaultValue "QLatin1String( \"transparent\" )"}
+						{defaultValue "QStringLiteral( \"transparent\" )"}
 					}
 				} || class Brush
 
