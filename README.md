@@ -16,7 +16,7 @@ And Prototyper licensed under GNU GPL v3.0!!!
 
 # Screenshots
 
-![](doc/img/Screenshot_20200110_103626.png)
+![](doc/img/Screenshot_20200110_144355.png)
 
 # Wanted
 

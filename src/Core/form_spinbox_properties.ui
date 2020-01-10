@@ -111,13 +111,6 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Value</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QSpinBox" name="m_value">
         <property name="maximum">
          <number>999</number>

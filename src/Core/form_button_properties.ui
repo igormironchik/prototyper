@@ -111,13 +111,6 @@
      </property>
      <layout class="QHBoxLayout" name="horizontalLayout_5">
       <item>
-       <widget class="QLabel" name="label">
-        <property name="text">
-         <string>Text</string>
-        </property>
-       </widget>
-      </item>
-      <item>
        <widget class="QLineEdit" name="m_text"/>
       </item>
      </layout>
