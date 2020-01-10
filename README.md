@@ -14,6 +14,10 @@ you can export your project to the PDF, HTML or SVG images of pages.
 
 And Prototyper licensed under GNU GPL v3.0!!!
 
+# Screenshots
+
+![](doc/img/Screenshot_20200110_103626.png)
+
 # Wanted
 
 I'm looking for a free designer to create icon of copy text format action
