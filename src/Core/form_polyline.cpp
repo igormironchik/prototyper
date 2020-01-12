@@ -519,7 +519,9 @@ FormPolyline::setObjectPen( const QPen & p, bool pushUndoCommand )
 
 	FormObject::setObjectPen( newPen, pushUndoCommand );
 
-	setPen( p );
+	setPen( newPen );
+
+	update();
 }
 
 void
