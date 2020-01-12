@@ -552,7 +552,12 @@ FormCheckBox::resize( const QRectF & rect )
 
 	d->m_width = rect.width();
 
-	d->m_rect.setHeight( rect.height() );
+	const QFontMetrics fm( d->m_font );
+
+	const qreal dy = ( fm.height() > rect.height() ?
+		fm.height() - rect.height() : 0.0 );
+
+	d->m_rect.setHeight( rect.height() + dy );
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( rect.topLeft() );
