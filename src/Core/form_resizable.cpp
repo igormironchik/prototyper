@@ -91,7 +91,7 @@ FormResizableProxyPrivate::init()
 
 	m_handles.swap( tmp );
 
-	m_handles->setMinSize( QSizeF( 35.0, 35.0 ) );
+	m_handles->setMinSize( QSizeF( 8.0, 8.0 ) );
 
 	m_handles->show();
 
