@@ -137,6 +137,9 @@ public:
 	//! Update values of properties.
 	virtual void updatePropertiesValues();
 
+	//! Clone object.
+	virtual FormObject * clone() const = 0;
+
 private:
 	Q_DISABLE_COPY( FormObject )
 

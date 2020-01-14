@@ -175,6 +175,12 @@ public:
 	//! Emit changed signal.
 	void emitChanged();
 
+	//! Next id.
+	QString nextId();
+
+	//! Clone object.
+	FormObject * clone() const override;
+
 public slots:
 	//! Rename form.
 	void renameForm( const QString & name );

@@ -719,6 +719,18 @@ FormPolyline::handleReleased( FormMoveHandle * handle )
 	page()->emitChanged();
 }
 
+FormObject *
+FormPolyline::clone() const
+{
+	auto * o = new FormPolyline( page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

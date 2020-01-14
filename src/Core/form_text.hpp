@@ -97,6 +97,9 @@ public:
 	//! \return Default size.
 	virtual QSizeF defaultSize() const override;
 
+	//! Clone object.
+	FormObject * clone() const override;
+
 public slots:
 	//! Set font size.
 	void setFontSize( int s );

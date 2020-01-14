@@ -2273,6 +2273,21 @@ Page::setCurrentPolyLine( FormPolyline * line )
 	d->m_polyline = true;
 }
 
+QString
+Page::nextId()
+{
+	const auto id = d->id();
+	d->m_ids.append( id );
+
+	return id;
+}
+
+FormObject *
+Page::clone() const
+{
+	return nullptr;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

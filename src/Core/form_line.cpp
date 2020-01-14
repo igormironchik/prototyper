@@ -428,6 +428,18 @@ FormLine::placeHandles()
 	d->placeChild();
 }
 
+FormObject *
+FormLine::clone() const
+{
+	auto * o = new FormLine( page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

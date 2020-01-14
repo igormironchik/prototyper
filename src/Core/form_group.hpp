@@ -86,12 +86,15 @@ public:
 	void setRectangle( const QRectF & rect,
 		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
+	//! Clone object.
+	FormObject * clone() const override;
+
 protected:
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		Q_DECL_OVERRIDE;
 	//! Handle released.
-	void handleReleased( FormMoveHandle * handle );
+	void handleReleased( FormMoveHandle * handle ) override;
 
 private:
 	//! Create elem with rect.

@@ -39,6 +39,7 @@
 #include "html_exporter.hpp"
 #include "svg_exporter.hpp"
 #include "form_group.hpp"
+#include "form_undo_commands.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -112,6 +113,7 @@ public:
 		,	m_zoomIn( nullptr )
 		,	m_zoomOut( nullptr )
 		,	m_zoomOriginal( nullptr )
+		,	m_duplicate( nullptr )
 		,	m_propertiesDock( nullptr )
 		,	m_propertiesScrollArea( nullptr )
 	{
@@ -198,6 +200,7 @@ public:
 	QAction * m_zoomIn;
 	QAction * m_zoomOut;
 	QAction * m_zoomOriginal;
+	QAction * m_duplicate;
 	//! Properties dock.
 	QDockWidget * m_propertiesDock;
 	//! Scroll area for properties.
@@ -538,6 +541,14 @@ ProjectWindowPrivate::init()
 
 	form->addSeparator();
 
+	m_duplicate = form->addAction( QIcon( QStringLiteral( ":/Core/img/edit-copy.png" ) ),
+		ProjectWindow::tr( "Duplicate" ) );
+	m_duplicate->setShortcutContext( Qt::ApplicationShortcut );
+	m_duplicate->setShortcut( ProjectWindow::tr( "Ctrl+D" ) );
+	m_duplicate->setEnabled( false );
+
+	form->addSeparator();
+
 	form->addAction( m_zoomIn );
 	form->addAction( m_zoomOriginal );
 	form->addAction( m_zoomOut );
@@ -674,6 +685,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::zoomOriginal );
 	ProjectWindow::connect( m_zoomOut, &QAction::triggered,
 		q, &ProjectWindow::zoomOut );
+	ProjectWindow::connect( m_duplicate, &QAction::triggered,
+		q, &ProjectWindow::duplicate );
 	ProjectWindow::connect( m_widget->undoGroup(), &QUndoGroup::cleanChanged,
 		q, &ProjectWindow::canUndoChanged );
 	ProjectWindow::connect( m_widget->descriptionTab()->editor(),
@@ -1395,6 +1408,7 @@ ProjectWindow::tabChanged( int index )
 		d->m_zoomIn->setEnabled( false );
 		d->m_zoomOut->setEnabled( false );
 		d->m_zoomOriginal->setEnabled( false );
+		d->m_duplicate->setEnabled( false );
 
 		d->m_propertiesDock->hide();
 	}
@@ -1429,6 +1443,8 @@ ProjectWindow::selectionChanged()
 	if( index > 0 )
 	{
 		const auto s = d->m_widget->pages().at( index - 1 )->pageScene()->selectedItems();
+
+		d->m_duplicate->setEnabled( !s.isEmpty() );
 
 		if( s.size() > 1 )
 		{
@@ -1854,6 +1870,55 @@ ProjectWindow::zoomOriginal()
 	d->m_zoomIn->setEnabled( true );
 	d->m_zoomOut->setEnabled( true );
 	d->m_zoomOriginal->setEnabled( false );
+}
+
+void
+ProjectWindow::duplicate()
+{
+	const auto idx = d->m_widget->tabs()->currentIndex();
+
+	if( idx > 0 )
+	{
+		const auto s = d->m_widget->pages().at( idx - 1 )->pageScene()->selectedItems();
+
+		d->m_widget->pages().at( idx - 1 )->pageScene()->clearSelection();
+
+		if( !s.isEmpty() )
+		{
+			QStringList orig;
+			QStringList dupl;
+
+			for( const auto & i : s )
+			{
+				auto * o = dynamic_cast< FormObject* > ( i );
+
+				if( o )
+				{
+					auto * n = o->clone();
+
+					orig.append( o->objectId() );
+					dupl.append( n->objectId() );
+
+					n->setPosition( n->position() + QPointF( d->m_cfg.defaultGridStep(),
+						d->m_cfg.defaultGridStep() ), false );
+
+					auto * g = dynamic_cast< QGraphicsItem* > ( n );
+
+					if( g )
+					{
+						g->setFlag( QGraphicsItem::ItemIsSelectable, true );
+						g->setSelected( true );
+					}
+				}
+			}
+
+			d->m_widget->pages().at( idx - 1 )->page()->undoStack()->push(
+				new UndoDuplicate( d->m_widget->pages().at( idx - 1 )->page(),
+					orig, dupl, d->m_cfg.defaultGridStep() ) );
+
+			projectChanged();
+		}
+	}
 }
 
 } /* namespace Core */

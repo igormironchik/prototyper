@@ -696,6 +696,18 @@ FormText::keyReleaseEvent( QKeyEvent * event )
 	p_cursorChanged( textCursor() );
 }
 
+FormObject *
+FormText::clone() const
+{
+	auto * o = new FormText( rectangle(), page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

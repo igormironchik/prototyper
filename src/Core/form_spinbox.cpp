@@ -579,6 +579,18 @@ FormSpinBox::properties( QWidget * parent )
 	return d->m_properties.data();
 }
 
+FormObject *
+FormSpinBox::clone() const
+{
+	auto * o = new FormSpinBox( rectangle(), page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

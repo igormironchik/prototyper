@@ -541,6 +541,23 @@ FormGroup::createElemWithRect( const Config & cfg )
 	addToGroup( e );
 }
 
+FormObject *
+FormGroup::clone() const
+{
+	auto * o = new FormGroup( page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	const auto ch = o->children();
+
+	for( const auto & i : ch )
+		dynamic_cast< FormObject* > ( i )->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

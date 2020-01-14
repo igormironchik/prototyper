@@ -521,6 +521,18 @@ FormButton::updatePropertiesValues()
 	}
 }
 
+FormObject *
+FormButton::clone() const
+{
+	auto * o = new FormButton( rectangle(), page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

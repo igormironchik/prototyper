@@ -69,5 +69,6 @@
         <file>img/zoom-in.png</file>
         <file>img/zoom-original.png</file>
         <file>img/zoom-out.png</file>
+        <file>img/edit-copy.png</file>
     </qresource>
 </RCC>

@@ -243,6 +243,18 @@ FormImage::moveResizable( const QPointF & delta )
 	moveBy( delta.x(), delta.y() );
 }
 
+FormObject *
+FormImage::clone() const
+{
+	auto * o = new FormImage( page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

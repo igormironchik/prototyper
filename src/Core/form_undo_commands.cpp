@@ -26,6 +26,8 @@
 // Qt include.
 #include <QTextDocument>
 
+#include <QDebug>
+
 
 namespace Prototyper {
 
@@ -513,6 +515,62 @@ UndoChangeCheckState::find() const
 	else
 		return nullptr;
 
+}
+
+
+//
+// UndoDuplicate
+//
+
+UndoDuplicate::UndoDuplicate( Page * form, const QStringList & origIds,
+	const QStringList & duplIds, int gridStep )
+	:	QUndoCommand( QObject::tr( "Duplicate" ) )
+	,	m_form( form )
+	,	m_origIds( origIds )
+	,	m_duplIds( duplIds )
+	,	m_undone( false )
+	,	m_gridStep( gridStep )
+{
+}
+
+void
+UndoDuplicate::undo()
+{
+	m_undone = true;
+
+	QList< QGraphicsItem* > items;
+
+	for( const auto & id : qAsConst( m_duplIds ) )
+		items.append( m_form->findItem( id ) );
+
+	m_form->deleteItems( items, false );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+}
+
+void
+UndoDuplicate::redo()
+{
+	if( m_undone )
+	{
+		m_duplIds.clear();
+
+		for( auto it = m_origIds.cbegin(), last = m_origIds.cend(); it != last; ++it )
+		{
+			auto * o = dynamic_cast< FormObject* > ( m_form->findItem( *it ) );
+
+			if( o )
+			{
+				auto * n = o->clone();
+
+				n->setPosition( n->position() + QPointF( m_gridStep, m_gridStep ), false );
+
+				m_duplIds.append( n->objectId() );
+			}
+		}
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
 }
 
 } /* namespace Core */

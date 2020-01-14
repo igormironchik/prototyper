@@ -60,6 +60,9 @@ public:
 
 	QString typeName() const override;
 
+	//! Clone object.
+	FormObject * clone() const override;
+
 private:
 	Q_DISABLE_COPY( FormRadioButton )
 }; // class FormRadioButton

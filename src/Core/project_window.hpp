@@ -175,6 +175,8 @@ private slots:
 	void zoomChanged();
 	//! Selection changed.
 	void selectionChanged();
+	//! Duplicate selection.
+	void duplicate();
 
 private:
 	friend class ProjectWindowPrivate;

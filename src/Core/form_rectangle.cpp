@@ -358,6 +358,18 @@ FormRect::handleReleased( FormMoveHandle * handle )
 	page()->emitChanged();
 }
 
+FormObject *
+FormRect::clone() const
+{
+	auto * o = new FormRect( page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

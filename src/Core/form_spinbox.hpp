@@ -107,6 +107,9 @@ public:
 
 	void updatePropertiesValues() override;
 
+	//! Clone object.
+	FormObject * clone() const override;
+
 protected:
 	//! Resize.
 	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;

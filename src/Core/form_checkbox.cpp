@@ -648,6 +648,18 @@ FormCheckBox::setChecked( bool on )
 	update();
 }
 
+FormObject *
+FormCheckBox::clone() const
+{
+	auto * o = new FormCheckBox( rectangle(), page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

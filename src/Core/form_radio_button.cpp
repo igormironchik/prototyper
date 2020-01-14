@@ -121,6 +121,18 @@ FormRadioButton::typeName() const
 	return tr( "Radio Button" );
 }
 
+FormObject *
+FormRadioButton::clone() const
+{
+	auto * o = new FormRadioButton( rectangle(), page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

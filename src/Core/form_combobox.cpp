@@ -280,6 +280,18 @@ FormComboBox::defaultSize() const
 	return QSizeF( MmPx::instance().fromMmX( 15.0 ), boxHeight() );
 }
 
+FormObject *
+FormComboBox::clone() const
+{
+	auto * o = new FormComboBox( rectangle(), page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

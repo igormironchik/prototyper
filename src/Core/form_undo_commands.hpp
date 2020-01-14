@@ -750,6 +750,37 @@ private:
 	bool m_checked;
 }; // class UndoChangeCheckState
 
+
+//
+// UndoDuplicate
+//
+
+//! Undo duplicate.
+class UndoDuplicate
+	:	public QUndoCommand
+{
+public:
+	UndoDuplicate( Page * form, const QStringList & origIds,
+		const QStringList & duplIds, int gridStep );
+	~UndoDuplicate() = default;
+
+	void undo() override;
+
+	void redo() override;
+
+private:
+	//! Form.
+	Page * m_form;
+	//! Original ids.
+	QStringList m_origIds;
+	//! Duplicated ids.
+	QStringList m_duplIds;
+	//! Undone?
+	bool m_undone;
+	//! Grid step.
+	int m_gridStep;
+}; // class UndoDuplicate
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

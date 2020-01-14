@@ -276,6 +276,18 @@ FormVSlider::defaultSize() const
 	return QSizeF( boxHeight(), MmPx::instance().fromMmY( 15.0 ) );
 }
 
+FormObject *
+FormVSlider::clone() const
+{
+	auto * o = new FormVSlider( rectangle(), page(), parentItem() );
+
+	o->setCfg( cfg() );
+
+	o->setObjectId( page()->nextId() );
+
+	return o;
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */
