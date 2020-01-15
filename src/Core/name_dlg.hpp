@@ -49,7 +49,7 @@ public:
 		const QString & title,
 		const QString & oldName,
 		QWidget * parent = 0, Qt::WindowFlags f = 0 );
-	~NameDlg();
+	~NameDlg() override;
 
 	//! \return Intered name.
 	QString name() const;

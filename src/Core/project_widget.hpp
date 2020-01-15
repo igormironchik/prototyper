@@ -63,9 +63,9 @@ signals:
 	//! Project has been modified.
 	void changed();
 	//! Page added.
-	void pageAdded( PageView * );
+	void pageAdded( Prototyper::Core::PageView * );
 	//! Page deleted.
-	void pageDeleted( PageView * );
+	void pageDeleted( Prototyper::Core::PageView * );
 
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,

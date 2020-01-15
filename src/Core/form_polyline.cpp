@@ -51,10 +51,10 @@ class FormPolylinePrivate {
 public:
 	explicit FormPolylinePrivate( FormPolyline * parent )
 		:	q( parent )
-		,	m_start( 0 )
-		,	m_end( 0 )
+		,	m_start( nullptr )
+		,	m_end( nullptr )
 		,	m_closed( false )
-		,	m_handles( 0 )
+		,	m_handles( nullptr )
 		,	m_handleMoved( false )
 	{
 	}
@@ -232,9 +232,7 @@ FormPolyline::FormPolyline( Page * form, QGraphicsItem * parent )
 	d->init();
 }
 
-FormPolyline::~FormPolyline()
-{
-}
+FormPolyline::~FormPolyline() = default;
 
 Cfg::Polyline
 FormPolyline::cfg() const
@@ -344,10 +342,8 @@ FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg, qreal dpi )
 	QVector< QPointF > points;
 	points.reserve( lines.size() * 2 );
 
-	for( int i = 0; i < lines.size(); ++i )
+	for( const auto & line : qAsConst( lines ) )
 	{
-		const QLineF line = lines.at( i );
-
 		points.append( line.p1() );
 		points.append( line.p2() );
 	}
@@ -496,19 +492,18 @@ FormPolyline::pointUnderHandle( const QPointF & p, bool & intersected ) const
 			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) +
 			pos();
 	}
-	else if( d->m_end->contains( d->m_end->mapFromScene( p ) ) )
+
+	if( d->m_end->contains( d->m_end->mapFromScene( p ) ) )
 	{
 		intersected = true;
 
 		return d->m_end->pos() +
 			QPointF( d->m_end->halfOfSize(), d->m_end->halfOfSize() ) + pos();
 	}
-	else
-	{
-		intersected = false;
 
-		return p;
-	}
+	intersected = false;
+
+	return p;
 }
 
 void

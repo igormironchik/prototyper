@@ -28,6 +28,7 @@
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
 #include "ui_form_spinbox_properties.h"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -53,7 +54,7 @@ public:
 	FormSpinBoxPrivate( FormSpinBox * parent, const QRectF & rect )
 		:	q( parent )
 		,	m_rect( QRectF( rect.x(), rect.y(), rect.width(), 25.0 ) )
-		,	m_proxy( 0 )
+		,	m_proxy( nullptr )
 		,	m_text( FormSpinBox::tr( "1" ) )
 		,	m_properties( nullptr )
 	{
@@ -93,7 +94,7 @@ FormSpinBoxPrivate::init()
 
 	m_font = QApplication::font();
 
-	m_font.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+	m_font.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
@@ -195,7 +196,7 @@ FormSpinBoxPrivate::connectProperties()
 			&QCheckBox::stateChanged,
 			[this]( int v ) {
 				const auto oldText = q->text();
-				m_font.setItalic( ( v == Qt::Checked ? true : false ) );
+				m_font.setItalic( ( v == Qt::Checked ) );
 				q->page()->emitChanged();
 
 				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
@@ -208,7 +209,7 @@ FormSpinBoxPrivate::connectProperties()
 			&QCheckBox::stateChanged,
 			[this]( int v ) {
 				const auto oldText = q->text();
-				m_font.setUnderline( ( v == Qt::Checked ? true : false ) );
+				m_font.setUnderline( ( v == Qt::Checked ) );
 				q->page()->emitChanged();
 
 				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
@@ -225,31 +226,31 @@ FormSpinBoxPrivate::disconnectProperties()
 	if( m_properties )
 	{
 		FormSpinBox::disconnect( m_properties->ui()->m_x,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_y,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_width,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_height,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_value,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_bold,
-			&QCheckBox::stateChanged, 0, 0 );
+			&QCheckBox::stateChanged, nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_italic,
-			&QCheckBox::stateChanged, 0, 0 );
+			&QCheckBox::stateChanged, nullptr, nullptr );
 
 		FormSpinBox::disconnect( m_properties->ui()->m_underline,
-			&QCheckBox::stateChanged, 0, 0 );
+			&QCheckBox::stateChanged, nullptr, nullptr );
 	}
 }
 
@@ -258,18 +259,16 @@ FormSpinBoxPrivate::disconnectProperties()
 // FormSpinBox
 //
 
-FormSpinBox::FormSpinBox( const QRectF & rect, Page * form,
+FormSpinBox::FormSpinBox( const QRectF & rect, Page * page,
 	QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	FormObject( FormObject::SpinBoxType, form )
+	,	FormObject( FormObject::SpinBoxType, page )
 	,	d( new FormSpinBoxPrivate( this, rect ) )
 {
 	d->init();
 }
 
-FormSpinBox::~FormSpinBox()
-{
-}
+FormSpinBox::~FormSpinBox() = default;
 
 void
 FormSpinBox::updatePropertiesValues()
@@ -358,8 +357,8 @@ FormSpinBox::boxHeight( int dpi )
 {
 	if( !dpi )
 		return MmPx::instance().fromMmY( 4.0 );
-	else
-		return MmPx::instance().fromMm( 4.0, dpi );
+
+	return MmPx::instance().fromMm( 4.0, dpi );
 }
 
 void
@@ -553,7 +552,7 @@ FormSpinBox::moveResizable( const QPointF & delta )
 QSizeF
 FormSpinBox::defaultSize() const
 {
-	return QSizeF( MmPx::instance().fromMmX( 15.0 ), boxHeight() );
+	return { MmPx::instance().fromMmX( 15.0 ), boxHeight() };
 }
 
 QWidget *

@@ -77,9 +77,7 @@ ObjectProperties::ObjectProperties( FormObject * obj, QWidget * parent )
 	d->init();
 }
 
-ObjectProperties::~ObjectProperties()
-{
-}
+ObjectProperties::~ObjectProperties() = default;
 
 Ui::ObjectProperties *
 ObjectProperties::ui() const
@@ -127,16 +125,16 @@ void
 ObjectProperties::disconnectProperties()
 {
 	disconnect( d->m_ui.m_x,
-		QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 	disconnect( d->m_ui.m_y,
-		QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 	disconnect( d->m_ui.m_width,
-		QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 	disconnect( d->m_ui.m_height,
-		QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 }
 
 } /* namespace Core */

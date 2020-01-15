@@ -52,17 +52,13 @@ public:
 	{
 	}
 
-	~TabsModel()
-	{
-	}
-
 	Qt::ItemFlags flags( const QModelIndex & index ) const
 		Q_DECL_OVERRIDE
 	{
 		if( index.isValid() )
 			return Qt::ItemIsSelectable | Qt::ItemIsEnabled;
-		else
-			return Qt::NoItemFlags;
+
+		return Qt::NoItemFlags;
 	}
 
 private:
@@ -78,7 +74,7 @@ class TabsViewPrivate {
 public:
 	explicit TabsViewPrivate( TabsView * parent )
 		:	q( parent )
-		,	m_activate( 0 )
+		,	m_activate( nullptr )
 	{
 	}
 
@@ -114,9 +110,7 @@ TabsView::TabsView( QWidget * parent )
 	d->init();
 }
 
-TabsView::~TabsView()
-{
-}
+TabsView::~TabsView() = default;
 
 void
 TabsView::keyPressEvent( QKeyEvent * event )
@@ -194,8 +188,8 @@ class TabsListPrivate {
 public:
 	explicit TabsListPrivate( TabsList * parent )
 		:	q( parent )
-		,	m_view( 0 )
-		,	m_model( 0 )
+		,	m_view( nullptr )
+		,	m_model( nullptr )
 	{
 	}
 
@@ -243,9 +237,7 @@ TabsList::TabsList( QWidget * parent, Qt::WindowFlags f )
 	d->init();
 }
 
-TabsList::~TabsList()
-{
-}
+TabsList::~TabsList() = default;
 
 QStringListModel *
 TabsList::model() const

@@ -101,9 +101,7 @@ SvgExporter::SvgExporter( const Cfg::Project & project )
 {
 }
 
-SvgExporter::~SvgExporter()
-{
-}
+SvgExporter::~SvgExporter() = default;
 
 void
 SvgExporter::exportToDoc( const QString & fileName )

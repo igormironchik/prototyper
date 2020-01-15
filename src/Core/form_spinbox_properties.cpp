@@ -72,9 +72,7 @@ SpinBoxProperties::SpinBoxProperties( QWidget * parent )
 	d->init();
 }
 
-SpinBoxProperties::~SpinBoxProperties()
-{
-}
+SpinBoxProperties::~SpinBoxProperties() = default;
 
 Ui::SpinBoxProperties *
 SpinBoxProperties::ui() const

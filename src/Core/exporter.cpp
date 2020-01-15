@@ -257,6 +257,8 @@ template< typename CFG >
 void
 draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 {
+	static const qreal c_minZDiff = 0.5;
+
 	std::list< qreal > z;
 
 	foreach( const Cfg::Group & group, form.group() )
@@ -307,20 +309,20 @@ draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 		const auto zv = z.front();
 
 		foreach( const Cfg::Group & group, form.group() )
-			if( qAbs( zv - group.z() ) < 0.5 )
+			if( qAbs( zv - group.z() ) < c_minZDiff )
 				drawGroup( group, p, dpi, svg );
 
 		foreach( const Cfg::Line & line, form.line() )
-			if( qAbs( zv - line.z() ) < 0.5 )
+			if( qAbs( zv - line.z() ) < c_minZDiff )
 				drawLine( line, p, dpi );
 
 		foreach( const Cfg::Polyline & poly, form.polyline() )
-			if( qAbs( zv - poly.z() ) < 0.5 )
+			if( qAbs( zv - poly.z() ) < c_minZDiff )
 				drawPolyline( poly, p, dpi );
 
 		foreach( const Cfg::Text & text, form.text() )
 		{
-			if( qAbs( zv - text.z() ) < 0.5 )
+			if( qAbs( zv - text.z() ) < c_minZDiff )
 			{
 				p.save();
 
@@ -341,7 +343,7 @@ draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 
 		foreach( const Cfg::Image & image, form.image() )
 		{
-			if( qAbs( zv - image.z() ) < 0.5 )
+			if( qAbs( zv - image.z() ) < c_minZDiff )
 			{
 				const QSize s( MmPx::instance().fromMm( image.size().width(), dpi ),
 					MmPx::instance().fromMm( image.size().height(), dpi ) );
@@ -359,35 +361,35 @@ draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 		}
 
 		foreach( const Cfg::Rect & rect, form.rect() )
-			if( qAbs( zv - rect.z() ) < 0.5 )
+			if( qAbs( zv - rect.z() ) < c_minZDiff )
 				drawRect( rect, p, dpi );
 
 		foreach( const Cfg::Button & btn, form.button() )
-			if( qAbs( zv - btn.z() ) < 0.5 )
+			if( qAbs( zv - btn.z() ) < c_minZDiff )
 				drawButton( btn, p, dpi );
 
 		foreach( const Cfg::CheckBox & chk, form.checkbox() )
-			if( qAbs( zv - chk.z() ) < 0.5 )
+			if( qAbs( zv - chk.z() ) < c_minZDiff )
 				drawCheckBox( chk, p, dpi );
 
 		foreach( const Cfg::CheckBox & chk, form.radiobutton() )
-			if( qAbs( zv - chk.z() ) < 0.5 )
+			if( qAbs( zv - chk.z() ) < c_minZDiff )
 				drawRadioButton( chk, p, dpi );
 
 		foreach( const Cfg::ComboBox & cb, form.combobox() )
-			if( qAbs( zv - cb.z() ) < 0.5 )
+			if( qAbs( zv - cb.z() ) < c_minZDiff )
 				drawComboBox( cb, p, dpi );
 
 		foreach( const Cfg::SpinBox & s, form.spinbox() )
-			if( qAbs( zv - s.z() ) < 0.5 )
+			if( qAbs( zv - s.z() ) < c_minZDiff )
 				drawSpinBox( s, p, dpi );
 
 		foreach( const Cfg::HSlider & hs, form.hslider() )
-			if( qAbs( zv - hs.z() ) < 0.5 )
+			if( qAbs( zv - hs.z() ) < c_minZDiff )
 				drawHSlider( hs, p, dpi );
 
 		foreach( const Cfg::VSlider & vs, form.vslider() )
-			if( qAbs( zv - vs.z() ) < 0.5 )
+			if( qAbs( zv - vs.z() ) < c_minZDiff )
 				drawVSlider( vs, p, dpi );
 
 		z.pop_front();
@@ -413,8 +415,8 @@ void
 ExporterPrivate::drawForm( QSvgGenerator & svg, const Cfg::Page & form, qreal dpi )
 {
 	svg.setViewBox( QRect( -1, 0,
-		MmPx::instance().fromMm( form.size().width(), dpi ) + 1,
-		MmPx::instance().fromMm( form.size().height(), dpi ) ) );
+		qRound( MmPx::instance().fromMm( form.size().width(), dpi ) ) + 1,
+		qRound( MmPx::instance().fromMm( form.size().height(), dpi ) ) ) );
 	svg.setResolution( dpi );
 
 	QPainter p;
@@ -441,14 +443,10 @@ Exporter::Exporter( const Cfg::Project & project )
 	d->init();
 }
 
-Exporter::~Exporter()
-{
-}
-
 Exporter::Exporter( QScopedPointer< ExporterPrivate > && dd )
-	:	d( 0 )
+	:	d( nullptr )
 {
-	QScopedPointer< ExporterPrivate > tmp( 0 );
+	QScopedPointer< ExporterPrivate > tmp( nullptr );
 
 	tmp.swap( dd );
 

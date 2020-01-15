@@ -60,7 +60,7 @@ class TabWidget
 	:	public QTabWidget
 {
 public:
-	explicit TabWidget( QWidget * parent = 0 )
+	explicit TabWidget( QWidget * parent = nullptr )
 		:	QTabWidget( parent )
 	{
 	}
@@ -82,10 +82,10 @@ public:
 		:	q( parent )
 		,	m_window( w )
 		,	m_cfg( cfg )
-		,	m_tabs( 0 )
-		,	m_desc( 0 )
-		,	m_tabBar( 0 )
-		,	m_undoGroup( 0 )
+		,	m_tabs( nullptr )
+		,	m_desc( nullptr )
+		,	m_tabBar( nullptr )
+		,	m_undoGroup( nullptr )
 		,	m_isTabRenamed( false )
 	{
 	}
@@ -122,7 +122,7 @@ public:
 void
 ProjectWidgetPrivate::init()
 {
-	QVBoxLayout * layout = new QVBoxLayout( q );
+	auto * layout = new QVBoxLayout( q );
 
 	m_tabs = new TabWidget( q );
 
@@ -163,7 +163,7 @@ ProjectWidgetPrivate::newProject()
 
 		m_tabNames.removeAt( i );
 
-		ProjectWidget::disconnect( tab, 0, 0, 0 );
+		ProjectWidget::disconnect( tab, nullptr, nullptr, nullptr );
 
 		m_undoGroup->removeStack( m_forms.at( i - 1 )->page()->undoStack() );
 
@@ -197,7 +197,7 @@ void
 ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
 	bool showGrid )
 {
-	PageView * form = new PageView( cfg, m_tabs );
+	auto * form = new PageView( cfg, m_tabs );
 
 	ProjectWidget::connect( form, &PageView::zoomChanged,
 		m_window, &ProjectWindow::zoomChanged );
@@ -234,9 +234,7 @@ ProjectWidget::ProjectWidget( Cfg::Project & cfg,
 	d->init();
 }
 
-ProjectWidget::~ProjectWidget()
-{
-}
+ProjectWidget::~ProjectWidget() = default;
 
 const QList< PageView* > &
 ProjectWidget::pages() const
@@ -355,8 +353,6 @@ ProjectWidget::renameTab( const QString & oldName )
 
 		if( dlg.exec() == QDialog::Accepted )
 		{
-			const QString tmpOldName = oldName;
-
 			d->m_tabs->setTabText( index, dlg.name() );
 
 			d->m_tabNames[ index ] = dlg.name();
@@ -405,7 +401,7 @@ ProjectWidget::deletePage( const QString & name )
 
 			d->m_tabs->removeTab( index );
 
-			disconnect( tab, 0, 0, 0 );
+			disconnect( tab, nullptr, nullptr, nullptr );
 
 			tab->deleteLater();
 

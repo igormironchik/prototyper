@@ -77,10 +77,6 @@ public:
 	{
 	}
 
-	~UndoCreate()
-	{
-	}
-
 	void undo() Q_DECL_OVERRIDE
 	{
 		m_undone = true;
@@ -157,7 +153,7 @@ public:
 	{
 	}
 
-	~UndoCreate()
+	~UndoCreate() override
 	{
 		if( m_doc )
 			m_doc->deleteLater();
@@ -240,10 +236,6 @@ public:
 	{
 	}
 
-	~UndoMove()
-	{
-	}
-
 	void undo() Q_DECL_OVERRIDE
 	{
 		m_undone = true;
@@ -301,10 +293,6 @@ public:
 	{
 	}
 
-	~UndoResize()
-	{
-	}
-
 	void undo() Q_DECL_OVERRIDE
 	{
 		m_undone = true;
@@ -359,10 +347,6 @@ public:
 		,	m_cfg( c )
 		,	m_form( form )
 		,	m_undone( false )
-	{
-	}
-
-	~UndoDelete()
 	{
 	}
 
@@ -448,7 +432,7 @@ public:
 		m_form->removeDocFromMap( m_doc );
 	}
 
-	~UndoDelete()
+	~UndoDelete() override
 	{
 		if( m_doc )
 			m_doc->deleteLater();
@@ -521,7 +505,6 @@ class UndoGroup
 {
 public:
 	UndoGroup( Page * form, const QString & id );
-	~UndoGroup();
 
 	void undo() Q_DECL_OVERRIDE;
 
@@ -550,7 +533,6 @@ class UndoUngroup
 public:
 	UndoUngroup( const QStringList & items,
 		const QString & groupId, Page * form );
-	~UndoUngroup();
 
 	void undo() Q_DECL_OVERRIDE;
 
@@ -579,7 +561,6 @@ class UndoAddLineToPoly
 public:
 	UndoAddLineToPoly( Page * form,
 		const QString & id, const QLineF & line );
-	~UndoAddLineToPoly();
 
 	void undo() Q_DECL_OVERRIDE;
 
@@ -608,7 +589,6 @@ class UndoChangeLine
 public:
 	UndoChangeLine( Page * form, const QString & id, const QLineF & oldLine,
 		const QLineF & newLine );
-	~UndoChangeLine();
 
 	void undo() Q_DECL_OVERRIDE;
 
@@ -639,7 +619,6 @@ class UndoChangePen
 public:
 	UndoChangePen( Page * form, const QString & id, const QPen & oldPen,
 		const QPen & newPen );
-	~UndoChangePen();
 
 	void undo() Q_DECL_OVERRIDE;
 
@@ -669,7 +648,6 @@ class UndoChangeTextOnForm
 {
 public:
 	UndoChangeTextOnForm( Page * form, const QString & id );
-	~UndoChangeTextOnForm();
 
 	void undo() Q_DECL_OVERRIDE;
 
@@ -696,7 +674,6 @@ class UndoChangeTextWithOpts
 public:
 	UndoChangeTextWithOpts( Page * form, const QString & id,
 		const Cfg::TextStyle & oldOpts, const Cfg::TextStyle & newOpts );
-	~UndoChangeTextWithOpts();
 
 	void undo() Q_DECL_OVERRIDE;
 
@@ -730,7 +707,6 @@ class UndoChangeCheckState
 {
 public:
 	UndoChangeCheckState( Page * form, const QString & id );
-	~UndoChangeCheckState() = default;
 
 	void undo() override;
 
@@ -762,7 +738,6 @@ class UndoDuplicate
 public:
 	UndoDuplicate( Page * form, const QStringList & origIds,
 		const QStringList & duplIds, int gridStep );
-	~UndoDuplicate() = default;
 
 	void undo() override;
 

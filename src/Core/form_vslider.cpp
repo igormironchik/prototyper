@@ -46,7 +46,7 @@ public:
 	FormVSliderPrivate( FormVSlider * parent, const QRectF & rect )
 		:	q( parent )
 		,	m_rect( rect )
-		,	m_proxy( 0 )
+		,	m_proxy( nullptr )
 	{
 	}
 
@@ -95,18 +95,16 @@ FormVSliderPrivate::setRect( const QRectF & rect )
 // FormVSlider
 //
 
-FormVSlider::FormVSlider( const QRectF & rect, Page * form,
+FormVSlider::FormVSlider( const QRectF & rect, Page * page,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	FormObject( FormObject::VSliderType, form )
+	,	FormObject( FormObject::VSliderType, page )
 	,	d( new FormVSliderPrivate( this, rect ) )
 {
 	d->init();
 }
 
-FormVSlider::~FormVSlider()
-{
-}
+FormVSlider::~FormVSlider() = default;
 
 void
 FormVSlider::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
@@ -161,8 +159,8 @@ FormVSlider::boxHeight( int dpi )
 {
 	if( !dpi )
 		return MmPx::instance().fromMmX( 4.0 );
-	else
-		return MmPx::instance().fromMm( 4.0, dpi );
+
+	return MmPx::instance().fromMm( 4.0, dpi );
 }
 
 void
@@ -273,7 +271,7 @@ FormVSlider::moveResizable( const QPointF & delta )
 QSizeF
 FormVSlider::defaultSize() const
 {
-	return QSizeF( boxHeight(), MmPx::instance().fromMmY( 15.0 ) );
+	return { boxHeight(), MmPx::instance().fromMmY( 15.0 ) };
 }
 
 FormObject *

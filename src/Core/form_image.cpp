@@ -48,7 +48,7 @@ class FormImagePrivate {
 public:
 	explicit FormImagePrivate( FormImage * parent )
 		:	q( parent )
-		,	m_handles( 0 )
+		,	m_handles( nullptr )
 	{
 	}
 
@@ -74,17 +74,15 @@ FormImagePrivate::init()
 // FormImage
 //
 
-FormImage::FormImage( Page * form, QGraphicsItem * parent )
+FormImage::FormImage( Page * page, QGraphicsItem * parent )
 	:	QGraphicsPixmapItem( parent )
-	,	FormObject( FormObject::ImageType, form )
+	,	FormObject( FormObject::ImageType, page )
 	,	d( new FormImagePrivate( this ) )
 {
 	d->init();
 }
 
-FormImage::~FormImage()
-{
-}
+FormImage::~FormImage() = default;
 
 Cfg::Image
 FormImage::cfg() const

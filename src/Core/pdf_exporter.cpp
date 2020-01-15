@@ -186,8 +186,8 @@ PdfExporterPrivate::printDocument( const QTextDocument & doc, QPdfWriter & pdf,
 
 			if( s.width() > body.size().width() ||
 				s.height() > body.size().height() - y )
-					s.scale( QSize( body.size().width(),
-						body.size().height() - y ), Qt::KeepAspectRatio );
+					s.scale( QSize( qRound( body.size().width() ),
+						qRound( body.size().height() - y ) ), Qt::KeepAspectRatio );
 
 			if( ( y + s.height() ) > body.height() )
 			{
@@ -241,9 +241,7 @@ PdfExporter::PdfExporter( const Cfg::Project & project )
 {
 }
 
-PdfExporter::~PdfExporter()
-{
-}
+PdfExporter::~PdfExporter() = default;
 
 void
 PdfExporter::exportToDoc( const QString & fileName )

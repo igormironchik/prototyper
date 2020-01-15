@@ -73,9 +73,7 @@ ButtonProperties::ButtonProperties( QWidget * parent )
 	d->init();
 }
 
-ButtonProperties::~ButtonProperties()
-{
-}
+ButtonProperties::~ButtonProperties() = default;
 
 Ui::ButtonProperties *
 ButtonProperties::ui() const

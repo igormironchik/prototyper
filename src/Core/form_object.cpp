@@ -73,14 +73,12 @@ public:
 // FormObject
 //
 
-FormObject::FormObject( ObjectType t, Page * form, int props )
-	:	d( new FormObjectPrivate( this, t, form, props ) )
+FormObject::FormObject( ObjectType t, Page * parent, int props )
+	:	d( new FormObjectPrivate( this, t, parent, props ) )
 {
 }
 
-FormObject::~FormObject()
-{
-}
+FormObject::~FormObject() = default;
 
 QWidget *
 FormObject::properties( QWidget * parent )
@@ -210,7 +208,7 @@ FormObject::postDeletion()
 QSizeF
 FormObject::defaultSize() const
 {
-	return QSizeF( 1.0, 1.0 );
+	return { 1.0, 1.0 };
 }
 
 void

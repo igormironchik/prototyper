@@ -75,9 +75,7 @@ GridStepDlg::GridStepDlg( int step, bool forAll,
 	d->init( step, forAll );
 }
 
-GridStepDlg::~GridStepDlg()
-{
-}
+GridStepDlg::~GridStepDlg() = default;
 
 int
 GridStepDlg::gridStep() const

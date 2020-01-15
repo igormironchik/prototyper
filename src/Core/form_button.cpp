@@ -28,6 +28,7 @@
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
 #include "ui_form_button_properties.h"
+#include "constants.hpp"
 
 // Qt include.
 #include <QFontMetrics>
@@ -55,7 +56,7 @@ public:
 	FormButtonPrivate( FormButton * parent, const QRectF & rect )
 		:	q( parent )
 		,	m_rect( rect )
-		,	m_proxy( 0 )
+		,	m_proxy( nullptr )
 		,	m_text( QLatin1String( "OK" ) )
 		,	m_props( nullptr )
 	{
@@ -93,7 +94,7 @@ FormButtonPrivate::init()
 
 	m_font = QApplication::font();
 
-	m_font.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+	m_font.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 
 	QFontMetrics m( m_font );
 	m_proxy->setMinSize(
@@ -199,7 +200,7 @@ FormButtonPrivate::connectProperties()
 			&QCheckBox::stateChanged,
 			[this]( int v ) {
 				const auto oldText = q->text();
-				m_font.setItalic( ( v == Qt::Checked ? true : false ) );
+				m_font.setItalic( ( v == Qt::Checked ) );
 				q->page()->emitChanged();
 
 				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
@@ -212,7 +213,7 @@ FormButtonPrivate::connectProperties()
 			&QCheckBox::stateChanged,
 			[this]( int v ) {
 				const auto oldText = q->text();
-				m_font.setUnderline( ( v == Qt::Checked ? true : false ) );
+				m_font.setUnderline( ( v == Qt::Checked ) );
 				q->page()->emitChanged();
 
 				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
@@ -229,31 +230,31 @@ FormButtonPrivate::disconnectProperties()
 	if( m_props )
 	{
 		FormButton::disconnect( m_props->ui()->m_x,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_y,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_width,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_height,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_text,
-			&QLineEdit::textChanged, 0, 0 );
+			&QLineEdit::textChanged, nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ), 0, 0 );
+			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_bold,
-			&QCheckBox::stateChanged, 0, 0 );
+			&QCheckBox::stateChanged, nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_italic,
-			&QCheckBox::stateChanged, 0, 0 );
+			&QCheckBox::stateChanged, nullptr, nullptr );
 
 		FormButton::disconnect( m_props->ui()->m_underline,
-			&QCheckBox::stateChanged, 0, 0 );
+			&QCheckBox::stateChanged, nullptr, nullptr );
 	}
 }
 
@@ -271,9 +272,7 @@ FormButton::FormButton( const QRectF & rect, Page * form,
 	d->init();
 }
 
-FormButton::~FormButton()
-{
-}
+FormButton::~FormButton() = default;
 
 void
 FormButton::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

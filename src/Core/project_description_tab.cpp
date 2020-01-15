@@ -41,8 +41,8 @@ class ProjectDescTabPrivate {
 public:
 	explicit ProjectDescTabPrivate( ProjectDescTab * parent )
 		:	q( parent )
-		,	m_bar( 0 )
-		,	m_editor( 0 )
+		,	m_bar( nullptr )
+		,	m_editor( nullptr )
 	{
 	}
 
@@ -60,7 +60,7 @@ public:
 void
 ProjectDescTabPrivate::init()
 {
-	QVBoxLayout * layout = new QVBoxLayout( q );
+	auto * layout = new QVBoxLayout( q );
 	layout->setMargin( 0 );
 	layout->setSpacing( 0 );
 
@@ -105,9 +105,7 @@ ProjectDescTab::ProjectDescTab( QWidget * parent, Qt::WindowFlags f )
 	d->init();
 }
 
-ProjectDescTab::~ProjectDescTab()
-{
-}
+ProjectDescTab::~ProjectDescTab() = default;
 
 QToolBar *
 ProjectDescTab::toolBar() const

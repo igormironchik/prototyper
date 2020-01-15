@@ -97,7 +97,7 @@ GridSnapPrivate::calc()
 
 GridSnap::GridSnap( QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	d( 0 )
+	,	d( nullptr )
 {
 	QScopedPointer< GridSnapPrivate > tmp( new GridSnapPrivate( this ) );
 
@@ -106,9 +106,7 @@ GridSnap::GridSnap( QGraphicsItem * parent )
 	d.swap( tmp );
 }
 
-GridSnap::~GridSnap()
-{
-}
+GridSnap::~GridSnap() = default;
 
 const QPointF &
 GridSnap::snapPos() const
@@ -142,9 +140,9 @@ QRectF
 GridSnap::boundingRect() const
 {
 	if( !d.isNull() )
-		return QRectF( 0, 0, d->m_size * 2, d->m_size * 2 );
-	else
-		return QRectF();
+		return { 0, 0, d->m_size * 2.0, d->m_size * 2.0 };
+
+	return {};
 }
 
 void

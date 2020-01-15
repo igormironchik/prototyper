@@ -60,9 +60,7 @@ WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormWithHandle * object,
 {
 }
 
-WithResizeAndMoveHandles::~WithResizeAndMoveHandles()
-{
-}
+WithResizeAndMoveHandles::~WithResizeAndMoveHandles() = default;
 
 void
 WithResizeAndMoveHandles::place( const QRectF & r )

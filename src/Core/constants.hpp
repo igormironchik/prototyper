@@ -23,9 +23,14 @@
 #ifndef PROTOTYPER__CORE__CONSTANTS_HPP__INCLUDED
 #define PROTOTYPER__CORE__CONSTANTS_HPP__INCLUDED
 
+// Qt include.
+#include <QtGlobal>
+
 namespace Prototyper {
 
 namespace Core {
+
+static const qreal c_defaultFontSize = 10.0;
 
 } /* namespace Core */
 

@@ -29,6 +29,7 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -57,8 +58,8 @@ public:
 	FormTextPrivate( const QRectF & rect, FormText * parent )
 		:	q( parent )
 		,	m_rect( rect )
-		,	m_proxy( 0 )
-		,	m_opts( 0 )
+		,	m_proxy( nullptr )
+		,	m_opts( nullptr )
 		,	m_isFirstPaint( true )
 		,	m_showToolBar( false )
 	{
@@ -99,7 +100,7 @@ FormTextPrivate::init()
 
 	QFont f = q->font();
 
-	f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+	f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 
 	q->setFont( f );
 
@@ -165,17 +166,15 @@ FormTextPrivate::setRect( const QRectF & rect )
 // FormText
 //
 
-FormText::FormText( const QRectF & rect, Page * form, QGraphicsItem * parent )
+FormText::FormText( const QRectF & rect, Page * page, QGraphicsItem * parent )
 	:	QGraphicsTextItem( parent )
-	,	FormObject( FormObject::TextType, form, FormObject::ResizeWidth )
+	,	FormObject( FormObject::TextType, page, FormObject::ResizeWidth )
 	,	d( new FormTextPrivate( rect, this ) )
 {
 	d->init();
 }
 
-FormText::~FormText()
-{
-}
+FormText::~FormText() = default;
 
 void
 FormText::clearEditMode()
@@ -564,7 +563,7 @@ FormText::clearFormat()
 		fmt.setFontItalic( false );
 		fmt.setFontWeight( QFont::Normal );
 		QFont f = fmt.font();
-		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
@@ -575,7 +574,7 @@ FormText::clearFormat()
 		f.setUnderline( false );
 		f.setItalic( false );
 		f.setWeight( QFont::Normal );
-		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 
 		setFont( f );
 	}
@@ -656,7 +655,7 @@ FormText::sceneEvent( QEvent * e )
 	{
 		case QEvent::ShortcutOverride :
 		{
-			QKeyEvent * ke = static_cast< QKeyEvent* > ( e );
+			auto * ke = dynamic_cast< QKeyEvent* > ( e );
 
 			if( ke == QKeySequence::Redo || ke == QKeySequence::Undo )
 			{
@@ -664,8 +663,8 @@ FormText::sceneEvent( QEvent * e )
 
 				return false;
 			}
-			else
-				return QGraphicsTextItem::sceneEvent( e );
+
+			return QGraphicsTextItem::sceneEvent( e );
 		}
 			break;
 
@@ -677,7 +676,7 @@ FormText::sceneEvent( QEvent * e )
 QSizeF
 FormText::defaultSize() const
 {
-	return QSizeF( MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 6.0 ) );
+	return { MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 6.0 ) };
 }
 
 void

@@ -43,13 +43,9 @@ namespace Core {
 // FormResizable
 //
 
-FormResizable::FormResizable()
-{
-}
+FormResizable::FormResizable() = default;
 
-FormResizable::~FormResizable()
-{
-}
+FormResizable::~FormResizable() = default;
 
 void
 FormResizable::resize( const QRectF & rect )
@@ -73,15 +69,13 @@ FormResizableProxyPrivate::FormResizableProxyPrivate( FormResizable * resizable,
 	:	q( parent )
 	,	m_object( resizable )
 	,	m_rect( 0.0, 0.0, 24.0, 24.0 )
-	,	m_handles( 0 )
+	,	m_handles( nullptr )
 	,	m_form( form )
 	,	m_handleMoved( false )
 {
 }
 
-FormResizableProxyPrivate::~FormResizableProxyPrivate()
-{
-}
+FormResizableProxyPrivate::~FormResizableProxyPrivate() = default;
 
 void
 FormResizableProxyPrivate::init()
@@ -112,7 +106,7 @@ FormResizableProxyPrivate::place( const QRectF & rect )
 FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 	QGraphicsItem * parent, Page * form )
 	:	QGraphicsItem( parent )
-	,	d( 0 )
+	,	d( nullptr )
 {
 	QScopedPointer< FormResizableProxyPrivate > tmp(
 		new FormResizableProxyPrivate( resizable, this, form ) );
@@ -126,9 +120,9 @@ FormResizableProxy::FormResizableProxy(
 	QScopedPointer< FormResizableProxyPrivate > && dd,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	d( 0 )
+	,	d( nullptr )
 {
-	QScopedPointer< FormResizableProxyPrivate > tmp( 0 );
+	QScopedPointer< FormResizableProxyPrivate > tmp( nullptr );
 
 	tmp.swap( dd );
 
@@ -137,9 +131,7 @@ FormResizableProxy::FormResizableProxy(
 	d.swap( tmp );
 }
 
-FormResizableProxy::~FormResizableProxy()
-{
-}
+FormResizableProxy::~FormResizableProxy() = default;
 
 void
 FormResizableProxy::setRect( const QRectF & rect )
@@ -173,8 +165,8 @@ FormResizableProxy::boundingRect() const
 
 		return r.adjusted( -12.0, -12.0, 12.0, 12.0 );
 	}
-	else
-		return QRectF();
+
+	return {};
 }
 
 void
@@ -276,7 +268,7 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 	{
 		d->m_object->resize( d->m_rect );
 
-		FormObject * obj = dynamic_cast< FormObject* > ( d->m_object );
+		auto * obj = dynamic_cast< FormObject* > ( d->m_object );
 
 		if( obj )
 		{
@@ -291,7 +283,7 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 	}
 	else
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( d->m_object );
+		auto * obj = dynamic_cast< FormObject* > ( d->m_object );
 
 		if( obj )
 		{

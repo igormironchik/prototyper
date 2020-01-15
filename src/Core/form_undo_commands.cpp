@@ -45,10 +45,6 @@ UndoGroup::UndoGroup( Page * form, const QString & id )
 {
 }
 
-UndoGroup::~UndoGroup()
-{
-}
-
 void
 UndoGroup::undo()
 {
@@ -56,7 +52,7 @@ UndoGroup::undo()
 
 	TopGui::instance()->projectWindow()->switchToSelectMode();
 
-	FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
+	auto * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
 
 	QList< QGraphicsItem* > items = group->children();
 
@@ -104,10 +100,6 @@ UndoUngroup::UndoUngroup( const QStringList & items,
 {
 }
 
-UndoUngroup::~UndoUngroup()
-{
-}
-
 void
 UndoUngroup::undo()
 {
@@ -130,7 +122,7 @@ UndoUngroup::redo()
 	{
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 
-		FormGroup * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
+		auto * group = dynamic_cast< FormGroup* > ( m_form->findItem( m_id ) );
 
 		m_form->ungroup( group, false );
 	}
@@ -151,10 +143,6 @@ UndoAddLineToPoly::UndoAddLineToPoly( Page * form,
 {
 }
 
-UndoAddLineToPoly::~UndoAddLineToPoly()
-{
-}
-
 void
 UndoAddLineToPoly::undo()
 {
@@ -162,7 +150,7 @@ UndoAddLineToPoly::undo()
 
 	TopGui::instance()->projectWindow()->switchToPolylineMode();
 
-	FormPolyline * poly = dynamic_cast< FormPolyline* > (
+	auto * poly = dynamic_cast< FormPolyline* > (
 		m_form->findItem( m_id ) );
 
 	poly->removeLine( m_line );
@@ -173,7 +161,7 @@ UndoAddLineToPoly::undo()
 
 		m_form->deleteItems( QList< QGraphicsItem* > () << poly, false );
 
-		FormLine * lineItem = dynamic_cast< FormLine* > (
+		auto * lineItem = dynamic_cast< FormLine* > (
 			m_form->createElement< FormLine > ( m_id ) );
 
 		lineItem->setLine( line );
@@ -197,7 +185,7 @@ UndoAddLineToPoly::redo()
 	{
 		TopGui::instance()->projectWindow()->switchToPolylineMode();
 
-		FormLine * lineItem = dynamic_cast< FormLine* > (
+		auto * lineItem = dynamic_cast< FormLine* > (
 			m_form->findItem( m_id ) );
 
 		if( lineItem )
@@ -207,7 +195,7 @@ UndoAddLineToPoly::redo()
 			m_form->deleteItems( QList< QGraphicsItem* > () << lineItem,
 				false );
 
-			FormPolyline * poly = dynamic_cast< FormPolyline* > (
+			auto * poly = dynamic_cast< FormPolyline* > (
 				m_form->createElement< FormPolyline > ( m_id ) );
 
 			poly->appendLine( line );
@@ -220,7 +208,7 @@ UndoAddLineToPoly::redo()
 		}
 		else
 		{
-			FormPolyline * poly = dynamic_cast< FormPolyline* > (
+			auto * poly = dynamic_cast< FormPolyline* > (
 				m_form->findItem( m_id ) );
 
 			poly->appendLine( m_line );
@@ -249,16 +237,12 @@ UndoChangeLine::UndoChangeLine( Page * form, const QString & id,
 {
 }
 
-UndoChangeLine::~UndoChangeLine()
-{
-}
-
 void
 UndoChangeLine::undo()
 {
 	m_undone = true;
 
-	FormLine * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
+	auto * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
 
 	line->setLine( m_oldLine );
 
@@ -272,7 +256,7 @@ UndoChangeLine::redo()
 {
 	if( m_undone )
 	{
-		FormLine * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
+		auto * line = dynamic_cast< FormLine* > ( m_form->findItem( m_id ) );
 
 		line->setLine( m_newLine );
 
@@ -298,16 +282,12 @@ UndoChangePen::UndoChangePen( Page * form, const QString & id,
 {
 }
 
-UndoChangePen::~UndoChangePen()
-{
-}
-
 void
 UndoChangePen::undo()
 {
 	m_undone = true;
 
-	FormObject * obj = dynamic_cast< FormObject* > ( m_form->findItem( m_id ) );
+	auto * obj = dynamic_cast< FormObject* > ( m_form->findItem( m_id ) );
 
 	if( obj )
 		obj->setObjectPen( m_oldPen, false );
@@ -320,7 +300,7 @@ UndoChangePen::redo()
 {
 	if( m_undone )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > (
+		auto * obj = dynamic_cast< FormObject* > (
 			m_form->findItem( m_id ) );
 
 		if( obj )
@@ -343,16 +323,12 @@ UndoChangeTextOnForm::UndoChangeTextOnForm( Page * form, const QString & id )
 {
 }
 
-UndoChangeTextOnForm::~UndoChangeTextOnForm()
-{
-}
-
 void
 UndoChangeTextOnForm::undo()
 {
 	m_undone = true;
 
-	FormText * text = dynamic_cast< FormText* > (
+	auto * text = dynamic_cast< FormText* > (
 		m_form->findItem( m_id ) );
 
 	if( text )
@@ -366,7 +342,7 @@ UndoChangeTextOnForm::redo()
 {
 	if( m_undone )
 	{
-		FormText * text = dynamic_cast< FormText* > (
+		auto * text = dynamic_cast< FormText* > (
 			m_form->findItem( m_id ) );
 
 		if( text )
@@ -389,10 +365,6 @@ UndoChangeTextWithOpts::UndoChangeTextWithOpts( Page * form, const QString & id,
 	,	m_oldOpts( oldOpts )
 	,	m_newOpts( newOpts )
 	,	m_undone( false )
-{
-}
-
-UndoChangeTextWithOpts::~UndoChangeTextWithOpts()
 {
 }
 
@@ -420,7 +392,7 @@ UndoChangeTextWithOpts::redo()
 void
 UndoChangeTextWithOpts::setTextOpts( const Cfg::TextStyle & opts )
 {
-	FormObject * obj = dynamic_cast< FormObject* > ( m_form->findItem( m_id ) );
+	auto * obj = dynamic_cast< FormObject* > ( m_form->findItem( m_id ) );
 
 	if( obj )
 	{
@@ -428,7 +400,7 @@ UndoChangeTextWithOpts::setTextOpts( const Cfg::TextStyle & opts )
 		{
 			case FormObject::ButtonType :
 			{
-				FormButton * e = dynamic_cast< FormButton* > ( obj );
+				auto * e = dynamic_cast< FormButton* > ( obj );
 
 				if( e )
 					e->setText( opts );
@@ -438,7 +410,7 @@ UndoChangeTextWithOpts::setTextOpts( const Cfg::TextStyle & opts )
 			case FormObject::CheckBoxType :
 			case FormObject::RadioButtonType :
 			{
-				FormCheckBox * e = dynamic_cast< FormCheckBox* > ( obj );
+				auto * e = dynamic_cast< FormCheckBox* > ( obj );
 
 				if( e )
 					e->setText( opts );
@@ -447,7 +419,7 @@ UndoChangeTextWithOpts::setTextOpts( const Cfg::TextStyle & opts )
 
 			case FormObject::SpinBoxType :
 			{
-				FormSpinBox * e = dynamic_cast< FormSpinBox* > ( obj );
+				auto * e = dynamic_cast< FormSpinBox* > ( obj );
 
 				if( e )
 					e->setText( opts );
@@ -512,9 +484,8 @@ UndoChangeCheckState::find() const
 
 	if( i )
 		return dynamic_cast< FormCheckBox* > ( i );
-	else
-		return nullptr;
 
+	return nullptr;
 }
 
 
@@ -555,9 +526,9 @@ UndoDuplicate::redo()
 	{
 		m_duplIds.clear();
 
-		for( auto it = m_origIds.cbegin(), last = m_origIds.cend(); it != last; ++it )
+		for( const auto & id : qAsConst( m_origIds ) )
 		{
-			auto * o = dynamic_cast< FormObject* > ( m_form->findItem( *it ) );
+			auto * o = dynamic_cast< FormObject* > ( m_form->findItem( id ) );
 
 			if( o )
 			{

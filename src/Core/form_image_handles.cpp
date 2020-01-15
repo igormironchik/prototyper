@@ -44,9 +44,7 @@ public:
 	{
 	}
 
-	~FormImageHandlesPrivate()
-	{
-	}
+	~FormImageHandlesPrivate() override = default;
 
 	//! Init.
 	void init() Q_DECL_OVERRIDE;
@@ -87,9 +85,7 @@ FormImageHandles::FormImageHandles( FormResizable * resizable,
 {
 }
 
-FormImageHandles::~FormImageHandles()
-{
-}
+FormImageHandles::~FormImageHandles() = default;
 
 bool
 FormImageHandles::isKeepAspectRatio() const

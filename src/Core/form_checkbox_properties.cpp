@@ -73,9 +73,7 @@ CheckBoxProperties::CheckBoxProperties( QWidget * parent )
 	d->init();
 }
 
-CheckBoxProperties::~CheckBoxProperties()
-{
-}
+CheckBoxProperties::~CheckBoxProperties() = default;
 
 Ui::CheckBoxProperties *
 CheckBoxProperties::ui() const

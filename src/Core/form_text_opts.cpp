@@ -37,7 +37,7 @@ class FormTextOptsPrivate {
 public:
 	explicit FormTextOptsPrivate( FormTextOpts * parent )
 		:	q( parent )
-		,	m_bar( 0 )
+		,	m_bar( nullptr )
 	{
 	}
 
@@ -89,9 +89,7 @@ FormTextOpts::FormTextOpts( QGraphicsItem * parent )
 	d->init();
 }
 
-FormTextOpts::~FormTextOpts()
-{
-}
+FormTextOpts::~FormTextOpts() = default;
 
 void
 FormTextOpts::updateState( const QTextCursor & cursor )

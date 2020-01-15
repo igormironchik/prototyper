@@ -47,7 +47,7 @@ class FormRectPrivate {
 public:
 	explicit FormRectPrivate( FormRect * parent )
 		:	q( parent )
-		,	m_handles( 0 )
+		,	m_handles( nullptr )
 		,	m_isHandleMoved( false )
 	{
 	}
@@ -115,9 +115,7 @@ FormRect::FormRect( Page * form, QGraphicsItem * parent )
 	d->init();
 }
 
-FormRect::~FormRect()
-{
-}
+FormRect::~FormRect() = default;
 
 Cfg::Rect
 FormRect::cfg() const
@@ -184,8 +182,8 @@ FormRect::boundingRect() const
 
 		return d->m_rect.adjusted( -w, -w, w, w );
 	}
-	else
-		return QRectF();
+
+	return {};
 }
 
 void

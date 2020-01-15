@@ -42,7 +42,7 @@ public:
 	explicit PageActionPrivate( PageAction * parent )
 		:	q( parent )
 		,	m_mode( PageAction::Select )
-		,	m_page( 0 )
+		,	m_page( nullptr )
 		,	m_fillColor( Qt::transparent )
 		,	m_strokeColor( Qt::black )
 		,	m_snap( true )
@@ -76,18 +76,16 @@ PageAction::PageAction()
 {
 }
 
-PageAction::~PageAction()
-{
-}
+PageAction::~PageAction() = default;
 
-static PageAction * pageActionInstance = 0;
+static PageAction * pageActionInstance = nullptr;
 
 void
 PageAction::cleanup()
 {
 	delete pageActionInstance;
 
-	pageActionInstance = 0;
+	pageActionInstance = nullptr;
 }
 
 PageAction *

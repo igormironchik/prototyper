@@ -98,9 +98,7 @@ NameDlg::NameDlg( const QStringList & names,
 	d->init();
 }
 
-NameDlg::~NameDlg()
-{
-}
+NameDlg::~NameDlg() = default;
 
 QString
 NameDlg::name() const

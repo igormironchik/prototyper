@@ -158,9 +158,7 @@ HtmlExporter::HtmlExporter( const Cfg::Project & project )
 {
 }
 
-HtmlExporter::~HtmlExporter()
-{
-}
+HtmlExporter::~HtmlExporter() = default;
 
 void
 HtmlExporter::exportToDoc( const QString & fileName )

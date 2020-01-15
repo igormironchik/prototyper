@@ -49,17 +49,13 @@ public:
 	{
 	}
 
-	~FormResizeHandlePrivate()
-	{
-	}
-
 	//! Init.
 	void init() Q_DECL_OVERRIDE;
 
 	inline FormResizeHandle * q_func()
-		{ return static_cast< FormResizeHandle* >( q ); }
+		{ return dynamic_cast< FormResizeHandle* >( q ); }
 	inline const FormResizeHandle * q_func() const
-		{ return static_cast< const FormResizeHandle* >( q ); }
+		{ return dynamic_cast< const FormResizeHandle* >( q ); }
 
 	//! Angle.
 	qreal m_angle;
@@ -101,9 +97,7 @@ FormResizeHandle::FormResizeHandle( qreal halfSize, const QPointF & zero,
 {
 }
 
-FormResizeHandle::~FormResizeHandle()
-{
-}
+FormResizeHandle::~FormResizeHandle() = default;
 
 void
 FormResizeHandle::paint( QPainter * painter,

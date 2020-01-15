@@ -50,9 +50,9 @@ class FormLinePrivate {
 public:
 	explicit FormLinePrivate( FormLine * parent )
 		:	q( parent )
-		,	m_h1( 0 )
-		,	m_h2( 0 )
-		,	m_move( 0 )
+		,	m_h1( nullptr )
+		,	m_h2( nullptr )
+		,	m_move( nullptr )
 		,	m_showHandles( false )
 		,	m_handleMoved( false )
 	{
@@ -131,17 +131,15 @@ FormLinePrivate::createHandles()
 // FormLine
 //
 
-FormLine::FormLine( Page * form, QGraphicsItem * parent )
+FormLine::FormLine( Page * page, QGraphicsItem * parent )
 	:	QGraphicsLineItem( parent )
-	,	FormObject( FormObject::LineType, form, 0 )
+	,	FormObject( FormObject::LineType, page, 0 )
 	,	d( new FormLinePrivate( this ) )
 {
 	d->init();
 }
 
-FormLine::~FormLine()
-{
-}
+FormLine::~FormLine() = default;
 
 Cfg::Line
 FormLine::cfg() const
@@ -289,7 +287,8 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 
 		return line().p1() + pos();
 	}
-	else if( d->m_h2->contains( d->m_h2->mapFromScene( point ) ) )
+
+	if( d->m_h2->contains( d->m_h2->mapFromScene( point ) ) )
 	{
 		intersected = true;
 
@@ -297,7 +296,8 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 
 		return line().p2() + pos();
 	}
-	else if( d->m_move->contains( d->m_move->mapFromScene( point ) ) )
+
+	if( d->m_move->contains( d->m_move->mapFromScene( point ) ) )
 	{
 		const QLineF l = line();
 
@@ -306,12 +306,10 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 		return QPointF( ( l.p1().x() + l.p2().x() ) / 2.0,
 			( l.p1().y() + l.p2().y() ) / 2.0 ) + pos();
 	}
-	else
-	{
-		intersected = false;
 
-		return point;
-	}
+	intersected = false;
+
+	return point;
 }
 
 bool

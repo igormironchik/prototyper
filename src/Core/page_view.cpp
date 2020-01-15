@@ -43,8 +43,8 @@ class PageViewPrivate {
 public:
 	PageViewPrivate( Cfg::Page & cfg, PageView * parent )
 		:	q( parent )
-		,	m_scene( 0 )
-		,	m_form( 0 )
+		,	m_scene( nullptr )
+		,	m_form( nullptr )
 		,	m_cfg( cfg )
 		,	m_scale( 1.0 )
 	{
@@ -101,9 +101,7 @@ PageView::PageView( Cfg::Page & cfg, QWidget * parent )
 	d->init();
 }
 
-PageView::~PageView()
-{
-}
+PageView::~PageView() = default;
 
 PageScene *
 PageView::pageScene() const

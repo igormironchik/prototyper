@@ -63,16 +63,12 @@ class FormGroupPrivate {
 public:
 	explicit FormGroupPrivate( FormGroup * parent )
 		:	q( parent )
-		,	m_center( 0 )
-		,	m_topLeft( 0 )
-		,	m_topRight( 0 )
-		,	m_bottomRight( 0 )
-		,	m_bottomLeft( 0 )
+		,	m_center( nullptr )
+		,	m_topLeft( nullptr )
+		,	m_topRight( nullptr )
+		,	m_bottomRight( nullptr )
+		,	m_bottomLeft( nullptr )
 		,	m_handleMoved( false )
-	{
-	}
-
-	~FormGroupPrivate()
 	{
 	}
 
@@ -133,17 +129,15 @@ FormGroupPrivate::init()
 // FormGroup
 //
 
-FormGroup::FormGroup( Page * form, QGraphicsItem * parent )
+FormGroup::FormGroup( Page * page, QGraphicsItem * parent )
 	:	QGraphicsItemGroup( parent )
-	,	FormObject( FormObject::GroupType, form, 0 )
+	,	FormObject( FormObject::GroupType, page, 0 )
 	,	d( new FormGroupPrivate( this ) )
 {
 	d->init();
 }
 
-FormGroup::~FormGroup()
-{
-}
+FormGroup::~FormGroup() = default;
 
 Cfg::Group
 FormGroup::cfg() const
@@ -152,7 +146,7 @@ FormGroup::cfg() const
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
 		{
@@ -160,7 +154,7 @@ FormGroup::cfg() const
 			{
 				case FormObject::LineType :
 				{
-					FormLine * line = dynamic_cast< FormLine* > ( item );
+					auto * line = dynamic_cast< FormLine* > ( item );
 
 					if( line )
 						c.line().push_back( line->cfg() );
@@ -169,7 +163,7 @@ FormGroup::cfg() const
 
 				case FormObject::PolylineType :
 				{
-					FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
+					auto * poly = dynamic_cast< FormPolyline* > ( item );
 
 					if( poly )
 						c.polyline().push_back( poly->cfg() );
@@ -178,7 +172,7 @@ FormGroup::cfg() const
 
 				case FormObject::TextType :
 				{
-					FormText * text = dynamic_cast< FormText* > ( item );
+					auto * text = dynamic_cast< FormText* > ( item );
 
 					if( text )
 						c.text().push_back( text->cfg() );
@@ -187,7 +181,7 @@ FormGroup::cfg() const
 
 				case FormObject::ImageType :
 				{
-					FormImage * image = dynamic_cast< FormImage* > ( item );
+					auto * image = dynamic_cast< FormImage* > ( item );
 
 					if( image )
 						c.image().push_back( image->cfg() );
@@ -196,7 +190,7 @@ FormGroup::cfg() const
 
 				case FormObject::RectType :
 				{
-					FormRect * rect = dynamic_cast< FormRect* > ( item );
+					auto * rect = dynamic_cast< FormRect* > ( item );
 
 					if( rect )
 						c.rect().push_back( rect->cfg() );
@@ -205,7 +199,7 @@ FormGroup::cfg() const
 
 				case FormObject::GroupType :
 				{
-					FormGroup * group = dynamic_cast< FormGroup* > ( item );
+					auto * group = dynamic_cast< FormGroup* > ( item );
 
 					if( group )
 						c.group().push_back( group->cfg() );
@@ -214,7 +208,7 @@ FormGroup::cfg() const
 
 				case FormObject::ButtonType :
 				{
-					FormButton * e = dynamic_cast< FormButton* > ( item );
+					auto * e = dynamic_cast< FormButton* > ( item );
 
 					if( e )
 						c.button().push_back( e->cfg() );
@@ -223,7 +217,7 @@ FormGroup::cfg() const
 
 				case FormObject::ComboBoxType :
 				{
-					FormComboBox * e = dynamic_cast< FormComboBox* > ( item );
+					auto * e = dynamic_cast< FormComboBox* > ( item );
 
 					if( e )
 						c.combobox().push_back( e->cfg() );
@@ -232,7 +226,7 @@ FormGroup::cfg() const
 
 				case FormObject::RadioButtonType :
 				{
-					FormRadioButton * e = dynamic_cast< FormRadioButton* > ( item );
+					auto * e = dynamic_cast< FormRadioButton* > ( item );
 
 					if( e )
 						c.radiobutton().push_back( e->cfg() );
@@ -241,7 +235,7 @@ FormGroup::cfg() const
 
 				case FormObject::CheckBoxType :
 				{
-					FormCheckBox * e = dynamic_cast< FormCheckBox* > ( item );
+					auto * e = dynamic_cast< FormCheckBox* > ( item );
 
 					if( e )
 						c.checkbox().push_back( e->cfg() );
@@ -250,7 +244,7 @@ FormGroup::cfg() const
 
 				case FormObject::HSliderType :
 				{
-					FormHSlider * e = dynamic_cast< FormHSlider* > ( item );
+					auto * e = dynamic_cast< FormHSlider* > ( item );
 
 					if( e )
 						c.hslider().push_back( e->cfg() );
@@ -259,7 +253,7 @@ FormGroup::cfg() const
 
 				case FormObject::VSliderType :
 				{
-					FormVSlider * e = dynamic_cast< FormVSlider* > ( item );
+					auto * e = dynamic_cast< FormVSlider* > ( item );
 
 					if( e )
 						c.vslider().push_back( e->cfg() );
@@ -268,7 +262,7 @@ FormGroup::cfg() const
 
 				case FormObject::SpinBoxType :
 				{
-					FormSpinBox * e = dynamic_cast< FormSpinBox* > ( item );
+					auto * e = dynamic_cast< FormSpinBox* > ( item );
 
 					if( e )
 						c.spinbox().push_back( e->cfg() );
@@ -299,7 +293,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 {
 	foreach( const Cfg::Line & cfg, c.line() )
 	{
-		FormLine * line = new FormLine( page(), page() );
+		auto * line = new FormLine( page(), page() );
 
 		line->setCfg( cfg );
 
@@ -308,7 +302,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Polyline & cfg, c.polyline() )
 	{
-		FormPolyline * poly = new FormPolyline( page(), page() );
+		auto * poly = new FormPolyline( page(), page() );
 
 		poly->setCfg( cfg );
 
@@ -319,7 +313,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 	{
 		const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
 
-		FormText * text = new FormText( r, page(), page() );
+		auto * text = new FormText( r, page(), page() );
 
 		text->setCfg( cfg );
 
@@ -328,7 +322,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Image & cfg, c.image() )
 	{
-		FormImage * image = new FormImage( page(), page() );
+		auto * image = new FormImage( page(), page() );
 
 		image->setCfg( cfg );
 
@@ -337,7 +331,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Rect & cfg, c.rect() )
 	{
-		FormRect * rect = new FormRect( page(), page() );
+		auto * rect = new FormRect( page(), page() );
 
 		rect->setCfg( cfg );
 
@@ -346,7 +340,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 
 	foreach( const Cfg::Group & cfg, c.group() )
 	{
-		FormGroup * group = new FormGroup( page(), page() );
+		auto * group = new FormGroup( page(), page() );
 
 		group->setCfg( cfg );
 
@@ -389,7 +383,7 @@ FormGroup::children() const
 
 	items.erase( std::remove_if( items.begin(), items.end(),
 			[] ( QGraphicsItem * item ) {
-				return ( dynamic_cast< FormObject* > ( item ) == 0 ); } ),
+				return ( dynamic_cast< FormObject* > ( item ) == nullptr ); } ),
 		items.end() );
 
 	return items;

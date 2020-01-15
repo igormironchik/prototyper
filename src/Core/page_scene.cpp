@@ -52,7 +52,7 @@ public:
 	PageScenePrivate( const Cfg::Page & cfg, PageScene * parent )
 		:	q( parent )
 		,	m_cfg( cfg )
-		,	m_form( 0 )
+		,	m_form( nullptr )
 		,	m_isPressed( false )
 		,	m_dist( 0.0 )
 		,	m_isSelectionEnabled( true )
@@ -103,7 +103,7 @@ PageScenePrivate::moveBy( const QPointF & delta )
 {
 	foreach( QGraphicsItem * item, q->selectedItems() )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
 			obj->setPosition( obj->position() + delta );
@@ -210,7 +210,7 @@ PageScene::PageScene( const Cfg::Page & cfg, QObject * parent )
 PageScene::~PageScene()
 {
 	if( d->m_form )
-		disconnect( this, 0, d->m_form, 0 );
+		disconnect( this, nullptr, d->m_form, nullptr );
 }
 
 Page *

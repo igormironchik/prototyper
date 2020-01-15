@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "text_editor.hpp"
 #include "utils.hpp"
+#include "constants.hpp"
 
 #include <QTextCursor>
 #include <QTextDocumentFragment>
@@ -59,7 +60,7 @@ TextEditorPrivate::init()
 
 	{
 		QFont f = q->font();
-		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		q->setFont( f );
 	}
 
@@ -67,7 +68,7 @@ TextEditorPrivate::init()
 
 	QTextCharFormat fmt = c.charFormat();
 	QFont f = fmt.font();
-	f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+	f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 	fmt.setFont( f );
 
 	c.setCharFormat( fmt );
@@ -92,11 +93,7 @@ TextEditor::TextEditor( QWidget * parent )
 	d->init();
 }
 
-TextEditor::~TextEditor()
-{
-}
-
-
+TextEditor::~TextEditor() = default;
 
 std::vector< Cfg::TextStyle >
 TextEditor::text() const
@@ -291,7 +288,7 @@ TextEditor::clearFormat()
 		fmt.setFontItalic( false );
 		fmt.setFontWeight( QFont::Normal );
 		QFont f = fmt.font();
-		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		fmt.setFont( f );
 
 		textCursor().setCharFormat( fmt );
@@ -302,7 +299,7 @@ TextEditor::clearFormat()
 		setFontItalic( false );
 		setFontWeight( QFont::Normal );
 		QFont f = currentFont();
-		f.setPixelSize( MmPx::instance().fromPtY( 10.0 ) );
+		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		setCurrentFont( f );
 	}
 

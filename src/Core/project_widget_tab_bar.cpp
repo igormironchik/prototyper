@@ -70,9 +70,7 @@ ProjectTabBar::ProjectTabBar( QWidget * parent )
 	d->init();
 }
 
-ProjectTabBar::~ProjectTabBar()
-{
-}
+ProjectTabBar::~ProjectTabBar() = default;
 
 void
 ProjectTabBar::renameTab()

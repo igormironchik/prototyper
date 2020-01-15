@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "text_opts_bar.hpp"
 #include "utils.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QAction>
@@ -45,12 +46,12 @@ class TextOptsBarPrivate {
 public:
 	TextOptsBarPrivate( TextOptsBar::IconSize s, TextOptsBar * parent )
 		:	q( parent )
-		,	m_fontBold( 0 )
-		,	m_fontItalic( 0 )
-		,	m_fontUnderline( 0 )
-		,	m_alignLeft( 0 )
-		,	m_alignCenter( 0 )
-		,	m_alignRight( 0 )
+		,	m_fontBold( nullptr )
+		,	m_fontItalic( nullptr )
+		,	m_fontUnderline( nullptr )
+		,	m_alignLeft( nullptr )
+		,	m_alignCenter( nullptr )
+		,	m_alignRight( nullptr )
 		,	m_iconSize( s )
 		,	m_fontSize( nullptr )
 	{
@@ -99,7 +100,7 @@ TextOptsBarPrivate::init()
 		<< QString::number( 36 )
 		<< QString::number( 48 )
 		<< QString::number( 72 ) );
-	QIntValidator * v = new QIntValidator( 1, 72 * 5, m_fontSize );
+	auto * v = new QIntValidator( 1, 72 * 5, m_fontSize );
 	m_fontSize->setValidator( v );
 	m_fontSize->setEditable( true );
 	const QString fontSizeTip = TextOptsBar::tr( "Font Size" );
@@ -145,7 +146,7 @@ TextOptsBarPrivate::init()
 	m_fontUnderline->setStatusTip( fontUnderlineTip );
 	m_fontUnderline->setCheckable( true );
 
-	QActionGroup * alignGroup = new QActionGroup( q );
+	auto * alignGroup = new QActionGroup( q );
 
 	q->addSeparator();
 
@@ -221,9 +222,7 @@ TextOptsBar::TextOptsBar( IconSize s, QWidget * parent )
 	d->init();
 }
 
-TextOptsBar::~TextOptsBar()
-{
-}
+TextOptsBar::~TextOptsBar() = default;
 
 void
 TextOptsBar::updateState( const QTextCursor & cursor )
@@ -244,7 +243,7 @@ TextOptsBar::updateState( const QTextCursor & cursor )
 	d->m_fontItalic->setChecked( fmt.fontItalic() );
 	d->m_fontUnderline->setChecked( fmt.fontUnderline() );
 
-	disconnect( d->m_fontSize, &QComboBox::currentTextChanged, 0, 0 );
+	disconnect( d->m_fontSize, &QComboBox::currentTextChanged, nullptr, nullptr );
 
 	d->m_fontSize->setCurrentText( QString::number(
 		qRound( MmPx::instance().toPtY( fmt.font().pixelSize() ) ) ) );
@@ -285,7 +284,7 @@ TextOptsBar::slotClearFormat()
 	d->m_fontBold->setChecked( false );
 	d->m_fontItalic->setChecked( false );
 	d->m_fontUnderline->setChecked( false );
-	d->m_fontSize->setCurrentText( QString::number( 10 ) );
+	d->m_fontSize->setCurrentText( QString::number( qRound( c_defaultFontSize ) ) );
 
 	d->m_alignLeft->setChecked( true );
 

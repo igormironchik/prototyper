@@ -49,7 +49,7 @@ class ExporterPrivate;
 class Exporter {
 public:
 	explicit Exporter( const Cfg::Project & project );
-	virtual ~Exporter();
+	virtual ~Exporter() = default;
 
 	//! Export documentation.
 	virtual void exportToDoc( const QString & fileName ) = 0;

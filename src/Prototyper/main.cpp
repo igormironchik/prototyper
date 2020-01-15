@@ -44,13 +44,13 @@ int main( int argc, char ** argv )
 	appIcon.addFile( QStringLiteral( ":/img/Prototyper_32x32.png" ) );
 	appIcon.addFile( QStringLiteral( ":/img/Prototyper_22x22.png" ) );
 	appIcon.addFile( QStringLiteral( ":/img/Prototyper_16x16.png" ) );
-	app.setWindowIcon( appIcon );
+	QApplication::setWindowIcon( appIcon );
 
 	QTranslator appTranslator;
 	appTranslator.load( "./tr/Prototyper_" + QLocale::system().name() );
-	app.installTranslator( &appTranslator );
+	QApplication::installTranslator( &appTranslator );
 
 	TopGui::instance()->projectWindow()->show();
 
-	return app.exec();
+	return QApplication::exec();
 }

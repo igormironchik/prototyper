@@ -724,7 +724,7 @@ ProjectWindowPrivate::setFlag( const QList< QGraphicsItem* > & children,
 	{
 		setFlag( item->childItems(), f, enabled );
 
-		FormObject * tmp = dynamic_cast< FormObject* > ( item );
+		auto * tmp = dynamic_cast< FormObject* > ( item );
 
 		if( tmp )
 			item->setFlag( f, enabled );
@@ -743,7 +743,7 @@ ProjectWindowPrivate::enableEditing( const QList< QGraphicsItem* > & children,
 {
 	foreach( QGraphicsItem * item, children )
 	{
-		FormText * text = dynamic_cast< FormText* > ( item );
+		auto * text = dynamic_cast< FormText* > ( item );
 
 		if( text )
 		{
@@ -763,8 +763,8 @@ ProjectWindowPrivate::updateCfg()
 
 	m_cfg.page().clear();
 
-	for( int i = 0; i < m_widget->pages().size(); ++i )
-		m_cfg.page().push_back( m_widget->pages().at( i )->page()->cfg() );
+	for( const auto & page : qAsConst( m_widget->pages() ) )
+		m_cfg.page().push_back( page->page()->cfg() );
 }
 
 void
@@ -796,9 +796,7 @@ ProjectWindow::ProjectWindow( QWidget * parent, Qt::WindowFlags f )
 	d->init();
 }
 
-ProjectWindow::~ProjectWindow()
-{
-}
+ProjectWindow::~ProjectWindow() = default;
 
 ProjectWidget *
 ProjectWindow::projectWidget() const
@@ -917,7 +915,7 @@ ProjectWindow::quit()
 
 	d->m_widget->tabs()->setCurrentIndex( 0 );
 
-	TopGui::instance()->saveCfg( 0 );
+	TopGui::instance()->saveCfg( nullptr );
 
 	QApplication::quit();
 }
@@ -1183,7 +1181,7 @@ ProjectWindow::insertImage()
 		QFileDialog::getOpenFileName( this, tr( "Select Image" ),
 			QStandardPaths::standardLocations(
 				QStandardPaths::PicturesLocation ).first(),
-			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ), 0,
+			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ), nullptr,
 			QFileDialog::DontUseNativeDialog );
 
 	QApplication::processEvents();
@@ -1196,8 +1194,8 @@ ProjectWindow::insertImage()
 		{
 			QApplication::processEvents();
 
-			QDrag * drag = new QDrag( this );
-			QMimeData * mimeData = new QMimeData;
+			auto * drag = new QDrag( this );
+			auto * mimeData = new QMimeData;
 
 			QPixmap p;
 			QSize s = image.size();
@@ -1294,7 +1292,7 @@ ProjectWindow::fillColor()
 			{
 				foreach( QGraphicsItem * item, selected )
 				{
-					FormObject * obj = dynamic_cast< FormObject* > ( item );
+					auto * obj = dynamic_cast< FormObject* > ( item );
 
 					if( obj )
 						obj->setObjectBrush( QBrush( c ) );
@@ -1323,7 +1321,7 @@ ProjectWindow::strokeColor()
 			{
 				foreach( QGraphicsItem * item, selected )
 				{
-					FormObject * obj = dynamic_cast< FormObject* > ( item );
+					auto * obj = dynamic_cast< FormObject* > ( item );
 
 					if( obj )
 						obj->setObjectPen( QPen( c ) );
@@ -1382,7 +1380,7 @@ ProjectWindow::tabChanged( int index )
 		d->m_zoomToolBar->hide();
 		d->m_widget->descriptionTab()->toolBar()->show();
 
-		PageAction::instance()->setPage( 0 );
+		PageAction::instance()->setPage( nullptr );
 
 		d->m_group->setEnabled( false );
 		d->m_select->setEnabled( false );
@@ -1818,13 +1816,13 @@ ProjectWindow::canUndoChanged( bool canUndo )
 }
 
 void
-ProjectWindow::pageAdded( PageView * form )
+ProjectWindow::pageAdded( Prototyper::Core::PageView * form )
 {
 	d->m_addedForms.append( form );
 }
 
 void
-ProjectWindow::pageDeleted( PageView * form )
+ProjectWindow::pageDeleted( Prototyper::Core::PageView * form )
 {
 	d->m_deletedForms.append( form );
 

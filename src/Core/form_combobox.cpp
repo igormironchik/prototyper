@@ -46,8 +46,8 @@ class FormComboBoxPrivate {
 public:
 	FormComboBoxPrivate( FormComboBox * parent, const QRectF & rect )
 		:	q( parent )
-		,	m_rect( QRectF( rect.x(), rect.y(), rect.width(), 25.0 ) )
-		,	m_proxy( 0 )
+		,	m_rect( QRectF( rect.x(), rect.y(), rect.width(), FormComboBox::boxHeight() ) )
+		,	m_proxy( nullptr )
 	{
 	}
 
@@ -96,18 +96,16 @@ FormComboBoxPrivate::setRect( const QRectF & rect )
 // FormComboBox
 //
 
-FormComboBox::FormComboBox( const QRectF & rect, Page * form,
+FormComboBox::FormComboBox( const QRectF & rect, Page * page,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	FormObject( FormObject::ComboBoxType, form )
+	,	FormObject( FormObject::ComboBoxType, page )
 	,	d( new FormComboBoxPrivate( this, rect ) )
 {
 	d->init();
 }
 
-FormComboBox::~FormComboBox()
-{
-}
+FormComboBox::~FormComboBox() = default;
 
 void
 FormComboBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
@@ -165,8 +163,8 @@ FormComboBox::boxHeight( int dpi )
 {
 	if( !dpi )
 		return MmPx::instance().fromMmY( 4.0 );
-	else
-		return MmPx::instance().fromMm( 4.0, dpi );
+
+	return MmPx::instance().fromMm( 4.0, dpi );
 }
 
 void
@@ -277,7 +275,7 @@ FormComboBox::moveResizable( const QPointF & delta )
 QSizeF
 FormComboBox::defaultSize() const
 {
-	return QSizeF( MmPx::instance().fromMmX( 15.0 ), boxHeight() );
+	return { MmPx::instance().fromMmX( 15.0 ), boxHeight() };
 }
 
 FormObject *

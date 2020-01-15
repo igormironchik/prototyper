@@ -43,13 +43,9 @@ namespace Core {
 // FormWithHandle
 //
 
-FormWithHandle::FormWithHandle()
-{
-}
+FormWithHandle::FormWithHandle() = default;
 
-FormWithHandle::~FormWithHandle()
-{
-}
+FormWithHandle::~FormWithHandle() = default;
 
 void
 FormWithHandle::handleMoved( const QPointF & delta, FormMoveHandle * handle )
@@ -85,9 +81,7 @@ FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
 {
 }
 
-FormMoveHandlePrivate::~FormMoveHandlePrivate()
-{
-}
+FormMoveHandlePrivate::~FormMoveHandlePrivate() = default;
 
 void
 FormMoveHandlePrivate::init()
@@ -108,7 +102,7 @@ FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
 	FormWithHandle * object, QGraphicsItem * parent, Page * form,
 	const QCursor & c )
 	:	QGraphicsObject( parent )
-	,	d( 0 )
+	,	d( nullptr )
 {
 	QScopedPointer< FormMoveHandlePrivate > tmp(
 		new FormMoveHandlePrivate( halfSize, zero, object, this, form, c ) );
@@ -121,9 +115,9 @@ FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
 FormMoveHandle::FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > && dd,
 	QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	d( 0 )
+	,	d( nullptr )
 {
-	QScopedPointer< FormMoveHandlePrivate > tmp( 0 );
+	QScopedPointer< FormMoveHandlePrivate > tmp( nullptr );
 
 	tmp.swap( dd );
 
@@ -132,9 +126,7 @@ FormMoveHandle::FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > && dd,
 	d.swap( tmp );
 }
 
-FormMoveHandle::~FormMoveHandle()
-{
-}
+FormMoveHandle::~FormMoveHandle() = default;
 
 qreal
 FormMoveHandle::halfOfSize() const
@@ -146,9 +138,9 @@ QRectF
 FormMoveHandle::boundingRect() const
 {
 	if( !d.isNull() )
-		return QRectF( 0, 0, d->m_size * 2, d->m_size * 2 );
-	else
-		return QRectF();
+		return { 0, 0, d->m_size * 2.0, d->m_size * 2.0 };
+
+	return {};
 }
 
 void
@@ -205,14 +197,12 @@ FormMoveHandle::handleMouseMove( const QPointF & point )
 
 		return true;
 	}
-	else
-	{
-		d->m_hovered = false;
 
-		update();
+	d->m_hovered = false;
 
-		return false;
-	}
+	update();
+
+	return false;
 }
 
 void
@@ -348,22 +338,20 @@ FormMoveHandle::eventFilter( QObject * watched, QEvent * event )
 			{
 				if( d->m_pressed )
 				{
-					QGraphicsSceneMouseEvent * me =
-						static_cast< QGraphicsSceneMouseEvent* > ( event );
+					auto * me = dynamic_cast< QGraphicsSceneMouseEvent* > ( event );
 
 					mouseMoveEvent( me );
 
 					return true;
 				}
-				else
-					return false;
+
+				return false;
 			}
 				break;
 
 			case QEvent::GraphicsSceneMousePress :
 			{
-				QGraphicsSceneMouseEvent * me =
-					static_cast< QGraphicsSceneMouseEvent* > ( event );
+				auto * me = dynamic_cast< QGraphicsSceneMouseEvent* > ( event );
 
 				mousePressEvent( me );
 
@@ -375,15 +363,14 @@ FormMoveHandle::eventFilter( QObject * watched, QEvent * event )
 			{
 				if( d->m_pressed )
 				{
-					QGraphicsSceneMouseEvent * me =
-						static_cast< QGraphicsSceneMouseEvent* > ( event );
+					auto * me = dynamic_cast< QGraphicsSceneMouseEvent* > ( event );
 
 					mouseReleaseEvent( me );
 
 					return true;
 				}
-				else
-					return false;
+
+				return false;
 			}
 				break;
 

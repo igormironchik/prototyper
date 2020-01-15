@@ -124,7 +124,7 @@ PagePrivate::currentZValue( const QList< QGraphicsItem* > & items,
 		if( !children.isEmpty() )
 			currentZValue( children, z );
 
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj && item->zValue() > z )
 			z = item->zValue();
@@ -144,19 +144,17 @@ PagePrivate::lineStartPoint( const QPointF & point, bool & intersected,
 
 		return tmp;
 	}
-	else
+
+	foreach( FormLine * line, m_currentLines )
 	{
-		foreach( FormLine * line, m_currentLines )
+		const QPointF tmp = line->pointUnderHandle( point, intersected,
+			intersectedEnds );
+
+		if( intersected )
 		{
-			const QPointF tmp = line->pointUnderHandle( point, intersected,
-				intersectedEnds );
+			return tmp;
 
-			if( intersected )
-			{
-				return tmp;
-
-				intersectedLine = line;
-			}
+			intersectedLine = line;
 		}
 	}
 
@@ -188,7 +186,7 @@ PagePrivate::handleMouseMoveInCurrentPolyLine( const QPointF & point )
 void
 PagePrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 {
-	FormGroup * tmp = dynamic_cast< FormGroup* > ( group );
+	auto * tmp = dynamic_cast< FormGroup* > ( group );
 
 	if( tmp )
 	{
@@ -215,7 +213,7 @@ PagePrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 
 				item->setSelected( true );
 
-				FormText * text = dynamic_cast< FormText* > ( item );
+				auto * text = dynamic_cast< FormText* > ( item );
 
 				if( text )
 					text->enableEditing( false );
@@ -314,13 +312,13 @@ PagePrivate::clear()
 
 	foreach( QGraphicsItem * item, items )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
 			objs.append( obj );
 		else
 		{
-			GridSnap * snap = dynamic_cast< GridSnap* > ( item );
+			auto * snap = dynamic_cast< GridSnap* > ( item );
 
 			if( !snap )
 				q->scene()->removeItem( item );
@@ -333,7 +331,7 @@ PagePrivate::clear()
 
 	foreach( FormObject * obj, objs )
 	{
-		QGraphicsItem * item = dynamic_cast< QGraphicsItem* > ( obj );
+		auto * item = dynamic_cast< QGraphicsItem* > ( obj );
 
 		if( item )
 			q->scene()->removeItem( item );
@@ -376,7 +374,7 @@ PagePrivate::createText( const Cfg::Text & cfg )
 {
 	const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
 
-	FormText * text = new FormText( r, q, q );
+	auto * text = new FormText( r, q, q );
 
 	text->setCfg( cfg );
 
@@ -393,7 +391,7 @@ PagePrivate::createText( const Cfg::Text & cfg )
 FormGroup *
 PagePrivate::createGroup( const Cfg::Group & cfg )
 {
-	FormGroup * group = new FormGroup( q, q );
+	auto * group = new FormGroup( q, q );
 
 	group->setCfg( cfg );
 
@@ -407,13 +405,13 @@ PagePrivate::clearIds( FormGroup * group )
 {
 	foreach( QGraphicsItem * item, group->childItems() )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
 		{
 			m_ids.removeOne( obj->objectId() );
 
-			FormGroup * childGroup = dynamic_cast< FormGroup* > ( item );
+			auto * childGroup = dynamic_cast< FormGroup* > ( item );
 
 			if( childGroup )
 				clearIds( childGroup );
@@ -426,13 +424,13 @@ PagePrivate::addIds( FormGroup * group )
 {
 	foreach( QGraphicsItem * item, group->childItems() )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
 		{
 			m_ids.append( obj->objectId() );
 
-			FormGroup * childGroup = dynamic_cast< FormGroup* > ( item );
+			auto * childGroup = dynamic_cast< FormGroup* > ( item );
 
 			if( childGroup )
 				addIds( childGroup );
@@ -454,7 +452,7 @@ PagePrivate::hideHandlesOfCurrent()
 {
 	if( m_current )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( m_current );
+		auto * obj = dynamic_cast< FormObject* > ( m_current );
 
 		if( obj )
 		{
@@ -462,7 +460,7 @@ PagePrivate::hideHandlesOfCurrent()
 			{
 				case FormObject::LineType :
 				{
-					FormLine * line = dynamic_cast< FormLine* > ( m_current );
+					auto * line = dynamic_cast< FormLine* > ( m_current );
 
 					if( line )
 						line->showHandles( false );
@@ -471,7 +469,7 @@ PagePrivate::hideHandlesOfCurrent()
 
 				case FormObject::PolylineType :
 				{
-					FormPolyline * line = dynamic_cast< FormPolyline* > ( m_current );
+					auto * line = dynamic_cast< FormPolyline* > ( m_current );
 
 					if( line )
 						line->showHandles( false );
@@ -622,7 +620,7 @@ PagePrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 Page::Page( Cfg::Page & c, QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
 	,	FormObject( FormObject::PageType, this )
-	,	d( 0 )
+	,	d( nullptr )
 {
 	QScopedPointer< PagePrivate > tmp( new PagePrivate( c, this ) );
 
@@ -631,9 +629,7 @@ Page::Page( Cfg::Page & c, QGraphicsItem * parent )
 	d.swap( tmp );
 }
 
-Page::~Page()
-{
-}
+Page::~Page() = default;
 
 template< class Elem >
 FormObject *
@@ -808,7 +804,7 @@ Page::cfg() const
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
 		{
@@ -816,7 +812,7 @@ Page::cfg() const
 			{
 				case FormObject::LineType :
 				{
-					FormLine * line = dynamic_cast< FormLine* > ( item );
+					auto * line = dynamic_cast< FormLine* > ( item );
 
 					if( line )
 						c.line().push_back( line->cfg() );
@@ -825,7 +821,7 @@ Page::cfg() const
 
 				case FormObject::PolylineType :
 				{
-					FormPolyline * poly = dynamic_cast< FormPolyline* > ( item );
+					auto * poly = dynamic_cast< FormPolyline* > ( item );
 
 					if( poly )
 						c.polyline().push_back( poly->cfg() );
@@ -834,7 +830,7 @@ Page::cfg() const
 
 				case FormObject::TextType :
 				{
-					FormText * text = dynamic_cast< FormText* > ( item );
+					auto * text = dynamic_cast< FormText* > ( item );
 
 					if( text )
 						c.text().push_back( text->cfg() );
@@ -843,7 +839,7 @@ Page::cfg() const
 
 				case FormObject::ImageType :
 				{
-					FormImage * image = dynamic_cast< FormImage* > ( item );
+					auto * image = dynamic_cast< FormImage* > ( item );
 
 					if( image )
 						c.image().push_back( image->cfg() );
@@ -852,7 +848,7 @@ Page::cfg() const
 
 				case FormObject::RectType :
 				{
-					FormRect * rect = dynamic_cast< FormRect* > ( item );
+					auto * rect = dynamic_cast< FormRect* > ( item );
 
 					if( rect )
 						c.rect().push_back( rect->cfg() );
@@ -861,7 +857,7 @@ Page::cfg() const
 
 				case FormObject::GroupType :
 				{
-					FormGroup * group = dynamic_cast< FormGroup* > ( item );
+					auto * group = dynamic_cast< FormGroup* > ( item );
 
 					if( group )
 						c.group().push_back( group->cfg() );
@@ -870,7 +866,7 @@ Page::cfg() const
 
 				case FormObject::ButtonType :
 				{
-					FormButton * btn = dynamic_cast< FormButton* > ( item );
+					auto * btn = dynamic_cast< FormButton* > ( item );
 
 					if( btn )
 						c.button().push_back( btn->cfg() );
@@ -879,7 +875,7 @@ Page::cfg() const
 
 				case FormObject::CheckBoxType :
 				{
-					FormCheckBox * chk = dynamic_cast< FormCheckBox* > ( item );
+					auto * chk = dynamic_cast< FormCheckBox* > ( item );
 
 					if( chk )
 						c.checkbox().push_back( chk->cfg() );
@@ -888,7 +884,7 @@ Page::cfg() const
 
 				case FormObject::RadioButtonType :
 				{
-					FormRadioButton * r = dynamic_cast< FormRadioButton* > ( item );
+					auto * r = dynamic_cast< FormRadioButton* > ( item );
 
 					if( r )
 						c.radiobutton().push_back( r->cfg() );
@@ -897,7 +893,7 @@ Page::cfg() const
 
 				case FormObject::ComboBoxType :
 				{
-					FormComboBox * cb = dynamic_cast< FormComboBox* > ( item );
+					auto * cb = dynamic_cast< FormComboBox* > ( item );
 
 					if( cb )
 						c.combobox().push_back( cb->cfg() );
@@ -906,7 +902,7 @@ Page::cfg() const
 
 				case FormObject::SpinBoxType :
 				{
-					FormSpinBox * sb = dynamic_cast< FormSpinBox* > ( item );
+					auto * sb = dynamic_cast< FormSpinBox* > ( item );
 
 					if( sb )
 						c.spinbox().push_back( sb->cfg() );
@@ -915,7 +911,7 @@ Page::cfg() const
 
 				case FormObject::HSliderType :
 				{
-					FormHSlider * hs = dynamic_cast< FormHSlider* > ( item );
+					auto * hs = dynamic_cast< FormHSlider* > ( item );
 
 					if( hs )
 						c.hslider().push_back( hs->cfg() );
@@ -924,7 +920,7 @@ Page::cfg() const
 
 				case FormObject::VSliderType :
 				{
-					FormVSlider * vs = dynamic_cast< FormVSlider* > ( item );
+					auto * vs = dynamic_cast< FormVSlider* > ( item );
 
 					if( vs )
 						c.vslider().push_back( vs->cfg() );
@@ -974,8 +970,8 @@ Page::switchToLineDrawingMode()
 	d->hideHandlesOfCurrent();
 
 	d->m_currentLines.clear();
-	d->m_current = 0;
-	d->m_currentPoly = 0;
+	d->m_current = nullptr;
+	d->m_currentPoly = nullptr;
 	d->m_polyline = false;
 }
 
@@ -1010,7 +1006,7 @@ Page::findItem( const QString & id )
 
 	foreach( QGraphicsItem * item, items )
 	{
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj && obj->objectId() == id )
 			return item;
@@ -1272,7 +1268,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 	{
 		case FormObject::LineType :
 		{
-			FormLine * item = dynamic_cast< FormLine* > ( obj );
+			auto * item = dynamic_cast< FormLine* > ( obj );
 			Cfg::Line cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1282,7 +1278,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::PolylineType :
 		{
-			FormPolyline * item = dynamic_cast< FormPolyline* > ( obj );
+			auto * item = dynamic_cast< FormPolyline* > ( obj );
 			Cfg::Polyline cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1292,7 +1288,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::TextType :
 		{
-			FormText * item = dynamic_cast< FormText* > ( obj );
+			auto * item = dynamic_cast< FormText* > ( obj );
 			Cfg::Text cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1302,7 +1298,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::ImageType :
 		{
-			FormImage * item = dynamic_cast< FormImage* > ( obj );
+			auto * item = dynamic_cast< FormImage* > ( obj );
 			Cfg::Image cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1312,7 +1308,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::RectType :
 		{
-			FormRect * item = dynamic_cast< FormRect* > ( obj );
+			auto * item = dynamic_cast< FormRect* > ( obj );
 			Cfg::Rect cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1322,7 +1318,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::GroupType :
 		{
-			FormGroup * item = dynamic_cast< FormGroup* > ( obj );
+			auto * item = dynamic_cast< FormGroup* > ( obj );
 			Cfg::Group cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1332,7 +1328,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::ButtonType :
 		{
-			FormButton * item = dynamic_cast< FormButton* > ( obj );
+			auto * item = dynamic_cast< FormButton* > ( obj );
 			Cfg::Button cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1342,7 +1338,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::ComboBoxType :
 		{
-			FormComboBox * item = dynamic_cast< FormComboBox* > ( obj );
+			auto * item = dynamic_cast< FormComboBox* > ( obj );
 			Cfg::ComboBox cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1352,7 +1348,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::RadioButtonType :
 		{
-			FormRadioButton * item = dynamic_cast< FormRadioButton* > ( obj );
+			auto * item = dynamic_cast< FormRadioButton* > ( obj );
 			Cfg::CheckBox cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1362,7 +1358,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::CheckBoxType :
 		{
-			FormCheckBox * item = dynamic_cast< FormCheckBox* > ( obj );
+			auto * item = dynamic_cast< FormCheckBox* > ( obj );
 			Cfg::CheckBox cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1372,7 +1368,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::HSliderType :
 		{
-			FormHSlider * item = dynamic_cast< FormHSlider* > ( obj );
+			auto * item = dynamic_cast< FormHSlider* > ( obj );
 			Cfg::HSlider cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1382,7 +1378,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::VSliderType :
 		{
-			FormVSlider * item = dynamic_cast< FormVSlider* > ( obj );
+			auto * item = dynamic_cast< FormVSlider* > ( obj );
 			Cfg::VSlider cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1392,7 +1388,7 @@ static inline void pushUndoDeleteCommand( QUndoStack * stack,
 
 		case FormObject::SpinBoxType :
 		{
-			FormSpinBox * item = dynamic_cast< FormSpinBox* > ( obj );
+			auto * item = dynamic_cast< FormSpinBox* > ( obj );
 			Cfg::SpinBox cfg = item->cfg();
 
 			stack->push( new UndoDelete< std::remove_pointer_t<
@@ -1412,9 +1408,9 @@ Page::deleteItems( const QList< QGraphicsItem* > & items,
 	foreach( QGraphicsItem * item, items )
 	{
 		if( item == d->m_current )
-			d->m_current = 0;
+			d->m_current = nullptr;
 
-		FormObject * obj = dynamic_cast< FormObject* > ( item );
+		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
 		{
@@ -1427,7 +1423,7 @@ Page::deleteItems( const QList< QGraphicsItem* > & items,
 			{
 				case FormObject::GroupType :
 				{
-					FormGroup * group = dynamic_cast< FormGroup* > ( item );
+					auto * group = dynamic_cast< FormGroup* > ( item );
 
 					if( group )
 					{
@@ -1440,7 +1436,7 @@ Page::deleteItems( const QList< QGraphicsItem* > & items,
 
 				case FormObject::TextType :
 				{
-					FormText * text = dynamic_cast< FormText* > ( item );
+					auto * text = dynamic_cast< FormText* > ( item );
 
 					if( text )
 					{
@@ -1469,10 +1465,10 @@ QRectF
 Page::boundingRect() const
 {
 	if( !d.isNull() )
-		return QRectF( 0.0, 0.0, d->m_cfg.size().width(),
-			d->m_cfg.size().height() + 30.0 );
-	else
-		return QRectF();
+		return { 0.0, 0.0, d->m_cfg.size().width() + 1.0,
+			d->m_cfg.size().height() + 1.0 };
+
+	return {};
 }
 
 void
@@ -1610,10 +1606,9 @@ Page::undoCommandInTextAdded()
 void
 Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 {
-	FormRectPlacer * placer = dynamic_cast< FormRectPlacer* > ( d->m_current );
+	auto * placer = dynamic_cast< FormRectPlacer* > ( d->m_current );
 
-	if( placer )
-		delete placer;
+	delete placer;
 
 	QMenu menu;
 	menu.addAction( TopGui::instance()->projectWindow()->showHideGridAction() );
@@ -1641,7 +1636,7 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 		{
 			case PageAction::DrawLine :
 			{
-				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
+				auto * line = dynamic_cast< FormLine* > ( d->m_current );
 
 				if( line )
 				{
@@ -1671,7 +1666,7 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawHSlider :
 			case PageAction::DrawVSlider :
 			{
-				FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+				auto * rect = dynamic_cast< FormRectPlacer* >
 					( d->m_current );
 
 				if( rect )
@@ -1687,7 +1682,7 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case PageAction::DrawRect :
 			{
-				FormRect * rect = dynamic_cast< FormRect* > ( d->m_current );
+				auto * rect = dynamic_cast< FormRect* > ( d->m_current );
 
 				if( rect )
 				{
@@ -1731,11 +1726,11 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				d->m_pressed = true;
 
-				FormLine * line = new FormLine( this, this );
+				auto * line = new FormLine( this, this );
 
 				bool intersected = false;
 				bool intersectedEnds = false;
-				FormLine * intersectedLine = 0;
+				FormLine * intersectedLine = nullptr;
 
 				QPointF p = d->lineStartPoint( mouseEvent->pos(),
 					intersected, intersectedEnds, intersectedLine );
@@ -1767,7 +1762,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					{
 						d->m_currentPoly->showHandles( false );
 
-						d->m_currentPoly = 0;
+						d->m_currentPoly = nullptr;
 					}
 				}
 
@@ -1790,7 +1785,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				d->m_pressed = true;
 
-				FormRectPlacer * rect = new FormRectPlacer( this );
+				auto * rect = new FormRectPlacer( this );
 
 				QPointF p = mouseEvent->pos();
 
@@ -1813,7 +1808,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				d->m_pressed = true;
 
-				FormRect * rect = new FormRect( this, this );
+				auto * rect = new FormRect( this, this );
 
 				d->m_current = rect;
 
@@ -1850,10 +1845,10 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, PagePrivate * d,
 {
 	scene->removeItem( d->m_current );
 
-	FormRectPlacer * rect = dynamic_cast< FormRectPlacer* >
+	auto * rect = dynamic_cast< FormRectPlacer* >
 		( d->m_current );
 
-	Elem * elem = 0;
+	Elem * elem = nullptr;
 
 	if( rect )
 	{
@@ -1928,7 +1923,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 		{
 			case PageAction::DrawLine :
 			{
-				FormLine * line = dynamic_cast< FormLine* > ( d->m_current );
+				auto * line = dynamic_cast< FormLine* > ( d->m_current );
 
 				if( line )
 				{
@@ -1939,7 +1934,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					bool intersected = false;
 					bool intersectedEnds = false;
-					FormLine * intersectedLine = 0;
+					FormLine * intersectedLine = nullptr;
 
 					QPointF p = d->lineStartPoint( mouseEvent->pos(),
 						intersected, intersectedEnds, intersectedLine );
@@ -1989,7 +1984,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 							d->m_current = d->m_currentPoly;
 
-							d->m_currentPoly = 0;
+							d->m_currentPoly = nullptr;
 
 							d->m_polyline = false;
 						}
@@ -2014,7 +2009,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case PageAction::InsertText :
 			{
-				FormText * text =
+				auto * text =
 					onReleaseWithRectPlacer< FormText, Cfg::Text > (
 						scene(), d.data(), mouseEvent, this );
 
@@ -2040,7 +2035,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 			case PageAction::DrawRect :
 			{
-				FormRect * rect = dynamic_cast< FormRect* > ( d->m_current );
+				auto * rect = dynamic_cast< FormRect* > ( d->m_current );
 
 				if( rect )
 				{
@@ -2200,7 +2195,7 @@ Page::dropEvent( QGraphicsSceneDragDropEvent * event )
 	{
 		d->hideHandlesOfCurrent();
 
-		FormImage * image = new FormImage( this, this );
+		auto * image = new FormImage( this, this );
 
 		const QString id = d->id();
 

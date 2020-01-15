@@ -162,9 +162,9 @@ private slots:
 	//! Can undo changed.
 	void canUndoChanged( bool canUndo );
 	//! Page added.
-	void pageAdded( PageView * form );
+	void pageAdded( Prototyper::Core::PageView * form );
 	//! Page deleted.
-	void pageDeleted( PageView * form );
+	void pageDeleted( Prototyper::Core::PageView * form );
 	//! Zoom in.
 	void zoomIn();
 	//! Zoom out.

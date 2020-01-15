@@ -56,7 +56,7 @@ class TopGuiPrivate {
 public:
 	explicit TopGuiPrivate( TopGui * parent )
 		:	q( parent )
-		,	m_projectWindow( 0 )
+		,	m_projectWindow( nullptr )
 	{
 	}
 
@@ -182,11 +182,9 @@ TopGui::TopGui()
 {
 }
 
-TopGui::~TopGui()
-{
-}
+TopGui::~TopGui() = default;
 
-static TopGui * topGuiInstance = 0;
+static TopGui * topGuiInstance = nullptr;
 
 void
 TopGui::cleanup()
@@ -195,7 +193,7 @@ TopGui::cleanup()
 	{
 		delete topGuiInstance;
 
-		topGuiInstance = 0;
+		topGuiInstance = nullptr;
 	}
 }
 

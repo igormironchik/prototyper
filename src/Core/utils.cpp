@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "utils.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QTextCharFormat>
@@ -124,7 +125,7 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 			style.set_style( textStyle( f, b ) );
 			QFont font = f.font();
 			style.set_fontSize( font.pixelSize() < MmPx::instance().fromPtY( 1.0 ) ?
-				MmPx::instance().fromPtY( 10.0 ) : MmPx::instance().toPtY( font.pixelSize() ) );
+				MmPx::instance().fromPtY( c_defaultFontSize ) : MmPx::instance().toPtY( font.pixelSize() ) );
 			style.set_text( t );
 
 			blocks.push_back( style );
@@ -145,7 +146,7 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 		style.set_style( textStyle( f, b ) );
 		QFont font = f.font();
 		style.set_fontSize( font.pixelSize() < MmPx::instance().fromPtY( 1.0 ) ?
-			MmPx::instance().fromPtY( 10.0 ) : MmPx::instance().toPtY( font.pixelSize() ) );
+			MmPx::instance().fromPtY( c_defaultFontSize ) : MmPx::instance().toPtY( font.pixelSize() ) );
 		style.set_text( t );
 
 		blocks.push_back( style );
@@ -368,7 +369,7 @@ MmPx::MmPx()
 QSizeF
 MmPx::a4() const
 {
-	return QSizeF( fromMmX( 210.0 ), fromMmY( 297.0 ) );
+	return { fromMmX( 210.0 ), fromMmY( 297.0 ) };
 }
 
 qreal

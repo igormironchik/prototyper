@@ -81,9 +81,7 @@ AspectRatioHandle::AspectRatioHandle( QGraphicsItem * parent )
 	d->init();
 }
 
-AspectRatioHandle::~AspectRatioHandle()
-{
-}
+AspectRatioHandle::~AspectRatioHandle() = default;
 
 bool
 AspectRatioHandle::isKeepAspectRatio() const
@@ -99,10 +97,12 @@ AspectRatioHandle::setKeepAspectRatio( bool on )
 	update();
 }
 
+static const qreal c_halfSize = 6.0;
+
 QRectF
 AspectRatioHandle::boundingRect() const
 {
-	return QRectF( 0.0, 0.0, 12.0, 12.0 );
+	return { 0.0, 0.0, c_halfSize * 2.0, c_halfSize * 2.0 };
 }
 
 void
@@ -128,7 +128,7 @@ AspectRatioHandle::paint( QPainter * painter,
 		else
 			painter->setBrush( Qt::white );
 
-		painter->drawRect( r.adjusted( 0.0, 0.0, -6.0, -6.0 ) );
+		painter->drawRect( r.adjusted( 0.0, 0.0, -c_halfSize, -c_halfSize ) );
 	}
 	else
 	{
@@ -136,7 +136,7 @@ AspectRatioHandle::paint( QPainter * painter,
 
 		painter->setBrush( Qt::NoBrush );
 
-		painter->drawRect( r.adjusted( 0.0, 0.0, 0.0, -6.0 ) );
+		painter->drawRect( r.adjusted( 0.0, 0.0, 0.0, -c_halfSize ) );
 
 		painter->setPen( Qt::black );
 
@@ -145,7 +145,7 @@ AspectRatioHandle::paint( QPainter * painter,
 		else
 			painter->setBrush( Qt::white );
 
-		painter->drawRect( r.adjusted( 0.0, 0.0, -6.0, 0.0 ) );
+		painter->drawRect( r.adjusted( 0.0, 0.0, -c_halfSize, 0.0 ) );
 	}
 }
 
