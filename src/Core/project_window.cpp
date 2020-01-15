@@ -40,6 +40,7 @@
 #include "svg_exporter.hpp"
 #include "form_group.hpp"
 #include "form_undo_commands.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -1417,17 +1418,17 @@ ProjectWindow::zoomChanged()
 {
 	const int index = d->m_widget->tabs()->currentIndex() - 1;
 
-	if( d->m_widget->pages().at( index )->scaleValue() < 4.0 )
+	if( d->m_widget->pages().at( index )->scaleValue() < c_maxZoom )
 		d->m_zoomIn->setEnabled( true );
 	else
 		d->m_zoomIn->setEnabled( false );
 
-	if( d->m_widget->pages().at( index )->scaleValue() > 0.1 )
+	if( d->m_widget->pages().at( index )->scaleValue() > c_minZoom )
 		d->m_zoomOut->setEnabled( true );
 	else
 		d->m_zoomOut->setEnabled( false );
 
-	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 1.0 ) > 0.1 )
+	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 1.0 ) > c_maxZero )
 		d->m_zoomOriginal->setEnabled( true );
 	else
 		d->m_zoomOriginal->setEnabled( false );
@@ -1838,7 +1839,7 @@ ProjectWindow::zoomIn()
 	d->m_widget->pages().at( index )->setScaleValue(
 		d->m_widget->pages().at( index )->scaleValue() + PageView::zoomFactor() );
 
-	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 4.0 ) < 0.01 )
+	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - c_maxZoom ) < c_maxZero )
 		d->m_zoomIn->setEnabled( false );
 
 	d->m_zoomOriginal->setEnabled( true );
@@ -1852,7 +1853,7 @@ ProjectWindow::zoomOut()
 	d->m_widget->pages().at( index )->setScaleValue(
 		d->m_widget->pages().at( index )->scaleValue() - PageView::zoomFactor() );
 
-	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - 0.1 ) < 0.01 )
+	if( qAbs( d->m_widget->pages().at( index )->scaleValue() - c_minZoom ) < c_maxZero )
 		d->m_zoomOut->setEnabled( false );
 
 	d->m_zoomOriginal->setEnabled( true );

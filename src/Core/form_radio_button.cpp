@@ -27,6 +27,7 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_checkbox_private.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QWidget>
@@ -90,7 +91,7 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	if( r.height() > boxHeight( dpi ) )
 	{
 		r.setTopLeft( QPointF( r.topLeft().x(),
-			r.topLeft().y() + ( r.height() - boxHeight( dpi ) ) / 2.0 ) );
+			r.topLeft().y() + ( r.height() - boxHeight( dpi ) ) / c_halfDivider ) );
 		r.setHeight( boxHeight( dpi ) );
 	}
 
@@ -108,7 +109,7 @@ FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	painter->setFont( font );
 
 	r = boundingRect;
-	r.moveLeft( r.x() + boxHeight( dpi ) + o * 2.0 );
+	r.moveLeft( r.x() + boxHeight( dpi ) + o * c_halfDivider );
 
 	painter->drawText( r, Qt::AlignLeft | Qt::AlignVCenter, text );
 }

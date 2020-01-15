@@ -31,6 +31,7 @@
 #include "page.hpp"
 #include "form_aspect_ratio_handle.hpp"
 #include "form_move_handle.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QKeyEvent>
@@ -140,9 +141,9 @@ PageScenePrivate::itemUnderMouse() const
 			{
 				const auto dz = item->zValue() - selected->zValue();
 
-				if( dz > 0.5 )
+				if( dz > c_zDelta )
 					selected = item;
-				else if( qAbs( dz ) < 0.5 || qAbs( qAbs( dz ) - 0.5 ) < 0.01 )
+				else if( qAbs( dz ) < c_zDelta || qAbs( qAbs( dz ) - c_zDelta ) < c_maxZero )
 				{
 					auto br1 = selected->boundingRect();
 					br1.moveTopLeft( selected->pos() );
@@ -272,7 +273,7 @@ PageScene::keyPressEvent( QKeyEvent * event )
 					break;
 
 				default :
-					delta = (qreal) d->m_cfg.gridStep() / 2.0;
+					delta = (qreal) d->m_cfg.gridStep() / c_halfDivider;
 					break;
 			}
 
@@ -403,7 +404,7 @@ PageScene::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 
 		auto * item = d->itemUnderMouse();
 
-		if( d->m_dist < 5.0 && item && !d->m_isHandlePressed )
+		if( d->m_dist < c_maxDistNoMove && item && !d->m_isHandlePressed )
 		{
 			if( !( event->modifiers() & Qt::ShiftModifier ) &&
 				!( event->modifiers() & Qt::ControlModifier ) )

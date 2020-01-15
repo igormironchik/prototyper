@@ -22,6 +22,7 @@
 
 // Prototyper include.
 #include "form_aspect_ratio_handle.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -102,7 +103,7 @@ static const qreal c_halfSize = 6.0;
 QRectF
 AspectRatioHandle::boundingRect() const
 {
-	return { 0.0, 0.0, c_halfSize * 2.0, c_halfSize * 2.0 };
+	return { 0.0, 0.0, c_halfSize * c_halfDivider, c_halfSize * c_halfDivider };
 }
 
 void

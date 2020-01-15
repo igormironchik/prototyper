@@ -24,6 +24,7 @@
 #include "form_image_handles.hpp"
 #include "form_aspect_ratio_handle.hpp"
 #include "form_resizable_private.hpp"
+#include "constants.hpp"
 
 
 namespace Prototyper {
@@ -68,9 +69,14 @@ FormImageHandlesPrivate::place( const QRectF & rect )
 {
 	FormResizableProxyPrivate::place( rect );
 
-	m_aspectRatioHandle->setPos( rect.x() - 12.0, rect.y() - 12.0 );
+	m_aspectRatioHandle->setPos( rect.x() - c_halfHandleSize * c_halfDivider * c_halfDivider,
+		rect.y() - c_halfHandleSize * c_halfDivider * c_halfDivider );
 
-	q->parentItem()->update( rect.adjusted( -20.0, -20.0, 20.0, 20.0 ) );
+	q->parentItem()->update(
+		rect.adjusted( -c_halfHandleSize * c_halfDivider * c_halfDivider * c_halfDivider,
+		-c_halfHandleSize * c_halfDivider * c_halfDivider * c_halfDivider,
+		c_halfHandleSize * c_halfDivider * c_halfDivider * c_halfDivider,
+		c_halfHandleSize * c_halfDivider * c_halfDivider * c_halfDivider ) );
 }
 
 
@@ -103,7 +109,9 @@ QRectF
 FormImageHandles::boundingRect() const
 {
 	return FormResizableProxy::boundingRect()
-		.adjusted( -12.0, -12.0, 0.0, 0.0 );
+		.adjusted( -c_halfHandleSize * c_halfDivider * c_halfDivider,
+			-c_halfHandleSize * c_halfDivider * c_halfDivider,
+			0.0, 0.0 );
 }
 
 } /* namespace Core */

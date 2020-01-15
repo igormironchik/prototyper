@@ -28,6 +28,7 @@
 #include "utils.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QUndoStack>
@@ -79,7 +80,7 @@ FormRectPrivate::init()
 
 	m_handles->hide();
 
-	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), 2.0 ),
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ),
 		false );
 
 	q->setObjectBrush( Qt::transparent );
@@ -95,7 +96,11 @@ FormRectPrivate::updateRect( const QRectF & r )
 	QRectF hr = q->boundingRect();
 
 	hr.moveTopLeft( q->pos() + hr.topLeft() );
-	hr.adjust( -12.0, -12.0, 12.0, 12.0 );
+	hr.adjust(
+		-c_halfHandleSize * c_halfDivider * c_halfDivider,
+		-c_halfHandleSize * c_halfDivider * c_halfDivider,
+		c_halfHandleSize * c_halfDivider * c_halfDivider,
+		c_halfHandleSize * c_halfDivider * c_halfDivider );
 
 	m_handles->place( hr );
 
@@ -107,9 +112,9 @@ FormRectPrivate::updateRect( const QRectF & r )
 // FormRect
 //
 
-FormRect::FormRect( Page * form, QGraphicsItem * parent )
+FormRect::FormRect( Page * page, QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
-	,	FormObject( FormObject::RectType, form )
+	,	FormObject( FormObject::RectType, page )
 	,	d( new FormRectPrivate( this ) )
 {
 	d->init();

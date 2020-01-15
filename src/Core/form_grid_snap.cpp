@@ -43,7 +43,7 @@ public:
 	explicit GridSnapPrivate( GridSnap * parent )
 		:	q( parent )
 		,	m_step( 10.0 )
-		,	m_size( 5 )
+		,	m_size( c_snapHalfSize )
 	{
 	}
 
@@ -67,7 +67,7 @@ public:
 void
 GridSnapPrivate::init()
 {
-	q->setZValue( 999999999999 );
+	q->setZValue( c_mostTopZValue );
 }
 
 QPointF
@@ -140,7 +140,7 @@ QRectF
 GridSnap::boundingRect() const
 {
 	if( !d.isNull() )
-		return { 0, 0, d->m_size * 2.0, d->m_size * 2.0 };
+		return { 0, 0, d->m_size * c_halfDivider, d->m_size * c_halfDivider };
 
 	return {};
 }

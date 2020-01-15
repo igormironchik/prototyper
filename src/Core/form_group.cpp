@@ -38,6 +38,7 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "utils.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -98,29 +99,33 @@ public:
 void
 FormGroupPrivate::init()
 {
-	m_center.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
+	m_center.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize, c_halfHandleSize ), q,
 		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
-	m_center->setZValue( 999999999999 );
+	m_center->setZValue( c_mostTopZValue );
 	m_center->hide();
 
-	m_topLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 6.0 ), q,
+	m_topLeft.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize * c_halfDivider, c_halfHandleSize * c_halfDivider ), q,
 		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
-	m_topLeft->setZValue( 999999999999 );
+	m_topLeft->setZValue( c_mostTopZValue );
 	m_topLeft->hide();
 
-	m_topRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 6.0 ), q,
+	m_topRight.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( 0.0, c_halfHandleSize * c_halfDivider ), q,
 		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
-	m_topRight->setZValue( 999999999999 );
+	m_topRight->setZValue( c_mostTopZValue );
 	m_topRight->hide();
 
-	m_bottomRight.reset( new FormMoveHandle( 3.0, QPointF( 0.0, 0.0 ), q,
+	m_bottomRight.reset( new FormMoveHandle( c_halfHandleSize, QPointF( 0.0, 0.0 ), q,
 		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
-	m_bottomRight->setZValue( 999999999999 );
+	m_bottomRight->setZValue( c_mostTopZValue );
 	m_bottomRight->hide();
 
-	m_bottomLeft.reset( new FormMoveHandle( 3.0, QPointF( 6.0, 0.0 ), q,
+	m_bottomLeft.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize * c_halfDivider, 0.0 ), q,
 		q->parentItem(), q->page(), Qt::SizeAllCursor ) );
-	m_bottomLeft->setZValue( 999999999999 );
+	m_bottomLeft->setZValue( c_mostTopZValue );
 	m_bottomLeft->hide();
 }
 
@@ -393,7 +398,8 @@ QRectF
 FormGroup::boundingRect() const
 {
 	return QGraphicsItemGroup::boundingRect()
-		.adjusted( -6.0, -6.0, 6.0, 6.0 );
+		.adjusted( -c_halfHandleSize * c_halfDivider, -c_halfHandleSize * c_halfDivider,
+			c_halfHandleSize * c_halfDivider, c_halfHandleSize * c_halfDivider );
 }
 
 void

@@ -24,6 +24,7 @@
 #include "html_exporter.hpp"
 #include "utils.hpp"
 #include "exporter_private.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QTextStream>
@@ -114,7 +115,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 		std::vector< Cfg::TextStyle > headList;
 		Cfg::TextStyle head;
 		head.style().push_back( Cfg::c_boldStyle );
-		head.fontSize() = 20.0;
+		head.fontSize() = c_headerFontSize;
 		head.text() = form.tabName();
 		headList.push_back( head );
 
@@ -129,10 +130,10 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 		QBuffer buff( &data );
 		buff.open( QIODevice::WriteOnly );
 		QSvgGenerator svg;
-		svg.setResolution( 150 );
+		svg.setResolution( c_resolution );
 		svg.setOutputDevice( &buff );
 
-		drawForm( svg, form, 150.0 );
+		drawForm( svg, form, c_resolution );
 
 		const int i = data.indexOf( QStringLiteral( "\n" ) );
 

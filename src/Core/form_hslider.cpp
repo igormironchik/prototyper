@@ -26,6 +26,7 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -134,14 +135,14 @@ FormHSlider::draw( QPainter * painter, const QRectF & rect,
 	{
 		r.setHeight( boxHeight( dpi ) );
 		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
-			( rect.height() - boxHeight( dpi ) ) / 2.0 ) );
+			( rect.height() - boxHeight( dpi ) ) / c_halfDivider ) );
 	}
 
 	const qreal gh = r.height() * 0.15;
 	const qreal hw = r.height() * 0.5;
 	const qreal sx = r.width() * 0.2 + rect.x();
 
-	const QRectF groove( r.x(), r.y() + r.height() / 2.0 - gh / 2.0,
+	const QRectF groove( r.x(), r.y() + r.height() / c_halfDivider - gh / c_halfDivider,
 		r.width(), gh );
 
 	const qreal ro = r.height() / 10.0;

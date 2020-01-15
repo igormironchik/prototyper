@@ -28,6 +28,7 @@
 #include "form_undo_commands.hpp"
 #include "form_object.hpp"
 #include "form_resizable_private.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -68,7 +69,9 @@ FormResizableProxyPrivate::FormResizableProxyPrivate( FormResizable * resizable,
 	FormResizableProxy * parent, Page * form )
 	:	q( parent )
 	,	m_object( resizable )
-	,	m_rect( 0.0, 0.0, 24.0, 24.0 )
+	,	m_rect( 0.0, 0.0,
+			c_halfHandleSize * c_halfDivider * c_halfDivider * c_halfDivider,
+			c_halfHandleSize * c_halfDivider * c_halfDivider * c_halfDivider )
 	,	m_handles( nullptr )
 	,	m_form( form )
 	,	m_handleMoved( false )
@@ -85,11 +88,11 @@ FormResizableProxyPrivate::init()
 
 	m_handles.swap( tmp );
 
-	m_handles->setMinSize( QSizeF( 8.0, 8.0 ) );
+	m_handles->setMinSize( QSizeF( c_minResizableSize, c_minResizableSize ) );
 
 	m_handles->show();
 
-	q->setZValue( 999999999999 );
+	q->setZValue( c_mostTopZValue );
 }
 
 void
@@ -163,7 +166,10 @@ FormResizableProxy::boundingRect() const
 		QRectF r = d->m_rect;
 		r.moveTopLeft( QPointF( 0.0, 0.0 ) );
 
-		return r.adjusted( -12.0, -12.0, 12.0, 12.0 );
+		return r.adjusted( -c_halfHandleSize * c_halfDivider * c_halfDivider,
+			-c_halfHandleSize * c_halfDivider * c_halfDivider,
+			c_halfHandleSize * c_halfDivider * c_halfDivider,
+			c_halfHandleSize * c_halfDivider * c_halfDivider );
 	}
 
 	return {};

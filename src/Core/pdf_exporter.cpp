@@ -24,6 +24,7 @@
 #include "pdf_exporter.hpp"
 #include "utils.hpp"
 #include "exporter_private.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPdfWriter>
@@ -86,9 +87,9 @@ PdfExporterPrivate::createImages()
 
 		QSvgGenerator svg;
 		svg.setFileName( m_images.last()->fileName() );
-		svg.setResolution( 150 );
+		svg.setResolution( c_resolution );
 
-		drawForm( svg, form, 150.0 );
+		drawForm( svg, form, c_resolution );
 
 		m_images.last()->close();
 	}
@@ -121,7 +122,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc, qreal dpi )
 
 		QTextCharFormat header;
 		header.setFontWeight( QFont::Bold );
-		header.setFontPointSize( 20.0 );
+		header.setFontPointSize( c_headerFontSize );
 
 		c.setCharFormat( header );
 
@@ -252,7 +253,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 
 	QPdfWriter pdf( fileName );
 
-	pdf.setResolution( 150 );
+	pdf.setResolution( c_resolution );
 
 	QPageLayout layout = pdf.pageLayout();
 	layout.setUnits( QPageLayout::Point );
@@ -269,7 +270,7 @@ PdfExporter::exportToDoc( const QString & fileName )
 	doc.documentLayout()->setPaintDevice( &pdf );
 	doc.setPageSize( body.size() );
 
-	d->fillDocument( doc, 150.0 );
+	d->fillDocument( doc, c_resolution );
 
 	doc.setPageSize( body.size() );
 

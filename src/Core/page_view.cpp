@@ -25,6 +25,7 @@
 #include "page_scene.hpp"
 #include "page.hpp"
 #include "project_cfg.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QApplication>
@@ -146,7 +147,7 @@ PageView::setScaleValue( qreal s )
 qreal
 PageView::zoomFactor()
 {
-	return 0.05;
+	return c_zoomFactor;
 }
 
 void
@@ -159,13 +160,14 @@ PageView::wheelEvent( QWheelEvent * event )
 			const qreal dy = ( event->angleDelta().y() > 0 ? zoomFactor() : -zoomFactor() );
 			const qreal scale = scaleValue() + dy;
 
-			if( qAbs( scale - 0.1 ) < 0.01 || qAbs( scale - 4.0 ) < 0.01 )
+			if( qAbs( scale - c_minZoom ) < c_maxZero || qAbs( scale - c_maxZoom ) < c_maxZero )
 				event->accept();
 			else
 			{
 				setScaleValue( scale );
 
-				ensureVisible( QRectF( event->position(), QSizeF( 10, 10 ) ) );
+				ensureVisible( QRectF( event->position(),
+					QSizeF( c_ensureVisibleRegion, c_ensureVisibleRegion ) ) );
 
 				event->accept();
 

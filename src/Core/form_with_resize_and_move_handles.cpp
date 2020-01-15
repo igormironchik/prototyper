@@ -25,6 +25,7 @@
 #include "form_move_handle.hpp"
 #include "form_resize_handle.hpp"
 #include "form_with_resize_and_move_handles.hpp"
+#include "constants.hpp"
 
 
 namespace Prototyper {
@@ -37,26 +38,45 @@ namespace Core {
 
 WithResizeAndMoveHandles::WithResizeAndMoveHandles( FormWithHandle * object,
 	QGraphicsItem * parent, Page * form )
-	:	m_topLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 12.0 ), -45.0,
+	:	m_topLeft( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( c_halfResizeHandleSize * c_halfDivider,
+				c_halfResizeHandleSize * c_halfDivider),
+			-45.0,
 			object, parent, form, Qt::SizeFDiagCursor ) )
-	,	m_top( new FormResizeHandle( 6.0, QPointF( 6.0, 12.0 ), 0.0,
+	,	m_top( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( c_halfResizeHandleSize,
+				c_halfResizeHandleSize * c_halfDivider),
+			0.0,
 			object, parent, form, Qt::SizeVerCursor ) )
-	,	m_topRight( new FormResizeHandle( 6.0, QPointF( 0.0, 12.0 ), 45.0,
+	,	m_topRight( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( 0.0, c_halfResizeHandleSize * c_halfDivider ),
+			45.0,
 			object, parent, form, Qt::SizeBDiagCursor ) )
-	,	m_left( new FormResizeHandle( 6.0, QPointF( 12.0, 6.0 ), -90.0,
+	,	m_left( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( c_halfResizeHandleSize * c_halfDivider,
+				c_halfResizeHandleSize ),
+			-90.0,
 			object, parent, form, Qt::SizeHorCursor ) )
-	,	m_bottomLeft( new FormResizeHandle( 6.0, QPointF( 12.0, 0.0 ), 45.0,
+	,	m_bottomLeft( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( c_halfResizeHandleSize * c_halfDivider, 0.0 ),
+			45.0,
 			object, parent, form, Qt::SizeBDiagCursor ) )
-	,	m_bottom( new FormResizeHandle( 6.0, QPointF( 6.0, 0.0 ), 0.0,
+	,	m_bottom( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( c_halfResizeHandleSize, 0.0 ), 0.0,
 			object, parent, form, Qt::SizeVerCursor ) )
-	,	m_bottomRight( new FormResizeHandle( 6.0, QPointF( 0.0, 0.0 ), -45.0,
+	,	m_bottomRight( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( 0.0, 0.0 ),
+			-45.0,
 			object, parent, form, Qt::SizeFDiagCursor ) )
-	,	m_right( new FormResizeHandle( 6.0, QPointF( 0.0, 6.0 ), 90,
+	,	m_right( new FormResizeHandle( c_halfResizeHandleSize,
+			QPointF( 0.0, c_halfResizeHandleSize ),
+			90,
 			object, parent, form, Qt::SizeHorCursor ) )
-	,	m_move( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),
+	,	m_move( new FormMoveHandle( c_halfHandleSize,
+			QPointF( c_halfHandleSize, c_halfHandleSize ),
 			object, parent, form, Qt::SizeAllCursor ) )
 	,	q( parent )
-	,	m_min( 25.0, 25.0 )
+	,	m_min( c_minResizableSize, c_minResizableSize )
 {
 }
 
@@ -66,31 +86,31 @@ void
 WithResizeAndMoveHandles::place( const QRectF & r )
 {
 	m_topLeft->setPos( r.x(), r.y() );
-	m_top->setPos( r.x() + r.width() / 2.0 -
+	m_top->setPos( r.x() + r.width() / c_halfDivider -
 		m_top->halfOfSize(), r.y() );
 	m_topRight->setPos( r.x() + r.width() -
-		m_topRight->halfOfSize() * 2.0, r.y() );
+		m_topRight->halfOfSize() * c_halfDivider, r.y() );
 	m_left->setPos( r.x(),
-		r.y() + r.height() / 2.0 -
+		r.y() + r.height() / c_halfDivider -
 			m_left->halfOfSize() );
 	m_bottomLeft->setPos( r.x(),
 		r.y() + r.height() -
-			m_bottomLeft->halfOfSize() * 2.0 );
-	m_bottom->setPos( r.x() + r.width() / 2.0 -
+			m_bottomLeft->halfOfSize() * c_halfDivider );
+	m_bottom->setPos( r.x() + r.width() / c_halfDivider -
 			m_bottom->halfOfSize(),
 		r.y() + r.height() -
-			m_bottom->halfOfSize() * 2.0 );
+			m_bottom->halfOfSize() * c_halfDivider );
 	m_bottomRight->setPos( r.x() + r.width() -
-			m_bottomRight->halfOfSize() * 2.0,
+			m_bottomRight->halfOfSize() * c_halfDivider,
 		r.y() + r.height() -
-			m_bottomRight->halfOfSize() * 2.0 );
+			m_bottomRight->halfOfSize() * c_halfDivider );
 	m_right->setPos( r.x() + r.width() -
-			m_right->halfOfSize() * 2.0,
-		r.y() + r.height() / 2.0 -
+			m_right->halfOfSize() * c_halfDivider,
+		r.y() + r.height() / c_halfDivider -
 			m_right->halfOfSize() );
-	m_move->setPos( r.x() + r.width() / 2.0 -
+	m_move->setPos( r.x() + r.width() / c_halfDivider -
 			m_move->halfOfSize(),
-		r.y() + r.height() / 2.0 -
+		r.y() + r.height() / c_halfDivider -
 			m_move->halfOfSize() );
 }
 
@@ -125,8 +145,8 @@ WithResizeAndMoveHandles::hide()
 bool
 WithResizeAndMoveHandles::checkConstraint( const QSizeF & s )
 {
-	return ( ( s.width() > m_min.width() || qAbs( s.width() - m_min.width() ) < 0.001 ) &&
-		( s.height() > m_min.height() || qAbs( s.height() - m_min.height() ) < 0.001 ) );
+	return ( ( s.width() > m_min.width() || qAbs( s.width() - m_min.width() ) < c_maxZero ) &&
+		( s.height() > m_min.height() || qAbs( s.height() - m_min.height() ) < c_maxZero ) );
 }
 
 void

@@ -26,6 +26,7 @@
 #include "form_grid_snap.hpp"
 #include "form_actions.hpp"
 #include "form_move_handle_private.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -90,7 +91,7 @@ FormMoveHandlePrivate::init()
 
 	q->setCursor( m_cursor );
 
-	q->setZValue( 999999999999 );
+	q->setZValue( c_mostTopZValue );
 }
 
 
@@ -138,7 +139,7 @@ QRectF
 FormMoveHandle::boundingRect() const
 {
 	if( !d.isNull() )
-		return { 0, 0, d->m_size * 2.0, d->m_size * 2.0 };
+		return { 0, 0, d->m_size * c_halfDivider, d->m_size * c_halfDivider };
 
 	return {};
 }

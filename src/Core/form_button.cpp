@@ -263,10 +263,10 @@ FormButtonPrivate::disconnectProperties()
 // FormButton
 //
 
-FormButton::FormButton( const QRectF & rect, Page * form,
+FormButton::FormButton( const QRectF & rect, Page * page,
 	QGraphicsItem * parent )
 	:	QGraphicsObject( parent )
-	,	FormObject( FormObject::ButtonType, form )
+	,	FormObject( FormObject::ButtonType, page )
 	,	d( new FormButtonPrivate( this, rect ) )
 {
 	d->init();

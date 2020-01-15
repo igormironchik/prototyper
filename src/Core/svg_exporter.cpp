@@ -24,6 +24,7 @@
 #include "svg_exporter.hpp"
 #include "utils.hpp"
 #include "exporter_private.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
@@ -76,9 +77,9 @@ SvgExporterPrivate::createImages( const QString & dir )
 		{
 			QSvgGenerator svg;
 			svg.setFileName( fileName );
-			svg.setResolution( 150 );
+			svg.setResolution( c_resolution );
 
-			drawForm( svg, form, 150.0 );
+			drawForm( svg, form, c_resolution );
 
 			++i;
 		}

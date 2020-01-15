@@ -53,7 +53,7 @@ class FormSpinBoxPrivate {
 public:
 	FormSpinBoxPrivate( FormSpinBox * parent, const QRectF & rect )
 		:	q( parent )
-		,	m_rect( QRectF( rect.x(), rect.y(), rect.width(), 25.0 ) )
+		,	m_rect( QRectF( rect.x(), rect.y(), rect.width(), FormSpinBox::boxHeight() ) )
 		,	m_proxy( nullptr )
 		,	m_text( FormSpinBox::tr( "1" ) )
 		,	m_properties( nullptr )
@@ -311,7 +311,7 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 	{
 		r.setHeight( boxHeight( dpi ) );
 		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
-			( rect.height() - boxHeight( dpi ) ) / 2.0 ) );
+			( rect.height() - boxHeight( dpi ) ) / c_halfDivider ) );
 	}
 
 	const qreal ro = r.height() / 10.0;
@@ -326,20 +326,20 @@ FormSpinBox::draw( QPainter * painter, const QRectF & rect,
 	painter->drawLine( QLineF( leftX, r.y(), leftX, r.y() + h ) );
 
 	QPainterPath top;
-	top.moveTo( leftX + o, r.y() + r.height() / 2.0 - o / 2.0 );
-	top.lineTo( leftX + w - o, r.y() + r.height() / 2.0 - o / 2.0 );
-	top.lineTo( leftX + w / 2.0, r.y() + o );
-	top.lineTo( leftX + o, r.y() + r.height() / 2.0 - o / 2.0 );
+	top.moveTo( leftX + o, r.y() + r.height() / c_halfDivider - o / c_halfDivider );
+	top.lineTo( leftX + w - o, r.y() + r.height() / c_halfDivider - o / c_halfDivider );
+	top.lineTo( leftX + w / c_halfDivider, r.y() + o );
+	top.lineTo( leftX + o, r.y() + r.height() / c_halfDivider - o / c_halfDivider );
 
 	painter->setBrush( QBrush( pen.color() ) );
 
 	painter->drawPath( top );
 
 	QPainterPath bottom;
-	bottom.moveTo( leftX + o, r.y() + r.height() / 2.0 + o / 2.0 );
-	bottom.lineTo( leftX + w - o, r.y() + r.height() / 2.0 + o / 2.0 );
-	bottom.lineTo( leftX + w / 2.0, r.y() + h - o );
-	bottom.lineTo( leftX + o, r.y() + r.height() / 2.0 + o / 2.0 );
+	bottom.moveTo( leftX + o, r.y() + r.height() / c_halfDivider + o / c_halfDivider );
+	bottom.lineTo( leftX + w - o, r.y() + r.height() / c_halfDivider + o / c_halfDivider );
+	bottom.lineTo( leftX + w / c_halfDivider, r.y() + h - o );
+	bottom.lineTo( leftX + o, r.y() + r.height() / c_halfDivider + o / c_halfDivider );
 
 	painter->drawPath( bottom );
 

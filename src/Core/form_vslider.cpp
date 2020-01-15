@@ -26,6 +26,7 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -134,7 +135,7 @@ FormVSlider::draw( QPainter * painter, const QRectF & rect,
 	{
 		r.setWidth( boxHeight( dpi ) );
 		r.moveTopLeft( QPointF( rect.topLeft().x() +
-			( rect.width() - boxHeight( dpi ) ) / 2.0, rect.topLeft().y() ) );
+			( rect.width() - boxHeight( dpi ) ) / c_halfDivider, rect.topLeft().y() ) );
 	}
 
 	const qreal gw = r.width() * 0.15;
@@ -142,7 +143,7 @@ FormVSlider::draw( QPainter * painter, const QRectF & rect,
 	const qreal sy = r.height() * 0.2 + r.y();
 	const qreal ro = r.width() / 10.0;
 
-	const QRectF groove( r.x() + r.width() / 2.0 - gw / 2.0, r.y(),
+	const QRectF groove( r.x() + r.width() / c_halfDivider - gw / c_halfDivider, r.y(),
 		gw, r.height() );
 
 	const QRectF handle( r.x(), sy, r.width(), hh );

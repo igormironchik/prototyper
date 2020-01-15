@@ -29,6 +29,7 @@
 #include "utils.hpp"
 #include "page.hpp"
 #include "form_undo_commands.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QStyleOptionGraphicsItem>
@@ -93,12 +94,14 @@ public:
 void
 FormPolylinePrivate::init()
 {
-	m_start.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
+	m_start.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize, c_halfHandleSize ), q,
 		q->parentItem(), q->page() ) );
 	m_start->ignoreMouseEvents( true );
 	m_start->unsetCursor();
 
-	m_end.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q,
+	m_end.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize, c_halfHandleSize ), q,
 		q->parentItem(), q->page() ) );
 	m_end->ignoreMouseEvents( true );
 	m_end->unsetCursor();
@@ -111,13 +114,13 @@ FormPolylinePrivate::init()
 
 	m_handles.swap( tmp );
 
-	m_handles->setMinSize( QSizeF( 25.0, 25.0 ) );
+	m_handles->setMinSize( QSizeF( c_minResizableSize, c_minResizableSize ) );
 
 	m_handles->setDeltaToZero( 1.0 );
 
 	m_handles->hide();
 
-	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), 2.0 ),
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ),
 		false );
 
 	q->setObjectBrush( Qt::transparent );
@@ -180,10 +183,12 @@ FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
 
 	m_resized = newR;
 
-	const qreal w = (qreal) q->objectPen().width() / 2.0;
+	const qreal w = (qreal) q->objectPen().width() / c_halfDivider;
 
-	m_handles->place( m_resized.adjusted( -12.0 - w, -12.0 - w,
-		12.0 + w, 12.0 + w ) );
+	m_handles->place( m_resized.adjusted( -c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+		-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+		c_halfHandleSize * c_halfDivider * c_halfDivider + w,
+		c_halfHandleSize * c_halfDivider * c_halfDivider + w ) );
 
 	const qreal mx = b.width() / m_resized.width();
 	const qreal my = b.height() / m_resized.height();
@@ -224,9 +229,9 @@ FormPolylinePrivate::boundingRect() const
 // FormPolyline
 //
 
-FormPolyline::FormPolyline( Page * form, QGraphicsItem * parent )
+FormPolyline::FormPolyline( Page * page, QGraphicsItem * parent )
 	:	QGraphicsPathItem( parent )
-	,	FormObject( FormObject::PolylineType, form )
+	,	FormObject( FormObject::PolylineType, page )
 	,	d( new FormPolylinePrivate( this ) )
 {
 	d->init();
@@ -315,10 +320,13 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 		MmPx::instance().fromMmX( c.size().width() ),
 		MmPx::instance().fromMmY( c.size().height() ) );
 
-	const qreal w = (qreal) objectPen().width() / 2.0;
+	const qreal w = (qreal) objectPen().width() / c_halfDivider;
 
-	d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
-		12.0 + w, 12.0 + w ) );
+	d->m_handles->place( d->m_resized.adjusted(
+		-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+		-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+		c_halfHandleSize * c_halfDivider * c_halfDivider + w,
+		c_halfHandleSize * c_halfDivider * c_halfDivider + w ) );
 
 	d->updateLines( QRectF(), d->m_resized );
 }
@@ -539,8 +547,8 @@ FormPolyline::handleMouseMoveInHandles( const QPointF & p )
 {
 	if( d->m_start->handleMouseMove( p ) )
 		return;
-	else
-		d->m_end->handleMouseMove( p );
+
+	d->m_end->handleMouseMove( p );
 }
 
 void
@@ -551,10 +559,13 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 	if( isSelected() && !group() )
 	{
-		const qreal w = (qreal) objectPen().width() / 2.0;
+		const qreal w = (qreal) objectPen().width() / c_halfDivider;
 
-		d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
-			12.0 + w, 12.0 + w ) );
+		d->m_handles->place( d->m_resized.adjusted(
+			-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+			-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+			c_halfHandleSize * c_halfDivider * c_halfDivider + w,
+			c_halfHandleSize * c_halfDivider * c_halfDivider + w ) );
 
 		d->m_handles->show();
 	}
@@ -574,8 +585,12 @@ FormPolyline::setPosition( const QPointF & p, bool pushUndoCommand )
 
 	d->m_resized.moveTopLeft( r.topLeft() );
 
-	const qreal w = (qreal) objectPen().width() / 2.0;
-	r.adjust( -12.0 - w, -12.0 - w, 12.0 + w, 12.0 + w );
+	const qreal w = (qreal) objectPen().width() / c_halfDivider;
+	r.adjust(
+		-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+		-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+		c_halfHandleSize * c_halfDivider * c_halfDivider + w,
+		c_halfHandleSize * c_halfDivider * c_halfDivider + w );
 
 	d->m_handles->place( r );
 }
@@ -624,10 +639,13 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 
 		d->m_resized.moveTopLeft( d->m_resized.topLeft() + delta );
 
-		const qreal w = (qreal) objectPen().width() / 2.0;
+		const qreal w = (qreal) objectPen().width() / c_halfDivider;
 
-		d->m_handles->place( d->m_resized.adjusted( -12.0 - w, -12.0 - w,
-			12.0 + w, 12.0 + w ) );
+		d->m_handles->place( d->m_resized.adjusted(
+			-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+			-c_halfHandleSize * c_halfDivider * c_halfDivider - w,
+			c_halfHandleSize * c_halfDivider * c_halfDivider + w,
+			c_halfHandleSize * c_halfDivider * c_halfDivider + w ) );
 	}
 	else if( handle == d->m_handles->m_topLeft.data() )
 	{

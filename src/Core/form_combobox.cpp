@@ -26,6 +26,7 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -134,7 +135,7 @@ FormComboBox::draw( QPainter * painter, const QRectF & rect,
 	{
 		r.setHeight( boxHeight( dpi ) );
 		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
-			( rect.height() - boxHeight( dpi ) ) / 2.0 ) );
+			( rect.height() - boxHeight( dpi ) ) / c_halfDivider ) );
 	}
 
 	const qreal ro = r.height() / 10.0;
@@ -150,7 +151,7 @@ FormComboBox::draw( QPainter * painter, const QRectF & rect,
 	QPainterPath path;
 	path.moveTo( leftX + o, r.y() + o );
 	path.lineTo( leftX + h - o, r.y() + o );
-	path.lineTo( leftX + h / 2.0, r.y() + h - o );
+	path.lineTo( leftX + h / c_halfDivider, r.y() + h - o );
 	path.lineTo( leftX + o, r.y() + o );
 
 	painter->setBrush( QBrush( pen.color() ) );

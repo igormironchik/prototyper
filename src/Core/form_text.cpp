@@ -94,7 +94,7 @@ FormTextPrivate::init()
 	m_opts.reset( new FormTextOpts( q->parentItem() ) );
 
 	m_opts->hide();
-	m_opts->setZValue( 999999999999 );
+	m_opts->setZValue( c_mostTopZValue );
 
 	setRect( m_rect );
 

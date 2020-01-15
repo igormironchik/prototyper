@@ -552,7 +552,7 @@ PagePrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 				++count;
 
 				points.append( dynamic_cast< FormObject* > ( item )->position().x() +
-					item->boundingRect().width() / 2.0 );
+					item->boundingRect().width() / c_halfDivider );
 			}
 				break;
 
@@ -577,7 +577,7 @@ PagePrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 				++count;
 
 				points.append( dynamic_cast< FormObject* > ( item )->position().y() +
-					item->boundingRect().height() / 2.0 );
+					item->boundingRect().height() / c_halfDivider );
 			}
 				break;
 

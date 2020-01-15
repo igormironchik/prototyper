@@ -339,25 +339,25 @@ MmPx::instance()
 qreal
 MmPx::toMmX( qreal px ) const
 {
-	return ( px / ( m_xdots / 25.4 ) );
+	return ( px / ( m_xdots / c_mmInInch ) );
 }
 
 qreal
 MmPx::fromMmX( qreal mm ) const
 {
-	return ( ( m_xdots / 25.4 ) * mm );
+	return ( ( m_xdots / c_mmInInch ) * mm );
 }
 
 qreal
 MmPx::toMmY( qreal px ) const
 {
-	return ( px / ( m_ydots / 25.4 ) );
+	return ( px / ( m_ydots / c_mmInInch ) );
 }
 
 qreal
 MmPx::fromMmY( qreal mm ) const
 {
-	return ( ( m_ydots / 25.4 ) * mm );
+	return ( ( m_ydots / c_mmInInch ) * mm );
 }
 
 MmPx::MmPx()
@@ -369,31 +369,31 @@ MmPx::MmPx()
 QSizeF
 MmPx::a4() const
 {
-	return { fromMmX( 210.0 ), fromMmY( 297.0 ) };
+	return { fromMmX( c_a4Width ), fromMmY( c_a4Height ) };
 }
 
 qreal
 MmPx::fromMm( qreal mm, qreal dpi ) const
 {
-	return ( ( dpi / 25.4 ) * mm );
+	return ( ( dpi / c_mmInInch ) * mm );
 }
 
 int
 MmPx::fromPtY( qreal pt ) const
 {
-	return qRound( ( m_ydots / 72.0 ) * pt );
+	return qRound( ( m_ydots / c_ptInInch ) * pt );
 }
 
 int
 MmPx::fromPt( qreal pt, qreal dpi ) const
 {
-	return qRound( ( dpi / 72.0 ) * pt );
+	return qRound( ( dpi / c_ptInInch ) * pt );
 }
 
 qreal
 MmPx::toPtY( int px ) const
 {
-	return ( ( static_cast< qreal > ( px ) / m_ydots ) * 72.0 );
+	return ( ( static_cast< qreal > ( px ) / m_ydots ) * c_ptInInch );
 }
 
 qreal

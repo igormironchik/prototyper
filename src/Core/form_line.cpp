@@ -28,6 +28,7 @@
 #include "form_grid_snap.hpp"
 #include "utils.hpp"
 #include "form_undo_commands.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QGraphicsSceneMouseEvent>
@@ -92,7 +93,7 @@ FormLinePrivate::init()
 	m_h2->hide();
 	m_move->hide();
 
-	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), 2.0 ), false );
+	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ), false );
 }
 
 void
@@ -109,20 +110,23 @@ FormLinePrivate::placeChild()
 		l.p2().y() - m_h2->halfOfSize() + p.y() );
 
 	m_move->setPos(
-		( l.p1().x() + l.p2().x() ) / 2.0 - m_move->halfOfSize() + p.x(),
-		( l.p1().y() + l.p2().y() ) / 2.0 - m_move->halfOfSize() + p.y() );
+		( l.p1().x() + l.p2().x() ) / c_halfDivider - m_move->halfOfSize() + p.x(),
+		( l.p1().y() + l.p2().y() ) / c_halfDivider - m_move->halfOfSize() + p.y() );
 }
 
 void
 FormLinePrivate::createHandles()
 {
-	m_h1.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
+	m_h1.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize, c_halfHandleSize ), q, q->parentItem(),
 		q->page(), Qt::CrossCursor ) );
 
-	m_h2.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ),q, q->parentItem(),
+	m_h2.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize, c_halfHandleSize ),q, q->parentItem(),
 		q->page(), Qt::CrossCursor ) );
 
-	m_move.reset( new FormMoveHandle( 3.0, QPointF( 3.0, 3.0 ), q, q->parentItem(),
+	m_move.reset( new FormMoveHandle( c_halfHandleSize,
+		QPointF( c_halfHandleSize, c_halfHandleSize ), q, q->parentItem(),
 		q->page(), Qt::SizeAllCursor ) );
 }
 
@@ -303,8 +307,8 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 
 		intersected = true;
 
-		return QPointF( ( l.p1().x() + l.p2().x() ) / 2.0,
-			( l.p1().y() + l.p2().y() ) / 2.0 ) + pos();
+		return QPointF( ( l.p1().x() + l.p2().x() ) / c_halfDivider,
+			( l.p1().y() + l.p2().y() ) / c_halfDivider ) + pos();
 	}
 
 	intersected = false;
@@ -317,12 +321,14 @@ FormLine::handleMouseMoveInHandles( const QPointF & point )
 {
 	if( d->m_h1->handleMouseMove( point ) )
 		return true;
-	else if( d->m_h2->handleMouseMove( point ) )
+
+	if( d->m_h2->handleMouseMove( point ) )
 		return true;
-	else if( d->m_move->handleMouseMove( point ) )
+
+	if( d->m_move->handleMouseMove( point ) )
 		return true;
-	else
-		return false;
+
+	return false;
 }
 
 void

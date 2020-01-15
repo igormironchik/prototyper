@@ -321,7 +321,7 @@ FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	if( r.height() > boxHeight( dpi ) )
 	{
 		r.setTopLeft( QPointF( r.topLeft().x() + pen.widthF(),
-			r.topLeft().y() + ( r.height() - boxHeight( dpi ) ) / 2.0 ) );
+			r.topLeft().y() + ( r.height() - boxHeight( dpi ) ) / c_halfDivider ) );
 		r.setHeight( boxHeight( dpi ) );
 	}
 
@@ -332,12 +332,12 @@ FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
 	if( isChecked )
 	{
 		painter->drawLine( QLineF( r.topLeft().x() + o,
-			r.topLeft().y() + boxHeight( dpi ) / 2.0,
-			r.topLeft().x() + boxHeight( dpi ) / 2.0,
+			r.topLeft().y() + boxHeight( dpi ) / c_halfDivider,
+			r.topLeft().x() + boxHeight( dpi ) / c_halfDivider,
 			r.bottomLeft().y() - o ) );
 
 		painter->drawLine( QLineF(
-			r.topLeft().x() + boxHeight( dpi ) / 2.0,
+			r.topLeft().x() + boxHeight( dpi ) / c_halfDivider,
 			r.bottomLeft().y() - o,
 			r.topRight().x() - o,
 			r.topRight().y() + o ) );
@@ -486,7 +486,7 @@ FormCheckBox::boundingRect() const
 	const qreal dy = ( fm.height() > d->m_rect.height() ?
 		( fm.height() - d->m_rect.height() ) / 2.0 : 0.0 );
 
-	return { 0.0, -dy, d->m_width, d->m_rect.height() + dy * 2.0 };
+	return { 0.0, -dy, d->m_width, d->m_rect.height() + dy * c_halfDivider };
 }
 
 void
