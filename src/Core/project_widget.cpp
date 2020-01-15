@@ -35,6 +35,7 @@
 #include "tabs_list.hpp"
 #include "project_window.hpp"
 #include "utils.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QTabWidget>
@@ -321,8 +322,8 @@ ProjectWidget::addPage()
 {
 	Cfg::Page cfg;
 	cfg.set_gridStep( d->m_cfg.defaultGridStep() );
-	cfg.size().set_width( 210.0 );
-	cfg.size().set_height( 297.0 );
+	cfg.size().set_width( c_a4Width );
+	cfg.size().set_height( c_a4Height );
 	cfg.set_tabName( tr( "Page %1" ).arg( QString::number( d->m_tabs->count() ) ) );
 
 	d->addPage( cfg, d->m_cfg.showGrid() );
