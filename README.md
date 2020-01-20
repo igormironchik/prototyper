@@ -14,6 +14,11 @@ you can export your project to the PDF, HTML or SVG images of pages.
 
 And Prototyper licensed under GNU GPL v3.0!!!
 
+I see this application as pre-design prototyping software. Designers will find
+this application useless. But If you want to describe idea for designer, then
+this application can be usefull. And don't forget that this is absolutely free
+software.
+
 # Screenshots
 
 ![](doc/img/Screenshot_20200110_144355.png)
