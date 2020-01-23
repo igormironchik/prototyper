@@ -96,6 +96,29 @@
 
 
 				|#
+					Comments.
+				#|
+				{class Comments
+					{tagScalarVector
+						{valueType QString}
+						{name comment}
+					}
+
+					{tag
+						{valueType Prototyper::Core::Cfg::Point}
+						{name pos}
+						{required}
+					}
+
+					{tagScalar
+						{valueType int}
+						{name id}
+						{required}
+					}
+				}
+
+
+				|#
 					Pen.
 				#|
 				{class Pen

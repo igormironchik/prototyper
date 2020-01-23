@@ -69,6 +69,7 @@ class FormText;
 class FormGroup;
 class GridSnap;
 class FormPolyline;
+class PageComment;
 
 
 //
@@ -138,6 +139,8 @@ public:
 	void hideHandlesOfCurrent();
 	//! Selection.
 	QList< QGraphicsItem* > selection();
+	//! Is comment under mosue?
+	bool isCommentUnderMouse() const;
 
 	//! AlignPoint.
 	enum AlignPoint {
@@ -189,6 +192,8 @@ public:
 	QUndoStack * m_undoStack;
 	//! Map of text documents.
 	QMap< QObject*, FormText* > m_docs;
+	//! Comments.
+	QList< PageComment* > m_comments;
 }; // class PagePrivate
 
 } /* namespace Core */

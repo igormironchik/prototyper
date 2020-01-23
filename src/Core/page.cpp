@@ -49,6 +49,7 @@
 #include "form_hslider.hpp"
 #include "form_vslider.hpp"
 #include "form_grid_snap.hpp"
+#include "form_comment.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -101,6 +102,16 @@ PagePrivate::init()
 
 	m_undoStack = new QUndoStack(
 		TopGui::instance()->projectWindow()->projectWidget()->undoGroup() );
+}
+
+bool
+PagePrivate::isCommentUnderMouse() const
+{
+	for( const auto & c : qAsConst( m_comments ) )
+		if( c->isUnderMouse() )
+			return true;
+
+	return false;
 }
 
 qreal
@@ -1613,8 +1624,54 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	QMenu menu;
 	menu.addAction( TopGui::instance()->projectWindow()->showHideGridAction() );
 	menu.addAction( d->m_gridStepAction );
-	menu.addAction( QIcon( QStringLiteral( ":/Core/img/transform-scale.png" ) ),
-		tr( "Resize" ), this, SLOT( resizeForm() ) );
+	menu.addSeparator();
+
+	if( !d->isCommentUnderMouse() )
+	{
+		menu.addAction( tr( "Add Comment" ),
+			[&] ()
+			{
+				auto * c = new PageComment( this );
+				c->setId( d->m_comments.size() + 1 );
+				c->setPos( event->scenePos() );
+				d->m_comments.append( c );
+
+				emit changed();
+			} );
+	}
+	else
+	{
+		menu.addAction( QIcon( QStringLiteral( ":/Core/img/edit-delete.png" ) ),
+			tr( "Delete Comment" ),
+			[&] ()
+			{
+				int id = 0;
+
+				for( const auto & c : qAsConst( d->m_comments ) )
+				{
+					if( c->isItYou( event->scenePos() ) )
+					{
+						id = c->id();
+
+						delete c;
+
+						d->m_comments.removeOne( c );
+
+						break;
+					}
+				}
+
+				int nid = id;
+
+				for( int i = id - 1; i < d->m_comments.size(); ++i )
+				{
+					d->m_comments.at( i )->setId( nid );
+					++nid;
+				}
+
+				emit changed();
+			} );
+	}
 
 	menu.exec( event->screenPos() );
 

@@ -127,31 +127,51 @@ CommentsPrivate::init()
 // Comments
 //
 
-Comments::Comments( QWidget * parent )
+Comments::Comments( const QStringList & data, QWidget * parent )
 	:	QDialog( parent )
 	,	d( new CommentsPrivate( this ) )
 {
 	d->init();
+
+	for( const auto & c : qAsConst( data ) )
+		addComment( c );
 }
 
 Comments::~Comments() = default;
+
+void
+Comments::addComment( const QString & c )
+{
+	if( !c.isEmpty() )
+	{
+		if( !d->m_currentIndex.isValid() )
+		{
+			d->m_model->insertRow( d->m_model->rowCount() );
+			d->m_model->setData( d->m_model->index( d->m_model->rowCount() - 1, 0 ),
+				c, Qt::DisplayRole );
+		}
+		else
+			d->m_model->setData( d->m_currentIndex, c, Qt::DisplayRole );
+	}
+}
+
+QStringList
+Comments::comments() const
+{
+	QStringList c;
+
+	for( int i = 0; i < d->m_model->rowCount(); ++i )
+		c.append( d->m_model->data( d->m_model->index( i, 0 ) ).toString() );
+
+	return c;
+}
 
 void
 Comments::commit()
 {
 	const auto text = d->m_ui.m_text->toPlainText().trimmed();
 
-	if( !text.isEmpty() )
-	{
-		if( !d->m_currentIndex.isValid() )
-		{
-			d->m_model->insertRow( d->m_model->rowCount() );
-			d->m_model->setData( d->m_model->index( d->m_model->rowCount() - 1, 0 ),
-				text, Qt::DisplayRole );
-		}
-		else
-			d->m_model->setData( d->m_currentIndex, text, Qt::DisplayRole );
-	}
+	addComment( text );
 
 	d->m_ui.m_text->clear();
 	d->m_currentIndex = QModelIndex();

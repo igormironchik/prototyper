@@ -96,7 +96,8 @@ HEADERS +=	exporter.hpp \
 			form_resizable_private.hpp \
 			page_private.hpp \
 			types.hpp \
-			comments.hpp
+			comments.hpp \
+			form_comment.hpp
 
 SOURCES +=	exporter.cpp \
 			form_actions.cpp \
@@ -145,7 +146,8 @@ SOURCES +=	exporter.cpp \
 			svg_exporter.cpp \
 			form_undo_commands.cpp \
 			form_object_properties.cpp \
-			comments.cpp
+			comments.cpp \
+			form_comment.cpp
 
 FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui \
