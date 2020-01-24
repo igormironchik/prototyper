@@ -777,6 +777,11 @@
 						{valueType Prototyper::Core::Cfg::VSlider}
 						{name vslider}
 					}
+
+					{tagVectorOfTags
+						{valueType Prototyper::Core::Cfg::Comments}
+						{name comments}
+					}
 				} || class Form
 
 

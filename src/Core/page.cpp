@@ -309,6 +309,12 @@ PagePrivate::updateFromCfg()
 	foreach( const Cfg::SpinBox & c, m_cfg.spinbox() )
 		createElemWithRect< FormSpinBox > ( c, QRectF() );
 
+	for( const auto & comment : m_cfg.comments() )
+	{
+		auto * c = new PageComment( q );
+		c->setCfg( comment );
+	}
+
 	q->update();
 }
 
@@ -812,6 +818,10 @@ Page::cfg() const
 	c.hslider().clear();
 	c.vslider().clear();
 	c.spinbox().clear();
+	c.comments().clear();
+
+	for( const auto & comment : qAsConst( d->m_comments ) )
+		c.comments().push_back( comment->cfg() );
 
 	foreach( QGraphicsItem * item, childItems() )
 	{
