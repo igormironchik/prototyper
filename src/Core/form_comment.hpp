@@ -49,6 +49,7 @@ class PageComment final
 
 signals:
 	void showComments();
+	void changed();
 
 public:
 	PageComment( QGraphicsItem * parent = nullptr );

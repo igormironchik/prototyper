@@ -313,6 +313,8 @@ PagePrivate::updateFromCfg()
 	{
 		auto * c = new PageComment( q );
 		c->setCfg( comment );
+		m_comments.append( c );
+		Page::connect( c, &PageComment::changed, q, &Page::changed );
 	}
 
 	q->update();
@@ -1645,6 +1647,8 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 				c->setId( d->m_comments.size() + 1 );
 				c->setPos( event->scenePos() );
 				d->m_comments.append( c );
+
+				connect( c, &PageComment::changed, this, &Page::changed );
 
 				emit changed();
 			} );

@@ -219,6 +219,9 @@ PageComment::showCommentsImpl()
 
 	dlg.exec();
 
+	if( d->m_comments != dlg.comments() )
+		emit changed();
+
 	d->m_comments = dlg.comments();
 }
 
