@@ -24,6 +24,7 @@
 #include "form_comment.hpp"
 #include "utils.hpp"
 #include "comments.hpp"
+#include "constants.hpp"
 
 // Qt include.
 #include <QFontMetrics>
@@ -77,6 +78,8 @@ PageComment::PageComment( QGraphicsItem * parent )
 {
 	connect( this, &PageComment::showComments,
 		this, &PageComment::showCommentsImpl );
+
+	setZValue( c_mostTopZValue - 1 );
 }
 
 PageComment::~PageComment() = default;
