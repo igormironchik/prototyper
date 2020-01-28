@@ -203,6 +203,8 @@ PageComment::mouseReleaseEvent( QGraphicsSceneMouseEvent * e )
 
 		if( d->m_distance < 5 )
 			emit showComments();
+		else
+			emit changed();
 
 		d->m_distance = 0;
 
