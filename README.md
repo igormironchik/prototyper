@@ -45,5 +45,3 @@ git submodule update --init --recursive
 # TODO
 
  - [ ] Add possibility to copy text format
- - [ ] Add comments to drawing area (pages)
-
