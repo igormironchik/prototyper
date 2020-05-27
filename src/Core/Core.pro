@@ -5,7 +5,6 @@ TARGET = Prototyper.Core
 QT += core gui widgets svg
 CONFIG += c++14
 DEFINES += PROTOTYPER_CORE CFGFILE_QT_SUPPORT
-VERSION = 2.0.0
 
 RESOURCES = resources.qrc
 
