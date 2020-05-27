@@ -25,7 +25,7 @@ macx {
 	QMAKE_RPATHDIR =
 }
 
-unix|win32: LIBS += -L$$OUT_PWD/../../ -lPrototyper.Core
+unix|win32: LIBS += -L$$OUT_PWD/../../ -lPrototyper.Core2
 
 INCLUDEPATH += $$PWD/..
 DEPENDPATH += $$PWD/..
