@@ -83,7 +83,7 @@ static inline void printText( QTextStream & stream,
 		QStringList strings = t.text().split( QLatin1Char( '\n' ) );
 
 		foreach( const QString & str, strings )
-			stream << str << QStringLiteral( "<br>" ) << endl;
+			stream << str << QStringLiteral( "<br>" ) << Qt::endl;
 
 		stream << ( std::find( t.style().cbegin(), t.style().cend(),
 					Cfg::c_underlineStyle ) != t.style().cend()  ?
@@ -95,7 +95,7 @@ static inline void printText( QTextStream & stream,
 					Cfg::c_boldStyle ) != t.style().cend() ?
 						QStringLiteral( "</b>" ) : QString() )
 			<< QStringLiteral( "</span>" )
-			<< endl;
+			<< Qt::endl;
 	}
 }
 
@@ -103,12 +103,12 @@ void
 HtmlExporterPrivate::printDocument( QTextStream & stream )
 {
 	stream << QStringLiteral( "<!DOCTYPE html><head></head>" )
-		<< endl << QStringLiteral( "<body>" ) << endl
+		<< Qt::endl << QStringLiteral( "<body>" ) << Qt::endl
 		<< QStringLiteral( "<div style=\"width: 800px; margin: auto;\">" ) ;
 
 	printText( stream, m_cfg.description().text() );
 
-	stream << QStringLiteral( "<br><br>" ) << endl;
+	stream << QStringLiteral( "<br><br>" ) << Qt::endl;
 
 	foreach( const Cfg::Page & form, m_cfg.page() )
 	{
@@ -145,7 +145,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 			<< data << QStringLiteral( "</div><br>" );
 	}
 
-	stream << QStringLiteral( "</div></body>" ) << endl;
+	stream << QStringLiteral( "</div></body>" ) << Qt::endl;
 }
 
 

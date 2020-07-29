@@ -48,7 +48,7 @@ public:
 	NameDlg( const QStringList & names,
 		const QString & title,
 		const QString & oldName,
-		QWidget * parent = 0, Qt::WindowFlags f = 0 );
+		QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 	~NameDlg() override;
 
 	//! \return Intered name.

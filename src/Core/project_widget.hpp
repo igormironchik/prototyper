@@ -69,7 +69,7 @@ signals:
 
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,
-		ProjectWindow * parent = 0, Qt::WindowFlags f = 0 );
+		ProjectWindow * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 	~ProjectWidget();
 
 	//! \return Pages.

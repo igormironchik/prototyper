@@ -50,7 +50,7 @@ class ProjectWindow
 	Q_OBJECT
 
 public:
-	ProjectWindow( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	ProjectWindow( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 	~ProjectWindow();
 
 	//! \return Project widget.

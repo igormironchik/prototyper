@@ -51,7 +51,7 @@ class ProjectDescTab
 	Q_OBJECT
 
 public:
-	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 	~ProjectDescTab();
 
 	//! \return Tool bar.

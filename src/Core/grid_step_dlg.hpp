@@ -46,7 +46,7 @@ class GridStepDlg
 
 public:
 	GridStepDlg( int step, bool forAll,
-		QWidget * parent = 0, Qt::WindowFlags f = 0 );
+		QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 	~GridStepDlg() override;
 
 	//! \return Grid step.

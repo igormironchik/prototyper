@@ -138,10 +138,10 @@ PageView::setScaleValue( qreal s )
 {
 	d->m_scale = s;
 
-	QMatrix m;
-	m.scale( d->m_scale, d->m_scale );
+	QTransform t;
+	t.scale( d->m_scale, d->m_scale );
 
-	setMatrix( m );
+	setTransform( t );
 }
 
 qreal

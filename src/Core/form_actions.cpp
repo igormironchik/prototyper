@@ -46,7 +46,6 @@ public:
 		,	m_fillColor( Qt::transparent )
 		,	m_strokeColor( Qt::black )
 		,	m_snap( true )
-		,	m_flags( 0 )
 	{
 	}
 

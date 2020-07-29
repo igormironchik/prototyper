@@ -95,7 +95,7 @@ class TabsList
 	Q_OBJECT
 
 public:
-	TabsList( QWidget * parent = 0, Qt::WindowFlags f = 0 );
+	TabsList( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
 	~TabsList();
 
 	//! \return Model.
