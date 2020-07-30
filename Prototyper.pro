@@ -22,9 +22,9 @@ defineTest(minQtVersion) {
     return(false)
 }
 
-!minQtVersion(5, 14, 0) {
+!minQtVersion(5, 15, 0) {
 	message("Cannot build Prototyper with Qt version $${QT_VERSION}.")
-    error("Use at least Qt 5.14.0.")
+    error("Use at least Qt 5.15.0.")
 }
 
 TEMPLATE = subdirs
