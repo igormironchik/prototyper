@@ -109,21 +109,21 @@ FormCheckBoxPrivate::connectProperties()
 	if( m_props )
 	{
 		FormCheckBox::connect( m_props->ui()->m_x,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				q->setPosition( QPointF( v, q->position().y() ) );
 				q->page()->emitChanged();
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_y,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				q->setPosition( QPointF( q->position().x(), v ) );
 				q->page()->emitChanged();
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_width,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				QRectF r = m_rect;
 				r.setWidth( v );
@@ -133,7 +133,7 @@ FormCheckBoxPrivate::connectProperties()
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_height,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				QRectF r = m_rect;
 				r.setHeight( v );
@@ -143,7 +143,7 @@ FormCheckBoxPrivate::connectProperties()
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_text,
-			&QLineEdit::textChanged,
+			&QLineEdit::textChanged, q,
 			[this]( const QString & t ) {
 				const auto oldText = q->text();
 				m_text = t;
@@ -156,7 +156,7 @@ FormCheckBoxPrivate::connectProperties()
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
@@ -169,7 +169,7 @@ FormCheckBoxPrivate::connectProperties()
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_bold,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
@@ -182,7 +182,7 @@ FormCheckBoxPrivate::connectProperties()
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_italic,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setItalic( ( v == Qt::Checked ) );
@@ -195,7 +195,7 @@ FormCheckBoxPrivate::connectProperties()
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_underline,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setUnderline( ( v == Qt::Checked ) );
@@ -208,7 +208,7 @@ FormCheckBoxPrivate::connectProperties()
 			} );
 
 		FormCheckBox::connect( m_props->ui()->m_checked,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				m_checked = ( v == Qt::Checked );
 

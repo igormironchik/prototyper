@@ -106,7 +106,7 @@ TextOptsBarPrivate::init()
 	const QString fontSizeTip = TextOptsBar::tr( "Font Size" );
 	m_fontSize->setToolTip( fontSizeTip );
 
-	TextOptsBar::connect( m_fontSize, &QComboBox::currentTextChanged,
+	TextOptsBar::connect( m_fontSize, &QComboBox::currentTextChanged, q,
 		[this] ( const QString & txt ) { emit q->setFontSize( txt.toInt() ); } );
 
 	q->addWidget( m_fontSize );
@@ -248,7 +248,7 @@ TextOptsBar::updateState( const QTextCursor & cursor )
 	d->m_fontSize->setCurrentText( QString::number(
 		qRound( MmPx::instance().toPtY( fmt.font().pixelSize() ) ) ) );
 
-	connect( d->m_fontSize, &QComboBox::currentTextChanged,
+	connect( d->m_fontSize, &QComboBox::currentTextChanged, this,
 		[this] ( const QString & txt ) { emit setFontSize( txt.toInt() ); } );
 
 	QTextBlockFormat b = cursor.blockFormat();

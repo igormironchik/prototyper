@@ -120,21 +120,21 @@ FormSpinBoxPrivate::connectProperties()
 	if( m_properties )
 	{
 		FormSpinBox::connect( m_properties->ui()->m_x,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				q->setPosition( QPointF( v, q->position().y() ) );
 				q->page()->emitChanged();
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_y,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				q->setPosition( QPointF( q->position().x(), v ) );
 				q->page()->emitChanged();
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_width,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				QRectF r = m_rect;
 				r.setWidth( v );
@@ -144,7 +144,7 @@ FormSpinBoxPrivate::connectProperties()
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_height,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				QRectF r = m_rect;
 				r.setHeight( v );
@@ -154,7 +154,7 @@ FormSpinBoxPrivate::connectProperties()
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_value,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_text = QString::number( v );
@@ -167,7 +167,7 @@ FormSpinBoxPrivate::connectProperties()
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
@@ -180,7 +180,7 @@ FormSpinBoxPrivate::connectProperties()
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_bold,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
@@ -193,7 +193,7 @@ FormSpinBoxPrivate::connectProperties()
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_italic,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setItalic( ( v == Qt::Checked ) );
@@ -206,7 +206,7 @@ FormSpinBoxPrivate::connectProperties()
 			} );
 
 		FormSpinBox::connect( m_properties->ui()->m_underline,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setUnderline( ( v == Qt::Checked ) );

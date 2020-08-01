@@ -124,21 +124,21 @@ FormButtonPrivate::connectProperties()
 	if( m_props )
 	{
 		FormButton::connect( m_props->ui()->m_x,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				q->setPosition( QPointF( v, q->position().y() ) );
 				q->page()->emitChanged();
 			} );
 
 		FormButton::connect( m_props->ui()->m_y,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				q->setPosition( QPointF( q->position().x(), v ) );
 				q->page()->emitChanged();
 			} );
 
 		FormButton::connect( m_props->ui()->m_width,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				QRectF r = m_rect;
 				r.setWidth( v );
@@ -148,7 +148,7 @@ FormButtonPrivate::connectProperties()
 			} );
 
 		FormButton::connect( m_props->ui()->m_height,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				QRectF r = m_rect;
 				r.setHeight( v );
@@ -158,7 +158,7 @@ FormButtonPrivate::connectProperties()
 			} );
 
 		FormButton::connect( m_props->ui()->m_text,
-			&QLineEdit::textChanged,
+			&QLineEdit::textChanged, q,
 			[this]( const QString & t ) {
 				const auto oldText = q->text();
 				m_text = t;
@@ -171,7 +171,7 @@ FormButtonPrivate::connectProperties()
 			} );
 
 		FormButton::connect( m_props->ui()->m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ),
+			QOverload< int >::of( &QSpinBox::valueChanged ), q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
@@ -184,7 +184,7 @@ FormButtonPrivate::connectProperties()
 			} );
 
 		FormButton::connect( m_props->ui()->m_bold,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
@@ -197,7 +197,7 @@ FormButtonPrivate::connectProperties()
 			} );
 
 		FormButton::connect( m_props->ui()->m_italic,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setItalic( ( v == Qt::Checked ) );
@@ -210,7 +210,7 @@ FormButtonPrivate::connectProperties()
 			} );
 
 		FormButton::connect( m_props->ui()->m_underline,
-			&QCheckBox::stateChanged,
+			&QCheckBox::stateChanged, q,
 			[this]( int v ) {
 				const auto oldText = q->text();
 				m_font.setUnderline( ( v == Qt::Checked ) );

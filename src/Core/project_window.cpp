@@ -993,7 +993,7 @@ ProjectWindow::openProject()
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Project to Open..." ),
 			( d->m_openFolder.isEmpty() ? QStandardPaths::standardLocations(
-				QStandardPaths::DocumentsLocation ).first() : d->m_openFolder ),
+				QStandardPaths::DocumentsLocation ).constFirst() : d->m_openFolder ),
 			tr( "Prototyper Project (*.prototyper)" ) );
 
 	if( !fileName.isEmpty() )
@@ -1104,7 +1104,7 @@ ProjectWindow::saveProjectAs()
 	const QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select File to Save Project..." ),
 		( d->m_openFolder.isEmpty() ? QStandardPaths::standardLocations(
-			QStandardPaths::DocumentsLocation ).first() : d->m_openFolder ),
+			QStandardPaths::DocumentsLocation ).constFirst() : d->m_openFolder ),
 		tr( "Prototyper Project (*.prototyper)" ) );
 
 	if( !fileName.isEmpty() )
@@ -1181,7 +1181,7 @@ ProjectWindow::insertImage()
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Image" ),
 			QStandardPaths::standardLocations(
-				QStandardPaths::PicturesLocation ).first(),
+				QStandardPaths::PicturesLocation ).constFirst(),
 			tr( "Image Files (*.png *.jpg *.jpeg *.bmp)" ), nullptr,
 			QFileDialog::DontUseNativeDialog );
 
@@ -1526,7 +1526,7 @@ ProjectWindow::exportToPDf()
 	QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select file to export project..." ),
 		QStandardPaths::standardLocations(
-			QStandardPaths::DocumentsLocation ).first(),
+			QStandardPaths::DocumentsLocation ).constFirst(),
 		tr( "PDF (*.pdf)" ) );
 
 	if( !fileName.isEmpty() )
@@ -1575,7 +1575,7 @@ ProjectWindow::exportToHtml()
 	QString fileName = QFileDialog::getSaveFileName( this,
 		tr( "Select file to export project..." ),
 		QStandardPaths::standardLocations(
-			QStandardPaths::DocumentsLocation ).first(),
+			QStandardPaths::DocumentsLocation ).constFirst(),
 		tr( "HTML (*.htm *.html)" ) );
 
 	if( !fileName.isEmpty() )
@@ -1625,7 +1625,7 @@ ProjectWindow::exportToSvg()
 	QString dirName = QFileDialog::getExistingDirectory( this,
 		tr( "Select directory to export project..." ),
 		QStandardPaths::standardLocations(
-			QStandardPaths::DocumentsLocation ).first() );
+			QStandardPaths::DocumentsLocation ).constFirst() );
 
 	if( !dirName.isEmpty() )
 	{

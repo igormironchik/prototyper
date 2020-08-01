@@ -1529,7 +1529,7 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 
 	if( !d->isCommentUnderMouse() )
 	{
-		menu.addAction( tr( "Add Comment" ),
+		menu.addAction( tr( "Add Comment" ), this,
 			[&] ()
 			{
 				auto * c = new PageComment( this );
@@ -1545,7 +1545,7 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 	else
 	{
 		menu.addAction( QIcon( QStringLiteral( ":/Core/img/edit-delete.png" ) ),
-			tr( "Delete Comment" ),
+			tr( "Delete Comment" ), this,
 			[&] ()
 			{
 				int id = 0;
