@@ -1539,6 +1539,8 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 
 				connect( c, &PageComment::changed, this, &Page::changed );
 
+				d->m_isCommentChanged = true;
+
 				emit changed();
 			} );
 	}
@@ -1559,6 +1561,8 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 						delete c;
 
 						d->m_comments.removeOne( c );
+
+						d->m_isCommentChanged = true;
 
 						break;
 					}
@@ -2250,7 +2254,7 @@ Page::isCommentChanged() const
 		if( c->isChanged() )
 			return true;
 
-	return false;
+	return d->m_isCommentChanged;
 }
 
 void
@@ -2258,6 +2262,8 @@ Page::clearCommentChanged()
 {
 	std::for_each( d->m_comments.begin(), d->m_comments.end(),
 		[] ( auto & c ) { c->setChanged( false ); } );
+
+	d->m_isCommentChanged = false;
 }
 
 } /* namespace Core */

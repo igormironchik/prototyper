@@ -88,6 +88,7 @@ public:
 		,	m_id( 0 )
 		,	m_snap( 0 )
 		,	m_polyline( false )
+		,	m_isCommentChanged( false )
 		,	m_currentPoly( 0 )
 		,	m_undoStack( 0 )
 	{
@@ -184,6 +185,8 @@ public:
 	GridSnap * m_snap;
 	//! Make polyline.
 	bool m_polyline;
+	//! Comment was added/deleted;
+	bool m_isCommentChanged;
 	//! Current polyline.
 	FormPolyline * m_currentPoly;
 	//! IDs
