@@ -104,6 +104,11 @@ public:
 	//! Set tab renamed.
 	void setTabRenamed( bool on = true );
 
+	//! \return Is comment changed?
+	bool isCommentChanged() const;
+	//! Clear comment changed flag.
+	void clearCommentChanged();
+
 public slots:
 	//! Add page.
 	void addPage();

@@ -2243,6 +2243,23 @@ Page::clone() const
 	return nullptr;
 }
 
+bool
+Page::isCommentChanged() const
+{
+	for( const auto & c : qAsConst( d->m_comments ) )
+		if( c->isChanged() )
+			return true;
+
+	return false;
+}
+
+void
+Page::clearCommentChanged()
+{
+	std::for_each( d->m_comments.begin(), d->m_comments.end(),
+		[] ( auto & c ) { c->setChanged( false ); } );
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

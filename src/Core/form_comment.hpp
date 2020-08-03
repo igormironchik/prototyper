@@ -70,6 +70,11 @@ public:
 
 	bool isItYou( const QPointF & point ) const;
 
+	//! \return Is changed?
+	bool isChanged() const;
+	//! Set changed flag.
+	void setChanged( bool on = true );
+
 private slots:
 	void showCommentsImpl();
 

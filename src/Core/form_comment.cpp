@@ -49,6 +49,7 @@ public:
 		:	q( parent )
 		,	m_id( 0 )
 		,	m_pressed( false )
+		,	m_isChanged( false )
 		,	m_distance( 0 )
 	{
 	}
@@ -63,6 +64,8 @@ public:
 	QPointF m_pos;
 	//! Mouse pressed.
 	bool m_pressed;
+	//! Is changed?
+	bool m_isChanged;
 	//! Mouse distance.
 	int m_distance;
 }; // class PageCommentPrivate
@@ -140,6 +143,18 @@ PageComment::isItYou( const QPointF & point ) const
 	r.moveTopLeft( pos() );
 
 	return r.contains( point );
+}
+
+bool
+PageComment::isChanged() const
+{
+	return d->m_isChanged;
+}
+
+void
+PageComment::setChanged( bool on )
+{
+	d->m_isChanged = on;
 }
 
 QRectF
@@ -222,9 +237,13 @@ PageComment::showCommentsImpl()
 	dlg.exec();
 
 	if( d->m_comments != dlg.comments() )
+	{
+		setChanged();
+
 		emit changed();
 
-	d->m_comments = dlg.comments();
+		d->m_comments = dlg.comments();
+	}
 }
 
 } /* namespace Core */

@@ -1087,6 +1087,8 @@ ProjectWindow::saveProjectImpl( const QString & fileName )
 		d->m_addedForms.clear();
 
 		d->m_deletedForms.clear();
+
+		d->m_widget->clearCommentChanged();
 	}
 	else
 		saveProjectAs();
@@ -1796,6 +1798,8 @@ ProjectWindow::canUndoChanged( bool canUndo )
 	else if( d->m_widget->descriptionTab()->editor()->document()->isUndoAvailable() )
 		can = true;
 	else if( d->m_widget->isTabRenamed() )
+		can = true;
+	else if( d->m_widget->isCommentChanged() )
 		can = true;
 	else
 	{

@@ -453,6 +453,23 @@ ProjectWidget::setTabRenamed( bool on )
 	d->m_isTabRenamed = on;
 }
 
+bool
+ProjectWidget::isCommentChanged() const
+{
+	for( const auto & f : qAsConst( d->m_forms ) )
+		if( f->page()->isCommentChanged() )
+			return true;
+
+	return false;
+}
+
+void
+ProjectWidget::clearCommentChanged()
+{
+	for( const auto & f : qAsConst( d->m_forms ) )
+		f->page()->clearCommentChanged();
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

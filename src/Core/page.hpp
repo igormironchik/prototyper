@@ -195,6 +195,11 @@ public:
 	//! Clone object.
 	FormObject * clone() const override;
 
+	//! \return Is comment changed?
+	bool isCommentChanged() const;
+	//! Clear comment changed flag.
+	void clearCommentChanged();
+
 public slots:
 	//! Rename form.
 	void renameForm( const QString & name );
