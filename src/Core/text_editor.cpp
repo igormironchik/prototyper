@@ -287,6 +287,8 @@ TextEditor::clearFormat()
 		fmt.setFontUnderline( false );
 		fmt.setFontItalic( false );
 		fmt.setFontWeight( QFont::Normal );
+		fmt.clearBackground();
+		fmt.clearForeground();
 		QFont f = fmt.font();
 		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		fmt.setFont( f );
@@ -298,6 +300,7 @@ TextEditor::clearFormat()
 		setFontUnderline( false );
 		setFontItalic( false );
 		setFontWeight( QFont::Normal );
+		setTextColor( Qt::black );
 		QFont f = currentFont();
 		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		setCurrentFont( f );
