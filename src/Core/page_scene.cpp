@@ -146,15 +146,13 @@ PageScenePrivate::itemUnderMouse() const
 					selected = item;
 				else if( qAbs( dz ) < c_zDelta || qAbs( qAbs( dz ) - c_zDelta ) < c_maxZero )
 				{
-					auto br1 = selected->boundingRect();
-					br1.moveTopLeft( selected->pos() );
-					auto br2 = item->boundingRect();
-					br2.moveTopLeft( item->pos() );
+					auto br1 = selected->sceneBoundingRect();
+					auto br2 = item->sceneBoundingRect();
 					const auto r = br1.intersected( br2 ).normalized();
 					const auto s = r.width() * r.height();
 
-					const auto r1 = selected->boundingRect().normalized();
-					const auto r2 = item->boundingRect().normalized();
+					const auto r1 = br1.normalized();
+					const auto r2 = br2.normalized();
 					const auto s1 = r1.width() * r1.height();
 					const auto s2 = r2.width() * r2.height();
 
