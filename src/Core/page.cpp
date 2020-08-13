@@ -1653,7 +1653,7 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QRectF r = rect->rectangle();
 					r.setBottomRight( mouseEvent->pos() );
 
-					rect->setRectangle( r.normalized() );
+					rect->setRectangle( r );
 				}
 
 				mouseEvent->accept();
@@ -1850,7 +1850,7 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, PagePrivate * d,
 			}
 
 			if( resize )
-				elem->setRectangle( QRectF( r.topLeft().x(), r.topLeft().y(), w, h ).normalized(), false );
+				elem->setRectangle( QRectF( r.topLeft().x(), r.topLeft().y(), w, h ), false );
 		}
 
 		const QString id = d->id();
