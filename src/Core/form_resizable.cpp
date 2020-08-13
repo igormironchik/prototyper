@@ -181,11 +181,8 @@ FormResizableProxy::paint( QPainter * painter,
 	QWidget * widget )
 {
 	Q_UNUSED( widget )
-
-	painter->setPen( QPen( Qt::gray, 1.0, Qt::DashLine ) );
-	painter->setBrush( Qt::NoBrush );
-
-	painter->drawRect( option->rect );
+	Q_UNUSED( painter )
+	Q_UNUSED( option )
 }
 
 void
