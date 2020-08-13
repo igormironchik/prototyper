@@ -918,6 +918,9 @@ ProjectWindow::quit()
 
 	TopGui::instance()->saveCfg( nullptr );
 
+	for( auto * p : d->m_widget->pages() )
+		p->scene()->clearSelection();
+
 	QApplication::quit();
 }
 
