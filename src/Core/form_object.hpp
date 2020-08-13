@@ -122,6 +122,9 @@ public:
 	//! \return Default size.
 	virtual QSizeF defaultSize() const;
 
+	//! Update position of handles.
+	void updateHandlesPos();
+
 	//! \return Page.
 	Page * page() const;
 

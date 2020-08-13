@@ -204,6 +204,11 @@ PagePrivate::ungroup( QGraphicsItem * group, bool pushUndoCommand )
 		{
 			tmp->removeFromGroup( item );
 
+			auto * o = dynamic_cast< FormObject* > ( item );
+
+			if( o )
+				o->updateHandlesPos();
+
 			if( PageAction::instance()->mode() == PageAction::Select )
 			{
 				item->setFlag( QGraphicsItem::ItemIsSelectable, true );

@@ -212,6 +212,12 @@ FormObject::defaultSize() const
 }
 
 void
+FormObject::updateHandlesPos()
+{
+	setPosition( position(), false );
+}
+
+void
 FormObject::setPosition( const QPointF & pos,
 	bool pushUndoCommand )
 {
