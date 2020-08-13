@@ -308,18 +308,18 @@ FormMoveHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 	{
 		d->m_pressed = false;
 
+		QPointF delta( 0.0, 0.0 );
+
 		if( PageAction::instance()->isSnapEnabled() )
-		{
-			const QPointF delta =
+			delta =
 				PageAction::instance()->page()->snapItem()->snapPos() -
 				mapToScene( d->m_pos ) + d->m_touchDelta;
 
-			setPos( pos() + delta );
+		setPos( pos() + delta );
 
-			moved( delta );
+		moved( delta );
 
-			released( this );
-		}
+		released( this );
 	}
 
 	if( !d->m_ignoreMouse )
