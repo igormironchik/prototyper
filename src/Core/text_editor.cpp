@@ -75,6 +75,8 @@ TextEditorPrivate::init()
 
 	q->setTextCursor( c );
 
+	q->setAutoFormatting( QTextEdit::AutoNone );
+
 	TextEditor::connect( q, &QTextEdit::cursorPositionChanged,
 		q, &TextEditor::slotCursorChanged );
 	TextEditor::connect( q, &QTextEdit::textChanged,
