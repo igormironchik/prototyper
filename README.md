@@ -21,7 +21,7 @@ software.
 
 # Screenshots
 
-![](doc/img/Screenshot_20200110_144355.png)
+![](doc/img/Screenshot_20200814_183334.png)
 
 # Wanted
 
