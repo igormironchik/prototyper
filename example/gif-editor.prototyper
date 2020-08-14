@@ -16531,16 +16531,9 @@
 			      " show all frames, allow to crop frames, remove unnecessary frames. We want to de"
 			      "velop this editor with Qt, as backend of image processing we will use Magick++ f"
 			      "rom ImageMagick.\n\nProject will be Open Sources and placed on GitHub. https://git"
-			      hub.com/igormironchik/gif-editor}
-		}
-		{text underline left
-			{fontSize 9.989501312335956839660866535268723964691162109375}
-			{text "\n"}
-		}
-		{text normal left
-			{fontSize 9.989501312335956839660866535268723964691162109375}
-			{text "\nAlso we will write a small book about development process of this editor. https"
-			      ://github.com/igormironchik/qt-widgets-on-real-example}
+			      "hub.com/igormironchik/gif-editor\n\nAlso we will write a small book about developm"
+			      "ent process of this editor. https://github.com/igormironchik/qt-widgets-on-real-"
+			      example}
 		}
 	}
 }
