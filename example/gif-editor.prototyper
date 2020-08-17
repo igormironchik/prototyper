@@ -16530,7 +16530,7 @@
 			{text "\n\nIn this project we want to develop simple GIF editor, that can open GIF files,"
 			      " show all frames, allow to crop frames, remove unnecessary frames. We want to de"
 			      "velop this editor with Qt, as backend of image processing we will use Magick++ f"
-			      "rom ImageMagick.\n\nProject will be Open Sources and placed on GitHub. https://git"
+			      "rom ImageMagick.\n\nProject will be Open Sourced and placed on GitHub. https://git"
 			      "hub.com/igormironchik/gif-editor\n\nAlso we will write a small book about developm"
 			      "ent process of this editor. https://github.com/igormironchik/qt-widgets-on-real-"
 			      example}
