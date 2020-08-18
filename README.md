@@ -1,4 +1,4 @@
-# This application was written in very difficult circumstances, so here can be a lot of issues. I'm sorry for it. Testers wanted! Al submitted issues will be fixed.
+# This application was written in very difficult circumstances, so here can be a lot of issues. I'm sorry for it. Testers wanted! All submitted issues will be fixed.
 
 # About
 
