@@ -6,7 +6,7 @@
 		{tabName "Main Window"}
 		{text
 			{textWidth 14.9989583333333342807236476801335811614990234375}
-			{objectId 35}
+			{objectId 1}
 			{z 0}
 			{text normal left
 				{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -2656,7 +2656,7 @@
 			      ZGIxUG67DPFMB2NJglFSTOSUSTFxXpcyNpnvlEJCoPXB+TjIQFwOiG7KHw3LGrdbIG2JdlYc07T1d7/i
 			      +sd/+JZl8pu+/g9bKI2Ed0p4KQAAAABJRU5ErkJggg==}
 			{keepAspectRatio true}
-			{objectId 29}
+			{objectId 2}
 			{z 0}
 			{size
 				{width 73.7916666666666714036182384006679058074951171875}
@@ -2693,7 +2693,7 @@
 			      xI/b6oXCDKwCJiPwef6GeZ5eQiQvEB0qoZ19H+v+T9b86aWb/eKAHRRlAQuQ/g0WGJgBoizAP/1/A6Uh
 			      XeBnV2GLAAAAAElFTkSuQmCC}
 			{keepAspectRatio true}
-			{objectId 10}
+			{objectId 3}
 			{z 0}
 			{size
 				{width 7.058333333333333570180911920033395290374755859375}
@@ -2705,7 +2705,7 @@
 			}
 		}
 		{rect
-			{objectId 1}
+			{objectId 4}
 			{z 0}
 			{topLeft
 				{x 3.208333333333333481363069950020872056484222412109375}
@@ -2728,7 +2728,7 @@
 			}
 		}
 		{rect
-			{objectId 2}
+			{objectId 5}
 			{z 0}
 			{topLeft
 				{x 3.208333333333333481363069950020872056484222412109375}
@@ -2751,7 +2751,7 @@
 			}
 		}
 		{rect
-			{objectId 3}
+			{objectId 6}
 			{z 0}
 			{topLeft
 				{x 3.208333333333333481363069950020872056484222412109375}
@@ -2774,7 +2774,7 @@
 			}
 		}
 		{rect
-			{objectId 4}
+			{objectId 7}
 			{z 0}
 			{topLeft
 				{x 14.4375000000000017763568394002504646778106689453125}
@@ -2797,7 +2797,7 @@
 			}
 		}
 		{rect
-			{objectId 37}
+			{objectId 8}
 			{z 0}
 			{topLeft
 				{x 4.81250000000000088817841970012523233890533447265625}
@@ -2820,11 +2820,11 @@
 			}
 		}
 		{group
-			{objectId 10}
+			{objectId 9}
 			{z 0}
 			{text
 				{textWidth 14.9989583333333342807236476801335811614990234375}
-				{objectId 7}
+				{objectId 10}
 				{z 0}
 				{text normal right
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -5474,7 +5474,7 @@
 				      ZGIxUG67DPFMB2NJglFSTOSUSTFxXpcyNpnvlEJCoPXB+TjIQFwOiG7KHw3LGrdbIG2JdlYc07T1d7/i
 				      +sd/+JZl8pu+/g9bKI2Ed0p4KQAAAABJRU5ErkJggg==}
 				{keepAspectRatio true}
-				{objectId 9}
+				{objectId 11}
 				{z 0}
 				{size
 					{width 23.90208333333333712289459072053432464599609375}
@@ -5486,7 +5486,7 @@
 				}
 			}
 			{rect
-				{objectId 8}
+				{objectId 12}
 				{z 0}
 				{topLeft
 					{x 17.64583333333333570180911920033395290374755859375}
@@ -5509,7 +5509,7 @@
 				}
 			}
 			{rect
-				{objectId 5}
+				{objectId 13}
 				{z 0}
 				{topLeft
 					{x 16.041666666666667850904559600166976451873779296875}
@@ -5534,7 +5534,7 @@
 			{checkbox
 				{width 20}
 				{isChecked true}
-				{objectId 6}
+				{objectId 14}
 				{z 0}
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -5559,11 +5559,11 @@
 			}
 		}
 		{group
-			{objectId 10}
+			{objectId 15}
 			{z 0}
 			{text
 				{textWidth 14.9989583333333342807236476801335811614990234375}
-				{objectId 12}
+				{objectId 16}
 				{z 0}
 				{text normal right
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -8213,7 +8213,7 @@
 				      ZGIxUG67DPFMB2NJglFSTOSUSTFxXpcyNpnvlEJCoPXB+TjIQFwOiG7KHw3LGrdbIG2JdlYc07T1d7/i
 				      +sd/+JZl8pu+/g9bKI2Ed0p4KQAAAABJRU5ErkJggg==}
 				{keepAspectRatio true}
-				{objectId 13}
+				{objectId 17}
 				{z 0}
 				{size
 					{width 23.90208333333333712289459072053432464599609375}
@@ -8225,7 +8225,7 @@
 				}
 			}
 			{rect
-				{objectId 14}
+				{objectId 18}
 				{z 0}
 				{topLeft
 					{x 52.93750000000000710542735760100185871124267578125}
@@ -8248,7 +8248,7 @@
 				}
 			}
 			{rect
-				{objectId 15}
+				{objectId 19}
 				{z 0}
 				{topLeft
 					{x 51.33333333333333570180911920033395290374755859375}
@@ -8273,7 +8273,7 @@
 			{checkbox
 				{width 20}
 				{isChecked true}
-				{objectId 16}
+				{objectId 20}
 				{z 0}
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -8298,11 +8298,11 @@
 			}
 		}
 		{group
-			{objectId 11}
+			{objectId 21}
 			{z 0}
 			{text
 				{textWidth 14.9989583333333342807236476801335811614990234375}
-				{objectId 18}
+				{objectId 22}
 				{z 0}
 				{text normal right
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -10952,7 +10952,7 @@
 				      ZGIxUG67DPFMB2NJglFSTOSUSTFxXpcyNpnvlEJCoPXB+TjIQFwOiG7KHw3LGrdbIG2JdlYc07T1d7/i
 				      +sd/+JZl8pu+/g9bKI2Ed0p4KQAAAABJRU5ErkJggg==}
 				{keepAspectRatio true}
-				{objectId 19}
+				{objectId 23}
 				{z 0}
 				{size
 					{width 23.90208333333333712289459072053432464599609375}
@@ -10964,7 +10964,7 @@
 				}
 			}
 			{rect
-				{objectId 20}
+				{objectId 24}
 				{z 0}
 				{topLeft
 					{x 88.2291666666666714036182384006679058074951171875}
@@ -10987,7 +10987,7 @@
 				}
 			}
 			{rect
-				{objectId 21}
+				{objectId 25}
 				{z 0}
 				{topLeft
 					{x 86.6250000000000142108547152020037174224853515625}
@@ -11012,7 +11012,7 @@
 			{checkbox
 				{width 20}
 				{isChecked true}
-				{objectId 22}
+				{objectId 26}
 				{z 0}
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -11037,11 +11037,11 @@
 			}
 		}
 		{group
-			{objectId 17}
+			{objectId 27}
 			{z 0}
 			{text
 				{textWidth 14.9989583333333342807236476801335811614990234375}
-				{objectId 24}
+				{objectId 28}
 				{z 0}
 				{text normal right
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -13691,7 +13691,7 @@
 				      ZGIxUG67DPFMB2NJglFSTOSUSTFxXpcyNpnvlEJCoPXB+TjIQFwOiG7KHw3LGrdbIG2JdlYc07T1d7/i
 				      +sd/+JZl8pu+/g9bKI2Ed0p4KQAAAABJRU5ErkJggg==}
 				{keepAspectRatio true}
-				{objectId 25}
+				{objectId 29}
 				{z 0}
 				{size
 					{width 23.90208333333333712289459072053432464599609375}
@@ -13703,7 +13703,7 @@
 				}
 			}
 			{rect
-				{objectId 26}
+				{objectId 30}
 				{z 0}
 				{topLeft
 					{x 123.520833333333342807236476801335811614990234375}
@@ -13726,7 +13726,7 @@
 				}
 			}
 			{rect
-				{objectId 27}
+				{objectId 31}
 				{z 0}
 				{topLeft
 					{x 121.9166666666666714036182384006679058074951171875}
@@ -13751,7 +13751,7 @@
 			{checkbox
 				{width 20}
 				{isChecked true}
-				{objectId 28}
+				{objectId 32}
 				{z 0}
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -13776,11 +13776,11 @@
 			}
 		}
 		{group
-			{objectId 23}
+			{objectId 33}
 			{z 0}
 			{text
 				{textWidth 14.9989583333333342807236476801335811614990234375}
-				{objectId 30}
+				{objectId 34}
 				{z 0}
 				{text normal right
 					{fontSize 9.989501312335956839660866535268723964691162109375}
@@ -16430,7 +16430,7 @@
 				      ZGIxUG67DPFMB2NJglFSTOSUSTFxXpcyNpnvlEJCoPXB+TjIQFwOiG7KHw3LGrdbIG2JdlYc07T1d7/i
 				      +sd/+JZl8pu+/g9bKI2Ed0p4KQAAAABJRU5ErkJggg==}
 				{keepAspectRatio true}
-				{objectId 31}
+				{objectId 35}
 				{z 0}
 				{size
 					{width 23.90208333333333712289459072053432464599609375}
@@ -16442,7 +16442,7 @@
 				}
 			}
 			{rect
-				{objectId 32}
+				{objectId 36}
 				{z 0}
 				{topLeft
 					{x 158.812500000000028421709430404007434844970703125}
@@ -16465,7 +16465,7 @@
 				}
 			}
 			{rect
-				{objectId 33}
+				{objectId 37}
 				{z 0}
 				{topLeft
 					{x 157.208333333333342807236476801335811614990234375}
@@ -16490,7 +16490,7 @@
 			{checkbox
 				{width 20}
 				{isChecked true}
-				{objectId 34}
+				{objectId 38}
 				{z 0}
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}

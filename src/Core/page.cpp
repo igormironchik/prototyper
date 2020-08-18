@@ -413,6 +413,8 @@ PagePrivate::createGroup( const Cfg::Group & cfg )
 void
 PagePrivate::clearIds( FormGroup * group )
 {
+	m_ids.removeOne( group->objectId() );
+
 	foreach( QGraphicsItem * item, group->childItems() )
 	{
 		auto * obj = dynamic_cast< FormObject* > ( item );
@@ -432,6 +434,8 @@ PagePrivate::clearIds( FormGroup * group )
 void
 PagePrivate::addIds( FormGroup * group )
 {
+	m_ids.append( group->objectId() );
+
 	foreach( QGraphicsItem * item, group->childItems() )
 	{
 		auto * obj = dynamic_cast< FormObject* > ( item );
