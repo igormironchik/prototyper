@@ -289,6 +289,8 @@ ProjectWindowPrivate::init()
 	m_propertiesScrollArea->setWidgetResizable( true );
 	m_propertiesDock->setWidget( m_propertiesScrollArea );
 	m_propertiesDock->setMinimumWidth( 250 );
+	auto w = new QWidget( m_propertiesScrollArea );
+	m_propertiesScrollArea->setWidget( w );
 
 	q->addDockWidget( Qt::LeftDockWidgetArea, m_tabsList );
 	q->addDockWidget( Qt::RightDockWidgetArea, m_propertiesDock );
@@ -1378,6 +1380,8 @@ ProjectWindow::tabChanged( int index )
 
 		zoomChanged();
 		selectionChanged();
+		d->m_propertiesDock->show();
+		d->m_propertiesDock->toggleViewAction()->setEnabled( true );
 	}
 	else
 	{
@@ -1415,6 +1419,7 @@ ProjectWindow::tabChanged( int index )
 		d->m_duplicate->setEnabled( false );
 
 		d->m_propertiesDock->hide();
+		d->m_propertiesDock->toggleViewAction()->setEnabled( false );
 	}
 }
 
@@ -1486,30 +1491,28 @@ ProjectWindow::selectionChanged()
 
 				if( widget )
 				{
-					if( d->m_propertiesScrollArea->widget() )
-						d->m_propertiesScrollArea->widget()->deleteLater();
-
 					d->m_propertiesScrollArea->setWidget( widget );
 					widget->show();
-					d->m_propertiesDock->show();
-					d->m_propertiesDock->toggleViewAction()->setEnabled( true );
 				}
 				else
 				{
-					d->m_propertiesDock->hide();
-					d->m_propertiesDock->toggleViewAction()->setEnabled( false );
+					auto w = new QWidget( d->m_propertiesScrollArea );
+					d->m_propertiesScrollArea->setWidget( w );
+					w->show();
 				}
 			}
 			else
 			{
-				d->m_propertiesDock->hide();
-				d->m_propertiesDock->toggleViewAction()->setEnabled( false );
+				auto w = new QWidget( d->m_propertiesScrollArea );
+				d->m_propertiesScrollArea->setWidget( w );
+				w->show();
 			}
 		}
 		else
 		{
-			d->m_propertiesDock->hide();
-			d->m_propertiesDock->toggleViewAction()->setEnabled( false );
+			auto w = new QWidget( d->m_propertiesScrollArea );
+			d->m_propertiesScrollArea->setWidget( w );
+			w->show();
 		}
 	}
 }

@@ -83,9 +83,6 @@ FormObject::~FormObject() = default;
 QWidget *
 FormObject::properties( QWidget * parent )
 {
-	if( d->m_props )
-		d->m_props->deleteLater();
-
 	d->m_props = new ObjectProperties( this, parent );
 
 	if( !( d->m_resizeProps & ResizeWidth ) )
