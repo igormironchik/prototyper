@@ -1,3 +1,5 @@
+# This application was written in very difficult circumstances, so here can be a lot of issues. I'm sorry for it. Testers wanted! Al submitted issues will be fixed.
+
 # About
 
 Prototyper this is desktop application to make UI prototypes.
