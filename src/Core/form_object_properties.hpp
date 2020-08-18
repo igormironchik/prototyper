@@ -47,7 +47,7 @@ class FormObject;
 
 class ObjectPropertiesPrivate;
 
-//! Properties of the button on the form.
+//! Properties of the object on the form.
 class ObjectProperties
 	:	public QWidget
 {

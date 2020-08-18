@@ -45,7 +45,7 @@ namespace Core {
 
 class SpinBoxPropertiesPrivate;
 
-//! Properties of the button on the form.
+//! Properties of the spinbox on the form.
 class SpinBoxProperties
 	:	public QWidget
 {

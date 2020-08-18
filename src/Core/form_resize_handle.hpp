@@ -37,7 +37,7 @@ namespace Core {
 
 class FormResizeHandlePrivate;
 
-//! Move handler on the form.
+//! rESIZE handler on the form.
 class FormResizeHandle
 	:	public FormMoveHandle
 {

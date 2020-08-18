@@ -42,7 +42,7 @@ namespace Core {
 
 class TextOptsBarPrivate;
 
-//! Text editor.
+//! Text editor's tool bar.
 class TextOptsBar
 	:	public QToolBar
 {

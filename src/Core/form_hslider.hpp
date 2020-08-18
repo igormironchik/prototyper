@@ -43,7 +43,7 @@ namespace Core {
 
 class FormHSliderPrivate;
 
-//! Combobox on the form.
+//! Horizontal slider on the form.
 class FormHSlider
 	:	public QGraphicsItem
 	,	public FormObject

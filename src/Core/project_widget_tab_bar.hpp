@@ -38,7 +38,7 @@ namespace Core {
 
 class ProjectTabBarPrivate;
 
-//! Form view.
+//! Project's tab bar.
 class ProjectTabBar
 	:	public QTabBar
 {

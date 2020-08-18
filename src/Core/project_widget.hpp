@@ -53,7 +53,7 @@ class ProjectWindow;
 
 class ProjectWidgetPrivate;
 
-//! Main window with project.
+//! Main widget with project.
 class ProjectWidget
 	:	public QWidget
 {

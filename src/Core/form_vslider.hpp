@@ -43,7 +43,7 @@ namespace Core {
 
 class FormVSliderPrivate;
 
-//! Combobox on the form.
+//! Vertical slider on the form.
 class FormVSlider
 	:	public QGraphicsItem
 	,	public FormObject

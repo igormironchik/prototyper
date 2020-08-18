@@ -406,7 +406,7 @@ private:
 // UndoCreate
 //
 
-//! Undo create.
+//! Undo delete.
 template<>
 class UndoDelete< FormText, Cfg::Text >
 	:	public QUndoCommand

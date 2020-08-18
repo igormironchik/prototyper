@@ -37,7 +37,7 @@ namespace Core {
 
 class SvgExporterPrivate;
 
-//! Exporter to PDF.
+//! Exporter to SVG.
 class SvgExporter
 	:	public Exporter
 {

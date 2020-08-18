@@ -44,7 +44,7 @@ class TextEditor;
 
 class ProjectDescTabPrivate;
 
-//! Main window with project.
+//! Tab with text description of the project.
 class ProjectDescTab
 	:	public QWidget
 {

@@ -88,7 +88,7 @@ private:
 
 class TabsListPrivate;
 
-//! Form hierarchy.
+//! Tabs list dock widget.
 class TabsList
 	:	public QDockWidget
 {
