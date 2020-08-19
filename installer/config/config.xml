@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Installer>
     <Name>Prototyper</Name>
-    <Version>2.0.0-alpha</Version>
+    <Version>2.0.1-alpha</Version>
     <Title>Prototyper Installer</Title>
     <Publisher>Igor Mironchik</Publisher>
     <StartMenuDir>Prototyper</StartMenuDir>
