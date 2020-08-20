@@ -117,7 +117,7 @@ FormTextPrivate::init()
 
 	q->setPlainText( FormText::tr( "Text" ) );
 
-	m_proxy->setMinSize( q->boundingRect().size() );
+	m_proxy->setMinSize( q->defaultSize() );
 
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
@@ -193,7 +193,6 @@ FormText::p_contentChanged()
 	r.moveTo( pos() );
 
 	d->m_proxy->setRect( r );
-	d->m_proxy->setMinSize( r.size() );
 }
 
 Cfg::Text
@@ -676,7 +675,7 @@ FormText::sceneEvent( QEvent * e )
 QSizeF
 FormText::defaultSize() const
 {
-	return { MmPx::instance().fromMmX( 15.0 ), MmPx::instance().fromMmY( 6.0 ) };
+	return { MmPx::instance().fromMmX( 10.0 ), MmPx::instance().fromMmY( 6.0 ) };
 }
 
 void
