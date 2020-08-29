@@ -276,7 +276,7 @@ FormComboBox::moveResizable( const QPointF & delta )
 QSizeF
 FormComboBox::defaultSize() const
 {
-	return { MmPx::instance().fromMmX( 15.0 ), boxHeight() };
+	return { MmPx::instance().fromMmX( 10.0 ), boxHeight() };
 }
 
 FormObject *

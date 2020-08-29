@@ -272,7 +272,7 @@ FormVSlider::moveResizable( const QPointF & delta )
 QSizeF
 FormVSlider::defaultSize() const
 {
-	return { boxHeight(), MmPx::instance().fromMmY( 15.0 ) };
+	return { boxHeight(), MmPx::instance().fromMmY( 10.0 ) };
 }
 
 FormObject *

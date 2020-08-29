@@ -575,7 +575,7 @@ FormCheckBox::moveResizable( const QPointF & delta )
 QSizeF
 FormCheckBox::defaultSize() const
 {
-	return { MmPx::instance().fromMmX( 20.0 ), boxHeight() };
+	return { MmPx::instance().fromMmX( 15.0 ), boxHeight() };
 }
 
 QWidget *
