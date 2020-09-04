@@ -70,5 +70,9 @@
         <file>img/zoom-original.png</file>
         <file>img/zoom-out.png</file>
         <file>img/edit-copy.png</file>
+        <file>img/object-order-back.png</file>
+        <file>img/object-order-front.png</file>
+        <file>img/object-order-lower.png</file>
+        <file>img/object-order-raise.png</file>
     </qresource>
 </RCC>
