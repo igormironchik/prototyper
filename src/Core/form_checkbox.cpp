@@ -293,6 +293,7 @@ FormCheckBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 	draw( painter,
 		objectPen(),
+		objectBrush(),
 		d->m_font,
 		QRectF( 0.0, 0.0, d->m_rect.width(), d->m_rect.height() ),
 		d->m_width,
@@ -307,13 +308,14 @@ FormCheckBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 }
 
 void
-FormCheckBox::draw( QPainter * painter, const QPen & pen, const QFont & font,
+FormCheckBox::draw( QPainter * painter, const QPen & pen, const QBrush & brush, const QFont & font,
 	const QRectF & rect, qreal width, bool isChecked, const QString & text,
 	const QRectF & boundingRect, int dpi )
 {
 	Q_UNUSED( width )
 
 	painter->setPen( pen );
+	painter->setBrush( brush );
 
 	QRectF r = rect;
 	r.setWidth( boxHeight( dpi ) );
@@ -386,6 +388,7 @@ FormCheckBox::cfg() const
 	c.set_isChecked( d->m_checked );
 	c.set_objectId( objectId() );
 	c.set_pen( Cfg::pen( objectPen() ) );
+	c.set_brush( Cfg::brush( objectBrush() ) );
 
 	Cfg::Point p;
 	p.set_x( MmPx::instance().toMmX( pos().x() ) );
@@ -413,6 +416,7 @@ FormCheckBox::setCfg( const Cfg::CheckBox & c )
 
 	setObjectId( c.objectId() );
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
+	setObjectBrush( Cfg::fromBrush( c.brush() ), false );
 
 	d->setRect( QRectF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ),

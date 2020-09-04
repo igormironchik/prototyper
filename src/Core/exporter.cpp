@@ -163,6 +163,7 @@ static inline void drawCheckBox( const Cfg::CheckBox & chk, QPainter & p, qreal 
 		MmPx::instance().fromMm( chk.size().height(), dpi ) );
 
 	FormCheckBox::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
+		Cfg::fromBrush( chk.brush() ),
 		font( chk.text(), p, dpi ),
 		r,
 		MmPx::instance().fromMm( chk.size().width(), dpi ),
@@ -184,6 +185,7 @@ static inline void drawRadioButton( const Cfg::CheckBox & chk, QPainter & p, qre
 		MmPx::instance().fromMm( chk.size().height(), dpi ) );
 
 	FormRadioButton::draw( &p, Cfg::fromPen( chk.pen(), dpi ),
+		Cfg::fromBrush( chk.brush() ),
 		font( chk.text(), p, dpi ),
 		r,
 		MmPx::instance().fromMm( chk.width(), dpi ),

@@ -64,6 +64,7 @@ FormRadioButton::paint( QPainter * painter,
 
 	draw( painter,
 		objectPen(),
+		objectBrush(),
 		d->m_font,
 		QRectF( 0.0, 0.0, d->m_rect.width(), d->m_rect.height() ),
 		d->m_width,
@@ -78,13 +79,14 @@ FormRadioButton::paint( QPainter * painter,
 }
 
 void
-FormRadioButton::draw( QPainter * painter, const QPen & pen, const QFont & font,
-	const QRectF & rect, qreal width, bool isChecked, const QString & text,
+FormRadioButton::draw( QPainter * painter, const QPen & pen, const QBrush & brush,
+	const QFont & font, const QRectF & rect, qreal width, bool isChecked, const QString & text,
 	const QRectF & boundingRect, int dpi )
 {
 	Q_UNUSED( width )
 
 	painter->setPen( pen );
+	painter->setBrush( brush );
 
 	QRectF r = rect;
 

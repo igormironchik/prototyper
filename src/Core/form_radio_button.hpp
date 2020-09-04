@@ -54,8 +54,8 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 	//! Draw radio button.
-	static void draw( QPainter * painter, const QPen & pen, const QFont & font,
-		const QRectF & rect, qreal width, bool isChecked, const QString & text,
+	static void draw( QPainter * painter, const QPen & pen, const QBrush & brush,
+		const QFont & font, const QRectF & rect, qreal width, bool isChecked, const QString & text,
 		const QRectF & boundingRect, int dpi = 0 );
 
 	QString typeName() const override;
