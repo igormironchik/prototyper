@@ -103,7 +103,7 @@ FormButtonPrivate::init()
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
 
-	q->setObjectBrush( Qt::transparent );
+	q->setObjectBrush( QBrush( PageAction::instance()->fillColor() ), false );
 }
 
 void
@@ -297,6 +297,14 @@ void
 FormButton::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
 	FormObject::setObjectPen( p, pushUndoCommand );
+
+	update();
+}
+
+void
+FormButton::setObjectBrush( const QBrush & b, bool pushUndoCommand )
+{
+	FormObject::setObjectBrush( b, pushUndoCommand );
 
 	update();
 }

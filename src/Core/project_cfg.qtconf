@@ -181,6 +181,7 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
 					}
 
 					{tagScalar
@@ -216,6 +217,7 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
 					}
 
 					{tag
@@ -345,6 +347,7 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
 					}
 
 					{tag
@@ -385,6 +388,12 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
+					}
+
+					{tag
+						{valueType Prototyper::Core::Cfg::Brush}
+						{name brush}
 					}
 
 					{tagScalar
@@ -426,6 +435,12 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
+					}
+
+					{tag
+						{valueType Prototyper::Core::Cfg::Brush}
+						{name brush}
 					}
 
 					{tagScalar
@@ -474,6 +489,12 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
+					}
+
+					{tag
+						{valueType Prototyper::Core::Cfg::Brush}
+						{name brush}
 					}
 
 					{tagScalar
@@ -515,6 +536,12 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
+					}
+
+					{tag
+						{valueType Prototyper::Core::Cfg::Brush}
+						{name brush}
 					}
 
 					{tagScalar
@@ -550,6 +577,12 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
+					}
+
+					{tag
+						{valueType Prototyper::Core::Cfg::Brush}
+						{name brush}
 					}
 
 					{tagScalar
@@ -585,6 +618,12 @@
 					{tag
 						{valueType Prototyper::Core::Cfg::Pen}
 						{name pen}
+						{required}
+					}
+
+					{tag
+						{valueType Prototyper::Core::Cfg::Brush}
+						{name brush}
 					}
 
 					{tagScalar

@@ -93,6 +93,7 @@ public:
 		,	m_undoAction( Q_NULLPTR )
 		,	m_redoAction( Q_NULLPTR )
 		,	m_strokeColor( nullptr )
+		,	m_fillColor( nullptr )
 		,	m_group( nullptr )
 		,	m_ungroup( nullptr )
 		,	m_alignHorizLeft( nullptr )
@@ -178,6 +179,8 @@ public:
 	QAction * m_redoAction;
 	//! Stroke color action.
 	QAction * m_strokeColor;
+	//! Fill color action.
+	QAction * m_fillColor;
 	//! Group action.
 	QAction * m_group;
 	//! Ungroup action.
@@ -391,6 +394,10 @@ ProjectWindowPrivate::init()
 	m_strokeColor = m_formToolBar->addAction(
 		QIcon( QStringLiteral( ":/Core/img/format-stroke-color.png" ) ),
 		ProjectWindow::tr( "Line Color" ) );
+
+	m_fillColor = m_formToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/fill-color.png" ) ),
+		ProjectWindow::tr( "Fill Color" ) );
 
 	m_drawButton = m_stdItemsToolBar->addAction(
 		QIcon( QStringLiteral( ":/Core/img/draw-pushbutton.png" ) ),
@@ -644,6 +651,8 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::ungroup );
 	ProjectWindow::connect( m_strokeColor, &QAction::triggered,
 		q, &ProjectWindow::strokeColor );
+	ProjectWindow::connect( m_fillColor, &QAction::triggered,
+		q, &ProjectWindow::fillColor );
 	ProjectWindow::connect( m_widget->tabs(), &QTabWidget::currentChanged,
 		q, &ProjectWindow::tabChanged );
 	ProjectWindow::connect( exportToPdf, &QAction::triggered,
@@ -1247,6 +1256,7 @@ void
 ProjectWindow::select( bool checked )
 {
 	d->m_strokeColor->setEnabled( checked  );
+	d->m_fillColor->setEnabled( checked );
 	d->m_group->setEnabled( checked );
 	d->m_ungroup->setEnabled( checked );
 	d->m_alignHorizLeft->setEnabled( checked );
@@ -1306,6 +1316,8 @@ ProjectWindow::fillColor()
 						obj->setObjectBrush( QBrush( c ) );
 				}
 			}
+			else
+				PageAction::instance()->setFillColor( c );
 		}
 	}
 }

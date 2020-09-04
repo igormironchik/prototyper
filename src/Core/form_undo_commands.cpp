@@ -312,6 +312,50 @@ UndoChangePen::redo()
 
 
 //
+// UndoChangeBrush
+//
+
+UndoChangeBrush::UndoChangeBrush( Page * form, const QString & id,
+	const QBrush & oldBrush, const QBrush & newBrush )
+	:	QUndoCommand( QObject::tr( "Change Brush" ) )
+	,	m_form( form )
+	,	m_id( id )
+	,	m_oldBrush( oldBrush )
+	,	m_newBrush( newBrush )
+	,	m_undone( false )
+{
+}
+
+void
+UndoChangeBrush::undo()
+{
+	m_undone = true;
+
+	auto * obj = dynamic_cast< FormObject* > ( m_form->findItem( m_id ) );
+
+	if( obj )
+		obj->setObjectBrush( m_oldBrush, false );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+}
+
+void
+UndoChangeBrush::redo()
+{
+	if( m_undone )
+	{
+		auto * obj = dynamic_cast< FormObject* > (
+			m_form->findItem( m_id ) );
+
+		if( obj )
+			obj->setObjectBrush( m_newBrush, false );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+}
+
+
+//
 // UndoChangeTextOnForm
 //
 

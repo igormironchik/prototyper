@@ -99,7 +99,7 @@ FormSpinBoxPrivate::init()
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
 
-	q->setObjectBrush( Qt::transparent );
+	q->setObjectBrush( QBrush( PageAction::instance()->fillColor() ), false );
 }
 
 void
@@ -365,6 +365,14 @@ void
 FormSpinBox::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
 	FormObject::setObjectPen( p, pushUndoCommand );
+
+	update();
+}
+
+void
+FormSpinBox::setObjectBrush( const QBrush & b, bool pushUndoCommand )
+{
+	FormObject::setObjectBrush( b, pushUndoCommand );
 
 	update();
 }

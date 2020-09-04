@@ -186,8 +186,12 @@ FormObject::objectBrush() const
 }
 
 void
-FormObject::setObjectBrush( const QBrush & b )
+FormObject::setObjectBrush( const QBrush & b, bool pushUndoCommand )
 {
+	if( pushUndoCommand )
+		d->m_form->undoStack()->push(
+			new UndoChangeBrush( d->m_form, d->m_id, d->m_brush, b ) );
+
 	d->m_brush = b;
 }
 

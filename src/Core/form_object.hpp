@@ -103,7 +103,8 @@ public:
 	//! \return Brush.
 	virtual const QBrush & objectBrush() const;
 	//! Set brush.
-	virtual void setObjectBrush( const QBrush & b );
+	virtual void setObjectBrush( const QBrush & b,
+		bool pushUndoCommand = true );
 
 	//! Position elements.
 	virtual void setPosition( const QPointF & pos,

@@ -123,7 +123,7 @@ FormPolylinePrivate::init()
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ),
 		false );
 
-	q->setObjectBrush( Qt::transparent );
+	q->setObjectBrush( QBrush( PageAction::instance()->fillColor() ), false );
 }
 
 void
@@ -309,7 +309,7 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
-	setObjectBrush( Cfg::fromBrush( c.brush() ) );
+	setObjectBrush( Cfg::fromBrush( c.brush() ), false );
 
 	setZValue( c.z() );
 
@@ -528,12 +528,14 @@ FormPolyline::setObjectPen( const QPen & p, bool pushUndoCommand )
 }
 
 void
-FormPolyline::setObjectBrush( const QBrush & b )
+FormPolyline::setObjectBrush( const QBrush & b, bool pushUndoCommand )
 {
 	if( d->m_closed )
 		setBrush( b );
 
-	FormObject::setObjectBrush( b );
+	FormObject::setObjectBrush( b, pushUndoCommand );
+
+	update();
 }
 
 QRectF

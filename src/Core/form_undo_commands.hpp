@@ -639,6 +639,36 @@ private:
 
 
 //
+// UndoChangeBrush
+//
+
+//! Undo changing of brush.
+class UndoChangeBrush
+	:	public QUndoCommand
+{
+public:
+	UndoChangeBrush( Page * form, const QString & id, const QBrush & oldBrush,
+		const QBrush & newBrush );
+
+	void undo() Q_DECL_OVERRIDE;
+
+	void redo() Q_DECL_OVERRIDE;
+
+private:
+	//! Form.
+	Page * m_form;
+	//! Id.
+	QString m_id;
+	//! Old brush.
+	QBrush m_oldBrush;
+	//! New brush.
+	QBrush m_newBrush;
+	//! Undone?
+	bool m_undone;
+}; // class UndoChangeBrush
+
+
+//
 // UndoChangeTextOnForm
 //
 

@@ -101,7 +101,7 @@ static inline void drawRect( const Cfg::Rect & rect, QPainter & p, qreal dpi )
 	p.setPen( QPen( QColor( rect.pen().color() ),
 		MmPx::instance().fromMm( rect.pen().width(), dpi ) ) );
 
-	p.setBrush( Qt::NoBrush );
+	p.setBrush( QBrush( QColor( rect.brush().color() ) ) );
 
 	p.drawRect( r );
 

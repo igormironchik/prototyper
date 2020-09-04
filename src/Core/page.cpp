@@ -1662,7 +1662,7 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QRectF r = rect->rectangle();
 					r.setBottomRight( mouseEvent->pos() );
 
-					rect->setRectangle( r );
+					rect->setRectangle( r, false );
 				}
 
 				mouseEvent->accept();
@@ -1796,7 +1796,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				if( PageAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
 
-				rect->setRectangle( QRectF( p, QSizeF( 0.0, 0.0 ) ).normalized() );
+				rect->setRectangle( QRectF( p, QSizeF( 0.0, 0.0 ) ).normalized(), false );
 
 				mouseEvent->accept();
 
@@ -2020,7 +2020,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					QRectF r = rect->rectangle();
 					r.setBottomRight( p );
 
-					rect->setRectangle( r.normalized() );
+					rect->setRectangle( r.normalized(), false );
 
 					d->m_undoStack->push( new UndoCreate< FormRect, Cfg::Rect > (
 						this, rect->objectId() ) );

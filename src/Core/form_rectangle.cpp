@@ -83,7 +83,7 @@ FormRectPrivate::init()
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ),
 		false );
 
-	q->setObjectBrush( Qt::transparent );
+	q->setObjectBrush( QBrush( PageAction::instance()->fillColor() ), false );
 }
 
 void
@@ -163,7 +163,7 @@ FormRect::setCfg( const Cfg::Rect & c )
 
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
 
-	setObjectBrush( Cfg::fromBrush( c.brush() ) );
+	setObjectBrush( Cfg::fromBrush( c.brush() ), false );
 
 	const QRectF r( MmPx::instance().fromMmX( c.topLeft().x() ),
 		MmPx::instance().fromMmY( c.topLeft().y() ),
@@ -199,6 +199,7 @@ FormRect::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	Q_UNUSED( widget )
 
 	painter->setPen( objectPen() );
+	painter->setBrush( objectBrush() );
 
 	painter->drawRect( d->m_rect );
 
@@ -252,6 +253,14 @@ FormRect::setObjectPen( const QPen & p, bool pushUndoCommand )
 	newPen.setWidth( 2 );
 
 	FormObject::setObjectPen( newPen, pushUndoCommand );
+
+	update();
+}
+
+void
+FormRect::setObjectBrush( const QBrush & b, bool pushUndoCommand )
+{
+	FormObject::setObjectBrush( b, pushUndoCommand );
 
 	update();
 }

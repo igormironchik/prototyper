@@ -93,7 +93,8 @@ public:
 		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	//! Set brush.
-	void setObjectBrush( const QBrush & b ) Q_DECL_OVERRIDE;
+	void setObjectBrush( const QBrush & b,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
 	QRectF boundingRect() const Q_DECL_OVERRIDE;
 

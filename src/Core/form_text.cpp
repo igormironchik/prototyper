@@ -122,7 +122,7 @@ FormTextPrivate::init()
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
 
-	q->setObjectBrush( Qt::transparent );
+	q->setObjectBrush( Qt::transparent, false );
 
 	FormText::connect( q->document(), &QTextDocument::contentsChanged,
 		q, &FormText::p_contentChanged );

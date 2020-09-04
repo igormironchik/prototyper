@@ -74,6 +74,10 @@ public:
 	void setObjectPen( const QPen & p,
 		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
 
+	//! Set brush.
+	void setObjectBrush( const QBrush & b,
+		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+
 	//! \return Cfg.
 	Cfg::SpinBox cfg() const;
 	//! Set cfg.
