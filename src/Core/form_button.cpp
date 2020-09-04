@@ -283,6 +283,7 @@ FormButton::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 
 	painter->setPen( objectPen() );
 	painter->setFont( d->m_font );
+	painter->setBrush( objectBrush() );
 
 	painter->drawRect( d->m_rect );
 	painter->drawText( d->m_rect, Qt::AlignCenter, d->m_text );
@@ -331,6 +332,7 @@ FormButton::cfg() const
 	c.set_text( text() );
 
 	c.set_pen( Cfg::pen( objectPen() ) );
+	c.set_brush( Cfg::brush( objectBrush() ) );
 
 	c.set_z( zValue() );
 
@@ -342,6 +344,7 @@ FormButton::setCfg( const Cfg::Button & c )
 {
 	setObjectId( c.objectId() );
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
+	setObjectBrush( Cfg::fromBrush( c.brush() ), false );
 	d->setRect( QRectF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ),
 		MmPx::instance().fromMmX( c.size().width() ),

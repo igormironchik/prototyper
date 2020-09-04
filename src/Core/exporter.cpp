@@ -137,6 +137,7 @@ static inline void drawButton( const Cfg::Button & btn, QPainter & p, qreal dpi 
 
 	p.setPen( QPen( QColor( btn.pen().color() ),
 		MmPx::instance().fromMm( btn.pen().width(), dpi ) ) );
+	p.setBrush( QBrush( QColor( btn.brush().color() ) ) );
 
 	p.setFont( font( btn.text(), p, dpi ) );
 
