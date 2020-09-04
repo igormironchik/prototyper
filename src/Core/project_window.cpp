@@ -116,6 +116,10 @@ public:
 		,	m_zoomOut( nullptr )
 		,	m_zoomOriginal( nullptr )
 		,	m_duplicate( nullptr )
+		,	m_toTop( nullptr )
+		,	m_toBottom( nullptr )
+		,	m_up( nullptr )
+		,	m_down( nullptr )
 		,	m_propertiesDock( nullptr )
 		,	m_propertiesScrollArea( nullptr )
 	{
@@ -205,6 +209,10 @@ public:
 	QAction * m_zoomOut;
 	QAction * m_zoomOriginal;
 	QAction * m_duplicate;
+	QAction * m_toTop;
+	QAction * m_toBottom;
+	QAction * m_up;
+	QAction * m_down;
 	//! Properties dock.
 	QDockWidget * m_propertiesDock;
 	//! Scroll area for properties.
@@ -493,6 +501,37 @@ ProjectWindowPrivate::init()
 	m_alignVertBottom->setShortcutContext( Qt::ApplicationShortcut );
 	m_alignVertBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+B" ) );
 
+	m_formToolBar->addSeparator();
+
+	m_toTop = m_formToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/object-order-front.png" ) ),
+		ProjectWindow::tr( "Bring to Top" ) );
+	m_toTop->setShortcutContext( Qt::ApplicationShortcut );
+	m_toTop->setShortcut( ProjectWindow::tr( "Ctrl+Alt+Up" ) );
+
+	m_up = m_formToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/object-order-raise.png" ) ),
+		ProjectWindow::tr( "Raise" ) );
+	m_up->setShortcutContext( Qt::ApplicationShortcut );
+	m_up->setShortcut( ProjectWindow::tr( "Ctrl+Up" ) );
+
+	m_down = m_formToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/object-order-lower.png" ) ),
+		ProjectWindow::tr( "Lower" ) );
+	m_down->setShortcutContext( Qt::ApplicationShortcut );
+	m_down->setShortcut( ProjectWindow::tr( "Ctrl+Down" ) );
+
+	m_toBottom = m_formToolBar->addAction(
+		QIcon( QStringLiteral( ":/Core/img/object-order-back.png" ) ),
+		ProjectWindow::tr( "Bring to Bottom" ) );
+	m_toBottom->setShortcutContext( Qt::ApplicationShortcut );
+	m_toBottom->setShortcut( ProjectWindow::tr( "Ctrl+Alt+Down" ) );
+
+	m_toTop->setEnabled( false );
+	m_up->setEnabled( false );
+	m_down->setEnabled( false );
+	m_toBottom->setEnabled( false );
+
 	m_zoomIn = m_zoomToolBar->addAction(
 		QIcon( QStringLiteral( ":/Core/img/zoom-in.png" ) ),
 		ProjectWindow::tr( "Zoom In" ) );
@@ -592,6 +631,13 @@ ProjectWindowPrivate::init()
 
 	form->addAction( m_group );
 	form->addAction( m_ungroup );
+
+	form->addSeparator();
+
+	form->addAction( m_toTop );
+	form->addAction( m_up );
+	form->addAction( m_down );
+	form->addAction( m_toBottom );
 
 	form->addSeparator();
 
@@ -1265,6 +1311,10 @@ ProjectWindow::select( bool checked )
 	d->m_alignVertTop->setEnabled( checked );
 	d->m_alignVertCenter->setEnabled( checked );
 	d->m_alignVertBottom->setEnabled( checked );
+	d->m_toTop->setEnabled( checked );
+	d->m_up->setEnabled( checked );
+	d->m_down->setEnabled( checked );
+	d->m_toBottom->setEnabled( checked );
 
 	d->m_drawPolyLine->setChecked( false );
 
@@ -1429,6 +1479,10 @@ ProjectWindow::tabChanged( int index )
 		d->m_zoomOut->setEnabled( false );
 		d->m_zoomOriginal->setEnabled( false );
 		d->m_duplicate->setEnabled( false );
+		d->m_toTop->setEnabled( false );
+		d->m_up->setEnabled( false );
+		d->m_down->setEnabled( false );
+		d->m_toBottom->setEnabled( false );
 
 		d->m_propertiesDock->hide();
 		d->m_propertiesDock->toggleViewAction()->setEnabled( false );
@@ -1466,6 +1520,10 @@ ProjectWindow::selectionChanged()
 		const auto s = d->m_widget->pages().at( index - 1 )->pageScene()->selectedItems();
 
 		d->m_duplicate->setEnabled( !s.isEmpty() );
+		d->m_toTop->setEnabled( !s.isEmpty() );
+		d->m_up->setEnabled( !s.isEmpty() );
+		d->m_down->setEnabled( !s.isEmpty() );
+		d->m_toBottom->setEnabled( !s.isEmpty() );
 
 		if( s.size() > 1 )
 		{
