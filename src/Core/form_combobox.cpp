@@ -115,7 +115,7 @@ FormComboBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 	Q_UNUSED( widget )
 	Q_UNUSED( option )
 
-	draw( painter, d->m_rect, objectPen() );
+	draw( painter, d->m_rect, objectPen(), objectBrush() );
 
 	if( isSelected() && !group() )
 		d->m_proxy->show();
@@ -125,9 +125,10 @@ FormComboBox::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 
 void
 FormComboBox::draw( QPainter * painter, const QRectF & rect,
-	const QPen & pen, int dpi )
+	const QPen & pen, const QBrush & brush, int dpi )
 {
 	painter->setPen( pen );
+	painter->setBrush( brush );
 
 	QRectF r = rect;
 
@@ -204,6 +205,7 @@ FormComboBox::cfg() const
 	c.set_size( s );
 
 	c.set_pen( Cfg::pen( objectPen() ) );
+	c.set_brush( Cfg::brush( objectBrush() ) );
 
 	c.set_z( zValue() );
 
@@ -215,6 +217,7 @@ FormComboBox::setCfg( const Cfg::ComboBox & c )
 {
 	setObjectId( c.objectId() );
 	setObjectPen( Cfg::fromPen( c.pen() ), false );
+	setObjectBrush( Cfg::fromBrush( c.brush() ), false );
 	d->setRect( QRectF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ),
 		MmPx::instance().fromMmX( c.size().width() ),

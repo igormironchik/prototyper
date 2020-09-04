@@ -61,7 +61,7 @@ public:
 		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
 
 	static void draw( QPainter * painter, const QRectF & rect,
-		const QPen & pen, int dpi = 0 );
+		const QPen & pen, const QBrush & brush, int dpi = 0 );
 
 	static qreal boxHeight( int dpi = 0 );
 

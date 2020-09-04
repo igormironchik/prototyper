@@ -206,7 +206,7 @@ static inline void drawComboBox( const Cfg::ComboBox & cb, QPainter & p, qreal d
 			MmPx::instance().fromMm( cb.pos().y(), dpi ),
 			MmPx::instance().fromMm( cb.size().width(), dpi ),
 			MmPx::instance().fromMm( cb.size().height(), dpi ) ),
-		Cfg::fromPen( cb.pen(), dpi ), dpi );
+		Cfg::fromPen( cb.pen(), dpi ), Cfg::fromBrush( cb.brush() ), dpi );
 
 	p.restore();
 }
@@ -221,6 +221,7 @@ static inline void drawSpinBox( const Cfg::SpinBox & s, QPainter & p, qreal dpi 
 			MmPx::instance().fromMm( s.size().width(), dpi ),
 			MmPx::instance().fromMm( s.size().height(), dpi ) ),
 		Cfg::fromPen( s.pen(), dpi ),
+		Cfg::fromBrush( s.brush() ),
 		font( s.text(), p, dpi ),
 		s.text().text(),
 		dpi );
