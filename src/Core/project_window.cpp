@@ -2010,6 +2010,36 @@ ProjectWindow::duplicate()
 	}
 }
 
+namespace /* anonymous */ {
+
+//! Up Z index.
+void upZ( const QList< QGraphicsItem* > & s, qreal delta, Page * page )
+{
+	UndoChangeZ::ZAndIds origZ;
+	UndoChangeZ::ZAndIds newZ;
+
+	for( const auto & i : s )
+	{
+		auto * o = dynamic_cast< FormObject* > ( i );
+
+		if( o )
+		{
+			origZ.append( qMakePair( o->objectId(), i->zValue() ) );
+
+			const auto z = i->zValue() + delta;
+
+			newZ.append( qMakePair( o->objectId(), z ) );
+
+			i->setZValue( z );
+		}
+	}
+
+	if( !origZ.isEmpty() )
+		page->undoStack()->push( new UndoChangeZ( page, origZ, newZ ) );
+} // upZ
+
+}
+
 void
 ProjectWindow::toTop()
 {
@@ -2023,34 +2053,25 @@ ProjectWindow::toTop()
 		const auto minMax = minMaxZ( s );
 		const auto delta = min - minMax.first;
 
-		UndoChangeZ::ZAndIds origZ;
-		UndoChangeZ::ZAndIds newZ;
+		upZ( s, delta, v->page() );
 
-		for( const auto & i : s )
-		{
-			auto * o = dynamic_cast< FormObject* > ( i );
-
-			if( o )
-			{
-				origZ.append( qMakePair( o->objectId(), i->zValue() ) );
-
-				const auto z = i->zValue() + delta;
-
-				newZ.append( qMakePair( o->objectId(), z ) );
-
-				i->setZValue( z );
-			}
-		}
-
-		if( !origZ.isEmpty() )
-			v->page()->undoStack()->push( new UndoChangeZ( v->page(), origZ, newZ ) );
+		setWindowModified( true );
 	}
 }
 
 void
 ProjectWindow::raise()
 {
+	const auto idx = d->m_widget->tabs()->currentIndex();
 
+	if( idx > 0 )
+	{
+		const auto * v = d->m_widget->pages().at( idx - 1 );
+
+		upZ( v->pageScene()->selectedItems(), 1.0, v->page() );
+
+		setWindowModified( true );
+	}
 }
 
 void

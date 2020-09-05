@@ -49,12 +49,20 @@ minMaxZ( const QList< QGraphicsItem* > & items )
 	qreal min = 0.0;
 	qreal max = 0.0;
 
+	bool first = true;
+
 	for( const auto & i : qAsConst( items ) )
 	{
 		auto * obj = dynamic_cast< FormObject* > ( i );
 
 		if( obj )
 		{
+			if( first )
+			{
+				min = i->zValue();
+				first = false;
+			}
+
 			if( i->zValue() < min )
 				min = i->zValue();
 
