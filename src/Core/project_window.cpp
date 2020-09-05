@@ -1351,9 +1351,26 @@ ProjectWindow::select( bool checked )
 void
 ProjectWindow::fillColor()
 {
-	const QColor c = QColorDialog::getColor(
-		PageAction::instance()->fillColor(),
-		this, tr( "Select Fill Color..." ),
+	const auto idx = d->m_widget->tabs()->currentIndex();
+
+	auto c = PageAction::instance()->fillColor();
+
+	if( idx > 0 )
+	{
+		const auto * v = d->m_widget->pages().at( idx - 1 );
+		const auto s = v->pageScene()->selectedItems();
+
+		if( s.size() == 1 )
+		{
+			auto * o = dynamic_cast< FormObject* > ( s.first() );
+
+			if( o )
+				c = o->objectBrush().color();
+		}
+	}
+
+	c = QColorDialog::getColor(
+		c, this, tr( "Select Fill Color..." ),
 		QColorDialog::ShowAlphaChannel );
 
 	if( c.isValid() )
@@ -1384,9 +1401,26 @@ ProjectWindow::fillColor()
 void
 ProjectWindow::strokeColor()
 {
-	const QColor c = QColorDialog::getColor(
-		PageAction::instance()->strokeColor(),
-		this, tr( "Select Stroke Color..." ),
+	const auto idx = d->m_widget->tabs()->currentIndex();
+
+	auto c = PageAction::instance()->strokeColor();
+
+	if( idx > 0 )
+	{
+		const auto * v = d->m_widget->pages().at( idx - 1 );
+		const auto s = v->pageScene()->selectedItems();
+
+		if( s.size() == 1 )
+		{
+			auto * o = dynamic_cast< FormObject* > ( s.first() );
+
+			if( o )
+				c = o->objectPen().color();
+		}
+	}
+
+	c = QColorDialog::getColor(
+		c, this, tr( "Select Stroke Color..." ),
 		QColorDialog::ShowAlphaChannel );
 
 	if( c.isValid() )
