@@ -60,6 +60,7 @@
 // C++ include.
 #include <algorithm>
 #include <type_traits>
+#include <functional>
 
 
 namespace Prototyper {
@@ -103,26 +104,27 @@ PagePrivate::isCommentUnderMouse() const
 qreal
 PagePrivate::currentZValue() const
 {
-	const auto children = q->childItems();
-
 	qreal z = 0.0;
 
-	if( !children.isEmpty() )
-		currentZValue( q->childItems(), z, true );
+	currentZValue( q->childItems(), z, true );
 
 	return z;
 }
 
+namespace /* anonymous */ {
+
+//! Find Z border element with comparator.
+template< typename U >
 void
-PagePrivate::currentZValue( const QList< QGraphicsItem* > & items,
-	qreal & z, bool initZ ) const
+findZBorder( const QList< QGraphicsItem* > & items,
+	qreal & z, bool initZ, U u )
 {
-	foreach( QGraphicsItem * item, items )
+	for( const auto & item : qAsConst( items ) )
 	{
 		const QList< QGraphicsItem* > children = item->childItems();
 
 		if( !children.isEmpty() )
-			currentZValue( children, z, false );
+			findZBorder( children, z, false, u );
 
 		auto * obj = dynamic_cast< FormObject* > ( item );
 
@@ -132,9 +134,18 @@ PagePrivate::currentZValue( const QList< QGraphicsItem* > & items,
 			initZ = false;
 		}
 
-		if( obj && item->zValue() > z )
+		if( obj && u( item->zValue(), z ) )
 			z = item->zValue();
 	}
+}
+
+} /* namespace anonymous */
+
+void
+PagePrivate::currentZValue( const QList< QGraphicsItem* > & items,
+	qreal & z, bool initZ ) const
+{
+	findZBorder( items, z, initZ, std::greater< qreal > () );
 }
 
 QPointF
@@ -2304,41 +2315,12 @@ Page::topZ() const
 	return d->currentZValue();
 }
 
-namespace /* anonymous */ {
-
-//! Find lowest Z index.
-void
-lowestZValue( const QList< QGraphicsItem* > & items,
-	qreal & z, bool initZ )
-{
-	for( const auto & item : qAsConst( items ) )
-	{
-		const QList< QGraphicsItem* > children = item->childItems();
-
-		if( !children.isEmpty() )
-			lowestZValue( children, z, false );
-
-		auto * obj = dynamic_cast< FormObject* > ( item );
-
-		if( obj && initZ )
-		{
-			z = item->zValue();
-			initZ = false;
-		}
-
-		if( obj && item->zValue() < z )
-			z = item->zValue();
-	}
-}
-
-} /* namespace anonymous */
-
 qreal
 Page::bottomZ() const
 {
 	qreal z = 0.0;
 
-	lowestZValue( childItems(), z, true );
+	findZBorder( childItems(), z, true, std::less< qreal > () );
 
 	return z;
 }
