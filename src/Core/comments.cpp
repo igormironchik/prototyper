@@ -34,8 +34,6 @@
 #include <QStyledItemDelegate>
 #include <QPainter>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 

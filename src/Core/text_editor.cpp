@@ -76,6 +76,7 @@ TextEditorPrivate::init()
 	q->setTextCursor( c );
 
 	q->setAutoFormatting( QTextEdit::AutoNone );
+	q->setTextInteractionFlags( Qt::TextEditorInteraction | Qt::TextBrowserInteraction );
 
 	TextEditor::connect( q, &QTextEdit::cursorPositionChanged,
 		q, &TextEditor::slotCursorChanged );
@@ -153,6 +154,28 @@ TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 		QFont f = currentFont();
 		f.setPixelSize( MmPx::instance().fromPtY( s.fontSize() ) );
 		setCurrentFont( f );
+
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_link ) != s.style().cend() )
+		{
+			QTextCursor cursor = textCursor();
+			QTextCharFormat fmt = cursor.charFormat();
+			fmt.setAnchor( true );
+			fmt.setAnchorHref( s.text() );
+			fmt.setForeground( QBrush( QColor( Qt::blue ) ) );
+			cursor.setCharFormat( fmt );
+			setTextCursor( cursor );
+		}
+		else
+		{
+			QTextCursor cursor = textCursor();
+			QTextCharFormat fmt = cursor.charFormat();
+			fmt.setAnchor( false );
+			fmt.setAnchorHref( QString() );
+			fmt.setForeground( QBrush( QColor( Qt::black ) ) );
+			cursor.setCharFormat( fmt );
+			setTextCursor( cursor );
+		}
 
 		insertPlainText( s.text() );
 
@@ -294,6 +317,9 @@ TextEditor::clearFormat()
 		QFont f = fmt.font();
 		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		fmt.setFont( f );
+		fmt.setAnchor( false );
+		fmt.setAnchorHref( QString() );
+		fmt.setForeground( QBrush( QColor( Qt::black ) ) );
 
 		textCursor().setCharFormat( fmt );
 	}
@@ -306,6 +332,13 @@ TextEditor::clearFormat()
 		QFont f = currentFont();
 		f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
 		setCurrentFont( f );
+		QTextCursor cursor = textCursor();
+		QTextCharFormat fmt = cursor.charFormat();
+		fmt.setAnchor( false );
+		fmt.setAnchorHref( QString() );
+		fmt.setForeground( QBrush( QColor( Qt::black ) ) );
+		cursor.setCharFormat( fmt );
+		setTextCursor( cursor );
 	}
 
 	emit changed();
@@ -365,6 +398,22 @@ TextEditor::alignRight()
 	}
 	else
 		setAlignment( Qt::AlignRight );
+}
+
+void
+TextEditor::insertLink()
+{
+	QTextCursor c = textCursor();
+
+	if( c.hasSelection() )
+	{
+		QTextCharFormat fmt = c.charFormat();
+		fmt.setAnchor( true );
+		fmt.setAnchorHref( c.selectedText() );
+		fmt.setForeground( QBrush( QColor( Qt::blue ) ) );
+
+		textCursor().setCharFormat( fmt );
+	}
 }
 
 } /* namespace Core */

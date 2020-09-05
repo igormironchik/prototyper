@@ -74,5 +74,6 @@
         <file>img/object-order-front.png</file>
         <file>img/object-order-lower.png</file>
         <file>img/object-order-raise.png</file>
+        <file>img/insert-link-small.png</file>
     </qresource>
 </RCC>

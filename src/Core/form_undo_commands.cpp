@@ -26,8 +26,6 @@
 // Qt include.
 #include <QTextDocument>
 
-#include <QDebug>
-
 
 namespace Prototyper {
 

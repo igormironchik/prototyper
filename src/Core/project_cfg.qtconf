@@ -19,6 +19,7 @@
 							"QStringLiteral( \"left\" )"
 							"QStringLiteral( \"right\" )"
 							"QStringLiteral( \"center\" )"
+							"QStringLiteral( \"link\" )"
 						}
 						{valueType QString}
 						{name style}

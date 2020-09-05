@@ -83,6 +83,8 @@ public slots:
 	void alignCenter();
 	//! Align right.
 	void alignRight();
+	//! Insert link.
+	void insertLink();
 
 private slots:
 	//! Cursor changed.

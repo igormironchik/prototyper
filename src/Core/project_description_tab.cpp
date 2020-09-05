@@ -91,6 +91,8 @@ ProjectDescTabPrivate::init()
 		m_editor, &TextEditor::alignCenter );
 	ProjectDescTab::connect( m_bar, &TextOptsBar::alignRight,
 		m_editor, &TextEditor::alignRight );
+	ProjectDescTab::connect( m_bar, &TextOptsBar::insertLink,
+		m_editor, &TextEditor::insertLink );
 }
 
 

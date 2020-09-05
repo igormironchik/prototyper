@@ -67,6 +67,8 @@ signals:
 	void alignCenter();
 	//! Align right.
 	void alignRight();
+	//! Insert link.
+	void insertLink();
 
 public:
 	//! Icon size.

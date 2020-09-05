@@ -156,6 +156,9 @@ FormTextPrivate::setRect( const QRectF & rect )
 	q->setTextWidth( m_rect.width() );
 
 	QRectF r = q->boundingRect();
+	const auto s = q->defaultSize();
+	r.setHeight( qMax( s.height(), r.height() ) );
+	r.setWidth( qMax( s.width(), r.width() ) );
 	r.moveTo( q->pos() );
 
 	m_proxy->setRect( r );
@@ -192,7 +195,7 @@ FormText::p_contentChanged()
 	QRectF r = boundingRect();
 	r.moveTo( pos() );
 
-	d->m_proxy->setRect( r );
+	d->setRect( r );
 }
 
 Cfg::Text
@@ -308,7 +311,7 @@ FormText::setCfg( const Cfg::Text & c )
 	QRectF r = boundingRect();
 	r.moveTo( pos() );
 
-	d->m_proxy->setRect( r );
+	d->setRect( r );
 }
 
 void
@@ -442,7 +445,7 @@ FormText::setFontSize( int s )
 	QRectF r = boundingRect();
 	r.moveTo( pos() );
 
-	d->m_proxy->setRect( r );
+	d->setRect( r );
 }
 
 void
@@ -473,7 +476,7 @@ FormText::bold( bool on )
 	QRectF r = boundingRect();
 	r.moveTo( pos() );
 
-	d->m_proxy->setRect( r );
+	d->setRect( r );
 }
 
 void
@@ -504,7 +507,7 @@ FormText::italic( bool on )
 	QRectF r = boundingRect();
 	r.moveTo( pos() );
 
-	d->m_proxy->setRect( r );
+	d->setRect( r );
 }
 
 void
@@ -535,7 +538,7 @@ FormText::underline( bool on )
 	QRectF r = boundingRect();
 	r.moveTo( pos() );
 
-	d->m_proxy->setRect( r );
+	d->setRect( r );
 }
 
 void
@@ -581,7 +584,7 @@ FormText::clearFormat()
 	QRectF r = boundingRect();
 	r.moveTo( pos() );
 
-	d->m_proxy->setRect( r );
+	d->setRect( r );
 }
 
 void

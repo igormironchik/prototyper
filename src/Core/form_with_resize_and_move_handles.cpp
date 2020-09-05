@@ -145,8 +145,8 @@ WithResizeAndMoveHandles::hide()
 bool
 WithResizeAndMoveHandles::checkConstraint( const QSizeF & s )
 {
-	return ( ( s.width() > m_min.width() || qAbs( s.width() - m_min.width() ) < c_maxZero ) &&
-		( s.height() > m_min.height() || qAbs( s.height() - m_min.height() ) < c_maxZero ) );
+	return ( ( s.width() >= m_min.width() || qAbs( s.width() - m_min.width() ) < c_maxZero ) &&
+		( s.height() >= m_min.height() || qAbs( s.height() - m_min.height() ) < c_maxZero ) );
 }
 
 void

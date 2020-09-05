@@ -94,7 +94,9 @@ bool operator != ( const QTextCharFormat & f1, const QTextCharFormat & f2 )
 	return ( f1.fontPointSize() != f2.fontPointSize() ||
 		f1.fontWeight() != f2.fontWeight() ||
 		f1.fontItalic() != f2.fontItalic() ||
-		f1.fontUnderline() != f2.fontUnderline() );
+		f1.fontUnderline() != f2.fontUnderline() ||
+		f1.isAnchor() != f2.isAnchor() ||
+		f1.anchorHref() != f2.anchorHref() );
 }
 
 bool operator != ( QTextBlockFormat & f1, const QTextBlockFormat & f2 )
@@ -125,6 +127,9 @@ std::vector< QString > textStyle( const QTextCharFormat & f,
 
 	if( res.empty() )
 		res.push_back( c_normalStyle );
+
+	if( f.isAnchor() && !f.anchorHref().isEmpty() )
+		res.push_back( c_link );
 
 	switch( b.alignment() )
 	{
@@ -323,6 +328,20 @@ void fillTextDocument( QTextDocument * doc,
 					fmt.setFontUnderline( true );
 			else
 				fmt.setFontUnderline( false );
+		}
+
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_link ) != s.style().cend() )
+		{
+			fmt.setAnchor( true );
+			fmt.setForeground( QBrush( QColor( Qt::blue ) ) );
+			fmt.setAnchorHref( s.text() );
+		}
+		else
+		{
+			fmt.setAnchor( false );
+			fmt.setAnchorHref( QString() );
+			fmt.setForeground( QBrush( QColor( Qt::black ) ) );
 		}
 
 		initBlockFormat( b, s );

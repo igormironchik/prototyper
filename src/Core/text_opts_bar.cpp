@@ -52,6 +52,7 @@ public:
 		,	m_alignLeft( nullptr )
 		,	m_alignCenter( nullptr )
 		,	m_alignRight( nullptr )
+		,	m_link( nullptr )
 		,	m_iconSize( s )
 		,	m_fontSize( nullptr )
 	{
@@ -74,6 +75,8 @@ public:
 	QAction * m_alignCenter;
 	//! Align right.
 	QAction * m_alignRight;
+	//! Insert link.
+	QAction * m_link;
 	//! Icon size.
 	TextOptsBar::IconSize m_iconSize;
 	//! Font size.
@@ -183,6 +186,20 @@ TextOptsBarPrivate::init()
 	m_alignRight->setCheckable( true );
 	alignGroup->addAction( m_alignRight );
 
+	if( m_iconSize == TextOptsBar::Large )
+	{
+		q->addSeparator();
+
+		const QString linkTip = TextOptsBar::tr( "Insert Link" );
+		m_link = q->addAction(
+			QIcon( QStringLiteral( ":/Core/img/insert-link.png" ) ),
+			linkTip );
+		m_link->setToolTip( linkTip );
+		m_link->setStatusTip( linkTip );
+		m_link->setCheckable( false );
+		m_link->setEnabled( false );
+	}
+
 	q->addSeparator();
 
 	const QString clearFormatTip = TextOptsBar::tr( "Clear Format" );
@@ -208,6 +225,10 @@ TextOptsBarPrivate::init()
 		q, &TextOptsBar::alignCenter );
 	TextOptsBar::connect( m_alignRight, &QAction::triggered,
 		q, &TextOptsBar::alignRight );
+
+	if( m_link )
+		TextOptsBar::connect( m_link, &QAction::triggered,
+			q, &TextOptsBar::insertLink );
 }
 
 
@@ -237,7 +258,12 @@ TextOptsBar::updateState( const QTextCursor & cursor )
 			c.setPosition( c.selectionEnd() );
 
 		fmt = c.charFormat();
+
+		if( d->m_link )
+			d->m_link->setEnabled( true );
 	}
+	else if( d->m_link )
+		d->m_link->setEnabled( false );
 
 	d->m_fontBold->setChecked( fmt.fontWeight() == QFont::Bold );
 	d->m_fontItalic->setChecked( fmt.fontItalic() );
