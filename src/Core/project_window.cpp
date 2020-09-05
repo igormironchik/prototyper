@@ -2046,8 +2046,8 @@ ProjectWindow::duplicate()
 
 namespace /* anonymous */ {
 
-//! Up Z index.
-void upZ( const QList< QGraphicsItem* > & s, qreal delta, Page * page )
+//! Change Z index.
+void changeZ( const QList< QGraphicsItem* > & s, qreal delta, Page * page )
 {
 	UndoChangeZ::ZAndIds origZ;
 	UndoChangeZ::ZAndIds newZ;
@@ -2087,7 +2087,7 @@ ProjectWindow::toTop()
 		const auto minMax = minMaxZ( s );
 		const auto delta = min - minMax.first;
 
-		upZ( s, delta, v->page() );
+		changeZ( s, delta, v->page() );
 
 		setWindowModified( true );
 	}
@@ -2102,7 +2102,7 @@ ProjectWindow::raise()
 	{
 		const auto * v = d->m_widget->pages().at( idx - 1 );
 
-		upZ( v->pageScene()->selectedItems(), 1.0, v->page() );
+		changeZ( v->pageScene()->selectedItems(), 1.0, v->page() );
 
 		setWindowModified( true );
 	}
@@ -2111,13 +2111,35 @@ ProjectWindow::raise()
 void
 ProjectWindow::lower()
 {
+	const auto idx = d->m_widget->tabs()->currentIndex();
 
+	if( idx > 0 )
+	{
+		const auto * v = d->m_widget->pages().at( idx - 1 );
+
+		changeZ( v->pageScene()->selectedItems(), -1.0, v->page() );
+
+		setWindowModified( true );
+	}
 }
 
 void
 ProjectWindow::toBottom()
 {
+	const auto idx = d->m_widget->tabs()->currentIndex();
 
+	if( idx > 0 )
+	{
+		const auto * v = d->m_widget->pages().at( idx - 1 );
+		const auto max = v->page()->bottomZ() - 1.0;
+		const auto s = v->pageScene()->selectedItems();
+		const auto minMax = minMaxZ( s );
+		const auto delta = max - minMax.second;
+
+		changeZ( s, delta, v->page() );
+
+		setWindowModified( true );
+	}
 }
 
 } /* namespace Core */

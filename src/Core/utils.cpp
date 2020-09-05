@@ -60,6 +60,7 @@ minMaxZ( const QList< QGraphicsItem* > & items )
 			if( first )
 			{
 				min = i->zValue();
+				max = min;
 				first = false;
 			}
 

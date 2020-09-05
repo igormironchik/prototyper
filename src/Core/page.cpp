@@ -103,25 +103,34 @@ PagePrivate::isCommentUnderMouse() const
 qreal
 PagePrivate::currentZValue() const
 {
+	const auto children = q->childItems();
+
 	qreal z = 0.0;
 
-	currentZValue( q->childItems(), z );
+	if( !children.isEmpty() )
+		currentZValue( q->childItems(), z, true );
 
 	return z;
 }
 
 void
 PagePrivate::currentZValue( const QList< QGraphicsItem* > & items,
-	qreal & z ) const
+	qreal & z, bool initZ ) const
 {
 	foreach( QGraphicsItem * item, items )
 	{
 		const QList< QGraphicsItem* > children = item->childItems();
 
 		if( !children.isEmpty() )
-			currentZValue( children, z );
+			currentZValue( children, z, false );
 
 		auto * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj && initZ )
+		{
+			z = item->zValue();
+			initZ = false;
+		}
 
 		if( obj && item->zValue() > z )
 			z = item->zValue();
@@ -2293,6 +2302,45 @@ qreal
 Page::topZ() const
 {
 	return d->currentZValue();
+}
+
+namespace /* anonymous */ {
+
+//! Find lowest Z index.
+void
+lowestZValue( const QList< QGraphicsItem* > & items,
+	qreal & z, bool initZ )
+{
+	for( const auto & item : qAsConst( items ) )
+	{
+		const QList< QGraphicsItem* > children = item->childItems();
+
+		if( !children.isEmpty() )
+			lowestZValue( children, z, false );
+
+		auto * obj = dynamic_cast< FormObject* > ( item );
+
+		if( obj && initZ )
+		{
+			z = item->zValue();
+			initZ = false;
+		}
+
+		if( obj && item->zValue() < z )
+			z = item->zValue();
+	}
+}
+
+} /* namespace anonymous */
+
+qreal
+Page::bottomZ() const
+{
+	qreal z = 0.0;
+
+	lowestZValue( childItems(), z, true );
+
+	return z;
 }
 
 } /* namespace Core */

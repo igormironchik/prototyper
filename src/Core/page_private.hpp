@@ -100,7 +100,7 @@ public:
 	qreal currentZValue() const;
 	//! \return Current Z-value.
 	void currentZValue( const QList< QGraphicsItem* > & items,
-		qreal & z ) const;
+		qreal & z, bool initZ ) const;
 	//! \return Start point for line.
 	QPointF lineStartPoint( const QPointF & point,
 		bool & intersected, bool & intersectedEnds,

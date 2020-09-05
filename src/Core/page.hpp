@@ -202,6 +202,8 @@ public:
 
 	//! \return Max Z index on the page.
 	qreal topZ() const;
+	//! \return Min Z index on the page.
+	qreal bottomZ() const;
 
 public slots:
 	//! Rename form.
