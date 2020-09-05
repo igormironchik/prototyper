@@ -23,6 +23,7 @@
 // Prototyper include.
 #include "utils.hpp"
 #include "constants.hpp"
+#include "form_object.hpp"
 
 // Qt include.
 #include <QTextCharFormat>
@@ -31,11 +32,53 @@
 #include <QTextBlockFormat>
 #include <QApplication>
 #include <QScreen>
+#include <QGraphicsItem>
 
 
 namespace Prototyper {
 
 namespace Core {
+
+//
+// minMaxZ
+//
+
+QPair< qreal, qreal >
+minMaxZ( const QList< QGraphicsItem* > & items )
+{
+	qreal min = 0.0;
+	qreal max = 0.0;
+
+	for( const auto & i : qAsConst( items ) )
+	{
+		auto * obj = dynamic_cast< FormObject* > ( i );
+
+		if( obj )
+		{
+			if( i->zValue() < min )
+				min = i->zValue();
+
+			if( i->zValue() > max )
+				max = i->zValue();
+
+			const auto children = i->childItems();
+
+			if( !children.isEmpty() )
+			{
+				const auto p = minMaxZ( children );
+
+				if( p.first < min )
+					min = p.first;
+
+				if( p.second > max )
+					max = p.second;
+			}
+		}
+	}
+
+	return qMakePair( min, max );
+}
+
 
 bool operator != ( const QTextCharFormat & f1, const QTextCharFormat & f2 )
 {

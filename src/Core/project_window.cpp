@@ -41,6 +41,7 @@
 #include "form_group.hpp"
 #include "form_undo_commands.hpp"
 #include "constants.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -754,6 +755,14 @@ ProjectWindowPrivate::init()
 		q, &ProjectWindow::pageAdded );
 	ProjectWindow::connect( m_widget, &ProjectWidget::pageDeleted,
 		q, &ProjectWindow::pageDeleted );
+	ProjectWindow::connect( m_toTop, &QAction::triggered,
+		q, &ProjectWindow::toTop );
+	ProjectWindow::connect( m_up, &QAction::triggered,
+		q, &ProjectWindow::raise );
+	ProjectWindow::connect( m_down, &QAction::triggered,
+		q, &ProjectWindow::lower );
+	ProjectWindow::connect( m_toBottom, &QAction::triggered,
+		q, &ProjectWindow::toBottom );
 
 	q->switchToSelectMode();
 
@@ -1520,6 +1529,7 @@ ProjectWindow::selectionChanged()
 		const auto s = d->m_widget->pages().at( index - 1 )->pageScene()->selectedItems();
 
 		d->m_duplicate->setEnabled( !s.isEmpty() );
+
 		d->m_toTop->setEnabled( !s.isEmpty() );
 		d->m_up->setEnabled( !s.isEmpty() );
 		d->m_down->setEnabled( !s.isEmpty() );
@@ -1998,6 +2008,61 @@ ProjectWindow::duplicate()
 			projectChanged();
 		}
 	}
+}
+
+void
+ProjectWindow::toTop()
+{
+	const auto idx = d->m_widget->tabs()->currentIndex();
+
+	if( idx > 0 )
+	{
+		const auto * v = d->m_widget->pages().at( idx - 1 );
+		const auto min = v->page()->topZ() + 1.0;
+		const auto s = v->pageScene()->selectedItems();
+		const auto minMax = minMaxZ( s );
+		const auto delta = min - minMax.first;
+
+		UndoChangeZ::ZAndIds origZ;
+		UndoChangeZ::ZAndIds newZ;
+
+		for( const auto & i : s )
+		{
+			auto * o = dynamic_cast< FormObject* > ( i );
+
+			if( o )
+			{
+				origZ.append( qMakePair( o->objectId(), i->zValue() ) );
+
+				const auto z = i->zValue() + delta;
+
+				newZ.append( qMakePair( o->objectId(), z ) );
+
+				i->setZValue( z );
+			}
+		}
+
+		if( !origZ.isEmpty() )
+			v->page()->undoStack()->push( new UndoChangeZ( v->page(), origZ, newZ ) );
+	}
+}
+
+void
+ProjectWindow::raise()
+{
+
+}
+
+void
+ProjectWindow::lower()
+{
+
+}
+
+void
+ProjectWindow::toBottom()
+{
+
 }
 
 } /* namespace Core */

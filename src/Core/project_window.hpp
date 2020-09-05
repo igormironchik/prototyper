@@ -177,6 +177,14 @@ private slots:
 	void selectionChanged();
 	//! Duplicate selection.
 	void duplicate();
+	//! Bring to top.
+	void toTop();
+	//! Raise.
+	void raise();
+	//! Lower.
+	void lower();
+	//! Bring to bottom.
+	void toBottom();
 
 private:
 	friend class ProjectWindowPrivate;

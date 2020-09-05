@@ -588,6 +588,54 @@ UndoDuplicate::redo()
 	}
 }
 
+//
+// UndoChangeZ
+//
+
+
+UndoChangeZ::UndoChangeZ( Page * form, const ZAndIds & origZ,
+	const ZAndIds & newZ )
+	:	QUndoCommand( QObject::tr( "Change Z" ) )
+	,	m_form( form )
+	,	m_orig( origZ )
+	,	m_new( newZ )
+	,	m_undone( false )
+{
+}
+
+void
+UndoChangeZ::undo()
+{
+	m_undone = true;
+
+	for( const auto & p : qAsConst( m_orig ) )
+	{
+		auto * i = m_form->findItem( p.first );
+
+		if( i )
+			i->setZValue( p.second );
+	}
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+}
+
+void
+UndoChangeZ::redo()
+{
+	if( m_undone )
+	{
+		for( const auto & p : qAsConst( m_new ) )
+		{
+			auto * i = m_form->findItem( p.first );
+
+			if( i )
+				i->setZValue( p.second );
+		}
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

@@ -786,6 +786,36 @@ private:
 	int m_gridStep;
 }; // class UndoDuplicate
 
+
+//
+// UndoChangeZ
+//
+
+//! Undo changing of Z index.
+class UndoChangeZ final
+	:	public QUndoCommand
+{
+public:
+	using ZAndIds = QVector< QPair< QString, qreal > >;
+
+	UndoChangeZ( Page * form, const ZAndIds & origZ,
+		const ZAndIds & newZ );
+
+	void undo() override;
+
+	void redo() override;
+
+private:
+	//! Form.
+	Page * m_form;
+	//! Original Z.
+	ZAndIds m_orig;
+	//! New Z.
+	ZAndIds m_new;
+	//! Undone?
+	bool m_undone;
+}; // class UndoChangeZ
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

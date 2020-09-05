@@ -1014,6 +1014,8 @@ Page::group( const QList< QGraphicsItem* > & items,
 	{
 		d->m_current = group;
 
+		group->setZValue( d->currentZValue() + 1.0 );
+
 		if( pushUndoCommand )
 			d->m_undoStack->push( new UndoGroup( this, group->objectId() ) );
 
@@ -1866,6 +1868,8 @@ Elem * onReleaseWithRectPlacer( QGraphicsScene * scene, PagePrivate * d,
 
 		elem->setObjectId( id );
 
+		elem->setZValue( d->currentZValue() + 1.0 );
+
 		d->m_ids.append( id );
 
 		d->m_undoStack->push( new UndoCreate< Elem, Config > ( form,
@@ -1901,9 +1905,13 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 				if( line )
 				{
 					if( !d->m_polyline )
+					{
+						line->setZValue( d->currentZValue() + 1.0 );
+
 						d->m_undoStack->push(
 							new UndoCreate< FormLine, Cfg::Line > (
 								this, line->objectId() ) );
+					}
 
 					bool intersected = false;
 					bool intersectedEnds = false;
@@ -1924,6 +1932,8 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 						if( !d->m_currentLines.isEmpty() )
 						{
 							d->m_currentPoly = new FormPolyline( this, this );
+
+							d->m_currentPoly->setZValue( d->currentZValue() + 1.0 );
 
 							const QString id =
 								d->m_currentLines.first()->objectId();
@@ -2021,6 +2031,8 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					r.setBottomRight( p );
 
 					rect->setRectangle( r.normalized(), false );
+
+					rect->setZValue( d->currentZValue() + 1.0 );
 
 					d->m_undoStack->push( new UndoCreate< FormRect, Cfg::Rect > (
 						this, rect->objectId() ) );
@@ -2170,6 +2182,8 @@ Page::dropEvent( QGraphicsSceneDragDropEvent * event )
 
 		auto * image = new FormImage( this, this );
 
+		image->setZValue( d->currentZValue() + 1.0 );
+
 		const QString id = d->id();
 
 		image->setObjectId( id );
@@ -2273,6 +2287,12 @@ Page::clearCommentChanged()
 		[] ( auto & c ) { c->setChanged( false ); } );
 
 	d->m_isCommentChanged = false;
+}
+
+qreal
+Page::topZ() const
+{
+	return d->currentZValue();
 }
 
 } /* namespace Core */

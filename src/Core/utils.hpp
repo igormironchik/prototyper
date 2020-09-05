@@ -35,12 +35,21 @@ class QTextCharFormat;
 class QTextCursor;
 class QTextDocument;
 class QTextBlockFormat;
+class QGraphicsItem;
 QT_END_NAMESPACE
 
 
 namespace Prototyper {
 
 namespace Core {
+
+//
+// minMaxZ
+//
+
+//! \return Min and max Z index.
+QPair< qreal, qreal >
+minMaxZ( const QList< QGraphicsItem* > & items );
 
 
 //

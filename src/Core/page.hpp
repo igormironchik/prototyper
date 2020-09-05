@@ -200,6 +200,9 @@ public:
 	//! Clear comment changed flag.
 	void clearCommentChanged();
 
+	//! \return Max Z index on the page.
+	qreal topZ() const;
+
 public slots:
 	//! Rename form.
 	void renameForm( const QString & name );
@@ -337,6 +340,8 @@ protected:
 		}
 
 		obj->setObjectId( id );
+
+		dynamic_cast< QGraphicsItem* > ( obj )->setZValue( d->currentZValue() + 1.0 );
 
 		d->m_ids.append( id );
 
