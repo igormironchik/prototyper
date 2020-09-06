@@ -11,6 +11,7 @@
 			{text normal left
 				{fontSize 9.989501312335956839660866535268723964691162109375}
 				{text Menu}
+				{link ""}
 			}
 			{pos
 				{x 4.81250000000000088817841970012523233890533447265625}
@@ -2827,8 +2828,9 @@
 				{objectId 10}
 				{z 0}
 				{text normal right
-					{fontSize 9.989501312335956839660866535268723964691162109375}
+					{fontSize 10}
 					{text #1}
+					{link ""}
 				}
 				{pos
 					{x 33.6875}
@@ -5539,6 +5541,7 @@
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
 					{text ""}
+					{link ""}
 				}
 				{pos
 					{x 17.64583333333333570180911920033395290374755859375}
@@ -5551,6 +5554,9 @@
 				{pen
 					{width 0.1604166666666666796192686206268263049423694610595703125}
 					{color #ff000000}
+				}
+				{brush
+					{color #00000000}
 				}
 			}
 			{pos
@@ -5566,8 +5572,9 @@
 				{objectId 16}
 				{z 0}
 				{text normal right
-					{fontSize 9.989501312335956839660866535268723964691162109375}
+					{fontSize 10}
 					{text #2}
+					{link ""}
 				}
 				{pos
 					{x 68.9791666666666714036182384006679058074951171875}
@@ -8278,6 +8285,7 @@
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
 					{text ""}
+					{link ""}
 				}
 				{pos
 					{x 52.93750000000000710542735760100185871124267578125}
@@ -8290,6 +8298,9 @@
 				{pen
 					{width 0.1604166666666666796192686206268263049423694610595703125}
 					{color #ff000000}
+				}
+				{brush
+					{color #00000000}
 				}
 			}
 			{pos
@@ -8305,8 +8316,9 @@
 				{objectId 22}
 				{z 0}
 				{text normal right
-					{fontSize 9.989501312335956839660866535268723964691162109375}
+					{fontSize 10}
 					{text #3}
+					{link ""}
 				}
 				{pos
 					{x 104.270833333333342807236476801335811614990234375}
@@ -11017,6 +11029,7 @@
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
 					{text ""}
+					{link ""}
 				}
 				{pos
 					{x 88.2291666666666714036182384006679058074951171875}
@@ -11029,6 +11042,9 @@
 				{pen
 					{width 0.1604166666666666796192686206268263049423694610595703125}
 					{color #ff000000}
+				}
+				{brush
+					{color #00000000}
 				}
 			}
 			{pos
@@ -11044,8 +11060,9 @@
 				{objectId 28}
 				{z 0}
 				{text normal right
-					{fontSize 9.989501312335956839660866535268723964691162109375}
+					{fontSize 10}
 					{text #4}
+					{link ""}
 				}
 				{pos
 					{x 139.5625}
@@ -13756,6 +13773,7 @@
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
 					{text ""}
+					{link ""}
 				}
 				{pos
 					{x 123.520833333333342807236476801335811614990234375}
@@ -13768,6 +13786,9 @@
 				{pen
 					{width 0.1604166666666666796192686206268263049423694610595703125}
 					{color #ff000000}
+				}
+				{brush
+					{color #00000000}
 				}
 			}
 			{pos
@@ -13783,8 +13804,9 @@
 				{objectId 34}
 				{z 0}
 				{text normal right
-					{fontSize 9.989501312335956839660866535268723964691162109375}
+					{fontSize 10}
 					{text #5}
+					{link ""}
 				}
 				{pos
 					{x 174.85416666666668561447295360267162322998046875}
@@ -16495,6 +16517,7 @@
 				{text normal left
 					{fontSize 9.989501312335956839660866535268723964691162109375}
 					{text ""}
+					{link ""}
 				}
 				{pos
 					{x 158.812500000000028421709430404007434844970703125}
@@ -16507,6 +16530,9 @@
 				{pen
 					{width 0.1604166666666666796192686206268263049423694610595703125}
 					{color #ff000000}
+				}
+				{brush
+					{color #00000000}
 				}
 			}
 			{pos
@@ -16524,16 +16550,30 @@
 		{text bold left
 			{fontSize 15.8923884514435709292001774883829057216644287109375}
 			{text "GIF Editor"}
+			{link ""}
 		}
 		{text normal left
 			{fontSize 9.989501312335956839660866535268723964691162109375}
 			{text "\n\nIn this project we want to develop simple GIF editor, that can open GIF files,"
 			      " show all frames, allow to crop frames, remove unnecessary frames. We want to de"
 			      "velop this editor with Qt, as backend of image processing we will use Magick++ f"
-			      "rom ImageMagick.\n\nProject will be Open Sourced and placed on GitHub. https://git"
-			      "hub.com/igormironchik/gif-editor\n\nAlso we will write a small book about developm"
-			      "ent process of this editor. https://github.com/igormironchik/qt-widgets-on-real-"
-			      example}
+			      "rom ImageMagick.\n\nProject will be Open Sourced and placed on GitHub. "}
+			{link ""}
+		}
+		{text normal left
+			{fontSize 9.989501312335956839660866535268723964691162109375}
+			{text https://github.com/igormironchik/gif-editor}
+			{link https://github.com/igormironchik/gif-editor}
+		}
+		{text normal left
+			{fontSize 9.989501312335956839660866535268723964691162109375}
+			{text "\n\nAlso we will write a small book about development process of this editor. "}
+			{link ""}
+		}
+		{text normal left
+			{fontSize 9.989501312335956839660866535268723964691162109375}
+			{text https://github.com/igormironchik/qt-widgets-on-real-example}
+			{link https://github.com/igormironchik/qt-widgets-on-real-example}
 		}
 	}
 }

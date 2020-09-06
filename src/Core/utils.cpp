@@ -179,7 +179,7 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 			style.set_style( textStyle( f, b ) );
 			QFont font = f.font();
 			style.set_fontSize( font.pixelSize() < MmPx::instance().fromPtY( 1.0 ) ?
-				MmPx::instance().fromPtY( c_defaultFontSize ) : MmPx::instance().toPtY( font.pixelSize() ) );
+				c_defaultFontSize : MmPx::instance().toPtY( font.pixelSize() ) );
 			style.set_text( t );
 
 			if( f.isAnchor() && !f.anchorHref().isEmpty() )
@@ -204,7 +204,7 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 		style.set_style( textStyle( f, b ) );
 		QFont font = f.font();
 		style.set_fontSize( font.pixelSize() < MmPx::instance().fromPtY( 1.0 ) ?
-			MmPx::instance().fromPtY( c_defaultFontSize ) : MmPx::instance().toPtY( font.pixelSize() ) );
+			c_defaultFontSize : MmPx::instance().toPtY( font.pixelSize() ) );
 		style.set_text( t );
 
 		if( f.isAnchor() && !f.anchorHref().isEmpty() )
