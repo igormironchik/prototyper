@@ -197,7 +197,6 @@ TextOptsBarPrivate::init()
 		m_link->setToolTip( linkTip );
 		m_link->setStatusTip( linkTip );
 		m_link->setCheckable( false );
-		m_link->setEnabled( false );
 	}
 
 	q->addSeparator();
@@ -258,12 +257,7 @@ TextOptsBar::updateState( const QTextCursor & cursor )
 			c.setPosition( c.selectionEnd() );
 
 		fmt = c.charFormat();
-
-		if( d->m_link )
-			d->m_link->setEnabled( true );
 	}
-	else if( d->m_link )
-		d->m_link->setEnabled( false );
 
 	d->m_fontBold->setChecked( fmt.fontWeight() == QFont::Bold );
 	d->m_fontItalic->setChecked( fmt.fontItalic() );

@@ -96,7 +96,8 @@ HEADERS +=	exporter.hpp \
 			page_private.hpp \
 			types.hpp \
 			comments.hpp \
-			form_comment.hpp
+			form_comment.hpp \
+			link_dlg.hpp
 
 SOURCES +=	exporter.cpp \
 			form_actions.cpp \
@@ -146,7 +147,8 @@ SOURCES +=	exporter.cpp \
 			form_undo_commands.cpp \
 			form_object_properties.cpp \
 			comments.cpp \
-			form_comment.cpp
+			form_comment.cpp \
+			link_dlg.cpp
 
 FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui \
@@ -154,7 +156,8 @@ FORMS +=	grid_step_dlg.ui \
 			form_checkbox_properties.ui \
 			form_spinbox_properties.ui \
 			form_object_properties.ui \
-			comments.ui
+			comments.ui \
+			link.ui
 
 INCLUDEPATH += $$PWD/../../3rdparty/cfgfile
 DEPENDPATH += $$PWD/../../3rdparty/cfgfile

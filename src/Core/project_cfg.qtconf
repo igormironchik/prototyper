@@ -19,7 +19,6 @@
 							"QStringLiteral( \"left\" )"
 							"QStringLiteral( \"right\" )"
 							"QStringLiteral( \"center\" )"
-							"QStringLiteral( \"link\" )"
 						}
 						{valueType QString}
 						{name style}
@@ -35,6 +34,11 @@
 						{valueType QString}
 						{name text}
 						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name link}
 					}
 				} || class TextStyle
 

@@ -128,9 +128,6 @@ std::vector< QString > textStyle( const QTextCharFormat & f,
 	if( res.empty() )
 		res.push_back( c_normalStyle );
 
-	if( f.isAnchor() && !f.anchorHref().isEmpty() )
-		res.push_back( c_link );
-
 	switch( b.alignment() )
 	{
 		case Qt::AlignCenter :
@@ -185,6 +182,9 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 				MmPx::instance().fromPtY( c_defaultFontSize ) : MmPx::instance().toPtY( font.pixelSize() ) );
 			style.set_text( t );
 
+			if( f.isAnchor() && !f.anchorHref().isEmpty() )
+				style.set_link( f.anchorHref() );
+
 			blocks.push_back( style );
 
 			f = c.charFormat();
@@ -205,6 +205,9 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 		style.set_fontSize( font.pixelSize() < MmPx::instance().fromPtY( 1.0 ) ?
 			MmPx::instance().fromPtY( c_defaultFontSize ) : MmPx::instance().toPtY( font.pixelSize() ) );
 		style.set_text( t );
+
+		if( f.isAnchor() && !f.anchorHref().isEmpty() )
+			style.set_link( f.anchorHref() );
 
 		blocks.push_back( style );
 	}
@@ -330,12 +333,11 @@ void fillTextDocument( QTextDocument * doc,
 				fmt.setFontUnderline( false );
 		}
 
-		if( std::find( s.style().cbegin(), s.style().cend(),
-			Cfg::c_link ) != s.style().cend() )
+		if( !s.link().isEmpty() )
 		{
 			fmt.setAnchor( true );
 			fmt.setForeground( QBrush( c_linkColor ) );
-			fmt.setAnchorHref( s.text() );
+			fmt.setAnchorHref( s.link() );
 		}
 		else
 		{

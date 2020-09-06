@@ -24,6 +24,7 @@
 #include "text_editor.hpp"
 #include "utils.hpp"
 #include "constants.hpp"
+#include "link_dlg.hpp"
 
 #include <QTextCursor>
 #include <QTextDocumentFragment>
@@ -329,16 +330,19 @@ TextEditor::alignRight()
 void
 TextEditor::insertLink()
 {
-	QTextCursor c = textCursor();
+	LinkDlg dlg( this );
 
-	if( c.hasSelection() )
+	if( dlg.exec() == QDialog::Accepted )
 	{
+		QTextCursor c = textCursor();
 		QTextCharFormat fmt = c.charFormat();
 		fmt.setAnchor( true );
-		fmt.setAnchorHref( c.selectedText() );
-		fmt.setForeground( QBrush( QColor( Qt::blue ) ) );
+		fmt.setAnchorHref( dlg.url() );
+		fmt.setForeground( QBrush( c_linkColor ) );
 
-		textCursor().setCharFormat( fmt );
+		c.setCharFormat( fmt );
+
+		c.insertText( dlg.text() );
 	}
 }
 
