@@ -334,14 +334,14 @@ void fillTextDocument( QTextDocument * doc,
 			Cfg::c_link ) != s.style().cend() )
 		{
 			fmt.setAnchor( true );
-			fmt.setForeground( QBrush( QColor( Qt::blue ) ) );
+			fmt.setForeground( QBrush( c_linkColor ) );
 			fmt.setAnchorHref( s.text() );
 		}
 		else
 		{
 			fmt.setAnchor( false );
 			fmt.setAnchorHref( QString() );
-			fmt.setForeground( QBrush( QColor( Qt::black ) ) );
+			fmt.setForeground( QBrush( c_textColor ) );
 		}
 
 		initBlockFormat( b, s );

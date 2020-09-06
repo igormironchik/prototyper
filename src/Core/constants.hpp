@@ -25,6 +25,8 @@
 
 // Qt include.
 #include <QtGlobal>
+#include <QColor>
+
 
 namespace Prototyper {
 
@@ -51,6 +53,9 @@ static const qreal c_a4Width = 210.0;
 static const qreal c_a4Height = 297.0;
 static const qreal c_linePenWidth = 2.0;
 static const qreal c_headerFontSize = 20.0;
+
+static const QColor c_textColor = Qt::black;
+static const QColor c_linkColor = QColor( 33, 122, 255 );
 
 } /* namespace Core */
 

@@ -109,84 +109,10 @@ TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 {
 	disconnect( this, &QTextEdit::textChanged, this, Q_NULLPTR );
 
-	reset();
+	auto * doc = new QTextDocument( this );
+	Cfg::fillTextDocument( doc, blocks );
 
-	foreach( const Cfg::TextStyle & s, blocks )
-	{
-		if( std::find( s.style().cbegin(), s.style().cend(),
-			Cfg::c_normalStyle ) != s.style().cend() )
-		{
-			setFontWeight( QFont::Normal );
-			setFontItalic( false );
-			setFontUnderline( false );
-		}
-		else
-		{
-			if( std::find( s.style().cbegin(), s.style().cend(),
-				Cfg::c_boldStyle ) != s.style().cend() )
-					setFontWeight( QFont::Bold );
-			else
-				setFontWeight( QFont::Normal );
-
-			if( std::find( s.style().cbegin(), s.style().cend(),
-				Cfg::c_italicStyle ) != s.style().cend() )
-					setFontItalic( true );
-			else
-				setFontItalic( false );
-
-			if( std::find( s.style().cbegin(), s.style().cend(),
-				Cfg::c_underlineStyle ) != s.style().cend() )
-					setFontUnderline( true );
-			else
-				setFontUnderline( false );
-		}
-
-		if( std::find( s.style().cbegin(), s.style().cend(),
-			Cfg::c_left ) != s.style().cend() )
-				setAlignment( Qt::AlignLeft );
-		else if( std::find( s.style().cbegin(), s.style().cend(),
-			Cfg::c_right ) != s.style().cend() )
-				setAlignment( Qt::AlignRight );
-		else if( std::find( s.style().cbegin(), s.style().cend(),
-			Cfg::c_center ) != s.style().cend() )
-				setAlignment( Qt::AlignCenter );
-
-		QFont f = currentFont();
-		f.setPixelSize( MmPx::instance().fromPtY( s.fontSize() ) );
-		setCurrentFont( f );
-
-		if( std::find( s.style().cbegin(), s.style().cend(),
-			Cfg::c_link ) != s.style().cend() )
-		{
-			QTextCursor cursor = textCursor();
-			QTextCharFormat fmt = cursor.charFormat();
-			fmt.setAnchor( true );
-			fmt.setAnchorHref( s.text() );
-			fmt.setForeground( QBrush( QColor( Qt::blue ) ) );
-			cursor.setCharFormat( fmt );
-			setTextCursor( cursor );
-		}
-		else
-		{
-			QTextCursor cursor = textCursor();
-			QTextCharFormat fmt = cursor.charFormat();
-			fmt.setAnchor( false );
-			fmt.setAnchorHref( QString() );
-			fmt.setForeground( QBrush( QColor( Qt::black ) ) );
-			cursor.setCharFormat( fmt );
-			setTextCursor( cursor );
-		}
-
-		insertPlainText( s.text() );
-
-		QTextCursor cursor = textCursor();
-		cursor.movePosition( QTextCursor::End );
-		setTextCursor( cursor );
-	}
-
-	QTextCursor cursor = textCursor();
-	cursor.setPosition( 0 );
-	setTextCursor( cursor );
+	setDocument( doc );
 
 	document()->setTextWidth( width() );
 	document()->clearUndoRedoStacks();

@@ -25,9 +25,12 @@
 
 // Qt include.
 #include <QtGlobal>
+#include <QFont>
+#include <QTextCursor>
 
 // Prototyper include.
 #include "project_cfg.hpp"
+#include "constants.hpp"
 
 
 QT_BEGIN_NAMESPACE
@@ -169,6 +172,66 @@ void fillTextDocument( QTextDocument * doc,
 //
 
 TextStyle textStyleFromFont( const QFont & f );
+
+
+//
+// applyTextFormat
+//
+
+template< typename T >
+void
+applyTextFormat( const Cfg::TextStyle & s, T * editor )
+{
+	if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_normalStyle ) != s.style().cend() )
+	{
+		editor->setFontWeight( QFont::Normal );
+		editor->setFontItalic( false );
+		editor->setFontUnderline( false );
+	}
+	else
+	{
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_boldStyle ) != s.style().cend() )
+				editor->setFontWeight( QFont::Bold );
+		else
+			editor->setFontWeight( QFont::Normal );
+
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_italicStyle ) != s.style().cend() )
+				editor->setFontItalic( true );
+		else
+			editor->setFontItalic( false );
+
+		if( std::find( s.style().cbegin(), s.style().cend(),
+			Cfg::c_underlineStyle ) != s.style().cend() )
+				editor->setFontUnderline( true );
+		else
+			editor->setFontUnderline( false );
+	}
+
+	if( std::find( s.style().cbegin(), s.style().cend(),
+		Cfg::c_left ) != s.style().cend() )
+			editor->setAlignment( Qt::AlignLeft );
+	else if( std::find( s.style().cbegin(), s.style().cend(),
+		Cfg::c_right ) != s.style().cend() )
+			editor->setAlignment( Qt::AlignRight );
+	else if( std::find( s.style().cbegin(), s.style().cend(),
+		Cfg::c_center ) != s.style().cend() )
+			editor->setAlignment( Qt::AlignCenter );
+
+	QFont f = editor->currentFont();
+	f.setPixelSize( MmPx::instance().fromPtY( s.fontSize() ) );
+	editor->setCurrentFont( f );
+
+	QTextCursor cursor = editor->textCursor();
+	QTextCharFormat fmt = cursor.charFormat();
+	fmt.setAnchor( false );
+	fmt.setAnchorHref( QString() );
+	fmt.setForeground( QBrush( c_textColor ) );
+	cursor.setCharFormat( fmt );
+	editor->setTextCursor( cursor );
+}
 
 } /* namespace Cfg */
 

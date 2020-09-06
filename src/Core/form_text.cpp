@@ -225,77 +225,10 @@ FormText::setCfg( const Cfg::Text & c )
 {
 	setPlainText( QString() );
 
-	QFont f = font();
-	QTextCharFormat fmt = textCursor().charFormat();
-	QTextBlockFormat b = textCursor().blockFormat();
+	auto * doc = new QTextDocument( this );
+	Cfg::fillTextDocument( doc, c.text() );
 
-	foreach( const Cfg::TextStyle & s, c.text() )
-	{
-		if( std::find( s.style().cbegin(), s.style().cend(),
-			Cfg::c_normalStyle ) != s.style().cend() )
-		{
-			f.setWeight( QFont::Normal );
-			f.setItalic( false );
-			f.setUnderline( false );
-
-			fmt.setFontWeight( QFont::Normal );
-			fmt.setFontItalic( false );
-			fmt.setFontUnderline( false );
-		}
-		else
-		{
-			if( std::find( s.style().cbegin(), s.style().cend(),
-				Cfg::c_boldStyle ) != s.style().cend() )
-			{
-				f.setWeight( QFont::Bold );
-				fmt.setFontWeight( QFont::Bold );
-			}
-			else
-			{
-				f.setWeight( QFont::Normal );
-				fmt.setFontWeight( QFont::Normal );
-			}
-
-			if( std::find( s.style().cbegin(), s.style().cend(),
-				Cfg::c_italicStyle ) != s.style().cend() )
-			{
-				f.setItalic( true );
-				fmt.setFontItalic( true );
-			}
-			else
-			{
-				f.setItalic( false );
-				fmt.setFontItalic( false );
-			}
-
-			if( std::find( s.style().cbegin(), s.style().cend(),
-				Cfg::c_underlineStyle ) != s.style().cend() )
-			{
-				f.setUnderline( true );
-				fmt.setFontUnderline( true );
-			}
-			else
-			{
-				f.setUnderline( false );
-				fmt.setFontUnderline( false );
-			}
-		}
-
-		Cfg::initBlockFormat( b, s );
-
-		f.setPixelSize( MmPx::instance().fromPtY( s.fontSize() ) );
-
-		fmt.setFont( f );
-
-		setFont( f );
-
-		QTextCursor cursor = textCursor();
-		cursor.movePosition( QTextCursor::End );
-		cursor.setCharFormat( fmt );
-		cursor.setBlockFormat( b );
-		cursor.insertText( s.text() );
-		setTextCursor( cursor );
-	}
+	setDocument( doc );
 
 	document()->clearUndoRedoStacks();
 
