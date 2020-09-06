@@ -16507,11 +16507,6 @@
 	}
 	{description
 		{tabName Description}
-		{text normal left
-			{fontSize 9.989501312335956839660866535268723964691162109375}
-			{text ""}
-			{link ""}
-		}
 		{text bold left
 			{fontSize 15.8923884514435709292001774883829057216644287109375}
 			{text "GIF Editor"}
