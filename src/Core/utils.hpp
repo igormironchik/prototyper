@@ -173,6 +173,8 @@ void fillTextDocument( QTextDocument * doc,
 
 TextStyle textStyleFromFont( const QFont & f );
 
+} /* namespace Cfg */
+
 
 //
 // applyTextFormat
@@ -233,7 +235,28 @@ applyTextFormat( const Cfg::TextStyle & s, T * editor )
 	editor->setTextCursor( cursor );
 }
 
-} /* namespace Cfg */
+
+//
+// initDefaultFont
+//
+
+template< typename T >
+void
+initDefaultFont( T * editor )
+{
+	QTextCursor c = editor->textCursor();
+
+	QTextCharFormat fmt = c.charFormat();
+	QFont f = fmt.font();
+	f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
+	fmt.setFont( f );
+
+	c.setCharFormat( fmt );
+
+	editor->setTextCursor( c );
+	editor->setFont( f );
+	editor->document()->setDefaultFont( f );
+}
 
 } /* namespace Core */
 

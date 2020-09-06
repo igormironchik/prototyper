@@ -98,22 +98,7 @@ FormTextPrivate::init()
 
 	setRect( m_rect );
 
-	QFont f = q->font();
-
-	f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
-
-	q->setFont( f );
-
-	q->document()->setDefaultFont( f );
-
-	QTextCursor c = q->textCursor();
-
-	QTextCharFormat fmt = c.charFormat();
-	fmt.setFont( f );
-
-	c.setCharFormat( fmt );
-
-	q->setTextCursor( c );
+	initDefaultFont( q );
 
 	q->setPlainText( FormText::tr( "Text" ) );
 
@@ -231,6 +216,8 @@ FormText::setCfg( const Cfg::Text & c )
 	setDocument( doc );
 
 	document()->clearUndoRedoStacks();
+
+	initDefaultFont( this );
 
 	setObjectId( c.objectId() );
 

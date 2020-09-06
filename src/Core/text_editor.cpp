@@ -65,16 +65,7 @@ TextEditorPrivate::init()
 		q->setFont( f );
 	}
 
-	QTextCursor c = q->textCursor();
-
-	QTextCharFormat fmt = c.charFormat();
-	QFont f = fmt.font();
-	f.setPixelSize( MmPx::instance().fromPtY( c_defaultFontSize ) );
-	fmt.setFont( f );
-
-	c.setCharFormat( fmt );
-
-	q->setTextCursor( c );
+	initDefaultFont( q );
 
 	q->setAutoFormatting( QTextEdit::AutoNone );
 	q->setTextInteractionFlags( Qt::TextEditorInteraction | Qt::TextBrowserInteraction );
@@ -117,6 +108,8 @@ TextEditor::setText( const std::vector< Cfg::TextStyle > & blocks )
 
 	document()->setTextWidth( width() );
 	document()->clearUndoRedoStacks();
+
+	initDefaultFont( this );
 
 	connect( this, &QTextEdit::textChanged, this, &TextEditor::changed );
 }
