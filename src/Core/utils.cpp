@@ -188,6 +188,7 @@ std::vector< Cfg::TextStyle > text( QTextCursor c, const QString & data )
 			blocks.push_back( style );
 
 			f = c.charFormat();
+			b = c.blockFormat();
 
 			t = data.at( pos );
 		}
