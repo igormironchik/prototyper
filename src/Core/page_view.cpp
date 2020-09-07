@@ -42,7 +42,7 @@ namespace Core {
 
 class PageViewPrivate {
 public:
-	PageViewPrivate( Cfg::Page & cfg, PageView * parent )
+	PageViewPrivate( const Cfg::Page & cfg, PageView * parent )
 		:	q( parent )
 		,	m_scene( nullptr )
 		,	m_form( nullptr )
@@ -95,7 +95,7 @@ PageViewPrivate::init()
 // FormView
 //
 
-PageView::PageView( Cfg::Page & cfg, QWidget * parent )
+PageView::PageView( const Cfg::Page & cfg, QWidget * parent )
 	:	QGraphicsView( parent )
 	,	d( new PageViewPrivate( cfg, this ) )
 {

@@ -96,7 +96,7 @@ public:
 	//! New project.
 	void newProject();
 	//! Add page.
-	void addPage( Cfg::Page & cfg, bool showGrid );
+	void addPage( const Cfg::Page & cfg, bool showGrid );
 
 	//! Parent.
 	ProjectWidget * q;
@@ -195,7 +195,7 @@ ProjectWidgetPrivate::newProject()
 }
 
 void
-ProjectWidgetPrivate::addPage( Cfg::Page & cfg,
+ProjectWidgetPrivate::addPage( const Cfg::Page & cfg,
 	bool showGrid )
 {
 	auto * form = new PageView( cfg, m_tabs );
@@ -292,8 +292,8 @@ ProjectWidget::setProject( const Cfg::Project & cfg )
 
 	d->m_tabNames[ 0 ] = d->m_cfg.description().tabName();
 
-	auto it = d->m_cfg.page().begin();
-	auto last = d->m_cfg.page().end();
+	auto it = d->m_cfg.page().cbegin();
+	auto last = d->m_cfg.page().cend();
 
 	for( ; it != last; ++it )
 		d->addPage( *it, d->m_cfg.showGrid() );

@@ -58,7 +58,7 @@ signals:
 	void zoomChanged();
 
 public:
-	PageView( Cfg::Page & cfg, QWidget * parent = 0 );
+	PageView( const Cfg::Page & cfg, QWidget * parent = 0 );
 	~PageView() override;
 
 	//! \return Page scene.
