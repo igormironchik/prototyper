@@ -97,7 +97,8 @@ HEADERS +=	exporter.hpp \
 			types.hpp \
 			comments.hpp \
 			form_comment.hpp \
-			link_dlg.hpp
+			link_dlg.hpp \
+			form_text_properties.hpp
 
 SOURCES +=	exporter.cpp \
 			form_actions.cpp \
@@ -148,7 +149,8 @@ SOURCES +=	exporter.cpp \
 			form_object_properties.cpp \
 			comments.cpp \
 			form_comment.cpp \
-			link_dlg.cpp
+			link_dlg.cpp \
+			form_text_properties.cpp
 
 FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui \
@@ -157,7 +159,8 @@ FORMS +=	grid_step_dlg.ui \
 			form_spinbox_properties.ui \
 			form_object_properties.ui \
 			comments.ui \
-			link.ui
+			link.ui \
+			form_text_properties.ui
 
 INCLUDEPATH += $$PWD/../../3rdparty/cfgfile
 DEPENDPATH += $$PWD/../../3rdparty/cfgfile

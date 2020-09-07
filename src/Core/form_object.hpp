@@ -135,9 +135,6 @@ public:
 	//! \return Widget with properties of object.
 	virtual QWidget * properties( QWidget * parent );
 
-	//! \return Pointer to default properties widget if set.
-	const QPointer< ObjectProperties > & defaultProperties() const;
-
 	//! Update values of properties.
 	virtual void updatePropertiesValues();
 

@@ -25,10 +25,13 @@
 
 // Qt include.
 #include <QPointer>
+#include <QWidget>
 
 // Prototyper include.
 #include "form_resizable.hpp"
 #include "form_checkbox_properties.hpp"
+#include "form_text_properties.hpp"
+#include "form_object_properties.hpp"
 
 
 namespace Prototyper {
@@ -71,7 +74,13 @@ public:
 	//! Width.
 	qreal m_width;
 	//! Properties.
-	QPointer< CheckBoxProperties > m_props;
+	QPointer< QWidget > m_props;
+	//! Object properties.
+	QPointer< ObjectProperties > m_objProps;
+	//! Text properties.
+	QPointer< TextProperties > m_textProps;
+	//! Check properties.
+	QPointer< CheckBoxProperties > m_checkProps;
 }; // class FormCheckBoxPrivate
 
 } /* namespace Core */

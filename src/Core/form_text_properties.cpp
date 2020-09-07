@@ -21,7 +21,8 @@
 */
 
 // Prototyper include.
-#include "form_checkbox_properties.hpp"
+#include "form_text_properties.hpp"
+#include "ui_form_text_properties.h"
 #include "utils.hpp"
 
 // Qt include.
@@ -35,27 +36,39 @@ namespace Prototyper {
 namespace Core {
 
 //
-// FormCheckBoxProperties
+// FormTextProperties
 //
 
-CheckBoxProperties::CheckBoxProperties( QWidget * parent )
+TextProperties::TextProperties( QWidget * parent )
 	:	QWidget( parent )
 {
 	m_ui.setupUi( this );
 }
 
-CheckBoxProperties::~CheckBoxProperties() = default;
+TextProperties::~TextProperties() = default;
 
-Ui::CheckBoxProperties *
-CheckBoxProperties::ui()
+Ui::TextProperties *
+TextProperties::ui()
 {
 	return &m_ui;
 }
 
 void
-CheckBoxProperties::disconnectProperties()
+TextProperties::disconnectProperties()
 {
-	disconnect( m_ui.m_checked,
+	FormCheckBox::disconnect( m_ui.m_text,
+		&QLineEdit::textChanged, nullptr, nullptr );
+
+	FormCheckBox::disconnect( m_ui.m_size,
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
+
+	FormCheckBox::disconnect( m_ui.m_bold,
+		&QCheckBox::stateChanged, nullptr, nullptr );
+
+	FormCheckBox::disconnect( m_ui.m_italic,
+		&QCheckBox::stateChanged, nullptr, nullptr );
+
+	FormCheckBox::disconnect( m_ui.m_underline,
 		&QCheckBox::stateChanged, nullptr, nullptr );
 }
 

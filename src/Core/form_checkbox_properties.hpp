@@ -25,14 +25,11 @@
 
 // Qt include.
 #include <QWidget>
-#include <QScopedPointer>
 
 // Prototyper include.
 #include "project_cfg.hpp"
-
-namespace Ui {
-	class CheckBoxProperties;
-}
+#include "ui_form_checkbox_properties.h"
+#include "form_undo_commands.hpp"
 
 
 namespace Prototyper {
@@ -42,8 +39,6 @@ namespace Core {
 //
 // FormCheckBoxProperties
 //
-
-class CheckBoxPropertiesPrivate;
 
 //! Properties of the checkbox on the form.
 class CheckBoxProperties
@@ -55,12 +50,32 @@ public:
 	CheckBoxProperties( QWidget * parent = Q_NULLPTR );
 	~CheckBoxProperties();
 
-	Ui::CheckBoxProperties * ui() const;
+	Ui::CheckBoxProperties * ui();
+
+	//! Connect properties signals/slots.
+	template< typename T >
+	void connectProperties( T * owner )
+	{
+		connect( m_ui.m_checked,
+			&QCheckBox::stateChanged, owner->q,
+			[this, owner]( int v ) {
+				owner->m_checked = ( v == Qt::Checked );
+
+				owner->q->page()->undoStack()->push( new UndoChangeCheckState( owner->q->page(),
+					owner->q->objectId() ) );
+
+				owner->q->update();
+			} );
+	}
+
+	//! Disconnect properties signals/slots.
+	void disconnectProperties();
 
 private:
 	Q_DISABLE_COPY( CheckBoxProperties )
 
-	QScopedPointer< CheckBoxPropertiesPrivate > d;
+	//! Ui.
+	Ui::CheckBoxProperties m_ui;
 }; // class ButtonProperties
 
 } /* namespace Core */

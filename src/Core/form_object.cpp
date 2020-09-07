@@ -64,6 +64,8 @@ public:
 	FormObject::ObjectType m_type;
 	//! Default properties.
 	QPointer< ObjectProperties > m_props;
+	//! Default properties top widget.
+	QPointer< QWidget > m_topProps;
 	//! Enable resize in properties.
 	int m_resizeProps;
 }; // class FormObjectPrivate
@@ -83,7 +85,13 @@ FormObject::~FormObject() = default;
 QWidget *
 FormObject::properties( QWidget * parent )
 {
-	d->m_props = new ObjectProperties( this, parent );
+	d->m_topProps = new QWidget( parent );
+	QVBoxLayout * layout = new QVBoxLayout( d->m_topProps );
+
+	d->m_props = new ObjectProperties( this, d->m_topProps );
+
+	layout->addWidget( d->m_props );
+	layout->addSpacerItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
 	if( !( d->m_resizeProps & ResizeWidth ) )
 	{
@@ -116,13 +124,7 @@ FormObject::properties( QWidget * parent )
 
 	d->m_props->connectProperties();
 
-	return d->m_props.data();
-}
-
-const QPointer< ObjectProperties > &
-FormObject::defaultProperties() const
-{
-	return d->m_props;
+	return d->m_topProps.data();
 }
 
 void

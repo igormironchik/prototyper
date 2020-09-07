@@ -30,6 +30,8 @@
 // Qt include.
 #include <QSpinBox>
 #include <QCheckBox>
+#include <QVBoxLayout>
+#include <QSpacerItem>
 
 
 namespace Prototyper {
