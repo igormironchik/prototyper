@@ -74,58 +74,6 @@ public:
 
 				owner->q->update();
 			} );
-
-		connect( m_ui.m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ), owner->q,
-			[this, owner]( int v ) {
-				const auto oldText = owner->q->text();
-				owner->m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
-				owner->q->page()->emitChanged();
-
-				owner->q->page()->undoStack()->push( new UndoChangeTextWithOpts( owner->q->page(),
-					owner->q->objectId(), oldText, owner->q->text() ) );
-
-				owner->q->update();
-			} );
-
-		connect( m_ui.m_bold,
-			&QCheckBox::stateChanged, owner->q,
-			[this, owner]( int v ) {
-				const auto oldText = owner->q->text();
-				owner->m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
-				owner->q->page()->emitChanged();
-
-				owner->q->page()->undoStack()->push( new UndoChangeTextWithOpts( owner->q->page(),
-					owner->q->objectId(), oldText, owner->q->text() ) );
-
-				owner->q->update();
-			} );
-
-		connect( m_ui.m_italic,
-			&QCheckBox::stateChanged, owner->q,
-			[this, owner]( int v ) {
-				const auto oldText = owner->q->text();
-				owner->m_font.setItalic( ( v == Qt::Checked ) );
-				owner->q->page()->emitChanged();
-
-				owner->q->page()->undoStack()->push( new UndoChangeTextWithOpts( owner->q->page(),
-					owner->q->objectId(), oldText, owner->q->text() ) );
-
-				owner->q->update();
-			} );
-
-		connect( m_ui.m_underline,
-			&QCheckBox::stateChanged, owner->q,
-			[this, owner]( int v ) {
-				const auto oldText = owner->q->text();
-				owner->m_font.setUnderline( ( v == Qt::Checked ) );
-				owner->q->page()->emitChanged();
-
-				owner->q->page()->undoStack()->push( new UndoChangeTextWithOpts( owner->q->page(),
-					owner->q->objectId(), oldText, owner->q->text() ) );
-
-				owner->q->update();
-			} );
 	}
 
 	//! Disconnect properties signals/slots.

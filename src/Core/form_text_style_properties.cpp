@@ -21,8 +21,7 @@
 */
 
 // Prototyper include.
-#include "form_text_properties.hpp"
-#include "ui_form_text_properties.h"
+#include "form_text_style_properties.hpp"
 #include "utils.hpp"
 
 // Qt include.
@@ -36,28 +35,37 @@ namespace Prototyper {
 namespace Core {
 
 //
-// FormTextProperties
+// FormTextStyleProperties
 //
 
-TextProperties::TextProperties( QWidget * parent )
+TextStyleProperties::TextStyleProperties( QWidget * parent )
 	:	QWidget( parent )
 {
 	m_ui.setupUi( this );
 }
 
-TextProperties::~TextProperties() = default;
+TextStyleProperties::~TextStyleProperties() = default;
 
-Ui::TextProperties *
-TextProperties::ui()
+Ui::TextStyleProperties *
+TextStyleProperties::ui()
 {
 	return &m_ui;
 }
 
 void
-TextProperties::disconnectProperties()
+TextStyleProperties::disconnectProperties()
 {
-	FormCheckBox::disconnect( m_ui.m_text,
-		&QLineEdit::textChanged, nullptr, nullptr );
+	FormCheckBox::disconnect( m_ui.m_size,
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
+
+	FormCheckBox::disconnect( m_ui.m_bold,
+		&QCheckBox::stateChanged, nullptr, nullptr );
+
+	FormCheckBox::disconnect( m_ui.m_italic,
+		&QCheckBox::stateChanged, nullptr, nullptr );
+
+	FormCheckBox::disconnect( m_ui.m_underline,
+		&QCheckBox::stateChanged, nullptr, nullptr );
 }
 
 } /* namespace Core */

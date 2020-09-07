@@ -32,6 +32,7 @@
 #include "form_checkbox_properties.hpp"
 #include "form_text_properties.hpp"
 #include "form_object_properties.hpp"
+#include "form_text_style_properties.hpp"
 
 
 namespace Prototyper {
@@ -79,6 +80,8 @@ public:
 	QPointer< ObjectProperties > m_objProps;
 	//! Text properties.
 	QPointer< TextProperties > m_textProps;
+	//! Text properties.
+	QPointer< TextStyleProperties > m_textStyleProps;
 	//! Check properties.
 	QPointer< CheckBoxProperties > m_checkProps;
 }; // class FormCheckBoxPrivate

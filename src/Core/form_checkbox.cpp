@@ -29,10 +29,10 @@
 #include "form_undo_commands.hpp"
 #include "form_actions.hpp"
 #include "form_checkbox_private.hpp"
-#include "ui_form_checkbox_properties.h"
 #include "constants.hpp"
 #include "ui_form_object_properties.h"
 #include "ui_form_text_properties.h"
+#include "ui_form_text_style_properties.h"
 #include "ui_form_checkbox_properties.h"
 
 // Qt include.
@@ -115,6 +115,7 @@ FormCheckBoxPrivate::connectProperties()
 	{
 		m_objProps->connectProperties();
 		m_textProps->connectProperties( this );
+		m_textStyleProps->connectProperties( this );
 		m_checkProps->connectProperties( this );
 	}
 }
@@ -126,6 +127,7 @@ FormCheckBoxPrivate::disconnectProperties()
 	{
 		m_objProps->disconnectProperties();
 		m_textProps->disconnectProperties();
+		m_textStyleProps->disconnectProperties();
 		m_checkProps->disconnectProperties();
 	}
 }
@@ -352,10 +354,10 @@ FormCheckBox::setText( const Cfg::TextStyle & c )
 	{
 		d->disconnectProperties();
 		d->m_textProps->ui()->m_text->setText( d->m_text );
-		d->m_textProps->ui()->m_size->setValue( qRound( c.fontSize() ) );
-		d->m_textProps->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
-		d->m_textProps->ui()->m_italic->setChecked( d->m_font.italic() );
-		d->m_textProps->ui()->m_underline->setChecked( d->m_font.underline() );
+		d->m_textStyleProps->ui()->m_size->setValue( qRound( c.fontSize() ) );
+		d->m_textStyleProps->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
+		d->m_textStyleProps->ui()->m_italic->setChecked( d->m_font.italic() );
+		d->m_textStyleProps->ui()->m_underline->setChecked( d->m_font.underline() );
 		d->connectProperties();
 	}
 
@@ -469,11 +471,13 @@ FormCheckBox::properties( QWidget * parent )
 	d->m_props = new QWidget( parent );
 	d->m_objProps = new ObjectProperties( this, parent );
 	d->m_textProps = new TextProperties( parent );
+	d->m_textStyleProps = new TextStyleProperties( parent );
 	d->m_checkProps = new CheckBoxProperties( parent );
 
 	QVBoxLayout * l = new QVBoxLayout( d->m_props );
 	l->addWidget( d->m_objProps );
 	l->addWidget( d->m_textProps );
+	l->addWidget( d->m_textStyleProps );
 	l->addWidget( d->m_checkProps );
 	l->addSpacerItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
@@ -483,10 +487,10 @@ FormCheckBox::properties( QWidget * parent )
 	d->m_objProps->ui()->m_height->setValue( d->m_rect.height() );
 
 	d->m_textProps->ui()->m_text->setText( d->m_text );
-	d->m_textProps->ui()->m_size->setValue( qRound( MmPx::instance().toPtY( d->m_font.pixelSize() ) ) );
-	d->m_textProps->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
-	d->m_textProps->ui()->m_italic->setChecked( d->m_font.italic() );
-	d->m_textProps->ui()->m_underline->setChecked( d->m_font.underline() );
+	d->m_textStyleProps->ui()->m_size->setValue( qRound( MmPx::instance().toPtY( d->m_font.pixelSize() ) ) );
+	d->m_textStyleProps->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
+	d->m_textStyleProps->ui()->m_italic->setChecked( d->m_font.italic() );
+	d->m_textStyleProps->ui()->m_underline->setChecked( d->m_font.underline() );
 
 	d->m_checkProps->ui()->m_checked->setChecked( d->m_checked );
 
