@@ -35,49 +35,28 @@ namespace Prototyper {
 namespace Core {
 
 //
-// SpinBoxPropertiesPrivate
-//
-
-class SpinBoxPropertiesPrivate {
-public:
-	explicit SpinBoxPropertiesPrivate( SpinBoxProperties * parent )
-		:	q( parent )
-	{
-	}
-
-	//! Init.
-	void init();
-
-	//! Parent.
-	SpinBoxProperties * q;
-	//! Ui.
-	Ui::SpinBoxProperties m_ui;
-}; // class SpinBoxPropertiesPrivate
-
-void
-SpinBoxPropertiesPrivate::init()
-{
-	m_ui.setupUi( q );
-}
-
-
-//
 // SpinBoxProperties
 //
 
 SpinBoxProperties::SpinBoxProperties( QWidget * parent )
 	:	QWidget( parent )
-	,	d( new SpinBoxPropertiesPrivate( this ) )
 {
-	d->init();
+	m_ui.setupUi( this );
 }
 
 SpinBoxProperties::~SpinBoxProperties() = default;
 
 Ui::SpinBoxProperties *
-SpinBoxProperties::ui() const
+SpinBoxProperties::ui()
 {
-	return &d->m_ui;
+	return &m_ui;
+}
+
+void
+SpinBoxProperties::disconnectProperties()
+{
+	disconnect( m_ui.m_value,
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 }
 
 } /* namespace Core */

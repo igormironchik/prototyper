@@ -390,9 +390,9 @@ QWidget *
 FormButton::properties( QWidget * parent )
 {
 	d->m_props = new QWidget( parent );
-	d->m_objProps = new ObjectProperties( this, parent );
-	d->m_textProps = new TextProperties( parent );
-	d->m_textStyleProps = new TextStyleProperties( parent );
+	d->m_objProps = new ObjectProperties( this, d->m_props );
+	d->m_textProps = new TextProperties( d->m_props );
+	d->m_textStyleProps = new TextStyleProperties( d->m_props );
 
 	QVBoxLayout * l = new QVBoxLayout( d->m_props );
 	l->addWidget( d->m_objProps );

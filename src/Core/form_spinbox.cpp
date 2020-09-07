@@ -29,6 +29,10 @@
 #include "form_actions.hpp"
 #include "ui_form_spinbox_properties.h"
 #include "constants.hpp"
+#include "ui_form_object_properties.h"
+#include "ui_form_text_style_properties.h"
+#include "form_text_style_properties.hpp"
+#include "form_object_properties.hpp"
 
 // Qt include.
 #include <QPainter>
@@ -39,6 +43,8 @@
 #include <QAction>
 #include <QUndoStack>
 #include <QGraphicsScene>
+#include <QVBoxLayout>
+#include <QSpacerItem>
 
 
 namespace Prototyper {
@@ -80,7 +86,13 @@ public:
 	//! Text.
 	QString m_text;
 	//! Properties.
-	QPointer< SpinBoxProperties > m_properties;
+	QPointer< QWidget > m_properties;
+	//! Object properties.
+	QPointer< ObjectProperties > m_objProps;
+	//! Spinbox properties.
+	QPointer< SpinBoxProperties > m_spinProps;
+	//! Text style properties.
+	QPointer< TextStyleProperties > m_textStyleProps;
 }; // class FormSpinBoxPrivate
 
 void
@@ -119,104 +131,9 @@ FormSpinBoxPrivate::connectProperties()
 {
 	if( m_properties )
 	{
-		FormSpinBox::connect( m_properties->ui()->m_x,
-			QOverload< int >::of( &QSpinBox::valueChanged ), q,
-			[this]( int v ) {
-				q->setPosition( QPointF( v, q->position().y() ) );
-				q->page()->emitChanged();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_y,
-			QOverload< int >::of( &QSpinBox::valueChanged ), q,
-			[this]( int v ) {
-				q->setPosition( QPointF( q->position().x(), v ) );
-				q->page()->emitChanged();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_width,
-			QOverload< int >::of( &QSpinBox::valueChanged ), q,
-			[this]( int v ) {
-				QRectF r = m_rect;
-				r.setWidth( v );
-				r.moveTopLeft( q->position() );
-				q->setRectangle( r, true );
-				q->page()->emitChanged();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_height,
-			QOverload< int >::of( &QSpinBox::valueChanged ), q,
-			[this]( int v ) {
-				QRectF r = m_rect;
-				r.setHeight( v );
-				r.moveTopLeft( q->position() );
-				q->setRectangle( r, true );
-				q->page()->emitChanged();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_value,
-			QOverload< int >::of( &QSpinBox::valueChanged ), q,
-			[this]( int v ) {
-				const auto oldText = q->text();
-				m_text = QString::number( v );
-				q->page()->emitChanged();
-
-				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
-					q->objectId(), oldText, q->text() ) );
-
-				q->update();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ), q,
-			[this]( int v ) {
-				const auto oldText = q->text();
-				m_font.setPixelSize( MmPx::instance().fromPtY( v ) );
-				q->page()->emitChanged();
-
-				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
-					q->objectId(), oldText, q->text() ) );
-
-				q->update();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_bold,
-			&QCheckBox::stateChanged, q,
-			[this]( int v ) {
-				const auto oldText = q->text();
-				m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
-				q->page()->emitChanged();
-
-				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
-					q->objectId(), oldText, q->text() ) );
-
-				q->update();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_italic,
-			&QCheckBox::stateChanged, q,
-			[this]( int v ) {
-				const auto oldText = q->text();
-				m_font.setItalic( ( v == Qt::Checked ) );
-				q->page()->emitChanged();
-
-				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
-					q->objectId(), oldText, q->text() ) );
-
-				q->update();
-			} );
-
-		FormSpinBox::connect( m_properties->ui()->m_underline,
-			&QCheckBox::stateChanged, q,
-			[this]( int v ) {
-				const auto oldText = q->text();
-				m_font.setUnderline( ( v == Qt::Checked ) );
-				q->page()->emitChanged();
-
-				q->page()->undoStack()->push( new UndoChangeTextWithOpts( q->page(),
-					q->objectId(), oldText, q->text() ) );
-
-				q->update();
-			} );
+		m_objProps->connectProperties();
+		m_spinProps->connectProperties( this );
+		m_textStyleProps->connectProperties( this );
 	}
 }
 
@@ -225,32 +142,9 @@ FormSpinBoxPrivate::disconnectProperties()
 {
 	if( m_properties )
 	{
-		FormSpinBox::disconnect( m_properties->ui()->m_x,
-			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_y,
-			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_width,
-			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_height,
-			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_value,
-			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_size,
-			QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_bold,
-			&QCheckBox::stateChanged, nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_italic,
-			&QCheckBox::stateChanged, nullptr, nullptr );
-
-		FormSpinBox::disconnect( m_properties->ui()->m_underline,
-			&QCheckBox::stateChanged, nullptr, nullptr );
+		m_objProps->disconnectProperties();
+		m_spinProps->disconnectProperties();
+		m_textStyleProps->disconnectProperties();
 	}
 }
 
@@ -276,10 +170,10 @@ FormSpinBox::updatePropertiesValues()
 	if( d->m_properties )
 	{
 		d->disconnectProperties();
-		d->m_properties->ui()->m_x->setValue( position().x() );
-		d->m_properties->ui()->m_y->setValue( position().y() );
-		d->m_properties->ui()->m_width->setValue( rectangle().width() );
-		d->m_properties->ui()->m_height->setValue( rectangle().height() );
+		d->m_objProps->ui()->m_x->setValue( position().x() );
+		d->m_objProps->ui()->m_y->setValue( position().y() );
+		d->m_objProps->ui()->m_width->setValue( rectangle().width() );
+		d->m_objProps->ui()->m_height->setValue( rectangle().height() );
 		d->connectProperties();
 	}
 }
@@ -473,11 +367,11 @@ FormSpinBox::setText( const Cfg::TextStyle & c )
 	if( d->m_properties )
 	{
 		d->disconnectProperties();
-		d->m_properties->ui()->m_value->setValue( d->m_text.toInt() );
-		d->m_properties->ui()->m_size->setValue( qRound( c.fontSize() ) );
-		d->m_properties->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
-		d->m_properties->ui()->m_italic->setChecked( d->m_font.italic() );
-		d->m_properties->ui()->m_underline->setChecked( d->m_font.underline() );
+		d->m_spinProps->ui()->m_value->setValue( d->m_text.toInt() );
+		d->m_textStyleProps->ui()->m_size->setValue( qRound( c.fontSize() ) );
+		d->m_textStyleProps->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
+		d->m_textStyleProps->ui()->m_italic->setChecked( d->m_font.italic() );
+		d->m_textStyleProps->ui()->m_underline->setChecked( d->m_font.underline() );
 		d->connectProperties();
 	}
 
@@ -502,8 +396,8 @@ FormSpinBox::setPosition( const QPointF & pos, bool pushUndoCommand )
 	if( d->m_properties )
 	{
 		d->disconnectProperties();
-		d->m_properties->ui()->m_x->setValue( pos.x() );
-		d->m_properties->ui()->m_y->setValue( pos.y() );
+		d->m_objProps->ui()->m_x->setValue( pos.x() );
+		d->m_objProps->ui()->m_y->setValue( pos.y() );
 		d->connectProperties();
 	}
 
@@ -536,8 +430,8 @@ FormSpinBox::setRectangle( const QRectF & rect,
 	if( d->m_properties )
 	{
 		d->disconnectProperties();
-		d->m_properties->ui()->m_width->setValue( rect.width() );
-		d->m_properties->ui()->m_height->setValue( rect.height() );
+		d->m_objProps->ui()->m_width->setValue( rect.width() );
+		d->m_objProps->ui()->m_height->setValue( rect.height() );
 		d->connectProperties();
 	}
 
@@ -569,20 +463,29 @@ FormSpinBox::defaultSize() const
 QWidget *
 FormSpinBox::properties( QWidget * parent )
 {
-	d->m_properties = new SpinBoxProperties( parent );
+	d->m_properties = new QWidget( parent );
+	d->m_objProps = new ObjectProperties( this, d->m_properties );
+	d->m_spinProps = new SpinBoxProperties( d->m_properties );
+	d->m_textStyleProps = new TextStyleProperties( d->m_properties );
 
-	d->m_properties->ui()->m_x->setValue( pos().x() );
-	d->m_properties->ui()->m_y->setValue( pos().y() );
-	d->m_properties->ui()->m_width->setValue( d->m_rect.width() );
-	d->m_properties->ui()->m_height->setValue( d->m_rect.height() );
-	d->m_properties->ui()->m_value->setValue( d->m_text.toInt() );
-	d->m_properties->ui()->m_size->setValue( qRound( MmPx::instance().toPtY( d->m_font.pixelSize() ) ) );
-	d->m_properties->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
-	d->m_properties->ui()->m_italic->setChecked( d->m_font.italic() );
-	d->m_properties->ui()->m_underline->setChecked( d->m_font.underline() );
+	auto * l = new QVBoxLayout( d->m_properties );
+	l->addWidget( d->m_objProps );
+	l->addWidget( d->m_spinProps );
+	l->addWidget( d->m_textStyleProps );
+	l->addSpacerItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
 
-	d->m_properties->ui()->m_width->setMinimum( defaultSize().width() );
-	d->m_properties->ui()->m_height->setMinimum( defaultSize().height() );
+	d->m_objProps->ui()->m_x->setValue( pos().x() );
+	d->m_objProps->ui()->m_y->setValue( pos().y() );
+	d->m_objProps->ui()->m_width->setValue( d->m_rect.width() );
+	d->m_objProps->ui()->m_height->setValue( d->m_rect.height() );
+	d->m_spinProps->ui()->m_value->setValue( d->m_text.toInt() );
+	d->m_textStyleProps->ui()->m_size->setValue( qRound( MmPx::instance().toPtY( d->m_font.pixelSize() ) ) );
+	d->m_textStyleProps->ui()->m_bold->setChecked( d->m_font.weight() == QFont::Bold );
+	d->m_textStyleProps->ui()->m_italic->setChecked( d->m_font.italic() );
+	d->m_textStyleProps->ui()->m_underline->setChecked( d->m_font.underline() );
+
+	d->m_objProps->ui()->m_width->setMinimum( defaultSize().width() );
+	d->m_objProps->ui()->m_height->setMinimum( defaultSize().height() );
 
 	d->connectProperties();
 

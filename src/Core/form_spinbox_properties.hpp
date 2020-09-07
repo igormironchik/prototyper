@@ -25,14 +25,11 @@
 
 // Qt include.
 #include <QWidget>
-#include <QScopedPointer>
 
 // Prototyper include.
 #include "project_cfg.hpp"
-
-namespace Ui {
-	class SpinBoxProperties;
-}
+#include "ui_form_spinbox_properties.h"
+#include "form_undo_commands.hpp"
 
 
 namespace Prototyper {
@@ -42,8 +39,6 @@ namespace Core {
 //
 // SpinBoxProperties
 //
-
-class SpinBoxPropertiesPrivate;
 
 //! Properties of the spinbox on the form.
 class SpinBoxProperties
@@ -55,12 +50,34 @@ public:
 	SpinBoxProperties( QWidget * parent = nullptr );
 	~SpinBoxProperties();
 
-	Ui::SpinBoxProperties * ui() const;
+	Ui::SpinBoxProperties * ui();
+
+	//! Connect properties signals/slots.
+	template< typename T >
+	void connectProperties( T * owner )
+	{
+		connect( m_ui.m_value,
+			QOverload< int >::of( &QSpinBox::valueChanged ), owner->q,
+			[this, owner]( int v ) {
+				const auto oldText = owner->q->text();
+				owner->m_text = QString::number( v );
+				owner->q->page()->emitChanged();
+
+				owner->q->page()->undoStack()->push( new UndoChangeTextWithOpts( owner->q->page(),
+					owner->q->objectId(), oldText, owner->q->text() ) );
+
+				owner->q->update();
+			} );
+	}
+
+	//! Disconnect properties signals/slots.
+	void disconnectProperties();
 
 private:
 	Q_DISABLE_COPY( SpinBoxProperties )
 
-	QScopedPointer< SpinBoxPropertiesPrivate > d;
+	//! Ui.
+	Ui::SpinBoxProperties m_ui;
 }; // class SpinBoxProperties
 
 } /* namespace Core */

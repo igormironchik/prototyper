@@ -44,8 +44,6 @@ namespace Core {
 // FormTextStyleProperties
 //
 
-class TextStylePropertiesPrivate;
-
 //! Properties of the Text on the form.
 class TextStyleProperties
 	:	public QWidget
