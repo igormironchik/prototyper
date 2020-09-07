@@ -164,3 +164,5 @@ FORMS +=	grid_step_dlg.ui \
 
 INCLUDEPATH += $$PWD/../../3rdparty/cfgfile
 DEPENDPATH += $$PWD/../../3rdparty/cfgfile
+
+OTHER_FILES += version.hpp.in
