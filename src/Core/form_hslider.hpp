@@ -44,21 +44,21 @@ namespace Core {
 class FormHSliderPrivate;
 
 //! Horizontal slider on the form.
-class FormHSlider
+class FormHSlider final
 	:	public QGraphicsItem
 	,	public FormObject
 	,	public FormResizable
 {
 public:
 	FormHSlider( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
-	~FormHSlider();
+	~FormHSlider() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
 		{ return HSliderType; }
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	static void draw( QPainter * painter, const QRectF & rect,
 		const QPen & pen, int dpi = 0 );
@@ -66,29 +66,24 @@ public:
 	static qreal boxHeight( int dpi = 0 );
 
 	//! Set pen.
-	void setObjectPen( const QPen & p,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
 
 	//! \return Cfg.
 	Cfg::HSlider cfg() const;
 	//! Set cfg.
 	void setCfg( const Cfg::HSlider & c );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
-
+	QRectF rectangle() const override;
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
 
 	//! \return Default size.
 	virtual QSizeF defaultSize() const override;
@@ -98,9 +93,9 @@ public:
 
 protected:
 	//! Resize.
-	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
+	void resize( const QRectF & rect ) override;
 	//! Move resizable.
-	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
+	void moveResizable( const QPointF & delta ) override;
 
 private:
 	friend class FormHSliderPrivate;

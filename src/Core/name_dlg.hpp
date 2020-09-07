@@ -39,7 +39,7 @@ namespace Core {
 class NameDlgPrivate;
 
 //! Name dialog.
-class NameDlg
+class NameDlg final
 	:	public QDialog
 {
 	Q_OBJECT

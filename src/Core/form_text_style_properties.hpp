@@ -45,14 +45,14 @@ namespace Core {
 //
 
 //! Properties of the Text on the form.
-class TextStyleProperties
+class TextStyleProperties final
 	:	public QWidget
 {
 	Q_OBJECT
 
 public:
 	TextStyleProperties( QWidget * parent = Q_NULLPTR );
-	~TextStyleProperties();
+	~TextStyleProperties() override;
 
 	Ui::TextStyleProperties * ui();
 

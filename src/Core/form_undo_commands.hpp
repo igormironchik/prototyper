@@ -65,7 +65,7 @@ namespace Core {
 
 //! Undo create.
 template< class Elem, class Config >
-class UndoCreate
+class UndoCreate final
 	:	public QUndoCommand
 {
 public:
@@ -77,7 +77,7 @@ public:
 	{
 	}
 
-	void undo() Q_DECL_OVERRIDE
+	void undo() override
 	{
 		m_undone = true;
 
@@ -108,7 +108,7 @@ public:
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 
-	void redo() Q_DECL_OVERRIDE
+	void redo() override
 	{
 		if( m_undone )
 		{
@@ -140,7 +140,7 @@ private:
 
 //! Undo create.
 template<>
-class UndoCreate< FormText, Cfg::Text >
+class UndoCreate< FormText, Cfg::Text > final
 	:	public QUndoCommand
 {
 public:
@@ -159,7 +159,7 @@ public:
 			m_doc->deleteLater();
 	}
 
-	void undo() Q_DECL_OVERRIDE
+	void undo() override
 	{
 		m_undone = true;
 
@@ -181,7 +181,7 @@ public:
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 
-	void redo() Q_DECL_OVERRIDE
+	void redo() override
 	{
 		if( m_undone )
 		{
@@ -223,7 +223,7 @@ private:
 //
 
 //! Undo move.
-class UndoMove
+class UndoMove final
 	:	public QUndoCommand
 {
 public:
@@ -236,7 +236,7 @@ public:
 	{
 	}
 
-	void undo() Q_DECL_OVERRIDE
+	void undo() override
 	{
 		m_undone = true;
 
@@ -248,7 +248,7 @@ public:
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 
-	void redo() Q_DECL_OVERRIDE
+	void redo() override
 	{
 		if( m_undone )
 		{
@@ -278,7 +278,7 @@ private:
 //
 
 //! Undo resize.
-class UndoResize
+class UndoResize final
 	:	public QUndoCommand
 {
 public:
@@ -293,7 +293,7 @@ public:
 	{
 	}
 
-	void undo() Q_DECL_OVERRIDE
+	void undo() override
 	{
 		m_undone = true;
 
@@ -305,7 +305,7 @@ public:
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 
-	void redo() Q_DECL_OVERRIDE
+	void redo() override
 	{
 		if( m_undone )
 		{
@@ -338,7 +338,7 @@ private:
 
 //! Undo delete.
 template< class Elem, class Config >
-class UndoDelete
+class UndoDelete final
 	:	public QUndoCommand
 {
 public:
@@ -350,7 +350,7 @@ public:
 	{
 	}
 
-	void undo() Q_DECL_OVERRIDE
+	void undo() override
 	{
 		m_undone = true;
 
@@ -362,7 +362,7 @@ public:
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 
-	void redo() Q_DECL_OVERRIDE
+	void redo() override
 	{
 		if( m_undone )
 		{
@@ -408,7 +408,7 @@ private:
 
 //! Undo delete.
 template<>
-class UndoDelete< FormText, Cfg::Text >
+class UndoDelete< FormText, Cfg::Text > final
 	:	public QUndoCommand
 {
 public:
@@ -438,7 +438,7 @@ public:
 			m_doc->deleteLater();
 	}
 
-	void undo() Q_DECL_OVERRIDE
+	void undo() override
 	{
 		m_undone = true;
 
@@ -460,7 +460,7 @@ public:
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 
-	void redo() Q_DECL_OVERRIDE
+	void redo() override
 	{
 		if( m_undone )
 		{
@@ -500,15 +500,15 @@ private:
 //
 
 //! Undo group.
-class UndoGroup
+class UndoGroup final
 	:	public QUndoCommand
 {
 public:
 	UndoGroup( Page * form, const QString & id );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Form.
@@ -527,16 +527,16 @@ private:
 //
 
 //! Undo ungroup.
-class UndoUngroup
+class UndoUngroup final
 	:	public QUndoCommand
 {
 public:
 	UndoUngroup( const QStringList & items,
 		const QString & groupId, Page * form );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Items.
@@ -555,16 +555,16 @@ private:
 //
 
 //! Undo adding line to polyline.
-class UndoAddLineToPoly
+class UndoAddLineToPoly final
 	:	public QUndoCommand
 {
 public:
 	UndoAddLineToPoly( Page * form,
 		const QString & id, const QLineF & line );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Line.
@@ -583,16 +583,16 @@ private:
 //
 
 //! Undo change line.
-class UndoChangeLine
+class UndoChangeLine final
 	:	public QUndoCommand
 {
 public:
 	UndoChangeLine( Page * form, const QString & id, const QLineF & oldLine,
 		const QLineF & newLine );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Form.
@@ -613,16 +613,16 @@ private:
 //
 
 //! Undo changing of pen.
-class UndoChangePen
+class UndoChangePen final
 	:	public QUndoCommand
 {
 public:
 	UndoChangePen( Page * form, const QString & id, const QPen & oldPen,
 		const QPen & newPen );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Form.
@@ -643,16 +643,16 @@ private:
 //
 
 //! Undo changing of brush.
-class UndoChangeBrush
+class UndoChangeBrush final
 	:	public QUndoCommand
 {
 public:
 	UndoChangeBrush( Page * form, const QString & id, const QBrush & oldBrush,
 		const QBrush & newBrush );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Form.
@@ -673,15 +673,15 @@ private:
 //
 
 //! Undo text changing on the form.
-class UndoChangeTextOnForm
+class UndoChangeTextOnForm final
 	:	public QUndoCommand
 {
 public:
 	UndoChangeTextOnForm( Page * form, const QString & id );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Form.
@@ -698,16 +698,16 @@ private:
 //
 
 //! Undo changing text with options.
-class UndoChangeTextWithOpts
+class UndoChangeTextWithOpts final
 	:	public QUndoCommand
 {
 public:
 	UndoChangeTextWithOpts( Page * form, const QString & id,
 		const Cfg::TextStyle & oldOpts, const Cfg::TextStyle & newOpts );
 
-	void undo() Q_DECL_OVERRIDE;
+	void undo() override;
 
-	void redo() Q_DECL_OVERRIDE;
+	void redo() override;
 
 private:
 	//! Set text options.
@@ -732,7 +732,7 @@ private:
 //
 
 //! Undo changing of check state.
-class UndoChangeCheckState
+class UndoChangeCheckState final
 	:	public QUndoCommand
 {
 public:
@@ -762,7 +762,7 @@ private:
 //
 
 //! Undo duplicate.
-class UndoDuplicate
+class UndoDuplicate final
 	:	public QUndoCommand
 {
 public:

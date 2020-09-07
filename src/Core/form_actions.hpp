@@ -46,7 +46,7 @@ class Page;
 class PageActionPrivate;
 
 //! Page action - is a singleton with current page mode and so on...
-class PageAction
+class PageAction final
 	:	public QObject
 {
 	Q_OBJECT

@@ -59,7 +59,7 @@ minMaxZ( const QList< QGraphicsItem* > & items );
 // MmPx
 //
 
-class MmPx {
+class MmPx final {
 public:
 	static const MmPx & instance();
 

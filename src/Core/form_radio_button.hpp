@@ -36,7 +36,7 @@ namespace Core {
 //
 
 //! Radio button on the form.
-class FormRadioButton
+class FormRadioButton final
 	:	public FormCheckBox
 {
 	Q_OBJECT
@@ -44,14 +44,14 @@ class FormRadioButton
 public:
 	FormRadioButton( const QRectF & rect, Page * page,
 		QGraphicsItem * parent = 0 );
-	~FormRadioButton();
+	~FormRadioButton() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
 		{ return RadioButtonType; }
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	//! Draw radio button.
 	static void draw( QPainter * painter, const QPen & pen, const QBrush & brush,

@@ -49,7 +49,7 @@ class Page;
 //
 
 //! Storage of resize and move handles.
-class WithResizeAndMoveHandles {
+class WithResizeAndMoveHandles final {
 public:
 	WithResizeAndMoveHandles( FormWithHandle * object,
 		QGraphicsItem * parent, Page * form );

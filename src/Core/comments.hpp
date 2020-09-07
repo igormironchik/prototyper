@@ -45,18 +45,24 @@ class Comments final
 	Q_OBJECT
 
 public:
-	Comments( const QStringList & data, QWidget * parent = nullptr );
+	explicit Comments( const QStringList & data, QWidget * parent = nullptr );
 	~Comments() override;
 
+	//! \return List of comments.
 	QStringList comments() const;
 
 private slots:
+	//! Write comment.
 	void commit();
+	//! Cancel comment.
 	void cancel();
+	//! Context menu.
 	void contextMenuRequested( const QPoint & pos );
+	//! Section resized.
 	void sectionResized( int logicalIndex, int oldSize, int newSize );
 
 private:
+	//! Add new comment.
 	void addComment( const QString & c );
 
 private:

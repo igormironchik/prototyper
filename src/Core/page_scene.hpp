@@ -48,7 +48,7 @@ class Page;
 class PageScenePrivate;
 
 //! Page scene.
-class PageScene
+class PageScene final
 	:	public QGraphicsScene
 {
 	Q_OBJECT
@@ -59,7 +59,7 @@ signals:
 
 public:
 	PageScene( const Cfg::Page & c, QObject * parent = 0 );
-	~PageScene();
+	~PageScene() override;
 
 	//! \return Page.
 	Page * page() const;
@@ -73,13 +73,11 @@ public slots:
 	void enableSelection( bool on = true );
 
 protected:
-	void keyPressEvent( QKeyEvent * event )
-		Q_DECL_OVERRIDE;
+	void keyPressEvent( QKeyEvent * event ) override;
 	void mouseMoveEvent( QGraphicsSceneMouseEvent * event ) override;
 	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
 	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
 	void mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event ) override;
-
 
 private:
 	Q_DISABLE_COPY( PageScene )

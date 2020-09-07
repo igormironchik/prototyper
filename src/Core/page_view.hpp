@@ -48,7 +48,7 @@ class Page;
 class PageViewPrivate;
 
 //! Page view.
-class PageView
+class PageView final
 	:	public QGraphicsView
 {
 	Q_OBJECT
@@ -59,7 +59,7 @@ signals:
 
 public:
 	PageView( Cfg::Page & cfg, QWidget * parent = 0 );
-	~PageView();
+	~PageView() override;
 
 	//! \return Page scene.
 	PageScene * pageScene() const;

@@ -75,15 +75,15 @@ public:
 	FormMoveHandle( qreal halfSize, const QPointF & zero,
 		FormWithHandle * object, QGraphicsItem * parent,
 		Page * form, const QCursor & c = QCursor() );
-	~FormMoveHandle();
+	~FormMoveHandle() override;
 
 	//! \return Half of the size of the edge.
 	qreal halfOfSize() const;
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	//! Ignore mouse events.
 	void ignoreMouseEvents( bool on = true );
@@ -107,20 +107,13 @@ protected:
 	virtual void released( FormMoveHandle * handle );
 
 protected:
-	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void hoverMoveEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mousePressEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	bool eventFilter( QObject * watched, QEvent * event )
-		Q_DECL_OVERRIDE;
+	void hoverEnterEvent( QGraphicsSceneHoverEvent * event ) override;
+	void hoverMoveEvent( QGraphicsSceneHoverEvent * event ) override;
+	void hoverLeaveEvent( QGraphicsSceneHoverEvent * event ) override;
+	void mouseMoveEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
+	bool eventFilter( QObject * watched, QEvent * event ) override;
 
 protected:
 	FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > && dd,

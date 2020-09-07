@@ -47,14 +47,14 @@ class Page;
 class FormPolylinePrivate;
 
 //! Polyline on the form.
-class FormPolyline
+class FormPolyline final
 	:	public QGraphicsPathItem
 	,	public FormObject
 	,	public FormWithHandle
 {
 public:
 	explicit FormPolyline( Page * page, QGraphicsItem * parent = 0 );
-	~FormPolyline();
+	~FormPolyline() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
@@ -89,44 +89,36 @@ public:
 	QPointF pointUnderHandle( const QPointF & p, bool & intersected ) const;
 
 	//! Set pen.
-	void setObjectPen( const QPen & p,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
 	//! Set brush.
-	void setObjectBrush( const QBrush & b,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setObjectBrush( const QBrush & b, bool pushUndoCommand = true ) override;
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	//! Handle mouse move in handles.
 	void handleMouseMoveInHandles( const QPointF & p );
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
-
+	QRectF rectangle() const override;
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
 
 	//! Clone object.
 	FormObject * clone() const override;
 
 protected:
 	//! Handle moved.
-	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
-		Q_DECL_OVERRIDE;
+	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
 	//! Handle released.
-	void handleReleased( FormMoveHandle * handle ) Q_DECL_OVERRIDE;
+	void handleReleased( FormMoveHandle * handle ) override;
 
 private:
 	Q_DISABLE_COPY( FormPolyline )

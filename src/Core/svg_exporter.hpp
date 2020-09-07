@@ -38,7 +38,7 @@ namespace Core {
 class SvgExporterPrivate;
 
 //! Exporter to SVG.
-class SvgExporter
+class SvgExporter final
 	:	public Exporter
 {
 public:
@@ -46,15 +46,13 @@ public:
 	~SvgExporter();
 
 	//! Export documentation.
-	void exportToDoc( const QString & fileName )
-		Q_DECL_OVERRIDE;
+	void exportToDoc( const QString & fileName ) override;
 
 private:
 	inline const SvgExporterPrivate * d_ptr() const
 		{ return reinterpret_cast< const SvgExporterPrivate* > ( d.data() ); }
 	inline SvgExporterPrivate * d_ptr()
 		{ return reinterpret_cast< SvgExporterPrivate* > ( d.data() ); }
-
 
 private:
 	Q_DISABLE_COPY( SvgExporter )

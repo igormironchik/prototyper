@@ -39,7 +39,7 @@ namespace Core {
 class FormRectPlacerPrivate;
 
 //! Helper for placing rectangle items.
-class FormRectPlacer
+class FormRectPlacer final
 	:	public QGraphicsItem
 {
 public:
@@ -55,10 +55,10 @@ public:
 	//! Set end pos.
 	void setEndPos( const QPointF & pos );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 private:
 	Q_DISABLE_COPY( FormRectPlacer )

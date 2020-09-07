@@ -39,7 +39,7 @@ namespace Core {
 class GridStepDlgPrivate;
 
 //! Grid step dialog.
-class GridStepDlg
+class GridStepDlg final
 	:	public QDialog
 {
 	Q_OBJECT

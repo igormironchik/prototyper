@@ -39,32 +39,28 @@ namespace Core {
 class AspectRatioHandlePrivate;
 
 //! Aspect ratio handle.
-class AspectRatioHandle
+class AspectRatioHandle final
 	:	public QGraphicsItem
 {
 public:
 	explicit AspectRatioHandle( QGraphicsItem * parent );
-	~AspectRatioHandle();
+	~AspectRatioHandle() override;
 
 	//! \return Is keep aspect ratio?
 	bool isKeepAspectRatio() const;
 	//! Set keep aspect ratio.
 	void setKeepAspectRatio( bool on = true );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 protected:
-	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void mousePressEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
+	void hoverEnterEvent( QGraphicsSceneHoverEvent * event ) override;
+	void hoverLeaveEvent( QGraphicsSceneHoverEvent * event ) override;
+	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
 
 private:
 	Q_DISABLE_COPY( AspectRatioHandle )

@@ -48,14 +48,14 @@ class FormObject;
 class ObjectPropertiesPrivate;
 
 //! Properties of the object on the form.
-class ObjectProperties
+class ObjectProperties final
 	:	public QWidget
 {
 	Q_OBJECT
 
 public:
 	explicit ObjectProperties( FormObject * obj, QWidget * parent = nullptr );
-	~ObjectProperties();
+	~ObjectProperties() override;
 
 	Ui::ObjectProperties * ui() const;
 

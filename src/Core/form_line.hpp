@@ -48,14 +48,14 @@ class FormLineMoveHandle;
 class FormLinePrivate;
 
 //! Line on the form.
-class FormLine
+class FormLine final
 	:	public QGraphicsLineItem
 	,	public FormObject
 	,	public FormWithHandle
 {
 public:
 	explicit FormLine( Page * page, QGraphicsItem * parent = 0 );
-	~FormLine();
+	~FormLine() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
@@ -66,14 +66,13 @@ public:
 	//! Set cfg.
 	void setCfg( const Cfg::Line & c );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	//! Set pen.
-	void setObjectPen( const QPen & p,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
 
 	//! Show handles.
 	void showHandles( bool show = true );
@@ -87,36 +86,28 @@ public:
 	bool handleMouseMoveInHandles( const QPointF & point );
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
-
+	QRectF rectangle() const override;
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
 
 	//! Clone object.
 	FormObject * clone() const override;
 
 protected:
 	//! Handle moved.
-	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
-		Q_DECL_OVERRIDE;
+	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
 	//! Handle released.
-	void handleReleased( FormMoveHandle * handle ) Q_DECL_OVERRIDE;
+	void handleReleased( FormMoveHandle * handle ) override;
 
 protected:
-	void mouseMoveEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mousePressEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
-		Q_DECL_OVERRIDE;
+	void mouseMoveEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
 
 protected:
 	friend class UndoChangeLine;

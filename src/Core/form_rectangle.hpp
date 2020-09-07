@@ -47,14 +47,14 @@ class Page;
 class FormRectPrivate;
 
 //! Rect on the form.
-class FormRect
+class FormRect final
 	:	public QGraphicsItem
 	,	public FormObject
 	,	public FormWithHandle
 {
 public:
 	explicit FormRect( Page * page, QGraphicsItem * parent = 0 );
-	~FormRect();
+	~FormRect() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
@@ -65,42 +65,34 @@ public:
 	//! Set cfg.
 	void setCfg( const Cfg::Rect & c );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! Set rect.
-	void setRectangle( const QRectF & r,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setRectangle( const QRectF & r, bool pushUndoCommand = true ) override;
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
+	QRectF rectangle() const override;
 
 	//! Set pen.
-	void setObjectPen( const QPen & p,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
 	//! Set brush.
-	void setObjectBrush( const QBrush & b,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setObjectBrush( const QBrush & b, bool pushUndoCommand = true ) override;
 
 	//! Clone object.
 	FormObject * clone() const override;
 
 protected:
 	//! Handle moved.
-	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
-		Q_DECL_OVERRIDE;
+	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
 	//! Handle released.
-	void handleReleased( FormMoveHandle * handle ) Q_DECL_OVERRIDE;
+	void handleReleased( FormMoveHandle * handle ) override;
 
 private:
 	Q_DISABLE_COPY( FormRect )

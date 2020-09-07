@@ -38,16 +38,15 @@ namespace Core {
 class HtmlExporterPrivate;
 
 //! Exporter to HTML.
-class HtmlExporter
+class HtmlExporter final
 	:	public Exporter
 {
 public:
 	explicit HtmlExporter( const Cfg::Project & project );
-	~HtmlExporter();
+	~HtmlExporter() override;
 
 	//! Export documentation.
-	void exportToDoc( const QString & fileName )
-		Q_DECL_OVERRIDE;
+	void exportToDoc( const QString & fileName ) override;
 
 private:
 	inline const HtmlExporterPrivate * d_ptr() const

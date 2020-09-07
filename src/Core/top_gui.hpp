@@ -45,7 +45,7 @@ class ProjectWindow;
 class TopGuiPrivate;
 
 //! Singleton for top GUI components.
-class PROTOTYPER_CORE_EXPORT TopGui
+class PROTOTYPER_CORE_EXPORT TopGui final
 	:	public QObject
 {
 	Q_OBJECT

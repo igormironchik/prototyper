@@ -45,18 +45,17 @@ class TextEditor;
 class ProjectDescTabPrivate;
 
 //! Tab with text description of the project.
-class ProjectDescTab
+class ProjectDescTab final
 	:	public QWidget
 {
 	Q_OBJECT
 
 public:
 	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
-	~ProjectDescTab();
+	~ProjectDescTab() override;
 
 	//! \return Tool bar.
 	QToolBar * toolBar() const;
-
 	//! \return Text editor.
 	TextEditor * editor() const;
 

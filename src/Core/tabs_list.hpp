@@ -44,7 +44,7 @@ namespace Core {
 class TabsViewPrivate;
 
 //! Tabs list view.
-class TabsView
+class TabsView final
 	:	public QListView
 {
 	Q_OBJECT
@@ -57,11 +57,11 @@ signals:
 
 public:
 	explicit TabsView( QWidget * parent );
-	~TabsView();
+	~TabsView() override;
 
 protected:
-	 void keyPressEvent( QKeyEvent * event ) Q_DECL_OVERRIDE;
-	 void contextMenuEvent( QContextMenuEvent * event ) Q_DECL_OVERRIDE;
+	 void keyPressEvent( QKeyEvent * event ) override;
+	 void contextMenuEvent( QContextMenuEvent * event ) override;
 
 private slots:
 	 //! Activate tab.
@@ -89,14 +89,14 @@ private:
 class TabsListPrivate;
 
 //! Tabs list dock widget.
-class TabsList
+class TabsList final
 	:	public QDockWidget
 {
 	Q_OBJECT
 
 public:
 	TabsList( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
-	~TabsList();
+	~TabsList() override;
 
 	//! \return Model.
 	QStringListModel * model() const;

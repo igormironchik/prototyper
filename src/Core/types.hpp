@@ -35,9 +35,9 @@ namespace Core {
 //! Grid mode.
 enum GridMode {
 	//! Show grid.
-	ShowGrid,
+	ShowGrid = 1,
 	//! No grid.
-	NoGrid
+	NoGrid = 2
 }; // enum GridMode
 
 } /* namespace Core */

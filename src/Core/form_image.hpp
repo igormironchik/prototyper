@@ -47,14 +47,14 @@ class Page;
 class FormImagePrivate;
 
 //! Pixmap on the form.
-class FormImage
+class FormImage final
 	:	public QGraphicsPixmapItem
 	,	public FormObject
 	,	public FormResizable
 {
 public:
 	explicit FormImage( Page * page, QGraphicsItem * parent = 0 );
-	~FormImage();
+	~FormImage() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
@@ -71,30 +71,26 @@ public:
 	void setImage( const QImage & img );
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
-
+	QRectF rectangle() const override;
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
 
 	//! Clone object.
 	FormObject * clone() const override;
 
 protected:
 	//! Resize.
-	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
+	void resize( const QRectF & rect ) override;
 	//! Move resizable.
-	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
+	void moveResizable( const QPointF & delta ) override;
 
 private:
 	Q_DISABLE_COPY( FormImage )

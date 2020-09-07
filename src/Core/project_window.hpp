@@ -44,7 +44,7 @@ class PageView;
 class ProjectWindowPrivate;
 
 //! Main window with project.
-class ProjectWindow
+class ProjectWindow final
 	:	public QMainWindow
 {
 	Q_OBJECT
@@ -78,7 +78,7 @@ public slots:
 	void switchToSelectMode();
 
 protected:
-	void closeEvent( QCloseEvent * e ) Q_DECL_OVERRIDE;
+	void closeEvent( QCloseEvent * e ) override;
 
 private slots:
 	//! Quit.

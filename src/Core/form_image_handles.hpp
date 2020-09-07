@@ -38,20 +38,20 @@ namespace Core {
 class FormImageHandlesPrivate;
 
 //! Image handles.
-class FormImageHandles
+class FormImageHandles final
 	:	public FormResizableProxy
 {
 public:
 	FormImageHandles( FormResizable * resizable,
 		QGraphicsItem * parent, Page * form );
-	~FormImageHandles();
+	~FormImageHandles() override;
 
 	//! \return Is keep aspect ratio?
 	bool isKeepAspectRatio() const;
 	//! Set keep aspect ratio.
 	void setKeepAspectRatio( bool on = true );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 private:
 	inline const FormImageHandlesPrivate * d_ptr() const

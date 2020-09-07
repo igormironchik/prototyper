@@ -42,7 +42,7 @@ namespace Core {
 class TextEditorPrivate;
 
 //! Text editor.
-class TextEditor
+class TextEditor final
 	:	public QTextEdit
 {
 	Q_OBJECT
@@ -55,7 +55,7 @@ signals:
 
 public:
 	explicit TextEditor( QWidget * parent = 0 );
-	~TextEditor() Q_DECL_OVERRIDE;
+	~TextEditor() override;
 
 	//! \return Text.
 	std::vector< Cfg::TextStyle > text() const;

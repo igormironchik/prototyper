@@ -78,7 +78,7 @@ class GridSnap;
 //
 
 //! Page.
-class Page
+class Page final
 	:	public QGraphicsObject
 	,	public FormObject
 {
@@ -90,7 +90,7 @@ signals:
 
 public:
 	explicit Page( Cfg::Page & c, QGraphicsItem * parent = 0 );
-	~Page();
+	~Page() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
@@ -164,27 +164,23 @@ public:
 	void deleteItems( const QList< QGraphicsItem* > & items,
 		bool makeUndoCommand = true );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget ) Q_DECL_OVERRIDE;
+		QWidget * widget ) override;
 
 	static void draw( QPainter * painter, int width, int height,
 		int gridStep, bool drawGrid = true );
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
-
+	QRectF rectangle() const override;
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
 
 	//! Emit changed signal.
 	void emitChanged();
@@ -218,24 +214,15 @@ private slots:
 	void undoCommandInTextAdded();
 
 protected:
-	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
-		Q_DECL_OVERRIDE;
-	void mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
-		Q_DECL_OVERRIDE;
-	void mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
-		Q_DECL_OVERRIDE;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
-		Q_DECL_OVERRIDE;
-	void hoverEnterEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void hoverMoveEvent( QGraphicsSceneHoverEvent * event )
-		Q_DECL_OVERRIDE;
-	void dragEnterEvent( QGraphicsSceneDragDropEvent * event )
-		Q_DECL_OVERRIDE;
-	void dragMoveEvent( QGraphicsSceneDragDropEvent * event )
-		Q_DECL_OVERRIDE;
-	void dropEvent( QGraphicsSceneDragDropEvent * event )
-		Q_DECL_OVERRIDE;
+	void contextMenuEvent( QGraphicsSceneContextMenuEvent * event ) override;
+	void mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent ) override;
+	void mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent ) override;
+	void mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent ) override;
+	void hoverEnterEvent( QGraphicsSceneHoverEvent * event ) override;
+	void hoverMoveEvent( QGraphicsSceneHoverEvent * event ) override;
+	void dragEnterEvent( QGraphicsSceneDragDropEvent * event ) override;
+	void dragMoveEvent( QGraphicsSceneDragDropEvent * event ) override;
+	void dropEvent( QGraphicsSceneDragDropEvent * event ) override;
 
 protected:
 	friend class UndoAddLineToPoly;

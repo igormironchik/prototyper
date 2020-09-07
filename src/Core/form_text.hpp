@@ -47,7 +47,7 @@ class Page;
 class FormTextPrivate;
 
 //! Text on the form.
-class FormText
+class FormText final
 	:	public QGraphicsTextItem
 	,	public FormObject
 	,	public FormResizable
@@ -56,7 +56,7 @@ class FormText
 
 public:
 	FormText( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
-	~FormText();
+	~FormText() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
@@ -74,26 +74,20 @@ public:
 	void clearSelection();
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
-
+	QRectF rectangle() const override;
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
 
 	//! Set object's pen.
-	void setObjectPen( const QPen & p,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
 	//! \return Default size.
 	virtual QSizeF defaultSize() const override;
 
@@ -129,14 +123,14 @@ private slots:
 
 protected:
 	//! Resize.
-	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
+	void resize( const QRectF & rect ) override;
 	//! Move resizable.
-	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
+	void moveResizable( const QPointF & delta ) override;
 
 protected:
 	void focusInEvent( QFocusEvent * e ) override;
-	void keyPressEvent( QKeyEvent * e ) Q_DECL_OVERRIDE;
-	bool sceneEvent( QEvent * e ) Q_DECL_OVERRIDE;
+	void keyPressEvent( QKeyEvent * e ) override;
+	bool sceneEvent( QEvent * e ) override;
 	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
 	void keyReleaseEvent( QKeyEvent * event ) override;
 

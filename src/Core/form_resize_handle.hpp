@@ -45,10 +45,10 @@ public:
 	FormResizeHandle( qreal halfSize, const QPointF & zero,
 		qreal angle, FormWithHandle * object, QGraphicsItem * parent,
 		Page * form, const QCursor & c = Qt::SizeAllCursor );
-	~FormResizeHandle();
+	~FormResizeHandle() override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 private:
 	Q_DISABLE_COPY( FormResizeHandle )

@@ -39,7 +39,7 @@ namespace Core {
 class ProjectTabBarPrivate;
 
 //! Project's tab bar.
-class ProjectTabBar
+class ProjectTabBar final
 	:	public QTabBar
 {
 	Q_OBJECT
@@ -54,7 +54,7 @@ signals:
 
 public:
 	explicit ProjectTabBar( QWidget * parent = 0 );
-	~ProjectTabBar();
+	~ProjectTabBar() override;
 
 private slots:
 	//! Rename tab.
@@ -65,7 +65,7 @@ private slots:
 	void deleteForm();
 
 protected:
-	void contextMenuEvent( QContextMenuEvent * event ) Q_DECL_OVERRIDE;
+	void contextMenuEvent( QContextMenuEvent * event ) override;
 
 private:
 	Q_DISABLE_COPY( ProjectTabBar )

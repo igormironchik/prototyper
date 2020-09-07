@@ -41,14 +41,14 @@ namespace Core {
 //
 
 //! Properties of the checkbox on the form.
-class CheckBoxProperties
+class CheckBoxProperties final
 	:	public QWidget
 {
 	Q_OBJECT
 
 public:
 	CheckBoxProperties( QWidget * parent = Q_NULLPTR );
-	~CheckBoxProperties();
+	~CheckBoxProperties() override;
 
 	Ui::CheckBoxProperties * ui();
 

@@ -43,7 +43,7 @@ namespace Core {
 class TextOptsBarPrivate;
 
 //! Text editor's tool bar.
-class TextOptsBar
+class TextOptsBar final
 	:	public QToolBar
 {
 	Q_OBJECT
@@ -74,13 +74,15 @@ public:
 	//! Icon size.
 	enum IconSize {
 		//! Small.
-		Small,
+		Small = 1,
 		//! Large.
-		Large
+		Large = 2,
+		//! Without link
+		WithoutLink = Small
 	}; // enum IconSize
 
 	TextOptsBar( IconSize s = Large, QWidget * parent = 0 );
-	~TextOptsBar();
+	~TextOptsBar() override;
 
 public slots:
 	//! Update state of the buttons.

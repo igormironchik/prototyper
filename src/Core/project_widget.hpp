@@ -54,7 +54,7 @@ class ProjectWindow;
 class ProjectWidgetPrivate;
 
 //! Main widget with project.
-class ProjectWidget
+class ProjectWidget final
 	:	public QWidget
 {
 	Q_OBJECT
@@ -70,7 +70,7 @@ signals:
 public:
 	explicit ProjectWidget( Cfg::Project & cfg,
 		ProjectWindow * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
-	~ProjectWidget();
+	~ProjectWidget() override;
 
 	//! \return Pages.
 	const QList< PageView* > & pages() const;

@@ -97,28 +97,22 @@ public:
 	//! \return Pen.
 	virtual const QPen & objectPen() const;
 	//! Set pen.
-	virtual void setObjectPen( const QPen & p,
-		bool pushUndoCommand = true );
+	virtual void setObjectPen( const QPen & p, bool pushUndoCommand = true );
 
 	//! \return Brush.
 	virtual const QBrush & objectBrush() const;
 	//! Set brush.
-	virtual void setObjectBrush( const QBrush & b,
-		bool pushUndoCommand = true );
+	virtual void setObjectBrush( const QBrush & b, bool pushUndoCommand = true );
 
 	//! Position elements.
-	virtual void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true );
-
+	virtual void setPosition( const QPointF & pos, bool pushUndoCommand = true );
 	//! \return Position of the element.
 	virtual QPointF position() const = 0;
 
 	//! \return Rectangle of the element.
 	virtual QRectF rectangle() const = 0;
-
 	//! Set rectangle.
-	virtual void setRectangle( const QRectF & rect,
-		bool pushUndoCommand = true );
+	virtual void setRectangle( const QRectF & rect, bool pushUndoCommand = true );
 
 	//! \return Default size.
 	virtual QSizeF defaultSize() const;

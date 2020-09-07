@@ -48,7 +48,9 @@ class PageComment final
 	Q_OBJECT
 
 signals:
+	//! Show comments.
 	void showComments();
+	//! Comments changed.
 	void changed();
 
 public:
@@ -65,9 +67,12 @@ public:
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) override;
 
+	//! Set ID of the comments.
 	void setId( int id );
+	//! \return ID.
 	int id() const;
 
+	//! Is this comment under point.
 	bool isItYou( const QPointF & point ) const;
 
 	//! \return Is changed?

@@ -76,7 +76,7 @@ class PageComment;
 // PagePrivate
 //
 
-class PagePrivate {
+class PagePrivate final {
 public:
 	PagePrivate( Cfg::Page & cfg, Page * parent )
 		:	q( parent )

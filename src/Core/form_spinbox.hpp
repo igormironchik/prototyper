@@ -47,7 +47,7 @@ class TextWithOpts;
 class FormSpinBoxPrivate;
 
 //! Spinbox on the form.
-class FormSpinBox
+class FormSpinBox final
 	:	public QGraphicsObject
 	,	public FormObject
 	,	public FormResizable
@@ -56,14 +56,14 @@ class FormSpinBox
 
 public:
 	FormSpinBox( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
-	~FormSpinBox();
+	~FormSpinBox() override;
 
 	//! \return Type.
 	static ObjectType staticObjectType()
 		{ return SpinBoxType; }
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 	static void draw( QPainter * painter, const QRectF & rect,
 		const QPen & pen, const QBrush & brush, const QFont & font, const QString & text,
@@ -72,12 +72,9 @@ public:
 	static qreal boxHeight( int dpi = 0 );
 
 	//! Set pen.
-	void setObjectPen( const QPen & p,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
 	//! Set brush.
-	void setObjectBrush( const QBrush & b,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
+	void setObjectBrush( const QBrush & b, bool pushUndoCommand = true ) override;
 
 	//! \return Cfg.
 	Cfg::SpinBox cfg() const;
@@ -89,21 +86,17 @@ public:
 	//! Set text.
 	void setText( const Cfg::TextStyle & c );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	//! Position elements.
-	void setPosition( const QPointF & pos,
-		bool pushUndoCommand = true ) Q_DECL_OVERRIDE;
-
+	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
 	//! \return Position of the element.
-	QPointF position() const Q_DECL_OVERRIDE;
+	QPointF position() const override;
 
 	//! \return Rectangle of the element.
-	QRectF rectangle() const Q_DECL_OVERRIDE;
-
+	QRectF rectangle() const override;
 	//! Set rectangle.
-	void setRectangle( const QRectF & rect,
-		bool pushUndoCommand ) Q_DECL_OVERRIDE;
+	void setRectangle( const QRectF & rect, bool pushUndoCommand ) override;
 
 	//! \return Default size.
 	virtual QSizeF defaultSize() const override;
@@ -117,9 +110,9 @@ public:
 
 protected:
 	//! Resize.
-	void resize( const QRectF & rect ) Q_DECL_OVERRIDE;
+	void resize( const QRectF & rect ) override;
 	//! Move resizable.
-	void moveResizable( const QPointF & delta ) Q_DECL_OVERRIDE;
+	void moveResizable( const QPointF & delta ) override;
 
 private:
 	friend class FormSpinBoxPrivate;

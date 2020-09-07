@@ -41,14 +41,14 @@ namespace Core {
 //
 
 //! Properties of the spinbox on the form.
-class SpinBoxProperties
+class SpinBoxProperties final
 	:	public QWidget
 {
 	Q_OBJECT
 
 public:
 	SpinBoxProperties( QWidget * parent = nullptr );
-	~SpinBoxProperties();
+	~SpinBoxProperties() override;
 
 	Ui::SpinBoxProperties * ui();
 

@@ -39,7 +39,7 @@ namespace Core {
 class FormTextOptsPrivate;
 
 //! Toolbar with text options on the form.
-class FormTextOpts
+class FormTextOpts final
 	:	public QGraphicsProxyWidget
 {
 	Q_OBJECT
@@ -66,7 +66,7 @@ signals:
 
 public:
 	explicit FormTextOpts( QGraphicsItem * parent );
-	~FormTextOpts();
+	~FormTextOpts() override;
 
 public slots:
 	//! Update state of the buttons.

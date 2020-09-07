@@ -77,7 +77,7 @@ class FormResizableProxy
 public:
 	FormResizableProxy( FormResizable * resizable,
 		QGraphicsItem * parent, Page * form );
-	~FormResizableProxy();
+	~FormResizableProxy() override;
 
 	//! Set rect.
 	void setRect( const QRectF & rect );
@@ -85,10 +85,10 @@ public:
 	//! Set min size.
 	void setMinSize( const QSizeF & min );
 
-	QRectF boundingRect() const Q_DECL_OVERRIDE;
+	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) Q_DECL_OVERRIDE;
+		QWidget * widget = 0 ) override;
 
 protected:
 	FormResizableProxy( QScopedPointer< FormResizableProxyPrivate > && dd,
@@ -96,10 +96,9 @@ protected:
 
 protected:
 	//! Handle moved.
-	void handleMoved( const QPointF & delta, FormMoveHandle * handle )
-		Q_DECL_OVERRIDE;
+	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
 	//! Handle released.
-	void handleReleased( FormMoveHandle * handle ) Q_DECL_OVERRIDE;
+	void handleReleased( FormMoveHandle * handle ) override;
 
 protected:
 	QScopedPointer< FormResizableProxyPrivate > d;
