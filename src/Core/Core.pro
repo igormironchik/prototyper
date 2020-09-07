@@ -43,7 +43,6 @@ HEADERS +=	exporter.hpp \
 			export.hpp \
 			form_actions.hpp \
 			form_aspect_ratio_handle.hpp \
-			form_button_properties.hpp \
 			form_button.hpp \
 			form_checkbox.hpp \
 			form_combobox.hpp \
@@ -103,7 +102,6 @@ HEADERS +=	exporter.hpp \
 SOURCES +=	exporter.cpp \
 			form_actions.cpp \
 			form_aspect_ratio_handle.cpp \
-			form_button_properties.cpp \
 			form_button.cpp \
 			form_checkbox.cpp \
 			form_combobox.cpp \
@@ -154,7 +152,6 @@ SOURCES +=	exporter.cpp \
 
 FORMS +=	grid_step_dlg.ui \
 			name_dlg.ui \
-			form_button_properties.ui \
 			form_checkbox_properties.ui \
 			form_spinbox_properties.ui \
 			form_object_properties.ui \
