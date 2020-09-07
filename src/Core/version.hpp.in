@@ -1,0 +1,18 @@
+
+#ifndef PROTOTYPER_VERSION_HPP_INCLUDED
+#define PROTOTYPER_VERSION_HPP_INCLUDED
+
+// Qt include.
+#include <QString>
+
+namespace Prototyper {
+
+namespace Core {
+
+static const QString c_version = QStringLiteral( "\"$$PROTOTYPER_VERSION\"" );
+
+} /* namespace Core */
+
+} /* namespace Prototyper */
+
+#endif // PROTOTYPER_VERSION_HPP_INCLUDED

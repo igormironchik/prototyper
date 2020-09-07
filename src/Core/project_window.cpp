@@ -42,6 +42,7 @@
 #include "form_undo_commands.hpp"
 #include "constants.hpp"
 #include "utils.hpp"
+#include "version.hpp"
 
 // Qt include.
 #include <QMenuBar>
@@ -1771,9 +1772,10 @@ ProjectWindow::about()
 {
 	QMessageBox::about( this, tr( "About Prototyper" ),
 		tr( "Prototyper - Simple UI prototyping software.\n\n"
+			"Version %1\n\n"
 			"Author - Igor Mironchik (igor.mironchik at gmail dot com).\n\n"
-			"Copyright (c) 2016 Igor Mironchik.\n\n"
-			"Licensed under GNU GPL 3.0." ) );
+			"Copyright (c) 2016-2020 Igor Mironchik.\n\n"
+			"Licensed under GNU GPL 3.0." ).arg( c_version ) );
 }
 
 void
