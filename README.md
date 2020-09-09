@@ -41,7 +41,7 @@ git submodule update --init --recursive
 I'm looking for a free designer to create icon of copy text format action
 in 16x16 and 22x22 sizes, and a cursor shape for applying text format (22x22 or 32x32?).
 Something similar like in MS Word but in KDE Oxygen icons style. You can look
-at icons in use in this application in src/Core/img folder.
+at icons in use in this application in `src/Core/img` folder.
 
 # TODO
 
