@@ -22,7 +22,7 @@ software.
 
 # Status
 
-Under construction. Testers wanted. Just contact me for Windows/Linux installations.
+Under construction. **Testers and designers wanted!** Just contact me for Windows/Linux installations.
 
 # Getting from Repository
 
