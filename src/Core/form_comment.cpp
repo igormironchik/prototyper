@@ -34,6 +34,9 @@
 #include <QGraphicsScene>
 #include <QGraphicsView>
 
+// C++ include.
+#include <cmath>
+
 
 namespace Prototyper {
 
@@ -161,10 +164,10 @@ QRectF
 PageComment::boundingRect() const
 {
 	QFontMetrics fm( QApplication::font() );
-	const auto r = fm.boundingRect( QString::number( d->m_id < 10 ? 10 : d->m_id ) )
-		.adjusted( -5, -5, 5, 5 );
+	const auto r = fm.boundingRect( QString::number( d->m_id < 10 ? 10 : d->m_id ) );
+	const qreal diameter = std::sqrt( r.width() * r.width() + r.height() * r.height() ) + 8.0;
 
-	return QRectF( 0.0, 0.0, r.width(), r.height() );
+	return QRectF( 0.0, 0.0, diameter, diameter );
 }
 
 void
@@ -173,9 +176,9 @@ PageComment::paint( QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
 	painter->setFont( QApplication::font() );
 	painter->setPen( QColor( 33, 122, 255 ) );
 	painter->setBrush( QColor( 33, 122, 255 ) );
-	painter->drawRoundedRect( boundingRect(), 3, 3 );
+	painter->drawEllipse( boundingRect() );
 	painter->setPen( Qt::white );
-	painter->drawRoundedRect( boundingRect().adjusted( 3, 3, -3, -3 ), 3, 3 );
+	painter->drawEllipse( boundingRect().adjusted( 3, 3, -3, -3 ) );
 	painter->drawText( boundingRect(), Qt::AlignCenter, QString::number( d->m_id ) );
 }
 
