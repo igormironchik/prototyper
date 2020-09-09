@@ -116,6 +116,8 @@ public:
 
 	//! \return Default size.
 	virtual QSizeF defaultSize() const;
+	//! \return Minimum allowed size.
+	virtual QSizeF minimumSize() const;
 
 	//! Update position of handles.
 	void updateHandlesPos();

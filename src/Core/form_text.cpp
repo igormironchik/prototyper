@@ -102,7 +102,7 @@ FormTextPrivate::init()
 
 	q->setPlainText( FormText::tr( "Text" ) );
 
-	m_proxy->setMinSize( q->defaultSize() );
+	m_proxy->setMinSize( q->minimumSize() );
 
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
 		false );
@@ -141,7 +141,7 @@ FormTextPrivate::setRect( const QRectF & rect )
 	q->setTextWidth( m_rect.width() );
 
 	QRectF r = q->boundingRect();
-	const auto s = q->defaultSize();
+	const auto s = q->minimumSize();
 	r.setHeight( qMax( s.height(), r.height() ) );
 	r.setWidth( qMax( s.width(), r.width() ) );
 	r.moveTo( q->pos() );
@@ -599,6 +599,12 @@ QSizeF
 FormText::defaultSize() const
 {
 	return { MmPx::instance().fromMmX( 10.0 ), MmPx::instance().fromMmY( 6.0 ) };
+}
+
+QSizeF
+FormText::minimumSize() const
+{
+	return QSizeF( 1.0, 1.0 );
 }
 
 void

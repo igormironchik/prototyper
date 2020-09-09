@@ -75,7 +75,7 @@ FormCheckBoxPrivate::init()
 {
 	m_handles.reset( new FormResizableProxy( q, q->parentItem(), q->page() ) );
 
-	m_handles->setMinSize( q->defaultSize() );
+	m_handles->setMinSize( q->minimumSize() );
 
 	m_handles->hide();
 
@@ -465,6 +465,12 @@ FormCheckBox::defaultSize() const
 	return { MmPx::instance().fromMmX( 15.0 ), boxHeight() };
 }
 
+QSizeF
+FormCheckBox::minimumSize() const
+{
+	return QSizeF( boxHeight(), boxHeight() );
+}
+
 QWidget *
 FormCheckBox::properties( QWidget * parent )
 {
@@ -494,8 +500,8 @@ FormCheckBox::properties( QWidget * parent )
 
 	d->m_checkProps->ui()->m_checked->setChecked( d->m_checked );
 
-	d->m_objProps->ui()->m_width->setMinimum( defaultSize().width() );
-	d->m_objProps->ui()->m_height->setMinimum( defaultSize().height() );
+	d->m_objProps->ui()->m_width->setMinimum( FormCheckBox::boxHeight() );
+	d->m_objProps->ui()->m_height->setMinimum( FormCheckBox::boxHeight() );
 
 	d->m_checkProps->ui()->m_checkGroup->setTitle( typeName() );
 

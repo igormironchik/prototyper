@@ -102,7 +102,9 @@ public:
 	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
 
 	//! \return Default size.
-	virtual QSizeF defaultSize() const override;
+	QSizeF defaultSize() const override;
+	//! \return Minimum allowed size.
+	QSizeF minimumSize() const override;
 
 	QWidget * properties( QWidget * parent ) override;
 	void updatePropertiesValues() override;

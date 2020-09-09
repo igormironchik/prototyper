@@ -110,13 +110,13 @@ FormObject::properties( QWidget * parent )
 	if( d->m_resizeProps & ResizeWidth )
 	{
 		d->m_props->ui()->m_width->setValue( rectangle().width() );
-		d->m_props->ui()->m_width->setMinimum( defaultSize().width() );
+		d->m_props->ui()->m_width->setMinimum( minimumSize().width() );
 	}
 
 	if( d->m_resizeProps & ResizeHeight )
 	{
 		d->m_props->ui()->m_height->setValue( rectangle().height() );
-		d->m_props->ui()->m_height->setMinimum( defaultSize().height() );
+		d->m_props->ui()->m_height->setMinimum( minimumSize().height() );
 	}
 
 	d->m_props->ui()->m_x->setValue( position().x() );
@@ -212,6 +212,12 @@ QSizeF
 FormObject::defaultSize() const
 {
 	return { 1.0, 1.0 };
+}
+
+QSizeF
+FormObject::minimumSize() const
+{
+	return defaultSize();
 }
 
 void

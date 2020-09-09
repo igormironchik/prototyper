@@ -88,8 +88,11 @@ public:
 
 	//! Set object's pen.
 	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
+
 	//! \return Default size.
-	virtual QSizeF defaultSize() const override;
+	QSizeF defaultSize() const override;
+	//! \return Minimum allowed size.
+	QSizeF minimumSize() const override;
 
 	//! Clone object.
 	FormObject * clone() const override;
