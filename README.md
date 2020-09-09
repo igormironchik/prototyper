@@ -1,4 +1,3 @@
-## This application was written in very difficult circumstances, so here can be a lot of issues. I'm sorry for it. Testers wanted! All submitted issues will be fixed.
 
 # About
 
@@ -21,6 +20,18 @@ this application useless. But If you want to describe idea for designer, then
 this application can be usefull. And don't forget that this is absolutely free
 software.
 
+# Status
+
+Under construction. Testers wanted. Just contact me for Windows/Linux installations.
+
+# Getting from Repository
+
+After clone update submodules with the next command:
+
+```
+git submodule update --init --recursive
+```
+
 # Screenshots
 
 ![](doc/img/Screenshot_20200814_183334.png)
@@ -31,18 +42,6 @@ I'm looking for a free designer to create icon of copy text format action
 in 16x16 and 22x22 sizes, and a cursor shape for applying text format (22x22 or 32x32?).
 Something similar like in MS Word but in KDE Oxygen icons style. You can look
 at icons in use in this application in src/Core/img folder.
-
-# Status
-
-Under construction.
-
-# Getting from Repository
-
-After clone update submodules with the next command:
-
-```
-git submodule update --init --recursive
-```
 
 # TODO
 
