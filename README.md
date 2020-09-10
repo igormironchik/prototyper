@@ -7,7 +7,7 @@ When you first time launch Prototyper you will see window with text editor (one 
 tab. This tabbed text editor is the place where you can describe
 your new project.
 
-Page can be created through the context menu on the tab, context menu in pages navigation
+Page for drawing can be created through the context menu on the tab, context menu in pages navigation
 or through the menu. When you create page you will see tool bar with tools for drawing.
 
 In such a way you describe prototype of you project. Once as you are ready
