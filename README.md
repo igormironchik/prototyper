@@ -1,7 +1,7 @@
 
 # About
 
-Prototyper this is desktop application to make UI prototypes.
+Prototyper is a desktop application to make UI prototypes.
 
 When you first time launch Prototyper you will see window with text editor (one and alone)
 tab. This tabbed text editor is the place where you can describe
