@@ -61,6 +61,8 @@ public:
 	void connectProperties();
 	//! Disconnect properties.
 	void disconnectProperties();
+	//! \return Full image rect.
+	QRectF imageRect() const;
 
 	//! Parent.
 	FormImage * q;
@@ -78,6 +80,12 @@ void
 FormImagePrivate::init()
 {
 	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->page() ) );
+}
+
+QRectF
+FormImagePrivate::imageRect() const
+{
+	return QRectF( q->pos(), QSizeF( m_image.size() ) );
 }
 
 void
@@ -104,6 +112,7 @@ FormImagePrivate::connectProperties()
 
 			if( m_handles->isKeepAspectRatio() )
 			{
+				r = imageRect();
 				qreal factor = (qreal) v / r.width();
 				r.setWidth( v );
 				r.setHeight( qRound( factor * r.height() ) );
@@ -125,6 +134,7 @@ FormImagePrivate::connectProperties()
 
 			if( m_handles->isKeepAspectRatio() )
 			{
+				r = imageRect();
 				qreal factor = (qreal) v / r.height();
 				r.setWidth( qRound( factor * r.width() ) );
 				r.setHeight( v );
