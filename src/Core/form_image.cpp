@@ -26,6 +26,8 @@
 #include "page.hpp"
 #include "form_undo_commands.hpp"
 #include "utils.hpp"
+#include "form_object_properties.hpp"
+#include "ui_form_object_properties.h"
 
 // Qt include.
 #include <QGraphicsSceneHoverEvent>
@@ -34,6 +36,7 @@
 #include <QBuffer>
 #include <QUndoStack>
 #include <QGraphicsScene>
+#include <QVBoxLayout>
 
 
 namespace Prototyper {
@@ -54,6 +57,10 @@ public:
 
 	//! Init.
 	void init();
+	//! Connect properties.
+	void connectProperties();
+	//! Disconnect properties.
+	void disconnectProperties();
 
 	//! Parent.
 	FormImage * q;
@@ -61,12 +68,92 @@ public:
 	QImage m_image;
 	//! Handles.
 	QScopedPointer< FormImageHandles > m_handles;
+	//! Default properties.
+	QPointer< ObjectProperties > m_props;
+	//! Default properties top widget.
+	QPointer< QWidget > m_topProps;
 }; // class FormImagePrivate
 
 void
 FormImagePrivate::init()
 {
 	m_handles.reset( new FormImageHandles( q, q->parentItem(), q->page() ) );
+}
+
+void
+FormImagePrivate::connectProperties()
+{
+	ObjectProperties::connect( m_props->ui()->m_x,
+		QOverload< int >::of( &QSpinBox::valueChanged ), m_props,
+		[this]( int v ) {
+			q->setPosition( QPointF( v, q->position().y() ) );
+			q->page()->emitChanged();
+		} );
+
+	ObjectProperties::connect( m_props->ui()->m_y,
+		QOverload< int >::of( &QSpinBox::valueChanged ), m_props,
+		[this]( int v ) {
+			q->setPosition( QPointF( q->position().x(), v ) );
+			q->page()->emitChanged();
+		} );
+
+	ObjectProperties::connect( m_props->ui()->m_width,
+		QOverload< int >::of( &QSpinBox::valueChanged ), m_props,
+		[this]( int v ) {
+			QRectF r = q->rectangle();
+
+			if( m_handles->isKeepAspectRatio() )
+			{
+				qreal factor = (qreal) v / r.width();
+				r.setWidth( v );
+				r.setHeight( qRound( factor * r.height() ) );
+			}
+			else
+				r.setWidth( v );
+
+			const bool was = m_handles->isKeepAspectRatio();
+			m_handles->setKeepAspectRatio( false );
+			q->setRectangle( r, true );
+			m_handles->setKeepAspectRatio( was );
+			q->page()->emitChanged();
+		} );
+
+	ObjectProperties::connect( m_props->ui()->m_height,
+		QOverload< int >::of( &QSpinBox::valueChanged ), m_props,
+		[this]( int v ) {
+			QRectF r = q->rectangle();
+
+			if( m_handles->isKeepAspectRatio() )
+			{
+				qreal factor = (qreal) v / r.height();
+				r.setWidth( qRound( factor * r.width() ) );
+				r.setHeight( v );
+			}
+			else
+				r.setHeight( v );
+
+			const bool was = m_handles->isKeepAspectRatio();
+			m_handles->setKeepAspectRatio( false );
+			q->setRectangle( r, true );
+			m_handles->setKeepAspectRatio( was );
+			q->page()->emitChanged();
+		} );
+}
+
+void
+FormImagePrivate::disconnectProperties()
+{
+	ObjectProperties::disconnect( m_props->ui()->m_x,
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
+
+	ObjectProperties::disconnect( m_props->ui()->m_y,
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
+
+	ObjectProperties::disconnect( m_props->ui()->m_width,
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
+
+	ObjectProperties::disconnect( m_props->ui()->m_height,
+		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 }
 
 
@@ -200,7 +287,7 @@ FormImage::position() const
 QRectF
 FormImage::rectangle() const
 {
-	QRectF r = boundingRect();
+	QRectF r = pixmap().rect();
 	r.moveTopLeft( position() );
 
 	return r;
@@ -214,6 +301,8 @@ FormImage::setRectangle( const QRectF & rect, bool pushUndoCommand )
 	resize( rect );
 
 	scene()->update();
+
+	updatePropertiesValues();
 }
 
 void
@@ -222,7 +311,7 @@ FormImage::resize( const QRectF & rect )
 	setPos( rect.topLeft() );
 
 	setPixmap( QPixmap::fromImage( d->m_image.scaled(
-		QSize( rect.width(), rect.height() ),
+		QSize( qRound( rect.width() ), qRound( rect.height() ) ),
 		( d->m_handles->isKeepAspectRatio() ? Qt::KeepAspectRatio :
 			Qt::IgnoreAspectRatio ), Qt::SmoothTransformation ) ) );
 
@@ -251,6 +340,47 @@ FormImage::clone() const
 	o->setObjectId( page()->nextId() );
 
 	return o;
+}
+
+QWidget *
+FormImage::properties( QWidget * parent )
+{
+	d->m_topProps = new QWidget( parent );
+	QVBoxLayout * layout = new QVBoxLayout( d->m_topProps );
+
+	d->m_props = new ObjectProperties( this, d->m_topProps );
+
+	layout->addWidget( d->m_props );
+	layout->addSpacerItem( new QSpacerItem( 0, 0, QSizePolicy::Minimum, QSizePolicy::Expanding ) );
+
+	d->m_props->ui()->m_width->setValue( rectangle().width() );
+	d->m_props->ui()->m_width->setMinimum( minimumSize().width() );
+	d->m_props->ui()->m_height->setValue( rectangle().height() );
+	d->m_props->ui()->m_height->setMinimum( minimumSize().height() );
+
+	d->m_props->ui()->m_x->setValue( position().x() );
+	d->m_props->ui()->m_y->setValue( position().y() );
+
+	d->connectProperties();
+
+	return d->m_topProps.data();
+}
+
+void
+FormImage::updatePropertiesValues()
+{
+	if( d->m_props )
+	{
+		d->disconnectProperties();
+
+		d->m_props->ui()->m_width->setValue( rectangle().width() );
+		d->m_props->ui()->m_height->setValue( rectangle().height() );
+
+		d->m_props->ui()->m_x->setValue( position().x() );
+		d->m_props->ui()->m_y->setValue( position().y() );
+
+		d->connectProperties();
+	}
 }
 
 } /* namespace Core */

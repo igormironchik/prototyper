@@ -86,6 +86,12 @@ public:
 	//! Clone object.
 	FormObject * clone() const override;
 
+	//! \return Widget with properties of object.
+	QWidget * properties( QWidget * parent ) override;
+
+	//! Update values of properties.
+	void updatePropertiesValues() override;
+
 protected:
 	//! Resize.
 	void resize( const QRectF & rect ) override;
