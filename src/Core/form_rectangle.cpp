@@ -165,10 +165,10 @@ FormRect::setCfg( const Cfg::Rect & c )
 
 	setObjectBrush( Cfg::fromBrush( c.brush() ), false );
 
-	const QRectF r( MmPx::instance().fromMmX( c.topLeft().x() ),
-		MmPx::instance().fromMmY( c.topLeft().y() ),
-		MmPx::instance().fromMmX( c.size().width() ),
-		MmPx::instance().fromMmY( c.size().height() ) );
+	const QRectF r( qRound( MmPx::instance().fromMmX( c.topLeft().x() ) ),
+		qRound( MmPx::instance().fromMmY( c.topLeft().y() ) ),
+		qRound( MmPx::instance().fromMmX( c.size().width() ) ),
+		qRound( MmPx::instance().fromMmY( c.size().height() ) ) );
 
 	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ) ) );
