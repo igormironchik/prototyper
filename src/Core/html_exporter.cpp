@@ -135,7 +135,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 
 		drawForm( svg, form, c_resolution );
 
-		const int i = data.indexOf( QStringLiteral( "\n" ) );
+		const int i = data.indexOf( QStringLiteral( "\n" ).toLatin1() );
 
 		if( i != -1 )
 			data.remove( 0, i );
