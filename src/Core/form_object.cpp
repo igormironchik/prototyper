@@ -97,14 +97,14 @@ FormObject::properties( QWidget * parent )
 	{
 		d->m_props->ui()->m_width->setEnabled( false );
 		d->m_props->ui()->m_width->setMinimum( 0 );
-		d->m_props->ui()->m_width->setValue( 0 );
+		d->m_props->ui()->m_width->setValue( rectangle().width() );
 	}
 
 	if( !( d->m_resizeProps & ResizeHeight ) )
 	{
 		d->m_props->ui()->m_height->setEnabled( false );
 		d->m_props->ui()->m_height->setMinimum( 0 );
-		d->m_props->ui()->m_height->setValue( 0 );
+		d->m_props->ui()->m_height->setValue( rectangle().height() );
 	}
 
 	if( d->m_resizeProps & ResizeWidth )
@@ -134,11 +134,8 @@ FormObject::updatePropertiesValues()
 	{
 		d->m_props->disconnectProperties();
 
-		if( d->m_resizeProps & ResizeWidth )
-			d->m_props->ui()->m_width->setValue( rectangle().width() );
-
-		if( d->m_resizeProps & ResizeHeight )
-			d->m_props->ui()->m_height->setValue( rectangle().height() );
+		d->m_props->ui()->m_width->setValue( rectangle().width() );
+		d->m_props->ui()->m_height->setValue( rectangle().height() );
 
 		d->m_props->ui()->m_x->setValue( position().x() );
 		d->m_props->ui()->m_y->setValue( position().y() );
