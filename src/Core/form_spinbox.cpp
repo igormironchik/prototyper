@@ -469,6 +469,8 @@ FormSpinBox::properties( QWidget * parent )
 	d->m_textStyleProps = new TextStyleProperties( d->m_properties );
 
 	auto * l = new QVBoxLayout( d->m_properties );
+	l->setMargin( 0 );
+	l->setSpacing( 0 );
 	l->addWidget( d->m_objProps );
 	l->addWidget( d->m_spinProps );
 	l->addWidget( d->m_textStyleProps );
