@@ -35,3 +35,4 @@ git submodule update --init --recursive
 # Screenshots
 
 ![](doc/img/Screenshot_20200814_183334.png)
+![](doc/img/Screenshot_20200920_202510.png)
