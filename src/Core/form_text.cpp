@@ -332,7 +332,13 @@ FormText::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
 	FormObject::setObjectPen( p, pushUndoCommand );
 
-	setDefaultTextColor( p.color() );
+	auto c = textCursor();
+	auto fmt = QTextCharFormat();
+	fmt.setForeground( QBrush( p.color() ) );
+	c.select( QTextCursor::Document );
+	c.mergeCharFormat( fmt );
+	c.clearSelection();
+	setTextCursor( c );
 
 	update();
 }
