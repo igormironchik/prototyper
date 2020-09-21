@@ -91,7 +91,10 @@ minMaxZ( const QList< QGraphicsItem* > & items )
 
 bool operator != ( const QTextCharFormat & f1, const QTextCharFormat & f2 )
 {
-	return ( f1.fontPointSize() != f2.fontPointSize() ||
+	const auto font1 = f1.font();
+	const auto font2 = f2.font();
+
+	return ( font1.pixelSize() != font2.pixelSize() ||
 		f1.fontWeight() != f2.fontWeight() ||
 		f1.fontItalic() != f2.fontItalic() ||
 		f1.fontUnderline() != f2.fontUnderline() ||
