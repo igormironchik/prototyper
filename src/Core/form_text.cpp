@@ -202,6 +202,8 @@ FormText::cfg() const
 
 	c.set_z( zValue() );
 
+	c.set_color( textCursor().charFormat().foreground().color().name( QColor::HexArgb ) );
+
 	return c;
 }
 
@@ -227,6 +229,8 @@ FormText::setCfg( const Cfg::Text & c )
 		MmPx::instance().fromMmY( c.pos().y() ) ) );
 
 	setZValue( c.z() );
+
+	setObjectPen( QPen( c.color() ), false );
 
 	QRectF r = boundingRect();
 	r.moveTo( pos() );

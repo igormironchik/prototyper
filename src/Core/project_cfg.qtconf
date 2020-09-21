@@ -276,6 +276,12 @@
 						{defaultValue 0.0}
 						{name z}
 					}
+
+					{tagScalar
+						{valueType QString}
+						{name color}
+						{defaultValue "QStringLiteral( \"black\" )"}
+					}
 				} || class Text
 
 
