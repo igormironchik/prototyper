@@ -334,7 +334,9 @@ FormText::setRectangle( const QRectF & rect, bool pushUndoCommand )
 void
 FormText::setObjectPen( const QPen & p, bool pushUndoCommand )
 {
-	FormObject::setObjectPen( p, pushUndoCommand );
+	Q_UNUSED( pushUndoCommand )
+
+	FormObject::setObjectPen( p, false );
 
 	auto c = textCursor();
 	auto fmt = QTextCharFormat();
