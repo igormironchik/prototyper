@@ -36,3 +36,7 @@ git submodule update --init --recursive
 
 ![](doc/img/Screenshot_20200814_183334.png)
 ![](doc/img/Screenshot_20200922_100855.png)
+
+# Donate
+
+[Donate with BTC](https://github.com/igormironchik)
