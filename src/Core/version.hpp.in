@@ -9,7 +9,7 @@ namespace Prototyper {
 
 namespace Core {
 
-static const QString c_version = QStringLiteral( "\"$$PROTOTYPER_VERSION\"" );
+static const QString c_version = QStringLiteral( "@PROTOTYPER_VERSION@" );
 
 } /* namespace Core */
 
