@@ -160,6 +160,9 @@ add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/session_cfg.hpp
 
 add_definitions( -DPROTOTYPER_CORE -DCFGFILE_QT_SUPPORT )
 
+include_directories( ${CMAKE_CURRENT_BINARY_DIR}
+	${CMAKE_CURRENT_SOURCE_DIR}/../../3rdparty/cfgfile )
+
 add_library( Prototyper.Core SHARED ${SRC} )
 
 add_dependencies( Prototyper.Core cfgfile.generator )
