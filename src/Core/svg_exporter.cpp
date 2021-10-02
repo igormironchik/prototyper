@@ -97,8 +97,7 @@ SvgExporterPrivate::createImages( const QString & dir )
 //
 
 SvgExporter::SvgExporter( const Cfg::Project & project )
-	:	Exporter( QScopedPointer< ExporterPrivate >
-			( new SvgExporterPrivate( project, this ) ) )
+	:	Exporter( std::make_unique< SvgExporterPrivate >( project, this ) )
 {
 }
 

@@ -395,7 +395,7 @@ FormButton::properties( QWidget * parent )
 	d->m_textStyleProps = new TextStyleProperties( d->m_props );
 
 	QVBoxLayout * l = new QVBoxLayout( d->m_props );
-	l->setMargin( 0 );
+	l->setContentsMargins( 0, 0, 0, 0 );
 	l->setSpacing( 0 );
 	l->addWidget( d->m_objProps );
 	l->addWidget( d->m_textProps );

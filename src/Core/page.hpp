@@ -25,8 +25,10 @@
 
 // Qt include.
 #include <QGraphicsObject>
-#include <QScopedPointer>
 #include <QTextDocument>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "types.hpp"
@@ -342,7 +344,7 @@ private:
 
 	Q_DISABLE_COPY( Page )
 
-	QScopedPointer< PagePrivate > d;
+	std::unique_ptr< PagePrivate > d;
 }; // class Page
 
 } /* namespace Core */

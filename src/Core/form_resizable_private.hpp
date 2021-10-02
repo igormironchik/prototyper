@@ -23,8 +23,8 @@
 #ifndef PROTOTYPER__CORE__FORM_RESIZABLE_PRIVATE_HPP__INCLUDED
 #define PROTOTYPER__CORE__FORM_RESIZABLE_PRIVATE_HPP__INCLUDED
 
-// Qt include.
-#include <QScopedPointer>
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_move_handle.hpp"
@@ -62,7 +62,7 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Handles.
-	QScopedPointer< WithResizeAndMoveHandles > m_handles;
+	std::unique_ptr< WithResizeAndMoveHandles > m_handles;
 	//! Form.
 	Page * m_form;
 	//! Subsidiary rect.

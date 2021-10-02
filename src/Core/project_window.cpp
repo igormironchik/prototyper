@@ -61,7 +61,6 @@
 #include <QDrag>
 #include <QUndoStack>
 #include <QUndoGroup>
-#include <QTextCodec>
 #include <QTextStream>
 #include <QFile>
 #include <QStringListModel>
@@ -907,7 +906,6 @@ ProjectWindow::readProject( const QString & fileName )
 			Cfg::tag_Project< cfgfile::qstring_trait_t > tag;
 
 			QTextStream stream( &file );
-			stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 
 			cfgfile::read_cfgfile( tag, stream, fileName );
 
@@ -1121,7 +1119,6 @@ ProjectWindow::saveProjectImpl( const QString & fileName )
 				Cfg::tag_Project< cfgfile::qstring_trait_t > tag( d->m_cfg );
 
 				QTextStream stream( &file );
-				stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 
 				cfgfile::write_cfgfile( tag, stream );
 

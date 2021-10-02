@@ -656,7 +656,7 @@ Page::Page( Cfg::Page & c, QGraphicsItem * parent )
 	,	FormObject( FormObject::PageType, this )
 	,	d( nullptr )
 {
-	QScopedPointer< PagePrivate > tmp( new PagePrivate( c, this ) );
+	auto tmp = std::make_unique< PagePrivate >( c, this );
 
 	tmp->init();
 
@@ -1407,7 +1407,7 @@ Page::deleteItems( const QList< QGraphicsItem* > & items,
 QRectF
 Page::boundingRect() const
 {
-	if( !d.isNull() )
+	if( d )
 		return { 0.0, 0.0, d->m_cfg.size().width() + 1.0,
 			d->m_cfg.size().height() + 1.0 };
 
@@ -2014,7 +2014,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			{
 				auto * text =
 					onReleaseWithRectPlacer< FormText, Cfg::Text > (
-						scene(), d.data(), mouseEvent, this );
+						scene(), d.get(), mouseEvent, this );
 
 				if( text )
 				{
@@ -2073,7 +2073,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawButton :
 			{
 				onReleaseWithRectPlacer< FormButton, Cfg::Button > (
-					scene(), d.data(), mouseEvent, this );
+					scene(), d.get(), mouseEvent, this );
 
 				emit changed();
 
@@ -2084,7 +2084,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawCheckBox :
 			{
 				onReleaseWithRectPlacer< FormCheckBox, Cfg::CheckBox > (
-					scene(), d.data(), mouseEvent, this );
+					scene(), d.get(), mouseEvent, this );
 
 				emit changed();
 
@@ -2095,7 +2095,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawRadioButton :
 			{
 				onReleaseWithRectPlacer< FormRadioButton, Cfg::CheckBox > (
-					scene(), d.data(), mouseEvent, this );
+					scene(), d.get(), mouseEvent, this );
 
 				emit changed();
 
@@ -2106,7 +2106,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawComboBox :
 			{
 				onReleaseWithRectPlacer< FormComboBox, Cfg::ComboBox > (
-					scene(), d.data(), mouseEvent, this );
+					scene(), d.get(), mouseEvent, this );
 
 				emit changed();
 
@@ -2117,7 +2117,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawSpinBox :
 			{
 				onReleaseWithRectPlacer< FormSpinBox, Cfg::SpinBox > (
-					scene(), d.data(), mouseEvent, this );
+					scene(), d.get(), mouseEvent, this );
 
 				emit changed();
 
@@ -2128,7 +2128,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawHSlider :
 			{
 				onReleaseWithRectPlacer< FormHSlider, Cfg::HSlider > (
-					scene(), d.data(), mouseEvent, this );
+					scene(), d.get(), mouseEvent, this );
 
 				emit changed();
 
@@ -2139,7 +2139,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 			case PageAction::DrawVSlider :
 			{
 				onReleaseWithRectPlacer< FormVSlider, Cfg::VSlider > (
-					scene(), d.data(), mouseEvent, this );
+					scene(), d.get(), mouseEvent, this );
 
 				emit changed();
 

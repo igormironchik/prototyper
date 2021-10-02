@@ -39,6 +39,9 @@
 #include <QUndoStack>
 #include <QGraphicsScene>
 
+// C++ include.
+#include <memory>
+
 
 namespace Prototyper {
 
@@ -76,13 +79,13 @@ public:
 	//! Polygon.
 	QPolygonF m_polygon;
 	//! Start handle.
-	QScopedPointer< FormMoveHandle > m_start;
+	std::unique_ptr< FormMoveHandle > m_start;
 	//! End handle.
-	QScopedPointer< FormMoveHandle > m_end;
+	std::unique_ptr< FormMoveHandle > m_end;
 	//! Closed?
 	bool m_closed;
 	//! Resize & move handles.
-	QScopedPointer< WithResizeAndMoveHandles > m_handles;
+	std::unique_ptr< WithResizeAndMoveHandles > m_handles;
 	//! Resized bounding rect.
 	QRectF m_resized;
 	//! Sunsidiary rect.
@@ -94,23 +97,22 @@ public:
 void
 FormPolylinePrivate::init()
 {
-	m_start.reset( new FormMoveHandle( c_halfHandleSize,
+	m_start = std::make_unique< FormMoveHandle >( c_halfHandleSize,
 		QPointF( c_halfHandleSize, c_halfHandleSize ), q,
-		q->parentItem(), q->page() ) );
+		q->parentItem(), q->page() );
 	m_start->ignoreMouseEvents( true );
 	m_start->unsetCursor();
 
-	m_end.reset( new FormMoveHandle( c_halfHandleSize,
+	m_end = std::make_unique< FormMoveHandle >( c_halfHandleSize,
 		QPointF( c_halfHandleSize, c_halfHandleSize ), q,
-		q->parentItem(), q->page() ) );
+		q->parentItem(), q->page() );
 	m_end->ignoreMouseEvents( true );
 	m_end->unsetCursor();
 
 	m_start->hide();
 	m_end->hide();
 
-	QScopedPointer< WithResizeAndMoveHandles > tmp(
-		new WithResizeAndMoveHandles( q, q->parentItem(), q->page() ) );
+	auto tmp = std::make_unique< WithResizeAndMoveHandles> ( q, q->parentItem(), q->page() );
 
 	m_handles.swap( tmp );
 

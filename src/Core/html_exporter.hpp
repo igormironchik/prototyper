@@ -50,9 +50,9 @@ public:
 
 private:
 	inline const HtmlExporterPrivate * d_ptr() const
-		{ return reinterpret_cast< const HtmlExporterPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< const HtmlExporterPrivate* > ( d.get() ); }
 	inline HtmlExporterPrivate * d_ptr()
-		{ return reinterpret_cast< HtmlExporterPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< HtmlExporterPrivate* > ( d.get() ); }
 
 private:
 	Q_DISABLE_COPY( HtmlExporter )

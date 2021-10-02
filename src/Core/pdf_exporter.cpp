@@ -237,8 +237,7 @@ PdfExporterPrivate::printDocument( const QTextDocument & doc, QPdfWriter & pdf,
 //
 
 PdfExporter::PdfExporter( const Cfg::Project & project )
-	:	Exporter( QScopedPointer< ExporterPrivate >
-			( new PdfExporterPrivate( project, this ) ) )
+	:	Exporter( std::make_unique< PdfExporterPrivate >( project, this ) )
 {
 }
 

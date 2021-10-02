@@ -86,8 +86,8 @@ FormImageHandlesPrivate::place( const QRectF & rect )
 
 FormImageHandles::FormImageHandles( FormResizable * resizable,
 	QGraphicsItem * parent, Page * form )
-	:	FormResizableProxy( QScopedPointer< FormResizableProxyPrivate > (
-			new FormImageHandlesPrivate( resizable, this, form ) ), parent )
+	:	FormResizableProxy( std::make_unique< FormImageHandlesPrivate >( resizable, this, form ),
+			parent )
 {
 }
 

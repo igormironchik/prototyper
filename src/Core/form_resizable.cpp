@@ -83,8 +83,7 @@ FormResizableProxyPrivate::~FormResizableProxyPrivate() = default;
 void
 FormResizableProxyPrivate::init()
 {
-	QScopedPointer< WithResizeAndMoveHandles > tmp(
-		new WithResizeAndMoveHandles( q, q, m_form ) );
+	auto tmp = std::make_unique< WithResizeAndMoveHandles> ( q, q, m_form );
 
 	m_handles.swap( tmp );
 
@@ -111,8 +110,7 @@ FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 	:	QGraphicsItem( parent )
 	,	d( nullptr )
 {
-	QScopedPointer< FormResizableProxyPrivate > tmp(
-		new FormResizableProxyPrivate( resizable, this, form ) );
+	auto tmp = std::make_unique< FormResizableProxyPrivate >( resizable, this, form );
 
 	tmp->init();
 
@@ -120,12 +118,12 @@ FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 }
 
 FormResizableProxy::FormResizableProxy(
-	QScopedPointer< FormResizableProxyPrivate > && dd,
+	std::unique_ptr< FormResizableProxyPrivate > && dd,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	d( nullptr )
 {
-	QScopedPointer< FormResizableProxyPrivate > tmp( nullptr );
+	std::unique_ptr< FormResizableProxyPrivate > tmp;
 
 	tmp.swap( dd );
 
@@ -161,7 +159,7 @@ FormResizableProxy::setMinSize( const QSizeF & min )
 QRectF
 FormResizableProxy::boundingRect() const
 {
-	if( !d.isNull() )
+	if( d )
 	{
 		QRectF r = d->m_rect;
 		r.moveTopLeft( QPointF( 0.0, 0.0 ) );

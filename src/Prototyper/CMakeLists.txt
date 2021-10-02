@@ -21,8 +21,10 @@ if( WIN32 )
 	list( APPEND SRC Prototyper.rc )
 endif()
 
+include_directories( ${CMAKE_CURRENT_SOURCE_DIR}/.. )
+
 add_executable( Prototyper ${SRC} )
 
-target_link_libraries( Prototyper Protoyper.Core Qt6::Widgets Qt6::Gui Qt6::Core )
+target_link_libraries( Prototyper Prototyper.Core Qt6::Widgets Qt6::Gui Qt6::Core )
 
 add_dependencies( Prototyper Prototyper.Core )

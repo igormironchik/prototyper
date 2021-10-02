@@ -25,8 +25,10 @@
 
 // Qt include.
 #include <QGraphicsObject>
-#include <QScopedPointer>
 #include <QCursor>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -116,11 +118,11 @@ protected:
 	bool eventFilter( QObject * watched, QEvent * event ) override;
 
 protected:
-	FormMoveHandle( QScopedPointer< FormMoveHandlePrivate > && dd,
+	FormMoveHandle( std::unique_ptr< FormMoveHandlePrivate > && dd,
 		QGraphicsItem * parent );
 
 protected:
-	QScopedPointer< FormMoveHandlePrivate > d;
+	std::unique_ptr< FormMoveHandlePrivate > d;
 
 private:
 	Q_DISABLE_COPY( FormMoveHandle )

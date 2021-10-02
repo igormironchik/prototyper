@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_move_handle.hpp"
@@ -91,7 +93,7 @@ public:
 		QWidget * widget = 0 ) override;
 
 protected:
-	FormResizableProxy( QScopedPointer< FormResizableProxyPrivate > && dd,
+	FormResizableProxy( std::unique_ptr< FormResizableProxyPrivate > && dd,
 		QGraphicsItem * parent );
 
 protected:
@@ -101,7 +103,7 @@ protected:
 	void handleReleased( FormMoveHandle * handle ) override;
 
 protected:
-	QScopedPointer< FormResizableProxyPrivate > d;
+	std::unique_ptr< FormResizableProxyPrivate > d;
 
 private:
 	Q_DISABLE_COPY( FormResizableProxy )

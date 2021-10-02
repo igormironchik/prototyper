@@ -54,9 +54,9 @@ private:
 	Q_DISABLE_COPY( FormResizeHandle )
 
 	inline FormResizeHandlePrivate * d_func()
-		{ return reinterpret_cast< FormResizeHandlePrivate* > ( d.data() ); }
+		{ return reinterpret_cast< FormResizeHandlePrivate* > ( d.get() ); }
 	inline const FormResizeHandlePrivate * d_func() const
-		{ return reinterpret_cast< const FormResizeHandlePrivate* >( d.data() ); }
+		{ return reinterpret_cast< const FormResizeHandlePrivate* >( d.get() ); }
 }; // class FormResizeHandler
 
 } /* namespace Core */

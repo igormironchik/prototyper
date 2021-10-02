@@ -29,12 +29,10 @@
 
 // Qt include.
 #include <QApplication>
-#include <QDesktopWidget>
 #include <QStandardPaths>
 #include <QFileInfo>
 #include <QMessageBox>
 #include <QDir>
-#include <QTextCodec>
 #include <QTextStream>
 #include <QFile>
 
@@ -103,7 +101,6 @@ TopGuiPrivate::init()
 				Cfg::tag_WindowsCfg< cfgfile::qstring_trait_t > tag;
 
 				QTextStream stream( &file );
-				stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 
 				cfgfile::read_cfgfile( tag, stream, m_appCfgFileName );
 
@@ -147,7 +144,6 @@ TopGuiPrivate::init()
 			Cfg::tag_Session< cfgfile::qstring_trait_t > tag;
 
 			QTextStream stream( &file );
-			stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 
 			cfgfile::read_cfgfile( tag, stream, m_appSessionCfgFileName );
 
@@ -263,7 +259,6 @@ TopGui::saveCfg( QWidget * parent )
 				Cfg::tag_WindowsCfg< cfgfile::qstring_trait_t > tag( cfg );
 
 				QTextStream stream( &file );
-				stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 
 				cfgfile::write_cfgfile( tag, stream );
 
@@ -298,7 +293,6 @@ TopGui::saveCfg( QWidget * parent )
 			Cfg::tag_Session< cfgfile::qstring_trait_t > tag( s );
 
 			QTextStream stream( &file );
-			stream.setCodec( QTextCodec::codecForName( "UTF-8" ) );
 
 			cfgfile::write_cfgfile( tag, stream );
 

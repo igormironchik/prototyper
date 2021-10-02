@@ -76,8 +76,7 @@ FormRectPlacer::FormRectPlacer( QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	d( nullptr )
 {
-	QScopedPointer< FormRectPlacerPrivate > tmp(
-		new FormRectPlacerPrivate( this ) );
+	auto tmp = std::make_unique< FormRectPlacerPrivate >( this );
 
 	tmp->init();
 
@@ -119,7 +118,7 @@ FormRectPlacer::setEndPos( const QPointF & pos )
 QRectF
 FormRectPlacer::boundingRect() const
 {
-	if( !d.isNull() )
+	if( d )
 		return d->m_rect;
 
 	return {};
