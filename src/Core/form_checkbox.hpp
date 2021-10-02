@@ -25,8 +25,10 @@
 
 // Qt include.
 #include <QGraphicsObject>
-#include <QScopedPointer>
 #include <QFont>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -130,7 +132,7 @@ protected:
 		FormObject::ObjectType type, QGraphicsItem * parent = 0 );
 
 protected:
-	QScopedPointer< FormCheckBoxPrivate > d;
+	std::unique_ptr< FormCheckBoxPrivate > d;
 
 private:
 	friend class FormButtonPrivate;

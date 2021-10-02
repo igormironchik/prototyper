@@ -69,11 +69,11 @@ public:
 	//! Parent.
 	FormLine * q;
 	//! First handle.
-	QScopedPointer< FormMoveHandle > m_h1;
+	std::unique_ptr< FormMoveHandle > m_h1;
 	//! Second handle.
-	QScopedPointer< FormMoveHandle > m_h2;
+	std::unique_ptr< FormMoveHandle > m_h2;
 	//! Move handler.
-	QScopedPointer< FormMoveHandle > m_move;
+	std::unique_ptr< FormMoveHandle > m_move;
 	//! Show handles?
 	bool m_showHandles;
 	//! Old position.
@@ -379,11 +379,11 @@ FormLine::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 
 		const QLineF l = line();
 
-		if( handle == d->m_h1.data() )
+		if( handle == d->m_h1.get() )
 			setLine( QLineF( l.p1() + delta, l.p2() ) );
-		else if( handle == d->m_h2.data() )
+		else if( handle == d->m_h2.get() )
 			setLine( QLineF( l.p1(), l.p2() + delta ) );
-		else if( handle == d->m_move.data() )
+		else if( handle == d->m_move.get() )
 			moveBy( delta.x(), delta.y() );
 	}
 }
@@ -395,7 +395,7 @@ FormLine::handleReleased( FormMoveHandle * handle )
 
 	if( isSelected() )
 	{
-		if( handle == d->m_move.data() )
+		if( handle == d->m_move.get() )
 			page()->undoStack()->push( new UndoMove( page(),
 				objectId(), position() - d->m_oldPos ) );
 		else

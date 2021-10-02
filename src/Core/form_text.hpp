@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsTextItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -142,7 +144,7 @@ private:
 
 	Q_DISABLE_COPY( FormText )
 
-	QScopedPointer< FormTextPrivate > d;
+	std::unique_ptr< FormTextPrivate > d;
 }; // class FormText
 
 } /* namespace Core */

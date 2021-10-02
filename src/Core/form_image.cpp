@@ -69,7 +69,7 @@ public:
 	//! Image.
 	QImage m_image;
 	//! Handles.
-	QScopedPointer< FormImageHandles > m_handles;
+	std::unique_ptr< FormImageHandles > m_handles;
 	//! Default properties.
 	QPointer< ObjectProperties > m_props;
 	//! Default properties top widget.

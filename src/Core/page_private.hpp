@@ -24,13 +24,13 @@
 #define PROTOTYPER__CORE__PAGE_PRIVATE_HPP__INCLUDED
 
 // Qt include.
-#include <QScopedPointer>
 #include <QList>
 #include <QMap>
 #include <QPointF>
 
 // C++ include.
 #include <vector>
+#include <memory>
 
 // Prototyper include.
 #include "types.hpp"

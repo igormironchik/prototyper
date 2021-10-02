@@ -53,7 +53,7 @@ public:
 	void place( const QRectF & rect ) Q_DECL_OVERRIDE;
 
 	//! Aspect ratio handle.
-	QScopedPointer< AspectRatioHandle > m_aspectRatioHandle;
+	std::unique_ptr< AspectRatioHandle > m_aspectRatioHandle;
 }; // class FormImageHandlesPrivate
 
 void

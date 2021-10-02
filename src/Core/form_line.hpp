@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsLineItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -118,7 +120,7 @@ protected:
 private:
 	Q_DISABLE_COPY( FormLine )
 
-	QScopedPointer< FormLinePrivate > d;
+	std::unique_ptr< FormLinePrivate > d;
 }; // class FormLine
 
 } /* namespace Core */

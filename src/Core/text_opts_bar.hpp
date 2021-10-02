@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QToolBar>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QTextCursor;
@@ -95,7 +97,7 @@ private:
 
 	Q_DISABLE_COPY( TextOptsBar )
 
-	QScopedPointer< TextOptsBarPrivate > d;
+	std::unique_ptr< TextOptsBarPrivate > d;
 }; // class TextOptsBar
 
 } /* namespace Core */

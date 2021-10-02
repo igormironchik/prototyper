@@ -61,7 +61,7 @@ public:
 	//! Parent.
 	FormRect * q;
 	//! Resize & move handles.
-	QScopedPointer< WithResizeAndMoveHandles > m_handles;
+	std::unique_ptr< WithResizeAndMoveHandles > m_handles;
 	//! Sunsidiary rect.
 	QRectF m_subsidiaryRect;
 	//! Is handle moved?
@@ -181,7 +181,7 @@ FormRect::setCfg( const Cfg::Rect & c )
 QRectF
 FormRect::boundingRect() const
 {
-	if( !d.isNull() )
+	if( d )
 	{
 		const qreal w = objectPen().widthF() / 2.0;
 
@@ -275,13 +275,13 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		d->m_isHandleMoved = true;
 	}
 
-	if( handle == d->m_handles->m_move.data() )
+	if( handle == d->m_handles->m_move.get() )
 	{
 		moveBy( delta.x(), delta.y() );
 
 		d->updateRect( d->m_rect );
 	}
-	else if( handle == d->m_handles->m_topLeft.data() )
+	else if( handle == d->m_handles->m_topLeft.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( delta.x(), delta.y(), 0.0, 0.0 );
@@ -289,7 +289,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
-	else if( handle == d->m_handles->m_top.data() )
+	else if( handle == d->m_handles->m_top.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( 0.0, delta.y(), 0.0, 0.0 );
@@ -297,7 +297,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
-	else if( handle == d->m_handles->m_topRight.data() )
+	else if( handle == d->m_handles->m_topRight.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( 0.0, delta.y(), delta.x(), 0.0 );
@@ -305,7 +305,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
-	else if( handle == d->m_handles->m_right.data() )
+	else if( handle == d->m_handles->m_right.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( 0.0, 0.0, delta.x(), 0.0 );
@@ -313,7 +313,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
-	else if( handle == d->m_handles->m_bottomRight.data() )
+	else if( handle == d->m_handles->m_bottomRight.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( 0.0, 0.0, delta.x(), delta.y() );
@@ -321,7 +321,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
-	else if( handle == d->m_handles->m_bottom.data() )
+	else if( handle == d->m_handles->m_bottom.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( 0.0, 0.0, 0.0, delta.y() );
@@ -329,7 +329,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
-	else if( handle == d->m_handles->m_bottomLeft.data() )
+	else if( handle == d->m_handles->m_bottomLeft.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( delta.x(), 0.0, 0.0, delta.y() );
@@ -337,7 +337,7 @@ FormRect::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateRect( r );
 	}
-	else if( handle == d->m_handles->m_left.data() )
+	else if( handle == d->m_handles->m_left.get() )
 	{
 		const QRectF r =
 			d->m_rect.adjusted( delta.x(), 0.0, 0.0, 0.0 );
@@ -354,7 +354,7 @@ FormRect::handleReleased( FormMoveHandle * handle )
 {
 	d->m_isHandleMoved = false;
 
-	if( handle == d->m_handles->m_move.data() )
+	if( handle == d->m_handles->m_move.get() )
 		page()->undoStack()->push( new UndoMove( page(),
 			objectId(), position() - d->m_subsidiaryRect.topLeft() ) );
 	else

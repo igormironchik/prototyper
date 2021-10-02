@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QDialog>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -63,7 +65,7 @@ private:
 
 	Q_DISABLE_COPY( NameDlg )
 
-	QScopedPointer< NameDlgPrivate > d;
+	std::unique_ptr< NameDlgPrivate > d;
 }; // class NameDlg
 
 } /* namespace Core */

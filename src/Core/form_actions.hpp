@@ -25,8 +25,10 @@
 
 // Qt include.
 #include <QObject>
-#include <QScopedPointer>
 #include <QFlags>
+
+// C++ include.
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QColor;
@@ -133,7 +135,7 @@ public:
 private:
 	Q_DISABLE_COPY( PageAction )
 
-	QScopedPointer< PageActionPrivate > d;
+	std::unique_ptr< PageActionPrivate > d;
 }; // class FormAction
 
 Q_DECLARE_OPERATORS_FOR_FLAGS( PageAction::Flags )

@@ -637,7 +637,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		d->m_handleMoved = true;
 	}
 
-	if( handle == d->m_handles->m_move.data() )
+	if( handle == d->m_handles->m_move.get() )
 	{
 		moveBy( delta.x(), delta.y() );
 
@@ -651,7 +651,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 			c_halfHandleSize * c_halfDivider * c_halfDivider + w,
 			c_halfHandleSize * c_halfDivider * c_halfDivider + w ) );
 	}
-	else if( handle == d->m_handles->m_topLeft.data() )
+	else if( handle == d->m_handles->m_topLeft.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( delta.x(), delta.y(), 0.0, 0.0 );
@@ -659,7 +659,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles->m_top.data() )
+	else if( handle == d->m_handles->m_top.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( 0.0, delta.y(), 0.0, 0.0 );
@@ -667,7 +667,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles->m_topRight.data() )
+	else if( handle == d->m_handles->m_topRight.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( 0.0, delta.y(), delta.x(), 0.0 );
@@ -675,7 +675,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles->m_right.data() )
+	else if( handle == d->m_handles->m_right.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( 0.0, 0.0, delta.x(), 0.0 );
@@ -683,7 +683,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles->m_bottomRight.data() )
+	else if( handle == d->m_handles->m_bottomRight.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( 0.0, 0.0, delta.x(), delta.y() );
@@ -691,7 +691,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles->m_bottom.data() )
+	else if( handle == d->m_handles->m_bottom.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( 0.0, 0.0, 0.0, delta.y() );
@@ -699,7 +699,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles->m_bottomLeft.data() )
+	else if( handle == d->m_handles->m_bottomLeft.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( delta.x(), 0.0, 0.0, delta.y() );
@@ -707,7 +707,7 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		if( d->m_handles->checkConstraint( r.size() ) )
 			d->updateLines( d->boundingRect(), r );
 	}
-	else if( handle == d->m_handles->m_left.data() )
+	else if( handle == d->m_handles->m_left.get() )
 	{
 		const QRectF r =
 			d->m_resized.adjusted( delta.x(), 0.0, 0.0, 0.0 );
@@ -724,7 +724,7 @@ FormPolyline::handleReleased( FormMoveHandle * handle )
 {
 	d->m_handleMoved = false;
 
-	if( handle == d->m_handles->m_move.data() )
+	if( handle == d->m_handles->m_move.get() )
 		page()->undoStack()->push( new UndoMove( page(),
 			objectId(), d->m_resized.topLeft() - d->m_subsidiaryRect.topLeft() ) );
 	else

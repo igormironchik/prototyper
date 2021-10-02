@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QWidget>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "project_cfg.hpp"
@@ -67,7 +69,7 @@ public:
 private:
 	Q_DISABLE_COPY( ObjectProperties )
 
-	QScopedPointer< ObjectPropertiesPrivate > d;
+	std::unique_ptr< ObjectPropertiesPrivate > d;
 }; // class ObjectProperties
 
 } /* namespace Core */

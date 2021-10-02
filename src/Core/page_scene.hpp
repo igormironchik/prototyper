@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsScene>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -82,7 +84,7 @@ protected:
 private:
 	Q_DISABLE_COPY( PageScene )
 
-	QScopedPointer< PageScenePrivate > d;
+	std::unique_ptr< PageScenePrivate > d;
 }; // class PageScene
 
 } /* namespace Core */

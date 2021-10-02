@@ -62,7 +62,7 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Resizable proxy.
-	QScopedPointer< FormResizableProxy > m_proxy;
+	std::unique_ptr< FormResizableProxy > m_proxy;
 }; // class FormComboBoxPrivate
 
 void

@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsPathItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -123,7 +125,7 @@ protected:
 private:
 	Q_DISABLE_COPY( FormPolyline )
 
-	QScopedPointer< FormPolylinePrivate > d;
+	std::unique_ptr< FormPolylinePrivate > d;
 }; // class FormPolyline
 
 } /* namespace Core */

@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsObject>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -112,7 +114,7 @@ private:
 
 	Q_DISABLE_COPY( FormButton )
 
-	QScopedPointer< FormButtonPrivate > d;
+	std::unique_ptr< FormButtonPrivate > d;
 }; // class FormButton
 
 } /* namespace Core */

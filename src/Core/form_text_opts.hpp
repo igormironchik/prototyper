@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsProxyWidget>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -75,7 +77,7 @@ public slots:
 private:
 	Q_DISABLE_COPY( FormTextOpts )
 
-	QScopedPointer< FormTextOptsPrivate > d;
+	std::unique_ptr< FormTextOptsPrivate > d;
 }; // class FormTextOpts
 
 } /* namespace Core */

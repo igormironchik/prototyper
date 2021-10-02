@@ -28,6 +28,9 @@
 #include <QPen>
 #include <QBrush>
 
+// C++ include.
+#include <memory>
+
 
 namespace Prototyper {
 
@@ -140,7 +143,7 @@ public:
 private:
 	Q_DISABLE_COPY( FormObject )
 
-	QScopedPointer< FormObjectPrivate > d;
+	std::unique_ptr< FormObjectPrivate > d;
 }; // class FormObject
 
 } /* namespace Core */

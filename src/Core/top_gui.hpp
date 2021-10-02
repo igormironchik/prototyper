@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QObject>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "export.hpp"
@@ -69,7 +71,7 @@ public:
 private:
 	Q_DISABLE_COPY( TopGui )
 
-	QScopedPointer< TopGuiPrivate > d;
+	std::unique_ptr< TopGuiPrivate > d;
 }; // class TopGui
 
 } /* namespace Core */

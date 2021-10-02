@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -102,7 +104,7 @@ private:
 
 	Q_DISABLE_COPY( FormHSlider )
 
-	QScopedPointer< FormHSliderPrivate > d;
+	std::unique_ptr< FormHSliderPrivate > d;
 }; // class FormHSlider
 
 } /* namespace Core */

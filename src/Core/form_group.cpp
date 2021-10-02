@@ -79,15 +79,15 @@ public:
 	//! Parent.
 	FormGroup * q;
 	//! Center handle.
-	QScopedPointer< FormMoveHandle > m_center;
+	std::unique_ptr< FormMoveHandle > m_center;
 	//! Top-left handle.
-	QScopedPointer< FormMoveHandle > m_topLeft;
+	std::unique_ptr< FormMoveHandle > m_topLeft;
 	//! Top-right handle.
-	QScopedPointer< FormMoveHandle > m_topRight;
+	std::unique_ptr< FormMoveHandle > m_topRight;
 	//! Bottom-right handle.
-	QScopedPointer< FormMoveHandle > m_bottomRight;
+	std::unique_ptr< FormMoveHandle > m_bottomRight;
 	//! Bottom-left handle.
-	QScopedPointer< FormMoveHandle > m_bottomLeft;
+	std::unique_ptr< FormMoveHandle > m_bottomLeft;
 	//! Child.
 	QList< FormObject* > m_child;
 	//! Old pos.

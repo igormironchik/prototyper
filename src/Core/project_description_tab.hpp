@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QWidget>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QToolBar;
@@ -62,7 +64,7 @@ public:
 private:
 	Q_DISABLE_COPY( ProjectDescTab )
 
-	QScopedPointer< ProjectDescTabPrivate > d;
+	std::unique_ptr< ProjectDescTabPrivate > d;
 }; // class ProjectDescTab
 
 } /* namespace Core */
