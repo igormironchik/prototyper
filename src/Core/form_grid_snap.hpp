@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -70,7 +72,7 @@ protected:
 private:
 	Q_DISABLE_COPY( GridSnap )
 
-	QScopedPointer< GridSnapPrivate > d;
+	std::unique_ptr< GridSnapPrivate > d;
 }; // class GridSnap
 
 } /* namespace Core */

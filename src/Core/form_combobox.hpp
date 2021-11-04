@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -104,7 +106,7 @@ private:
 
 	Q_DISABLE_COPY( FormComboBox )
 
-	QScopedPointer< FormComboBoxPrivate > d;
+	std::unique_ptr< FormComboBoxPrivate > d;
 }; // class FormComboBox
 
 } /* namespace Core */

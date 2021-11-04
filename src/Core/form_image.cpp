@@ -69,7 +69,7 @@ public:
 	//! Image.
 	QImage m_image;
 	//! Handles.
-	QScopedPointer< FormImageHandles > m_handles;
+	std::unique_ptr< FormImageHandles > m_handles;
 	//! Default properties.
 	QPointer< ObjectProperties > m_props;
 	//! Default properties top widget.
@@ -357,7 +357,7 @@ FormImage::properties( QWidget * parent )
 {
 	d->m_topProps = new QWidget( parent );
 	QVBoxLayout * layout = new QVBoxLayout( d->m_topProps );
-	layout->setMargin( 0 );
+	layout->setContentsMargins( 0, 0, 0, 0 );
 	layout->setSpacing( 0 );
 
 	d->m_props = new ObjectProperties( this, d->m_topProps );

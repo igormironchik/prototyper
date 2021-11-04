@@ -50,9 +50,9 @@ public:
 
 private:
 	inline const PdfExporterPrivate * d_ptr() const
-		{ return reinterpret_cast< const PdfExporterPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< const PdfExporterPrivate* > ( d.get() ); }
 	inline PdfExporterPrivate * d_ptr()
-		{ return reinterpret_cast< PdfExporterPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< PdfExporterPrivate* > ( d.get() ); }
 
 private:
 	Q_DISABLE_COPY( PdfExporter )

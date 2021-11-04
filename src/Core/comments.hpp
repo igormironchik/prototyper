@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QDialog>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -70,7 +72,7 @@ private:
 
 	Q_DISABLE_COPY( Comments )
 
-	QScopedPointer< CommentsPrivate > d;
+	std::unique_ptr< CommentsPrivate > d;
 }; // class Comments
 
 } /* namespace Core */

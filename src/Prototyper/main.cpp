@@ -47,8 +47,8 @@ int main( int argc, char ** argv )
 	QApplication::setWindowIcon( appIcon );
 
 	QTranslator appTranslator;
-	appTranslator.load( "./tr/Prototyper_" + QLocale::system().name() );
-	QApplication::installTranslator( &appTranslator );
+	if( appTranslator.load( "./tr/Prototyper_" + QLocale::system().name() ) )
+		QApplication::installTranslator( &appTranslator );
 
 	TopGui::instance()->projectWindow()->show();
 

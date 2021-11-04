@@ -23,8 +23,8 @@
 #ifndef PROTOTYPER__CORE__EXPORTER_HPP__INCLUDED
 #define PROTOTYPER__CORE__EXPORTER_HPP__INCLUDED
 
-// Qt include.
-#include <QScopedPointer>
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "project_cfg.hpp"
@@ -55,10 +55,10 @@ public:
 	virtual void exportToDoc( const QString & fileName ) = 0;
 
 protected:
-	explicit Exporter( QScopedPointer< ExporterPrivate > && dd );
+	explicit Exporter( std::unique_ptr< ExporterPrivate > && dd );
 
 protected:
-	QScopedPointer< ExporterPrivate > d;
+	std::unique_ptr< ExporterPrivate > d;
 
 private:
 	Q_DISABLE_COPY( Exporter )

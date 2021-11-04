@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsView>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -85,7 +87,7 @@ private:
 
 	Q_DISABLE_COPY( PageView )
 
-	QScopedPointer< PageViewPrivate > d;
+	std::unique_ptr< PageViewPrivate > d;
 }; // class PageView
 
 } /* namespace Core */

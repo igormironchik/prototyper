@@ -154,8 +154,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 //
 
 HtmlExporter::HtmlExporter( const Cfg::Project & project )
-	:	Exporter( QScopedPointer< ExporterPrivate >
-			( new HtmlExporterPrivate( project, this ) ) )
+	:	Exporter( std::make_unique< HtmlExporterPrivate >( project, this ) )
 {
 }
 

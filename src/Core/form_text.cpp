@@ -75,9 +75,9 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Resizable proxy.
-	QScopedPointer< FormResizableProxy > m_proxy;
+	std::unique_ptr< FormResizableProxy > m_proxy;
 	//! Text options.
-	QScopedPointer< FormTextOpts > m_opts;
+	std::unique_ptr< FormTextOpts > m_opts;
 	//! First paint.
 	bool m_isFirstPaint;
 	//! Show tool bar.
@@ -111,23 +111,23 @@ FormTextPrivate::init()
 
 	FormText::connect( q->document(), &QTextDocument::contentsChanged,
 		q, &FormText::p_contentChanged );
-	FormText::connect( m_opts.data(), &FormTextOpts::setFontSize,
+	FormText::connect( m_opts.get(), &FormTextOpts::setFontSize,
 		q, &FormText::setFontSize );
-	FormText::connect( m_opts.data(), &FormTextOpts::bold,
+	FormText::connect( m_opts.get(), &FormTextOpts::bold,
 		q, &FormText::bold );
-	FormText::connect( m_opts.data(), &FormTextOpts::italic,
+	FormText::connect( m_opts.get(), &FormTextOpts::italic,
 		q, &FormText::italic );
-	FormText::connect( m_opts.data(), &FormTextOpts::underline,
+	FormText::connect( m_opts.get(), &FormTextOpts::underline,
 		q, &FormText::underline );
-	FormText::connect( m_opts.data(), &FormTextOpts::textColor,
+	FormText::connect( m_opts.get(), &FormTextOpts::textColor,
 		q, &FormText::changeTextColor );
-	FormText::connect( m_opts.data(), &FormTextOpts::clearFormat,
+	FormText::connect( m_opts.get(), &FormTextOpts::clearFormat,
 		q, &FormText::clearFormat );
-	FormText::connect( m_opts.data(), &FormTextOpts::alignLeft,
+	FormText::connect( m_opts.get(), &FormTextOpts::alignLeft,
 		q, &FormText::alignLeft );
-	FormText::connect( m_opts.data(), &FormTextOpts::alignCenter,
+	FormText::connect( m_opts.get(), &FormTextOpts::alignCenter,
 		q, &FormText::alignCenter );
-	FormText::connect( m_opts.data(), &FormTextOpts::alignRight,
+	FormText::connect( m_opts.get(), &FormTextOpts::alignRight,
 		q, &FormText::alignRight );
 }
 

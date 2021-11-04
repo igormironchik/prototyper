@@ -50,9 +50,9 @@ public:
 
 private:
 	inline const SvgExporterPrivate * d_ptr() const
-		{ return reinterpret_cast< const SvgExporterPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< const SvgExporterPrivate* > ( d.get() ); }
 	inline SvgExporterPrivate * d_ptr()
-		{ return reinterpret_cast< SvgExporterPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< SvgExporterPrivate* > ( d.get() ); }
 
 private:
 	Q_DISABLE_COPY( SvgExporter )

@@ -55,9 +55,9 @@ public:
 
 private:
 	inline const FormImageHandlesPrivate * d_ptr() const
-		{ return reinterpret_cast< const FormImageHandlesPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< const FormImageHandlesPrivate* > ( d.get() ); }
 	inline FormImageHandlesPrivate * d_ptr()
-		{ return reinterpret_cast< FormImageHandlesPrivate* > ( d.data() ); }
+		{ return reinterpret_cast< FormImageHandlesPrivate* > ( d.get() ); }
 
 private:
 	Q_DISABLE_COPY( FormImageHandles )

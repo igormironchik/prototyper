@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QTextEdit>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "project_cfg.hpp"
@@ -95,7 +97,7 @@ private:
 
 	Q_DISABLE_COPY( TextEditor )
 
-	QScopedPointer< TextEditorPrivate > d;
+	std::unique_ptr< TextEditorPrivate > d;
 }; // class TextEditor
 
 } /* namespace Core */

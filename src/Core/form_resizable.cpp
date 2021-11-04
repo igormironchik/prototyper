@@ -83,8 +83,7 @@ FormResizableProxyPrivate::~FormResizableProxyPrivate() = default;
 void
 FormResizableProxyPrivate::init()
 {
-	QScopedPointer< WithResizeAndMoveHandles > tmp(
-		new WithResizeAndMoveHandles( q, q, m_form ) );
+	auto tmp = std::make_unique< WithResizeAndMoveHandles> ( q, q, m_form );
 
 	m_handles.swap( tmp );
 
@@ -111,8 +110,7 @@ FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 	:	QGraphicsItem( parent )
 	,	d( nullptr )
 {
-	QScopedPointer< FormResizableProxyPrivate > tmp(
-		new FormResizableProxyPrivate( resizable, this, form ) );
+	auto tmp = std::make_unique< FormResizableProxyPrivate >( resizable, this, form );
 
 	tmp->init();
 
@@ -120,12 +118,12 @@ FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 }
 
 FormResizableProxy::FormResizableProxy(
-	QScopedPointer< FormResizableProxyPrivate > && dd,
+	std::unique_ptr< FormResizableProxyPrivate > && dd,
 	QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	d( nullptr )
 {
-	QScopedPointer< FormResizableProxyPrivate > tmp( nullptr );
+	std::unique_ptr< FormResizableProxyPrivate > tmp;
 
 	tmp.swap( dd );
 
@@ -161,7 +159,7 @@ FormResizableProxy::setMinSize( const QSizeF & min )
 QRectF
 FormResizableProxy::boundingRect() const
 {
-	if( !d.isNull() )
+	if( d )
 	{
 		QRectF r = d->m_rect;
 		r.moveTopLeft( QPointF( 0.0, 0.0 ) );
@@ -195,7 +193,7 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 		d->m_handleMoved = true;
 	}
 
-	if( handle == d->m_handles->m_move.data() )
+	if( handle == d->m_handles->m_move.get() )
 	{
 		d->m_rect.moveTop( d->m_rect.top() + delta.y() );
 		d->m_rect.moveRight( d->m_rect.right() + delta.x() );
@@ -204,56 +202,56 @@ FormResizableProxy::handleMoved( const QPointF & delta, FormMoveHandle * handle 
 
 		d->m_object->moveResizable( delta );
 	}
-	else if( handle == d->m_handles->m_topLeft.data() )
+	else if( handle == d->m_handles->m_topLeft.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( delta.x(), delta.y(), 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles->m_top.data() )
+	else if( handle == d->m_handles->m_top.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, delta.y(), 0.0, 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles->m_topRight.data() )
+	else if( handle == d->m_handles->m_topRight.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, delta.y(), delta.x(), 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles->m_right.data() )
+	else if( handle == d->m_handles->m_right.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, delta.x(), 0.0 );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles->m_bottomRight.data() )
+	else if( handle == d->m_handles->m_bottomRight.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, delta.x(), delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles->m_bottom.data() )
+	else if( handle == d->m_handles->m_bottom.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( 0.0, 0.0, 0.0, delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles->m_bottomLeft.data() )
+	else if( handle == d->m_handles->m_bottomLeft.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( delta.x(), 0.0, 0.0, delta.y() );
 
 		if( d->m_handles->checkConstraint( r.size() ) )
 			setRect( r );
 	}
-	else if( handle == d->m_handles->m_left.data() )
+	else if( handle == d->m_handles->m_left.get() )
 	{
 		const QRectF r = d->m_rect.adjusted( delta.x(), 0.0, 0.0, 0.0 );
 
@@ -267,7 +265,7 @@ FormResizableProxy::handleReleased( FormMoveHandle * handle )
 {
 	d->m_handleMoved = false;
 
-	if( handle != d->m_handles->m_move.data() )
+	if( handle != d->m_handles->m_move.get() )
 	{
 		d->m_object->resize( d->m_rect );
 

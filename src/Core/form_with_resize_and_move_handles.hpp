@@ -25,8 +25,10 @@
 
 // Qt include.
 #include <QtGlobal>
-#include <QScopedPointer>
 #include <QSizeF>
+
+// C++ include.
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QGraphicsItem;
@@ -69,23 +71,23 @@ public:
 	void setDeltaToZero( qreal delta );
 
 	//! Top-left resize.
-	QScopedPointer< FormResizeHandle > m_topLeft;
+	std::unique_ptr< FormResizeHandle > m_topLeft;
 	//! Top resize.
-	QScopedPointer< FormResizeHandle > m_top;
+	std::unique_ptr< FormResizeHandle > m_top;
 	//! Top-right resize.
-	QScopedPointer< FormResizeHandle > m_topRight;
+	std::unique_ptr< FormResizeHandle > m_topRight;
 	//! Left resize.
-	QScopedPointer< FormResizeHandle > m_left;
+	std::unique_ptr< FormResizeHandle > m_left;
 	//! Left-bottom resize.
-	QScopedPointer< FormResizeHandle > m_bottomLeft;
+	std::unique_ptr< FormResizeHandle > m_bottomLeft;
 	//! Bottom resize.
-	QScopedPointer< FormResizeHandle > m_bottom;
+	std::unique_ptr< FormResizeHandle > m_bottom;
 	//! Right-bottom resize.
-	QScopedPointer< FormResizeHandle > m_bottomRight;
+	std::unique_ptr< FormResizeHandle > m_bottomRight;
 	//! Right resize.
-	QScopedPointer< FormResizeHandle > m_right;
+	std::unique_ptr< FormResizeHandle > m_right;
 	//! Move handle.
-	QScopedPointer< FormMoveHandle > m_move;
+	std::unique_ptr< FormMoveHandle > m_move;
 	//! Parent.
 	QGraphicsItem * q;
 	//! Min size.

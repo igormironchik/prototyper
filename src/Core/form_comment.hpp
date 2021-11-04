@@ -24,8 +24,10 @@
 #define PROTOTYPER_CORE_FORM_COMMENT_HPP_INCLUDED
 
 // Qt include.
-#include <QScopedPointer>
 #include <QGraphicsObject>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "project_cfg.hpp"
@@ -91,7 +93,7 @@ protected:
 private:
 	Q_DISABLE_COPY( PageComment )
 
-	QScopedPointer< PageCommentPrivate > d;
+	std::unique_ptr< PageCommentPrivate > d;
 }; // class PageComment
 
 } /* namespace Core */

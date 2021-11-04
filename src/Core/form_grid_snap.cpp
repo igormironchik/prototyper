@@ -99,7 +99,7 @@ GridSnap::GridSnap( QGraphicsItem * parent )
 	:	QGraphicsItem( parent )
 	,	d( nullptr )
 {
-	QScopedPointer< GridSnapPrivate > tmp( new GridSnapPrivate( this ) );
+	auto tmp = std::make_unique< GridSnapPrivate >( this );
 
 	tmp->init();
 
@@ -139,7 +139,7 @@ GridSnap::snapped( const QPointF & p ) const
 QRectF
 GridSnap::boundingRect() const
 {
-	if( !d.isNull() )
+	if( d )
 		return { 0, 0, d->m_size * c_halfDivider, d->m_size * c_halfDivider };
 
 	return {};

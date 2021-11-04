@@ -80,7 +80,7 @@ public:
 	//! Rect.
 	QRectF m_rect;
 	//! Resizable proxy.
-	QScopedPointer< FormResizableProxy > m_proxy;
+	std::unique_ptr< FormResizableProxy > m_proxy;
 	//! Font.
 	QFont m_font;
 	//! Text.
@@ -469,7 +469,7 @@ FormSpinBox::properties( QWidget * parent )
 	d->m_textStyleProps = new TextStyleProperties( d->m_properties );
 
 	auto * l = new QVBoxLayout( d->m_properties );
-	l->setMargin( 0 );
+	l->setContentsMargins( 0, 0, 0, 0 );
 	l->setSpacing( 0 );
 	l->addWidget( d->m_objProps );
 	l->addWidget( d->m_spinProps );

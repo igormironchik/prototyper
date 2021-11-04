@@ -447,10 +447,10 @@ Exporter::Exporter( const Cfg::Project & project )
 	d->init();
 }
 
-Exporter::Exporter( QScopedPointer< ExporterPrivate > && dd )
+Exporter::Exporter( std::unique_ptr< ExporterPrivate > && dd )
 	:	d( nullptr )
 {
-	QScopedPointer< ExporterPrivate > tmp( nullptr );
+	std::unique_ptr< ExporterPrivate > tmp;
 
 	tmp.swap( dd );
 

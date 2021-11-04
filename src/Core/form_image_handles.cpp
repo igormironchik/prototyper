@@ -53,7 +53,7 @@ public:
 	void place( const QRectF & rect ) Q_DECL_OVERRIDE;
 
 	//! Aspect ratio handle.
-	QScopedPointer< AspectRatioHandle > m_aspectRatioHandle;
+	std::unique_ptr< AspectRatioHandle > m_aspectRatioHandle;
 }; // class FormImageHandlesPrivate
 
 void
@@ -86,8 +86,8 @@ FormImageHandlesPrivate::place( const QRectF & rect )
 
 FormImageHandles::FormImageHandles( FormResizable * resizable,
 	QGraphicsItem * parent, Page * form )
-	:	FormResizableProxy( QScopedPointer< FormResizableProxyPrivate > (
-			new FormImageHandlesPrivate( resizable, this, form ) ), parent )
+	:	FormResizableProxy( std::make_unique< FormImageHandlesPrivate >( resizable, this, form ),
+			parent )
 {
 }
 

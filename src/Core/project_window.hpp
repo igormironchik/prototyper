@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QMainWindow>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -194,7 +196,7 @@ private:
 
 	Q_DISABLE_COPY( ProjectWindow )
 
-	QScopedPointer< ProjectWindowPrivate > d;
+	std::unique_ptr< ProjectWindowPrivate > d;
 }; // class ProjectWindow
 
 } /* namespace Core */

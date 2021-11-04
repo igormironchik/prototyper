@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -65,7 +67,7 @@ protected:
 private:
 	Q_DISABLE_COPY( AspectRatioHandle )
 
-	QScopedPointer< AspectRatioHandlePrivate > d;
+	std::unique_ptr< AspectRatioHandlePrivate > d;
 }; // class AspectRatioHandle
 
 } /* namespace Core */

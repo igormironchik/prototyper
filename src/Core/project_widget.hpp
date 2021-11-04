@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QWidget>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QTabWidget;
@@ -132,7 +134,7 @@ private:
 
 	Q_DISABLE_COPY( ProjectWidget )
 
-	QScopedPointer< ProjectWidgetPrivate > d;
+	std::unique_ptr< ProjectWidgetPrivate > d;
 }; // class ProjectWidget
 
 } /* namespace Core */

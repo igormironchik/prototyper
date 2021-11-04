@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -63,7 +65,7 @@ public:
 private:
 	Q_DISABLE_COPY( FormRectPlacer )
 
-	QScopedPointer< FormRectPlacerPrivate > d;
+	std::unique_ptr< FormRectPlacerPrivate > d;
 }; // class FormRectPlacer
 
 } /* namespace Core */

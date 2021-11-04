@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QDialog>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 
 namespace Prototyper {
@@ -58,7 +60,7 @@ public:
 private:
 	Q_DISABLE_COPY( GridStepDlg )
 
-	QScopedPointer< GridStepDlgPrivate > d;
+	std::unique_ptr< GridStepDlgPrivate > d;
 }; // class GridStepDlg
 
 } /* namespace Core */

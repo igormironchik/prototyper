@@ -25,8 +25,10 @@
 
 // Qt include.
 #include <QDockWidget>
-#include <QScopedPointer>
 #include <QListView>
+
+// C++ include.
+#include <memory>
 
 QT_BEGIN_NAMESPACE
 class QStringListModel;
@@ -78,7 +80,7 @@ private:
 
 	 Q_DISABLE_COPY( TabsView )
 
-	 QScopedPointer< TabsViewPrivate > d;
+	 std::unique_ptr< TabsViewPrivate > d;
 }; // class TabsView
 
 
@@ -109,7 +111,7 @@ private:
 
 	Q_DISABLE_COPY( TabsList )
 
-	QScopedPointer< TabsListPrivate > d;
+	std::unique_ptr< TabsListPrivate > d;
 }; // class TabsList
 
 } /* namespace Core */

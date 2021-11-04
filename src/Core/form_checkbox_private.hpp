@@ -27,6 +27,9 @@
 #include <QPointer>
 #include <QWidget>
 
+// C++ include.
+#include <memory>
+
 // Prototyper include.
 #include "form_resizable.hpp"
 #include "form_checkbox_properties.hpp"
@@ -67,7 +70,7 @@ public:
 	//! Checked?
 	bool m_checked;
 	//! Handles.
-	QScopedPointer< FormResizableProxy > m_handles;
+	std::unique_ptr< FormResizableProxy > m_handles;
 	//! Font.
 	QFont m_font;
 	//! Text.

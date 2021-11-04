@@ -25,7 +25,9 @@
 
 // Qt include.
 #include <QGraphicsPixmapItem>
-#include <QScopedPointer>
+
+// C++ include.
+#include <memory>
 
 // Prototyper include.
 #include "form_object.hpp"
@@ -101,7 +103,7 @@ protected:
 private:
 	Q_DISABLE_COPY( FormImage )
 
-	QScopedPointer< FormImagePrivate > d;
+	std::unique_ptr< FormImagePrivate > d;
 }; // class FormImage
 
 } /* namespace Core */

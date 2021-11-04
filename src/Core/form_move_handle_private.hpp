@@ -25,7 +25,6 @@
 
 // Qt include.
 #include <QGraphicsObject>
-#include <QScopedPointer>
 #include <QCursor>
 
 
