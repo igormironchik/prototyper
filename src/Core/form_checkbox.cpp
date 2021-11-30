@@ -518,10 +518,10 @@ FormCheckBox::updatePropertiesValues()
 	if( d->m_props )
 	{
 		d->disconnectProperties();
-		d->m_objProps->ui()->m_x->setValue( position().x() );
-		d->m_objProps->ui()->m_y->setValue( position().y() );
-		d->m_objProps->ui()->m_width->setValue( rectangle().width() );
-		d->m_objProps->ui()->m_height->setValue( rectangle().height() );
+		d->m_objProps->ui()->m_x->setValue( qRound( position().x() ) );
+		d->m_objProps->ui()->m_y->setValue( qRound( position().y() ) );
+		d->m_objProps->ui()->m_width->setValue( qRound( rectangle().width() ) );
+		d->m_objProps->ui()->m_height->setValue( qRound( rectangle().height() ) );
 		d->connectProperties();
 	}
 }

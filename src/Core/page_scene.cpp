@@ -30,6 +30,7 @@
 #include "form_actions.hpp"
 #include "page.hpp"
 #include "form_aspect_ratio_handle.hpp"
+#include "form_nodes_edit_resize_handle.hpp"
 #include "form_move_handle.hpp"
 #include "constants.hpp"
 #include "form_comment.hpp"
@@ -176,8 +177,9 @@ PageScenePrivate::isHandleUnderMouse( const QList< QGraphicsItem* > & children )
 			auto * h = dynamic_cast< FormMoveHandle* > ( item );
 			auto * a = dynamic_cast< AspectRatioHandle* > ( item );
 			auto * c = dynamic_cast< PageComment* > ( item );
+			auto * m = dynamic_cast< NodesEditResizeHandle* > ( item );
 
-			if( h || a || c )
+			if( h || a || c || m )
 				return true;
 
 			const auto sub = item->childItems();

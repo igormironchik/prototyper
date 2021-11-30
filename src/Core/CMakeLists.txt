@@ -124,6 +124,10 @@ set( SRC exporter.hpp
     link_dlg.cpp
     form_text_properties.cpp
     form_text_style_properties.cpp
+	form_polyline_handles.hpp
+	form_polyline_handles.cpp
+	form_nodes_edit_resize_handle.hpp
+	form_nodes_edit_resize_handle.cpp
 	grid_step_dlg.ui
     name_dlg.ui
     form_checkbox_properties.ui

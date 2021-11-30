@@ -107,7 +107,7 @@ FormResizableProxyPrivate::place( const QRectF & rect )
 
 FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 	QGraphicsItem * parent, Page * form )
-	:	QGraphicsItem( parent )
+	:	QGraphicsObject( parent )
 	,	d( nullptr )
 {
 	auto tmp = std::make_unique< FormResizableProxyPrivate >( resizable, this, form );
@@ -120,7 +120,7 @@ FormResizableProxy::FormResizableProxy( FormResizable * resizable,
 FormResizableProxy::FormResizableProxy(
 	std::unique_ptr< FormResizableProxyPrivate > && dd,
 	QGraphicsItem * parent )
-	:	QGraphicsItem( parent )
+	:	QGraphicsObject( parent )
 	,	d( nullptr )
 {
 	std::unique_ptr< FormResizableProxyPrivate > tmp;
@@ -133,6 +133,12 @@ FormResizableProxy::FormResizableProxy(
 }
 
 FormResizableProxy::~FormResizableProxy() = default;
+
+WithResizeAndMoveHandles *
+FormResizableProxy::handles() const
+{
+	return d->m_handles.get();
+}
 
 void
 FormResizableProxy::setRect( const QRectF & rect )

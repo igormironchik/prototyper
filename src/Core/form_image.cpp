@@ -385,11 +385,11 @@ FormImage::updatePropertiesValues()
 	{
 		d->disconnectProperties();
 
-		d->m_props->ui()->m_width->setValue( rectangle().width() );
-		d->m_props->ui()->m_height->setValue( rectangle().height() );
+		d->m_props->ui()->m_width->setValue( qRound( rectangle().width() ) );
+		d->m_props->ui()->m_height->setValue( qRound( rectangle().height() ) );
 
-		d->m_props->ui()->m_x->setValue( position().x() );
-		d->m_props->ui()->m_y->setValue( position().y() );
+		d->m_props->ui()->m_x->setValue( qRound( position().x() ) );
+		d->m_props->ui()->m_y->setValue( qRound( position().y() ) );
 
 		d->connectProperties();
 	}

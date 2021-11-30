@@ -24,7 +24,7 @@
 #define PROTOTYPER__CORE__FORM_RESIZABLE_HPP__INCLUDED
 
 // Qt include.
-#include <QGraphicsItem>
+#include <QGraphicsObject>
 
 // C++ include.
 #include <memory>
@@ -73,7 +73,7 @@ class FormResizableProxyPrivate;
 //! and on resize draw new rectangle but don't resize actual FormResizable.
 //! And only on release do actual resize.
 class FormResizableProxy
-	:	public QGraphicsItem
+	:	public QGraphicsObject
 	,	public FormWithHandle
 {
 public:
@@ -91,6 +91,9 @@ public:
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 		QWidget * widget = 0 ) override;
+
+	//! \return Pointer to handles.
+	WithResizeAndMoveHandles * handles() const;
 
 protected:
 	FormResizableProxy( std::unique_ptr< FormResizableProxyPrivate > && dd,

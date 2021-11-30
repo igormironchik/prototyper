@@ -31,6 +31,7 @@
 
 // Prototyper include.
 #include "form_object.hpp"
+#include "form_resizable.hpp"
 #include "form_move_handle.hpp"
 #include "project_cfg.hpp"
 
@@ -52,6 +53,7 @@ class FormPolylinePrivate;
 class FormPolyline final
 	:	public QGraphicsPathItem
 	,	public FormObject
+	,	public FormResizable
 	,	public FormWithHandle
 {
 public:
@@ -117,6 +119,10 @@ public:
 	FormObject * clone() const override;
 
 protected:
+	//! Resize.
+	void resize( const QRectF & rect ) override;
+	//! Move resizable.
+	void moveResizable( const QPointF & delta ) override;
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
 	//! Handle released.
