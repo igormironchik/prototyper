@@ -51,6 +51,8 @@ public:
 
 	//! Init.
 	void init();
+	//! Set tool tip.
+	void setToolTip();
 
 	//! Parent.
 	AspectRatioHandle * q;
@@ -68,6 +70,17 @@ AspectRatioHandlePrivate::init()
 	q->setCursor( Qt::ArrowCursor );
 
 	q->setAcceptHoverEvents( true );
+
+	setToolTip();
+}
+
+void
+AspectRatioHandlePrivate::setToolTip()
+{
+	if( m_keepAspectRatio )
+		q->setToolTip( QObject::tr( "Switch to free resize mode" ) );
+	else
+		q->setToolTip( QObject::tr( "Switch to keep aspect ratio resize mode" ) );
 }
 
 
@@ -193,6 +206,8 @@ AspectRatioHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 		if( boundingRect().contains( event->pos() ) )
 		{
 			d->m_keepAspectRatio = !d->m_keepAspectRatio;
+
+			d->setToolTip();
 
 			update();
 
