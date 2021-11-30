@@ -183,8 +183,6 @@ FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
 
 	m_resized = newR;
 
-	const qreal w = (qreal) q->objectPen().width() / c_halfDivider;
-
 	m_handles->setRect( m_resized );
 
 	const qreal mx = b.width() / m_resized.width();
@@ -324,7 +322,6 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 		MmPx::instance().fromMmX( c.size().width() ),
 		MmPx::instance().fromMmY( c.size().height() ) );
 
-	const qreal w = (qreal) objectPen().width() / c_halfDivider;
 
 	d->m_handles->setRect( d->m_resized );
 
