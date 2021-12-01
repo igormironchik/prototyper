@@ -67,7 +67,7 @@ public:
 	//! Make path.
 	void makePath();
 	//! Update lines.
-	void updateLines( const QRectF & oldR, const QRectF & newR );
+	void resize( const QRectF & oldR, const QRectF & newR );
 	//! \return Bounding rect.
 	QRectF boundingRect() const;
 
@@ -173,7 +173,7 @@ FormPolylinePrivate::makePath()
 }
 
 void
-FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
+FormPolylinePrivate::resize( const QRectF & oldR, const QRectF & newR )
 {
 	Q_UNUSED( oldR )
 
@@ -321,7 +321,7 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 
 	d->m_handles->setRect( d->m_resized );
 
-	d->updateLines( QRectF(), d->m_resized );
+	d->resize( QRectF(), d->m_resized );
 }
 
 void
@@ -609,7 +609,7 @@ FormPolyline::resize( const QRectF & rect )
 {
 	d->m_handles->setRect( rect );
 
-	d->updateLines( d->boundingRect(), rect );
+	d->resize( d->boundingRect(), rect );
 
 	page()->update();
 }
