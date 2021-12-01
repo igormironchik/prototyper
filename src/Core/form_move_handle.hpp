@@ -99,9 +99,6 @@ public:
 	//! \return Cursor.
 	const QCursor & handleCursor() const;
 
-	//! Set additional space to zero point.
-	void setDeltaToZero( const QPointF & delta );
-
 protected:
 	//! Handle was moved.
 	virtual void moved( const QPointF & delta );

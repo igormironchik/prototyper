@@ -67,8 +67,6 @@ public:
 	bool m_ignoreMouse;
 	//! Zero point.
 	QPointF m_zero;
-	//! Additional delta to zero.
-	QPointF m_addToZero;
 	//! Touch delta.
 	QPointF m_touchDelta;
 	//! Cursor.

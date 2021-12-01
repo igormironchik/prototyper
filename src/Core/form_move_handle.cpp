@@ -76,7 +76,6 @@ FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
 	,	m_pressed( false )
 	,	m_ignoreMouse( false )
 	,	m_zero( zero )
-	,	m_addToZero( 0.0, 0.0 )
 	,	m_cursor( c )
 	,	m_form( form )
 {
@@ -220,12 +219,6 @@ FormMoveHandle::handleCursor() const
 }
 
 void
-FormMoveHandle::setDeltaToZero( const QPointF & delta )
-{
-	d->m_addToZero = delta;
-}
-
-void
 FormMoveHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
 {
 	PageAction::instance()->page()->snapItem()->setSnapPos(
@@ -289,7 +282,7 @@ FormMoveHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
 		d->m_pressed = true;
 		d->m_pos = mapFromScene( event->scenePos() );
 
-		d->m_touchDelta = d->m_pos - d->m_zero - d->m_addToZero;
+		d->m_touchDelta = d->m_pos - d->m_zero;
 
 		event->accept();
 	}

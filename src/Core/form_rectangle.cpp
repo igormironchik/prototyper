@@ -76,8 +76,6 @@ FormRectPrivate::init()
 	m_handles.reset( new WithResizeAndMoveHandles( q, q->parentItem(),
 		q->page() ) );
 
-	m_handles->setDeltaToZero( 1.0 );
-
 	m_handles->hide();
 
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ),
@@ -93,7 +91,7 @@ FormRectPrivate::updateRect( const QRectF & r )
 
 	m_rect.moveTopLeft( QPointF( 0.0, 0.0 ) );
 
-	QRectF hr = q->boundingRect();
+	QRectF hr = m_rect;
 
 	hr.moveTopLeft( q->pos() + hr.topLeft() );
 	hr.adjust(
