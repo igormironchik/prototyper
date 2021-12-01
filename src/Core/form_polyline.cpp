@@ -117,7 +117,7 @@ FormPolylinePrivate::init()
 	m_handles.swap( tmp );
 
 	m_handles->handles()->setMinSize( QSizeF( c_minResizableSize, c_minResizableSize ) );
-	m_handles->handles()->setDeltaToZero( 1.0 );
+//	m_handles->handles()->setDeltaToZero( 1.0 );
 	m_handles->hide();
 
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ),
@@ -478,7 +478,7 @@ FormPolyline::showHandles( bool show )
 		d->m_start->hide();
 		d->m_end->hide();
 
-		QRectF r = boundingRect();
+		QRectF r = d->boundingRect();
 		r.moveTopLeft( pos() + r.topLeft() );
 		d->m_handles->setRect( r );
 	}
@@ -573,7 +573,7 @@ FormPolyline::setPosition( const QPointF & p, bool pushUndoCommand )
 
 	setPos( p - d->boundingRect().topLeft() );
 
-	QRectF r = boundingRect();
+	QRectF r = d->boundingRect();
 	r.moveTopLeft( pos() + r.topLeft() );
 
 	d->m_resized.moveTopLeft( r.topLeft() );
