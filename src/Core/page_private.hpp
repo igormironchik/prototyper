@@ -103,8 +103,7 @@ public:
 		qreal & z, bool initZ ) const;
 	//! \return Start point for line.
 	QPointF lineStartPoint( const QPointF & point,
-		bool & intersected, bool & intersectedEnds,
-		FormLine* & intersectedLine ) const;
+		bool & intersected, bool & intersectedEnds ) const;
 	//! Clear current lines.
 	void clearCurrentLines();
 	//! Handle mouse move in current lines.

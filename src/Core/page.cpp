@@ -150,7 +150,7 @@ PagePrivate::currentZValue( const QList< QGraphicsItem* > & items,
 
 QPointF
 PagePrivate::lineStartPoint( const QPointF & point, bool & intersected,
-	bool & intersectedEnds, FormLine* & intersectedLine ) const
+	bool & intersectedEnds ) const
 {
 	if( m_currentPoly )
 	{
@@ -168,11 +168,7 @@ PagePrivate::lineStartPoint( const QPointF & point, bool & intersected,
 			intersectedEnds );
 
 		if( intersected )
-		{
 			return tmp;
-
-			intersectedLine = line;
-		}
 	}
 
 	return point;
@@ -1725,10 +1721,9 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				bool intersected = false;
 				bool intersectedEnds = false;
-				FormLine * intersectedLine = nullptr;
 
 				QPointF p = d->lineStartPoint( mouseEvent->pos(),
-					intersected, intersectedEnds, intersectedLine );
+					intersected, intersectedEnds );
 
 				if( !intersected && PageAction::instance()->isSnapEnabled() )
 					p = d->m_snap->snapPos();
@@ -1935,10 +1930,10 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					bool intersected = false;
 					bool intersectedEnds = false;
-					FormLine * intersectedLine = nullptr;
+
 
 					QPointF p = d->lineStartPoint( mouseEvent->pos(),
-						intersected, intersectedEnds, intersectedLine );
+						intersected, intersectedEnds );
 
 					if( !intersected && PageAction::instance()->isSnapEnabled() )
 						p = d->m_snap->snapPos();
