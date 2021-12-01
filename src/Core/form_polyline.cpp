@@ -117,7 +117,6 @@ FormPolylinePrivate::init()
 	m_handles.swap( tmp );
 
 	m_handles->handles()->setMinSize( QSizeF( c_minResizableSize, c_minResizableSize ) );
-//	m_handles->handles()->setDeltaToZero( 1.0 );
 	m_handles->hide();
 
 	q->setObjectPen( QPen( PageAction::instance()->strokeColor(), c_linePenWidth ),
