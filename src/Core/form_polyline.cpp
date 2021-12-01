@@ -59,7 +59,6 @@ public:
 		,	m_end( nullptr )
 		,	m_closed( false )
 		,	m_handles( nullptr )
-		,	m_handleMoved( false )
 	{
 	}
 
@@ -75,7 +74,7 @@ public:
 	//! Parent.
 	FormPolyline * q;
 	//! Lines.
-	QList< QLineF > m_lines;
+	QVector< QLineF > m_lines;
 	//! Polygon.
 	QPolygonF m_polygon;
 	//! Start handle.
@@ -88,10 +87,6 @@ public:
 	std::unique_ptr< FormPolylineHandles > m_handles;
 	//! Resized bounding rect.
 	QRectF m_resized;
-	//! Sunsidiary rect.
-	QRectF m_subsidiaryRect;
-	//! Handle moved?
-	bool m_handleMoved;
 }; // class FormPolylinePrivate
 
 void
@@ -215,8 +210,6 @@ FormPolylinePrivate::updateLines( const QRectF & oldR, const QRectF & newR )
 	m_polygon = QPolygonF( points );
 
 	q->setPath( path );
-
-	//q->setPos( 0.0, 0.0 );
 }
 
 QRectF
