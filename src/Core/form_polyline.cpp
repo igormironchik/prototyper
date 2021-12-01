@@ -87,6 +87,8 @@ public:
 	std::unique_ptr< FormPolylineHandles > m_handles;
 	//! Resized bounding rect.
 	QRectF m_resized;
+	//! Handles for editing lines.
+	QVector< std::unique_ptr< FormMoveHandle > > m_editHandles;
 }; // class FormPolylinePrivate
 
 void
@@ -157,6 +159,8 @@ FormPolylinePrivate::makePath()
 
 	QRectF r = boundingRect();
 	r.moveTopLeft( r.topLeft() + q->pos() );
+
+	m_handles->setRect( r );
 
 	m_resized = r;
 

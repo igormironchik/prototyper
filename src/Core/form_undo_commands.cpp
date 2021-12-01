@@ -211,6 +211,8 @@ UndoAddLineToPoly::redo()
 
 			poly->appendLine( m_line );
 
+			m_form->setCurrentPolyLine( poly );
+
 			if( poly->isClosed() )
 				poly->showHandles( false );
 			else
