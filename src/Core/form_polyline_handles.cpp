@@ -121,6 +121,15 @@ FormPolylineHandles::boundingRect() const
 			0.0, 0.0 );
 }
 
+void
+FormPolylineHandles::setHandlesVisible( bool on )
+{
+	if( on )
+		d->m_handles->show();
+	else
+		d->m_handles->hide();
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

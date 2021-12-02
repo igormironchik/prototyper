@@ -76,7 +76,7 @@ class FormMoveHandle
 public:
 	FormMoveHandle( qreal halfSize, const QPointF & zero,
 		FormWithHandle * object, QGraphicsItem * parent,
-		Page * form, const QCursor & c = QCursor() );
+		Page * form, const QCursor & c = QCursor(), bool followCursor = false );
 	~FormMoveHandle() override;
 
 	//! \return Half of the size of the edge.

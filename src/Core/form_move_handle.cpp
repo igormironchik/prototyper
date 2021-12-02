@@ -68,13 +68,14 @@ FormWithHandle::handleReleased( FormMoveHandle * handle )
 
 FormMoveHandlePrivate::FormMoveHandlePrivate( qreal halfSize,
 	const QPointF & zero, FormWithHandle * object, FormMoveHandle * parent,
-	Page * form, const QCursor & c )
+	Page * form, const QCursor & c, bool followCursor )
 	:	q( parent )
 	,	m_object( object )
 	,	m_size( halfSize )
 	,	m_hovered( false )
 	,	m_pressed( false )
 	,	m_ignoreMouse( false )
+	,	m_followCursor( followCursor )
 	,	m_zero( zero )
 	,	m_cursor( c )
 	,	m_form( form )
@@ -100,11 +101,12 @@ FormMoveHandlePrivate::init()
 
 FormMoveHandle::FormMoveHandle( qreal halfSize, const QPointF & zero,
 	FormWithHandle * object, QGraphicsItem * parent, Page * form,
-	const QCursor & c )
+	const QCursor & c, bool followCursor )
 	:	QGraphicsObject( parent )
 	,	d( nullptr )
 {
-	auto tmp = std::make_unique< FormMoveHandlePrivate >( halfSize, zero, object, this, form, c );
+	auto tmp = std::make_unique< FormMoveHandlePrivate >( halfSize, zero, object, this, form, c,
+		followCursor );
 
 	tmp->init();
 
@@ -264,6 +266,9 @@ FormMoveHandle::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 		const QPointF delta = mapFromScene( event->scenePos() ) - d->m_pos;
 
 		moved( delta );
+
+		if( d->m_followCursor )
+			setPos( pos() + delta );
 
 		event->accept();
 	}

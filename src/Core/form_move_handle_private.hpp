@@ -45,7 +45,7 @@ class FormMoveHandlePrivate {
 public:
 	FormMoveHandlePrivate( qreal halfSize, const QPointF & zero,
 		FormWithHandle * object, FormMoveHandle * parent, Page * form,
-		const QCursor & c );
+		const QCursor & c, bool followCursor );
 	virtual ~FormMoveHandlePrivate();
 
 	//! Init.
@@ -65,6 +65,8 @@ public:
 	QPointF m_pos;
 	//! Ignore mouse events?
 	bool m_ignoreMouse;
+	//! Follow cursor?
+	bool m_followCursor;
 	//! Zero point.
 	QPointF m_zero;
 	//! Touch delta.

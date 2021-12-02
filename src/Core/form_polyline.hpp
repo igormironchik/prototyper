@@ -51,11 +51,14 @@ class FormPolylinePrivate;
 
 //! Polyline on the form.
 class FormPolyline final
-	:	public QGraphicsPathItem
+	:	public QObject
+	,	public QGraphicsPathItem
 	,	public FormObject
 	,	public FormResizable
 	,	public FormWithHandle
 {
+	Q_OBJECT
+
 public:
 	explicit FormPolyline( Page * page, QGraphicsItem * parent = 0 );
 	~FormPolyline() override;
@@ -125,8 +128,12 @@ protected:
 	void moveResizable( const QPointF & delta ) override;
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
-	//! Handle released.
-	void handleReleased( FormMoveHandle * handle ) override;
+
+private slots:
+	friend class FormPolylinePrivate;
+
+	//! Mode changed.
+	void modeChanged();
 
 private:
 	Q_DISABLE_COPY( FormPolyline )

@@ -44,7 +44,7 @@ public:
 	FormResizeHandlePrivate( qreal halfSize, const QPointF & zero,
 		qreal angle, FormWithHandle * object, FormResizeHandle * parent,
 		Page * form, const QCursor & c )
-		:	FormMoveHandlePrivate( halfSize, zero, object, parent, form, c )
+		:	FormMoveHandlePrivate( halfSize, zero, object, parent, form, c, false )
 		,	m_angle( angle )
 	{
 	}

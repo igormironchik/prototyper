@@ -60,6 +60,10 @@ public:
 
 	QRectF boundingRect() const override;
 
+public slots:
+	//! Hide/show resize handles.
+	void setHandlesVisible( bool on = true );
+
 private:
 	inline const FormPolylineHandlesPrivate * d_ptr() const
 		{ return reinterpret_cast< const FormPolylineHandlesPrivate* > ( d.get() ); }

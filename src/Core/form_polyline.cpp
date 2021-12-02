@@ -41,6 +41,7 @@
 
 // C++ include.
 #include <memory>
+#include <vector>
 
 
 namespace Prototyper {
@@ -70,6 +71,12 @@ public:
 	void resize( const QRectF & oldR, const QRectF & newR );
 	//! \return Bounding rect.
 	QRectF boundingRect() const;
+	//! Create edit handles.
+	void createEditHandles();
+	//! Clear edit handles.
+	void clearEditHandles();
+	//! \return Index of edit handle.
+	std::size_t indexOfEditHandle( FormMoveHandle * h ) const;
 
 	//! Parent.
 	FormPolyline * q;
@@ -88,7 +95,7 @@ public:
 	//! Resized bounding rect.
 	QRectF m_resized;
 	//! Handles for editing lines.
-	QVector< std::unique_ptr< FormMoveHandle > > m_editHandles;
+	std::vector< std::unique_ptr< FormMoveHandle > > m_editHandles;
 }; // class FormPolylinePrivate
 
 void
@@ -120,6 +127,9 @@ FormPolylinePrivate::init()
 		false );
 
 	q->setObjectBrush( QBrush( PageAction::instance()->fillColor() ), false );
+
+	FormPolyline::connect( m_handles.get(), &FormPolylineHandles::currentModeChanged,
+		q, &FormPolyline::modeChanged );
 }
 
 void
@@ -220,6 +230,58 @@ QRectF
 FormPolylinePrivate::boundingRect() const
 {
 	return m_polygon.boundingRect();
+}
+
+void
+FormPolylinePrivate::createEditHandles()
+{
+	for( int i = 0; i < m_lines.size(); ++i )
+	{
+		auto h = std::make_unique< FormMoveHandle >( c_halfHandleSize,
+			QPointF( c_halfHandleSize, c_halfHandleSize ), q,
+			q->parentItem(), q->page(), Qt::CrossCursor, true );
+
+		h->setPos( m_lines[ i ].p1() - QPointF( c_halfHandleSize, c_halfHandleSize ) + q->pos() );
+
+		h->setVisible( true );
+
+		m_editHandles.push_back( std::move( h ) );
+	}
+
+	if( !m_closed )
+	{
+		auto h = std::make_unique< FormMoveHandle >( c_halfHandleSize,
+			QPointF( c_halfHandleSize, c_halfHandleSize ), q,
+			q->parentItem(), q->page(), Qt::CrossCursor, true );
+
+		h->setPos( m_lines.back().p2() - QPointF( c_halfHandleSize, c_halfHandleSize ) + q->pos() );
+
+		h->setVisible( true );
+
+		m_editHandles.push_back( std::move( h ) );
+	}
+}
+
+void
+FormPolylinePrivate::clearEditHandles()
+{
+	m_editHandles.clear();
+}
+
+std::size_t
+FormPolylinePrivate::indexOfEditHandle( FormMoveHandle * h ) const
+{
+	std::size_t idx = 0;
+
+	for( const auto & hh : m_editHandles )
+	{
+		if( hh.get() == h )
+			return idx;
+
+		++idx;
+	}
+
+	return idx;
 }
 
 
@@ -623,11 +685,23 @@ FormPolyline::moveResizable( const QPointF & delta )
 void
 FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
-}
+	const auto i = d->indexOfEditHandle( handle );
 
-void
-FormPolyline::handleReleased( FormMoveHandle * handle )
-{
+	if( i < d->m_editHandles.size() )
+	{
+		auto & l1 = ( i < d->m_lines.size() ? d->m_lines[ i ] : d->m_lines.back() );
+		auto & l2 = ( i == 0 ? d->m_lines[ d->m_lines.size() - 1 ] : d->m_lines[ i - 1 ] );
+
+		if( i < d->m_lines.size() )
+			l1.setP1( l1.p1() + delta );
+		else
+			l1.setP2( l1.p2() + delta );
+
+		if( ( i == 0 && d->m_closed ) || ( i < d->m_lines.size() && i > 0 ) )
+			l2.setP2( l2.p2() + delta );
+
+		d->makePath();
+	}
 }
 
 FormObject *
@@ -640,6 +714,23 @@ FormPolyline::clone() const
 	o->setObjectId( page()->nextId() );
 
 	return o;
+}
+
+void
+FormPolyline::modeChanged()
+{
+	if( d->m_handles->currentMode() == NodesEditResizeHandle::NodesEditMode )
+	{
+		d->m_handles->setHandlesVisible( false );
+
+		d->createEditHandles();
+	}
+	else
+	{
+		d->m_handles->setHandlesVisible( true );
+
+		d->clearEditHandles();
+	}
 }
 
 } /* namespace Core */
