@@ -86,6 +86,7 @@ public:
 		,	m_pressed( false )
 		,	m_current( 0 )
 		,	m_id( 0 )
+		,	m_currentLine( nullptr )
 		,	m_snap( 0 )
 		,	m_polyline( false )
 		,	m_isCommentChanged( false )
@@ -104,10 +105,8 @@ public:
 	//! \return Start point for line.
 	QPointF lineStartPoint( const QPointF & point,
 		bool & intersected, bool & intersectedEnds ) const;
-	//! Clear current lines.
-	void clearCurrentLines();
 	//! Handle mouse move in current lines.
-	void handleMouseMoveInCurrentLines( const QPointF & point );
+	void handleMouseMoveInCurrentLine( const QPointF & point );
 	//! Handle mouse move in current polyline.
 	void handleMouseMoveInCurrentPolyLine( const QPointF & point );
 	//! Ungroup.
@@ -179,7 +178,7 @@ public:
 	//! ID.
 	quint64 m_id;
 	//! Current lines.
-	QList< FormLine* > m_currentLines;
+	FormLine * m_currentLine;
 	//! Grid snap.
 	GridSnap * m_snap;
 	//! Make polyline.

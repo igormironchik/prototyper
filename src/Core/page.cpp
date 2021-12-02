@@ -162,9 +162,9 @@ PagePrivate::lineStartPoint( const QPointF & point, bool & intersected,
 		return tmp;
 	}
 
-	foreach( FormLine * line, m_currentLines )
+	if( m_currentLine )
 	{
-		const QPointF tmp = line->pointUnderHandle( point, intersected,
+		const QPointF tmp = m_currentLine->pointUnderHandle( point, intersected,
 			intersectedEnds );
 
 		if( intersected )
@@ -175,19 +175,10 @@ PagePrivate::lineStartPoint( const QPointF & point, bool & intersected,
 }
 
 void
-PagePrivate::clearCurrentLines()
+PagePrivate::handleMouseMoveInCurrentLine( const QPointF & point )
 {
-	foreach( FormLine * line, m_currentLines )
-		line->showHandles( false );
-
-	m_currentLines.clear();
-}
-
-void
-PagePrivate::handleMouseMoveInCurrentLines( const QPointF & point )
-{
-	foreach( FormLine * line, m_currentLines )
-		line->handleMouseMoveInHandles( point );
+	if( m_currentLine )
+		m_currentLine->handleMouseMoveInHandles( point );
 }
 
 void
@@ -885,9 +876,9 @@ Page::setCfg( const Cfg::Page & c )
 
 void
 Page::switchToSelectMode()
-{
-	foreach( FormLine * line, d->m_currentLines )
-		line->setSelected( true );
+{	
+	if( d->m_currentLine )
+		d->m_currentLine->setSelected( true );
 
 	if( d->m_current )
 		d->m_current->setSelected( true );
@@ -897,8 +888,6 @@ Page::switchToSelectMode()
 		d->m_currentPoly->setSelected( true );
 		d->m_currentPoly->showHandles( false );
 	}
-
-	d->clearCurrentLines();
 }
 
 void
@@ -906,7 +895,7 @@ Page::switchToLineDrawingMode()
 {
 	d->hideHandlesOfCurrent();
 
-	d->m_currentLines.clear();
+	d->m_currentLine = nullptr;
 	d->m_current = nullptr;
 	d->m_currentPoly = nullptr;
 	d->m_polyline = false;
@@ -1005,25 +994,6 @@ Page::group( const QList< QGraphicsItem* > & items,
 			if( item->parentItem() == this )
 				group->addToGroup( item );
 		}
-	}
-	else if( d->m_currentLines.size() > 1 )
-	{
-		group = new FormGroup( this, this );
-
-		group->setObjectId( i );
-
-		d->m_ids.append( i );
-
-		foreach( FormLine * line, d->m_currentLines )
-		{
-			line->setFlag( QGraphicsItem::ItemIsSelectable, false );
-
-			line->setSelected( false );
-
-			group->addToGroup( line );
-		}
-
-		d->m_currentLines.clear();
 	}
 
 	if( group )
@@ -1636,7 +1606,7 @@ Page::mouseMoveEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					line->setLine( l.p1().x(), l.p1().y(),
 						l.p2().x() + delta.x(), l.p2().y() + delta.y() );
 
-					d->handleMouseMoveInCurrentLines( mouseEvent->pos() );
+					d->handleMouseMoveInCurrentLine( mouseEvent->pos() );
 				}
 
 				if( d->m_currentPoly )
@@ -1730,7 +1700,7 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				line->setLine( p.x(), p.y(), p.x(), p.y() );
 
-				if( intersectedEnds && d->m_currentLines.size() == 1 &&
+				if( intersectedEnds &&
 					PageAction::instance()->testFlag( PageAction::Polyline ) )
 						d->m_polyline = true;
 
@@ -1744,8 +1714,6 @@ Page::mousePressEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 				if( !intersected )
 				{
-					d->clearCurrentLines();
-
 					d->m_polyline = false;
 
 					if( d->m_currentPoly )
@@ -1944,24 +1912,23 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 
 					if( d->m_polyline )
 					{
-						if( !d->m_currentLines.isEmpty() )
+						if( d->m_currentLine )
 						{
 							d->m_currentPoly = new FormPolyline( this, this );
 
 							d->m_currentPoly->setZValue( d->currentZValue() + 1.0 );
 
-							const QString id =
-								d->m_currentLines.first()->objectId();
+							const QString id = d->m_currentLine->objectId();
 
 							d->m_currentPoly->setObjectId( id );
 
 							d->m_currentPoly->appendLine(
-								d->m_currentLines.first()->line() );
+								d->m_currentLine->line() );
 							d->m_currentPoly->showHandles( true );
 
-							delete d->m_currentLines.first();
+							delete d->m_currentLine;
 
-							d->m_currentLines.clear();
+							d->m_currentLine = nullptr;
 						}
 
 						d->m_currentPoly->appendLine( line->line() );
@@ -1989,7 +1956,7 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 					}
 					else
 					{
-						d->m_currentLines.append( line );
+						d->m_currentLine = line;
 
 						line->showHandles( true );
 					}
@@ -2250,12 +2217,9 @@ Page::setCurrentLine( FormLine * line )
 {
 	d->m_current = line;
 
-	d->m_currentLines.clear();
+	d->m_currentLine = line;
 
-	if( line )
-		d->m_currentLines.append( line );
-
-	d->m_currentPoly = Q_NULLPTR;
+	d->m_currentPoly = nullptr;
 }
 
 void
@@ -2263,7 +2227,7 @@ Page::setCurrentPolyLine( FormPolyline * line )
 {
 	d->m_current = line;
 
-	d->m_currentLines.clear();
+	d->m_currentLine = nullptr;
 
 	d->m_currentPoly = line;
 
