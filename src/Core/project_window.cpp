@@ -359,6 +359,7 @@ ProjectWindowPrivate::init()
 		QIcon( QStringLiteral( ":/Core/img/draw-polyline.png" ) ),
 		ProjectWindow::tr( "Draw Polyline" ) );
 	m_drawPolyLine->setCheckable( true );
+	m_formToolBarGroup->addAction( m_drawPolyLine );
 	m_drawPolyLine->setShortcutContext( Qt::ApplicationShortcut );
 	m_drawPolyLine->setShortcut( ProjectWindow::tr( "Alt+P" ) );
 
@@ -953,7 +954,7 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 void
 ProjectWindow::switchToPolylineMode()
 {
-	d->m_drawPolyLine->trigger();
+	d->m_drawPolyLine->setChecked( true );
 }
 
 void
@@ -1206,8 +1207,6 @@ ProjectWindow::drawRect()
 {
 	d->clearEditModeInTexts();
 
-	d->m_drawPolyLine->setChecked( false );
-
 	PageAction::instance()->setMode( PageAction::DrawRect );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1220,9 +1219,11 @@ ProjectWindow::drawPolyline( bool on )
 
 	if( on )
 	{
-		d->m_drawLine->trigger();
+		PageAction::instance()->setMode( PageAction::DrawLine );
 
 		PageAction::instance()->setFlag( PageAction::Polyline );
+
+		d->prepareDrawingWithRectPlacer();
 	}
 	else
 		PageAction::instance()->clearFlag( PageAction::Polyline );
@@ -1233,8 +1234,6 @@ ProjectWindow::insertText()
 {
 	d->clearEditModeInTexts();
 
-	d->m_drawPolyLine->setChecked( false );
-
 	PageAction::instance()->setMode( PageAction::InsertText );
 
 	d->prepareDrawingWithRectPlacer( true );
@@ -1244,8 +1243,6 @@ void
 ProjectWindow::insertImage()
 {
 	d->clearEditModeInTexts();
-
-	d->m_drawPolyLine->setChecked( false );
 
 	const QString fileName =
 		QFileDialog::getOpenFileName( this, tr( "Select Image" ),
@@ -1322,8 +1319,6 @@ ProjectWindow::select( bool checked )
 	d->m_up->setEnabled( checked );
 	d->m_down->setEnabled( checked );
 	d->m_toBottom->setEnabled( checked );
-
-	d->m_drawPolyLine->setChecked( false );
 
 	d->clearEditModeInTexts();
 
@@ -1786,8 +1781,6 @@ ProjectWindow::drawButton()
 {
 	d->clearEditModeInTexts();
 
-	d->m_drawPolyLine->setChecked( false );
-
 	PageAction::instance()->setMode( PageAction::DrawButton );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1797,8 +1790,6 @@ void
 ProjectWindow::drawComboBox()
 {
 	d->clearEditModeInTexts();
-
-	d->m_drawPolyLine->setChecked( false );
 
 	PageAction::instance()->setMode( PageAction::DrawComboBox );
 
@@ -1810,8 +1801,6 @@ ProjectWindow::drawRadioButton()
 {
 	d->clearEditModeInTexts();
 
-	d->m_drawPolyLine->setChecked( false );
-
 	PageAction::instance()->setMode( PageAction::DrawRadioButton );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1821,8 +1810,6 @@ void
 ProjectWindow::drawCheckBox()
 {
 	d->clearEditModeInTexts();
-
-	d->m_drawPolyLine->setChecked( false );
 
 	PageAction::instance()->setMode( PageAction::DrawCheckBox );
 
@@ -1834,8 +1821,6 @@ ProjectWindow::drawHSlider()
 {
 	d->clearEditModeInTexts();
 
-	d->m_drawPolyLine->setChecked( false );
-
 	PageAction::instance()->setMode( PageAction::DrawHSlider );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1846,8 +1831,6 @@ ProjectWindow::drawVSlider()
 {
 	d->clearEditModeInTexts();
 
-	d->m_drawPolyLine->setChecked( false );
-
 	PageAction::instance()->setMode( PageAction::DrawVSlider );
 
 	d->prepareDrawingWithRectPlacer();
@@ -1857,8 +1840,6 @@ void
 ProjectWindow::drawSpinbox()
 {
 	d->clearEditModeInTexts();
-
-	d->m_drawPolyLine->setChecked( false );
 
 	PageAction::instance()->setMode( PageAction::DrawSpinBox );
 
