@@ -307,6 +307,8 @@ FormLine::pointUnderHandle( const QPointF & point, bool & intersected,
 
 		intersected = true;
 
+		intersectedEnds = false;
+
 		return QPointF( ( l.p1().x() + l.p2().x() ) / c_halfDivider,
 			( l.p1().y() + l.p2().y() ) / c_halfDivider ) + pos();
 	}
