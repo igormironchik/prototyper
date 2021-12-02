@@ -636,6 +636,57 @@ UndoChangeZ::redo()
 	}
 }
 
+
+//
+// UndoEditPoly
+//
+
+UndoEditPoly::UndoEditPoly( Page * form, const QLineF & oldL1, const QLineF & oldL2,
+	const QLineF & newL1, const QLineF & newL2, int index,
+	const QString & id )
+	:	QUndoCommand( QObject::tr( "Change Polyline" ) )
+	,	m_form( form )
+	,	m_undone( false )
+	,	m_oldL1( oldL1 )
+	,	m_oldL2( oldL2 )
+	,	m_newL1( newL1 )
+	,	m_newL2( newL2 )
+	,	m_index( index )
+	,	m_id( id )
+{
+}
+
+void
+UndoEditPoly::undo()
+{
+	m_undone = true;
+
+	auto * poly = dynamic_cast< FormPolyline* > (
+		m_form->findItem( m_id ) );
+
+	poly->moveNode( m_index, m_oldL1, m_oldL2 );
+
+	m_form->setCurrentPolyLine( poly );
+
+	TopGui::instance()->projectWindow()->switchToSelectMode();
+}
+
+void
+UndoEditPoly::redo()
+{
+	if( m_undone )
+	{
+		auto * poly = dynamic_cast< FormPolyline* > (
+			m_form->findItem( m_id ) );
+
+		poly->moveNode( m_index, m_newL1, m_newL2 );
+
+		m_form->setCurrentPolyLine( poly );
+
+		TopGui::instance()->projectWindow()->switchToSelectMode();
+	}
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */

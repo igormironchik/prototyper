@@ -77,6 +77,8 @@ public:
 	void clearEditHandles();
 	//! \return Index of edit handle.
 	std::size_t indexOfEditHandle( FormMoveHandle * h ) const;
+	//! Show/hide edit nodes.
+	void setVisibleEditNodes( bool on = true );
 
 	//! Parent.
 	FormPolyline * q;
@@ -96,6 +98,8 @@ public:
 	QRectF m_resized;
 	//! Handles for editing lines.
 	std::vector< std::unique_ptr< FormMoveHandle > > m_editHandles;
+	//! Currently edited lines.
+	QVector< QLineF > m_currentEditedLines;
 }; // class FormPolylinePrivate
 
 void
@@ -282,6 +286,13 @@ FormPolylinePrivate::indexOfEditHandle( FormMoveHandle * h ) const
 	}
 
 	return idx;
+}
+
+void
+FormPolylinePrivate::setVisibleEditNodes( bool on )
+{
+	for( std::size_t i = 0; i < m_editHandles.size(); ++i )
+		m_editHandles[ i ]->setVisible( on );
 }
 
 
@@ -619,9 +630,15 @@ FormPolyline::paint( QPainter * painter, const QStyleOptionGraphicsItem * option
 	QGraphicsPathItem::paint( painter, option, widget );
 
 	if( isSelected() && !group() )
+	{
 		d->m_handles->show();
+		d->setVisibleEditNodes( true );
+	}
 	else
+	{
 		d->m_handles->hide();
+		d->setVisibleEditNodes( false );
+	}
 }
 
 void
@@ -692,6 +709,12 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 		auto & l1 = ( i < d->m_lines.size() ? d->m_lines[ i ] : d->m_lines.back() );
 		auto & l2 = ( i == 0 ? d->m_lines[ d->m_lines.size() - 1 ] : d->m_lines[ i - 1 ] );
 
+		if( d->m_currentEditedLines.isEmpty() )
+		{
+			d->m_currentEditedLines.push_back( l1 );
+			d->m_currentEditedLines.push_back( l2 );
+		}
+
 		if( i < d->m_lines.size() )
 			l1.setP1( l1.p1() + delta );
 		else
@@ -702,6 +725,54 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 
 		d->makePath();
 	}
+}
+
+void
+FormPolyline::handleReleased( FormMoveHandle * handle )
+{
+	const auto i = d->indexOfEditHandle( handle );
+
+	if( i < d->m_editHandles.size() )
+	{
+		auto & l1 = ( i < d->m_lines.size() ? d->m_lines[ i ] : d->m_lines.back() );
+		auto & l2 = ( i == 0 ? d->m_lines[ d->m_lines.size() - 1 ] : d->m_lines[ i - 1 ] );
+
+		page()->undoStack()->push(
+			new UndoEditPoly( page(),
+				d->m_currentEditedLines.front(), d->m_currentEditedLines.back(),
+				l1, l2, i, objectId() ) );
+	}
+
+	d->m_currentEditedLines.clear();
+}
+
+void
+FormPolyline::moveNode( int i, const QLineF & newL1, const QLineF & newL2 )
+{
+	auto & l1 = ( i < d->m_lines.size() ? d->m_lines[ i ] : d->m_lines.back() );
+	auto & l2 = ( i == 0 ? d->m_lines[ d->m_lines.size() - 1 ] : d->m_lines[ i - 1 ] );
+
+	QPointF p;
+
+	if( i < d->m_lines.size() )
+	{
+		l1.setP1( newL1.p1() );
+		p = l1.p1();
+	}
+	else
+	{
+		l1.setP2( newL1.p2() );
+		p = l1.p2();
+	}
+
+	if( ( i == 0 && d->m_closed ) || ( i < d->m_lines.size() && i > 0 ) )
+		l2.setP2( newL2.p2() );
+
+	d->makePath();
+
+	if( !d->m_editHandles.empty() )
+		d->m_editHandles[ i ]->setPos( p -
+			QPointF( d->m_start->halfOfSize(), d->m_start->halfOfSize() ) + pos() );
 }
 
 FormObject *

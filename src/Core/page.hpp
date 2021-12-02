@@ -231,6 +231,7 @@ protected:
 	template< class Elem, class Config > friend class UndoCreate;
 	template< class Elem, class Config > friend class UndoDelete;
 	friend class UndoChangeTextOnForm;
+	friend class UndoEditPoly;
 
 	//! Remove document from map.
 	void removeDocFromMap( QObject * doc );

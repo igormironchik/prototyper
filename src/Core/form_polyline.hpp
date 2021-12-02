@@ -128,12 +128,20 @@ protected:
 	void moveResizable( const QPointF & delta ) override;
 	//! Handle moved.
 	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
+	//! Handle released.
+	void handleReleased( FormMoveHandle * handle ) override;
 
 private slots:
 	friend class FormPolylinePrivate;
 
 	//! Mode changed.
 	void modeChanged();
+
+private:
+	friend class UndoEditPoly;
+
+	//! Move node.
+	void moveNode( int index, const QLineF & newL1, const QLineF & newL2 );
 
 private:
 	Q_DISABLE_COPY( FormPolyline )

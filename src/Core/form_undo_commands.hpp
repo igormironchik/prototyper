@@ -816,6 +816,43 @@ private:
 	bool m_undone;
 }; // class UndoChangeZ
 
+
+//
+// UndoEditPoly
+//
+
+//! Undo editing of polyline.
+class UndoEditPoly final
+	:	public QUndoCommand
+{
+public:
+	UndoEditPoly( Page * form, const QLineF & oldL1, const QLineF & oldL2,
+		const QLineF & newL1, const QLineF & newL2, int index,
+		const QString & id );
+
+	void undo() override;
+
+	void redo() override;
+
+private:
+	//! Form.
+	Page * m_form;
+	//! Undone?
+	bool m_undone;
+	//! Old line 1.
+	QLineF m_oldL1;
+	//! Old line 2.
+	QLineF m_oldL2;
+	//! New line 1.
+	QLineF m_newL1;
+	//! New line 2.
+	QLineF m_newL2;
+	//! Node index.
+	int m_index;
+	//! Polyline ID.
+	QString m_id;
+}; // class UndoEditPoly
+
 } /* namespace Core */
 
 } /* namespace Prototyper */
