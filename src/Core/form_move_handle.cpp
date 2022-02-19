@@ -150,7 +150,7 @@ FormMoveHandle::paint( QPainter * painter,
 {
 	Q_UNUSED( widget )
 
-	painter->setRenderHint( QPainter::Antialiasing, false );
+	painter->setRenderHint( QPainter::Antialiasing, true );
 
 	painter->setPen( Qt::black );
 

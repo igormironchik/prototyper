@@ -367,7 +367,7 @@ FormPolyline::setCfg( const Cfg::Polyline & c )
 	setPos( QPointF( MmPx::instance().fromMmX( c.pos().x() ),
 		MmPx::instance().fromMmY( c.pos().y() ) ) );
 
-	foreach( const Cfg::Line & l, c.line() )
+	for( const Cfg::Line & l : c.line() )
 	{
 		QLineF line;
 		line.setP1( QPointF( MmPx::instance().fromMmX( l.p1().x() ),
@@ -402,7 +402,7 @@ FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg, qreal dpi )
 {
 	QList< QLineF > lines;
 
-	foreach( const Cfg::Line & l, cfg.line() )
+	for( const Cfg::Line & l : cfg.line() )
 	{
 		QLineF line;
 		line.setP1( QPointF( MmPx::instance().fromMm( l.p1().x(), dpi ),

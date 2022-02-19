@@ -65,7 +65,7 @@ static inline QString printStyle( const Cfg::TextStyle & style )
 static inline void printText( QTextStream & stream,
 	const std::vector< Cfg::TextStyle > & text )
 {
-	foreach( const Cfg::TextStyle & t, text )
+	for( const Cfg::TextStyle & t : text )
 	{
 		stream << QStringLiteral( "<span " )
 			<< printStyle( t )
@@ -110,7 +110,7 @@ HtmlExporterPrivate::printDocument( QTextStream & stream )
 
 	stream << QStringLiteral( "<br><br>" ) << Qt::endl;
 
-	foreach( const Cfg::Page & form, m_cfg.page() )
+	for( const Cfg::Page & form : m_cfg.page() )
 	{
 		std::vector< Cfg::TextStyle > headList;
 		Cfg::TextStyle head;

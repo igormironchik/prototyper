@@ -268,43 +268,43 @@ PagePrivate::updateFromCfg()
 
 	m_ids.append( m_cfg.tabName() );
 
-	foreach( const Cfg::Line & c, m_cfg.line() )
+	for( const Cfg::Line & c : m_cfg.line() )
 		createElem< FormLine > ( c );
 
-	foreach( const Cfg::Polyline & c, m_cfg.polyline() )
+	for( const Cfg::Polyline & c : m_cfg.polyline() )
 		createElem< FormPolyline > ( c );
 
-	foreach( const Cfg::Text & c, m_cfg.text() )
+	for( const Cfg::Text & c : m_cfg.text() )
 		createText( c );
 
-	foreach( const Cfg::Image & c, m_cfg.image() )
+	for( const Cfg::Image & c : m_cfg.image() )
 		createElem< FormImage > ( c );
 
-	foreach( const Cfg::Rect & c, m_cfg.rect() )
+	for( const Cfg::Rect & c : m_cfg.rect() )
 		createElem< FormRect > ( c );
 
-	foreach( const Cfg::Group & c, m_cfg.group() )
+	for( const Cfg::Group & c : m_cfg.group() )
 		createGroup( c );
 
-	foreach( const Cfg::Button & c, m_cfg.button() )
+	for( const Cfg::Button & c : m_cfg.button() )
 		createElemWithRect< FormButton > ( c, QRectF() );
 
-	foreach( const Cfg::ComboBox & c, m_cfg.combobox() )
+	for( const Cfg::ComboBox & c : m_cfg.combobox() )
 		createElemWithRect< FormComboBox > ( c, QRectF() );
 
-	foreach( const Cfg::CheckBox & c, m_cfg.radiobutton() )
+	for( const Cfg::CheckBox & c : m_cfg.radiobutton() )
 		createElemWithRect< FormRadioButton > ( c, QRectF() );
 
-	foreach( const Cfg::CheckBox & c, m_cfg.checkbox() )
+	for( const Cfg::CheckBox & c : m_cfg.checkbox() )
 		createElemWithRect< FormCheckBox > ( c, QRectF() );
 
-	foreach( const Cfg::HSlider & c, m_cfg.hslider() )
+	for( const Cfg::HSlider & c : m_cfg.hslider() )
 		createElemWithRect< FormHSlider > ( c, QRectF() );
 
-	foreach( const Cfg::VSlider & c, m_cfg.vslider() )
+	for( const Cfg::VSlider & c : m_cfg.vslider() )
 		createElemWithRect< FormVSlider > ( c, QRectF() );
 
-	foreach( const Cfg::SpinBox & c, m_cfg.spinbox() )
+	for( const Cfg::SpinBox & c : m_cfg.spinbox() )
 		createElemWithRect< FormSpinBox > ( c, QRectF() );
 
 	for( const auto & comment : m_cfg.comments() )
@@ -1399,12 +1399,9 @@ Page::draw( QPainter * painter, int width, int height, int gridStep, bool drawGr
 
 	painter->setPen( gridColor );
 
-	painter->setRenderHint( QPainter::Antialiasing, false );
+	painter->setRenderHint( QPainter::Antialiasing, true );
 
-	painter->setBrush( QBrush( gridColor ) );
-
-	painter->setBrush( Qt::white );
-
+	painter->setPen( gridColor );
 
 	painter->setBrush( Qt::white );
 

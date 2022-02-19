@@ -78,7 +78,7 @@ public:
 void
 PdfExporterPrivate::createImages()
 {
-	foreach( const Cfg::Page & form, m_cfg.page() )
+	for( const Cfg::Page & form : m_cfg.page() )
 	{
 		m_images.append( QSharedPointer< QTemporaryFile >
 			( new QTemporaryFile ) );
@@ -104,7 +104,7 @@ PdfExporterPrivate::fillDocument( QTextDocument & doc, qreal dpi )
 
 	int i = 0;
 
-	foreach( const Cfg::Page & form, m_cfg.page() )
+	for( const Cfg::Page & form : m_cfg.page() )
 	{
 		c.movePosition( QTextCursor::End );
 

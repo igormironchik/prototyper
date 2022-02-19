@@ -296,7 +296,7 @@ FormGroup::cfg() const
 void
 FormGroup::setCfg( const Cfg::Group & c )
 {
-	foreach( const Cfg::Line & cfg, c.line() )
+	for( const Cfg::Line & cfg : c.line() )
 	{
 		auto * line = new FormLine( page(), page() );
 
@@ -305,7 +305,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 		addToGroup( line );
 	}
 
-	foreach( const Cfg::Polyline & cfg, c.polyline() )
+	for( const Cfg::Polyline & cfg : c.polyline() )
 	{
 		auto * poly = new FormPolyline( page(), page() );
 
@@ -314,7 +314,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 		addToGroup( poly );
 	}
 
-	foreach( const Cfg::Text & cfg, c.text() )
+	for( const Cfg::Text & cfg : c.text() )
 	{
 		const QRectF r( 0.0, 0.0, cfg.textWidth(), 0.0 );
 
@@ -325,7 +325,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 		addToGroup( text );
 	}
 
-	foreach( const Cfg::Image & cfg, c.image() )
+	for( const Cfg::Image & cfg : c.image() )
 	{
 		auto * image = new FormImage( page(), page() );
 
@@ -334,7 +334,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 		addToGroup( image );
 	}
 
-	foreach( const Cfg::Rect & cfg, c.rect() )
+	for( const Cfg::Rect & cfg : c.rect() )
 	{
 		auto * rect = new FormRect( page(), page() );
 
@@ -343,7 +343,7 @@ FormGroup::setCfg( const Cfg::Group & c )
 		addToGroup( rect );
 	}
 
-	foreach( const Cfg::Group & cfg, c.group() )
+	for( const Cfg::Group & cfg : c.group() )
 	{
 		auto * group = new FormGroup( page(), page() );
 
@@ -352,25 +352,25 @@ FormGroup::setCfg( const Cfg::Group & c )
 		addToGroup( group );
 	}
 
-	foreach( const Cfg::Button & cfg, c.button() )
+	for( const Cfg::Button & cfg : c.button() )
 		createElemWithRect< FormButton > ( cfg );
 
-	foreach( const Cfg::ComboBox & cfg, c.combobox() )
+	for( const Cfg::ComboBox & cfg : c.combobox() )
 		createElemWithRect< FormComboBox > ( cfg );
 
-	foreach( const Cfg::CheckBox & cfg, c.radiobutton() )
+	for( const Cfg::CheckBox & cfg : c.radiobutton() )
 		createElemWithRect< FormRadioButton > ( cfg );
 
-	foreach( const Cfg::CheckBox & cfg, c.checkbox() )
+	for( const Cfg::CheckBox & cfg : c.checkbox() )
 		createElemWithRect< FormCheckBox > ( cfg );
 
-	foreach( const Cfg::HSlider & cfg, c.hslider() )
+	for( const Cfg::HSlider & cfg : c.hslider() )
 		createElemWithRect< FormHSlider > ( cfg );
 
-	foreach( const Cfg::VSlider & cfg, c.vslider() )
+	for( const Cfg::VSlider & cfg : c.vslider() )
 		createElemWithRect< FormVSlider > ( cfg );
 
-	foreach( const Cfg::SpinBox & cfg, c.spinbox() )
+	for( const Cfg::SpinBox & cfg : c.spinbox() )
 		createElemWithRect< FormSpinBox > ( cfg );
 
 	setObjectId( c.objectId() );

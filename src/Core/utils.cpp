@@ -307,7 +307,7 @@ void fillTextDocument( QTextDocument * doc,
 	QTextCharFormat fmt = c.charFormat();
 	QTextBlockFormat b = c.blockFormat();
 
-	foreach( const Cfg::TextStyle & s, text )
+	for( const Cfg::TextStyle & s : text )
 	{
 		if( std::find( s.style().cbegin(), s.style().cend(),
 			Cfg::c_normalStyle ) != s.style().cend() )

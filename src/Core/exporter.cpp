@@ -265,43 +265,43 @@ draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 
 	std::list< qreal > z;
 
-	foreach( const Cfg::Group & group, form.group() )
+	for( const Cfg::Group & group : form.group() )
 		z.push_back( qRound( group.z() ) );
 
-	foreach( const Cfg::Line & line, form.line() )
+	for( const Cfg::Line & line : form.line() )
 		z.push_back( qRound( line.z() ) );
 
-	foreach( const Cfg::Polyline & poly, form.polyline() )
+	for( const Cfg::Polyline & poly : form.polyline() )
 		z.push_back( qRound( poly.z() ) );
 
-	foreach( const Cfg::Text & text, form.text() )
+	for( const Cfg::Text & text : form.text() )
 		z.push_back( qRound( text.z() ) );
 
-	foreach( const Cfg::Image & image, form.image() )
+	for( const Cfg::Image & image : form.image() )
 		z.push_back( qRound( image.z() ) );
 
-	foreach( const Cfg::Rect & rect, form.rect() )
+	for( const Cfg::Rect & rect : form.rect() )
 		z.push_back( qRound( rect.z() ) );
 
-	foreach( const Cfg::Button & btn, form.button() )
+	for( const Cfg::Button & btn : form.button() )
 		z.push_back( qRound( btn.z() ) );
 
-	foreach( const Cfg::CheckBox & chk, form.checkbox() )
+	for( const Cfg::CheckBox & chk : form.checkbox() )
 		z.push_back( qRound( chk.z() ) );
 
-	foreach( const Cfg::CheckBox & chk, form.radiobutton() )
+	for( const Cfg::CheckBox & chk : form.radiobutton() )
 		z.push_back( qRound( chk.z() ) );
 
-	foreach( const Cfg::ComboBox & cb, form.combobox() )
+	for( const Cfg::ComboBox & cb : form.combobox() )
 		z.push_back( qRound( cb.z() ) );
 
-	foreach( const Cfg::SpinBox & s, form.spinbox() )
+	for( const Cfg::SpinBox & s : form.spinbox() )
 		z.push_back( qRound( s.z() ) );
 
-	foreach( const Cfg::HSlider & hs, form.hslider() )
+	for( const Cfg::HSlider & hs : form.hslider() )
 		z.push_back( qRound( hs.z() ) );
 
-	foreach( const Cfg::VSlider & vs, form.vslider() )
+	for( const Cfg::VSlider & vs : form.vslider() )
 		z.push_back( qRound( vs.z() ) );
 
 	z.sort();
@@ -312,19 +312,19 @@ draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 	{
 		const auto zv = z.front();
 
-		foreach( const Cfg::Group & group, form.group() )
+		for( const Cfg::Group & group : form.group() )
 			if( qAbs( zv - group.z() ) < c_minZDiff )
 				drawGroup( group, p, dpi, svg );
 
-		foreach( const Cfg::Line & line, form.line() )
+		for( const Cfg::Line & line : form.line() )
 			if( qAbs( zv - line.z() ) < c_minZDiff )
 				drawLine( line, p, dpi );
 
-		foreach( const Cfg::Polyline & poly, form.polyline() )
+		for( const Cfg::Polyline & poly : form.polyline() )
 			if( qAbs( zv - poly.z() ) < c_minZDiff )
 				drawPolyline( poly, p, dpi );
 
-		foreach( const Cfg::Text & text, form.text() )
+		for( const Cfg::Text & text : form.text() )
 		{
 			if( qAbs( zv - text.z() ) < c_minZDiff )
 			{
@@ -345,7 +345,7 @@ draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 			}
 		}
 
-		foreach( const Cfg::Image & image, form.image() )
+		for( const Cfg::Image & image : form.image() )
 		{
 			if( qAbs( zv - image.z() ) < c_minZDiff )
 			{
@@ -364,35 +364,35 @@ draw( QPainter & p, QSvgGenerator & svg, const CFG & form, qreal dpi )
 			}
 		}
 
-		foreach( const Cfg::Rect & rect, form.rect() )
+		for( const Cfg::Rect & rect : form.rect() )
 			if( qAbs( zv - rect.z() ) < c_minZDiff )
 				drawRect( rect, p, dpi );
 
-		foreach( const Cfg::Button & btn, form.button() )
+		for( const Cfg::Button & btn : form.button() )
 			if( qAbs( zv - btn.z() ) < c_minZDiff )
 				drawButton( btn, p, dpi );
 
-		foreach( const Cfg::CheckBox & chk, form.checkbox() )
+		for( const Cfg::CheckBox & chk : form.checkbox() )
 			if( qAbs( zv - chk.z() ) < c_minZDiff )
 				drawCheckBox( chk, p, dpi );
 
-		foreach( const Cfg::CheckBox & chk, form.radiobutton() )
+		for( const Cfg::CheckBox & chk : form.radiobutton() )
 			if( qAbs( zv - chk.z() ) < c_minZDiff )
 				drawRadioButton( chk, p, dpi );
 
-		foreach( const Cfg::ComboBox & cb, form.combobox() )
+		for( const Cfg::ComboBox & cb : form.combobox() )
 			if( qAbs( zv - cb.z() ) < c_minZDiff )
 				drawComboBox( cb, p, dpi );
 
-		foreach( const Cfg::SpinBox & s, form.spinbox() )
+		for( const Cfg::SpinBox & s : form.spinbox() )
 			if( qAbs( zv - s.z() ) < c_minZDiff )
 				drawSpinBox( s, p, dpi );
 
-		foreach( const Cfg::HSlider & hs, form.hslider() )
+		for( const Cfg::HSlider & hs : form.hslider() )
 			if( qAbs( zv - hs.z() ) < c_minZDiff )
 				drawHSlider( hs, p, dpi );
 
-		foreach( const Cfg::VSlider & vs, form.vslider() )
+		for( const Cfg::VSlider & vs : form.vslider() )
 			if( qAbs( zv - vs.z() ) < c_minZDiff )
 				drawVSlider( vs, p, dpi );
 
