@@ -1399,7 +1399,7 @@ Page::draw( QPainter * painter, int width, int height, int gridStep, bool drawGr
 
 	painter->setPen( gridColor );
 
-	painter->setRenderHint( QPainter::Antialiasing, true );
+	painter->setRenderHint( QPainter::Antialiasing, false );
 
 	painter->setPen( gridColor );
 
