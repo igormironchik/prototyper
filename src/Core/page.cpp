@@ -81,7 +81,7 @@ PagePrivate::init()
 		q, &Page::slotSetGridStep );
 
 	m_snap = new GridSnap( q );
-	m_snap->setGridStep( m_cfg.gridStep() );
+	m_snap->setGridStep( MmPx::instance().fromMmX( m_cfg.gridStep() ) );
 
 	q->setAcceptHoverEvents( true );
 
@@ -262,7 +262,7 @@ PagePrivate::updateFromCfg()
 
 	q->setSize( size );
 
-	q->setGridStep( m_cfg.gridStep() );
+	q->setGridStep( MmPx::instance().fromMmX( m_cfg.gridStep() ) );
 
 	q->setObjectId( m_cfg.tabName() );
 
@@ -689,13 +689,13 @@ Page::setGridMode( GridMode m )
 int
 Page::gridStep() const
 {
-	return d->m_cfg.gridStep();
+	return MmPx::instance().fromMmX( d->m_cfg.gridStep() );
 }
 
 void
 Page::setGridStep( int s )
 {
-	d->m_cfg.set_gridStep( s );
+	d->m_cfg.set_gridStep( MmPx::instance().toMmX( s ) );
 
 	d->m_snap->setGridStep( s );
 
@@ -1388,7 +1388,7 @@ Page::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 	Q_UNUSED( widget )
 
 	draw( painter, d->m_cfg.size().width(),
-		d->m_cfg.size().height(), d->m_cfg.gridStep(),
+		d->m_cfg.size().height(), MmPx::instance().fromMmX( d->m_cfg.gridStep() ),
 		d->m_gridMode == ShowGrid );
 }
 
@@ -1496,7 +1496,7 @@ void
 Page::slotSetGridStep()
 {
 	TopGui::instance()->projectWindow()->setGridStep(
-		d->m_cfg.gridStep(), false );
+		MmPx::instance().fromMmX( d->m_cfg.gridStep() ), false );
 }
 
 void

@@ -1023,7 +1023,7 @@ ProjectWindow::setGridStep( int step, bool forAll )
 	{
 		if( dlg.applyForAllForms() )
 		{
-			d->m_cfg.set_defaultGridStep( dlg.gridStep() );
+			d->m_cfg.set_defaultGridStep( MmPx::instance().toMmX( dlg.gridStep() ) );
 
 			foreach( PageView * view, d->m_widget->pages() )
 				view->page()->setGridStep( dlg.gridStep() );
@@ -1045,7 +1045,7 @@ ProjectWindow::setGridStep()
 {
 	const int index = d->m_widget->tabs()->currentIndex();
 
-	int step = d->m_cfg.defaultGridStep();
+	int step = MmPx::instance().fromMmX( d->m_cfg.defaultGridStep() );
 	bool forAll = true;
 
 	if( index > 0 )
@@ -2002,8 +2002,9 @@ ProjectWindow::duplicate()
 					orig.append( o->objectId() );
 					dupl.append( n->objectId() );
 
-					n->setPosition( n->position() + QPointF( d->m_cfg.defaultGridStep(),
-						d->m_cfg.defaultGridStep() ), false );
+					n->setPosition( n->position() +
+							QPointF( MmPx::instance().fromMmX( d->m_cfg.defaultGridStep() ),
+						MmPx::instance().fromMmX( d->m_cfg.defaultGridStep() ) ), false );
 
 					auto * g = dynamic_cast< QGraphicsItem* > ( n );
 
@@ -2017,7 +2018,7 @@ ProjectWindow::duplicate()
 
 			d->m_widget->pages().at( idx - 1 )->page()->undoStack()->push(
 				new UndoDuplicate( d->m_widget->pages().at( idx - 1 )->page(),
-					orig, dupl, d->m_cfg.defaultGridStep() ) );
+					orig, dupl, MmPx::instance().fromMmX( d->m_cfg.defaultGridStep() ) ) );
 
 			projectChanged();
 		}

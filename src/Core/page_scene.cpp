@@ -34,6 +34,7 @@
 #include "form_move_handle.hpp"
 #include "constants.hpp"
 #include "form_comment.hpp"
+#include "utils.hpp"
 
 // Qt include.
 #include <QKeyEvent>
@@ -267,7 +268,7 @@ PageScene::keyPressEvent( QKeyEvent * event )
 			switch( event->modifiers() )
 			{
 				case Qt::ShiftModifier :
-					delta = d->m_cfg.gridStep();
+					delta = MmPx::instance().fromMmX( d->m_cfg.gridStep() );
 					break;
 
 				case Qt::AltModifier :
@@ -275,7 +276,7 @@ PageScene::keyPressEvent( QKeyEvent * event )
 					break;
 
 				default :
-					delta = (qreal) d->m_cfg.gridStep() / c_halfDivider;
+					delta = (qreal) MmPx::instance().fromMmX( d->m_cfg.gridStep() ) / c_halfDivider;
 					break;
 			}
 

@@ -751,10 +751,10 @@
 					}
 
 					{tagScalar
-						{valueType int}
+						{valueType qreal}
 						{name gridStep}
 						{required}
-						{defaultValue 20}
+						{defaultValue 2.0}
 					}
 
 					{tagScalar
@@ -851,10 +851,10 @@
 					}
 
 					{tagScalar
-						{valueType int}
+						{valueType qreal}
 						{name defaultGridStep}
 						{required}
-						{defaultValue 20}
+						{defaultValue 2.0}
 					}
 
 					{tagScalar
