@@ -185,10 +185,14 @@ public:
 
 		f.setItalic( true );
 
+		painter->save();
+
 		painter->setFont( f );
 
 		painter->drawText( opts.rect.adjusted( 0, 0, -opts.fontMetrics.averageCharWidth(), 0 ),
 			index.data( Qt::UserRole ).toString(), to );
+
+		painter->restore();
 	}
 
 	QSize sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const override
