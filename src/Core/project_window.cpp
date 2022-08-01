@@ -123,6 +123,7 @@ public:
 		,	m_down( nullptr )
 		,	m_propertiesDock( nullptr )
 		,	m_propertiesScrollArea( nullptr )
+		,	m_isQuit( false )
 	{
 	}
 
@@ -222,6 +223,10 @@ public:
 	QList< PageView* > m_addedForms;
 	//! Deleted forms.
 	QList< PageView* > m_deletedForms;
+	//! Author.
+	QString m_author;
+	//! Is quit?
+	bool m_isQuit;
 }; // class ProjectWindowPrivate
 
 void
@@ -896,6 +901,18 @@ ProjectWindow::tabsList() const
 	return d->m_tabsList;
 }
 
+const QString &
+ProjectWindow::author() const
+{
+	return d->m_author;
+}
+
+void
+ProjectWindow::setAuthor( const QString & name )
+{
+	d->m_author = name;
+}
+
 void
 ProjectWindow::readProject( const QString & fileName )
 {
@@ -948,7 +965,8 @@ ProjectWindow::closeEvent( QCloseEvent * e )
 {
 	e->accept();
 
-	quit();
+	if( !d->m_isQuit )
+		quit();
 }
 
 void
@@ -969,6 +987,8 @@ ProjectWindow::switchToSelectMode()
 void
 ProjectWindow::quit()
 {
+	d->m_isQuit = true;
+
 	if( isWindowModified() )
 	{
 		QMessageBox::StandardButton btn =

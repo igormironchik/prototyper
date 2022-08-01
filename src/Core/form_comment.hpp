@@ -64,6 +64,11 @@ public:
 	//! Set cfg.
 	void setCfg( const Cfg::Comments & c );
 
+	//! \return Author.
+	QString author() const;
+	//! Set author.
+	void setAuthor( const QString & name );
+
 	QRectF boundingRect() const override;
 
 	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,

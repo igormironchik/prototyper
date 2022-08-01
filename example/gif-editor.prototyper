@@ -16508,7 +16508,10 @@
 		}
 		{comments
 			{id 1}
-			{comment "This is a main window of a GIF editor..."}
+			{comment
+				{author "Igor Mironchik"}
+				{text "This is a main window of a GIF editor..."}
+			}
 			{pos
 				{x 169.239583333333342807236476801335811614990234375}
 				{y 29.15370370370370523005476570688188076019287109375}

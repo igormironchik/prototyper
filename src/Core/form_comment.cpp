@@ -25,6 +25,8 @@
 #include "utils.hpp"
 #include "comments.hpp"
 #include "constants.hpp"
+#include "top_gui.hpp"
+#include "project_window.hpp"
 
 // Qt include.
 #include <QFontMetrics>
@@ -60,7 +62,9 @@ public:
 	//! Parent.
 	PageComment * q;
 	//! Comments.
-	QStringList m_comments;
+	QVector< QPair< QString, QString > > m_comments;
+	//! Author.
+	QString m_author;
 	//! Id.
 	int m_id;
 	//! Mouse pos.
@@ -104,7 +108,13 @@ PageComment::cfg() const
 	c.set_pos( p );
 
 	for( const auto & s : qAsConst( d->m_comments ) )
-		c.comment().push_back( s );
+	{
+		Cfg::Comment comment;
+		comment.set_author( s.first );
+		comment.set_text( s.second );
+
+		c.comment().push_back( comment );
+	}
 
 	return c;
 }
@@ -118,11 +128,23 @@ PageComment::setCfg( const Cfg::Comments & c )
 	d->m_comments.clear();
 
 	for( const auto & s : c.comment() )
-		d->m_comments.append( s );
+		d->m_comments.append( qMakePair( s.author(), s.text() ) );
 
 	d->m_id = c.id();
 
 	update();
+}
+
+QString
+PageComment::author() const
+{
+	return d->m_author;
+}
+
+void
+PageComment::setAuthor( const QString & name )
+{
+	d->m_author = name;
 }
 
 void
@@ -235,7 +257,7 @@ PageComment::mouseReleaseEvent( QGraphicsSceneMouseEvent * e )
 void
 PageComment::showCommentsImpl()
 {
-	Comments dlg( d->m_comments, scene()->views().first() );
+	Comments dlg( d->m_author, d->m_comments, scene()->views().first() );
 
 	dlg.exec();
 
@@ -246,6 +268,13 @@ PageComment::showCommentsImpl()
 		emit changed();
 
 		d->m_comments = dlg.comments();
+	}
+
+	if( d->m_author != dlg.author() )
+	{
+		d->m_author = dlg.author();
+
+		TopGui::instance()->projectWindow()->setAuthor( d->m_author );
 	}
 }
 

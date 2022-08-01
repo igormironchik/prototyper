@@ -69,6 +69,11 @@ public:
 	//! \return Tabs list widget.
 	TabsList * tabsList() const;
 
+	//! \return Author.
+	const QString & author() const;
+	//! Set author.
+	void setAuthor( const QString & name );
+
 public slots:
 	//! Read project.
 	void readProject( const QString & fileName );

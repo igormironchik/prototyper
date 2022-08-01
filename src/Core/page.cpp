@@ -311,6 +311,7 @@ PagePrivate::updateFromCfg()
 	{
 		auto * c = new PageComment( q );
 		c->setCfg( comment );
+		c->setAuthor( TopGui::instance()->projectWindow()->author() );
 		m_comments.append( c );
 		Page::connect( c, &PageComment::changed, q, &Page::changed );
 	}

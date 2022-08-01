@@ -16,6 +16,11 @@
 						{name project}
 						{required}
 					}
+
+					{tagScalar
+						{valueType QString}
+						{name author}
+					}
 				}
 
 			} || namespace Cfg

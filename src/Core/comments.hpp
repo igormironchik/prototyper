@@ -47,11 +47,16 @@ class Comments final
 	Q_OBJECT
 
 public:
-	explicit Comments( const QStringList & data, QWidget * parent = nullptr );
+	explicit Comments( const QString & author,
+		const QVector< QPair< QString, QString > > & data,
+		QWidget * parent = nullptr );
 	~Comments() override;
 
 	//! \return List of comments.
-	QStringList comments() const;
+	QVector< QPair< QString, QString > > comments() const;
+
+	//! \return Author.
+	QString author() const;
 
 private slots:
 	//! Write comment.
@@ -62,10 +67,12 @@ private slots:
 	void contextMenuRequested( const QPoint & pos );
 	//! Section resized.
 	void sectionResized( int logicalIndex, int oldSize, int newSize );
+	//! Name changed.
+	void nameChanged( const QString & name );
 
 private:
 	//! Add new comment.
-	void addComment( const QString & c );
+	void addComment( const QPair< QString, QString > & c );
 
 private:
 	friend class CommentsPrivate;

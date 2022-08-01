@@ -99,13 +99,30 @@
 					}
 				} || class Point
 
+				|#
+					Comment
+				#|
+				{class Comment
+					{tagScalar
+						{valueType QString}
+						{name author}
+						{required}
+					}
+
+					{tagScalar
+						{valueType QString}
+						{name text}
+						{required}
+					}
+				}
+
 
 				|#
 					Comments.
 				#|
 				{class Comments
-					{tagScalarVector
-						{valueType QString}
+					{tagVectorOfTags
+						{valueType Prototyper::Core::Cfg::Comment}
 						{name comment}
 					}
 

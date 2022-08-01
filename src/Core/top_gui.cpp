@@ -135,6 +135,7 @@ TopGuiPrivate::init()
 	}
 
 	QString projectFileName;
+	QString author;
 
 	QFile file( m_appSessionCfgFileName );
 
@@ -150,12 +151,16 @@ TopGuiPrivate::init()
 			file.close();
 
 			projectFileName = tag.get_cfg().project();
+			author = tag.get_cfg().author();
 		}
 		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & )
 		{
 			file.close();
 		}
 	}
+
+	if( !author.isEmpty() )
+		m_projectWindow->setAuthor( author );
 
 	if( !projectFileName.isEmpty() &&
 		QFileInfo::exists( projectFileName ) )
@@ -225,10 +230,11 @@ TopGui::saveCfg( QWidget * parent )
 	{
 		if( !dir.mkpath( info.path() ) )
 		{
-			QMessageBox::warning( parent,
-				tr( "Unable to create folder..." ),
-				tr( "Unable to create folder for the configuration files. "
-					"Path: \"%1\"." ).arg( info.path() ) );
+			if( parent )
+				QMessageBox::warning( parent,
+					tr( "Unable to create folder..." ),
+					tr( "Unable to create folder for the configuration files. "
+						"Path: \"%1\"." ).arg( info.path() ) );
 
 			return;
 		}
@@ -289,6 +295,7 @@ TopGui::saveCfg( QWidget * parent )
 		try {
 			Cfg::Session s;
 			s.set_project( d->m_projectWindow->projectFileName() );
+			s.set_author( d->m_projectWindow->author() );
 
 			Cfg::tag_Session< cfgfile::qstring_trait_t > tag( s );
 
