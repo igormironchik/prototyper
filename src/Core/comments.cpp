@@ -34,6 +34,7 @@
 #include <QPainter>
 #include <QLineEdit>
 #include <QAbstractListModel>
+#include <QStyleOptionViewItem>
 
 
 namespace Prototyper {
@@ -162,6 +163,32 @@ public:
 		:	QStyledItemDelegate( parent )
 		,	m_parent( parent )
 	{
+	}
+
+	void paint( QPainter * painter, const QStyleOptionViewItem & option,
+		const QModelIndex & index ) const override
+	{
+		auto opts = option;
+		opts.displayAlignment = Qt::AlignLeft | Qt::AlignTop;
+
+		QStyledItemDelegate::paint( painter, opts, index );
+
+		QTextOption to;
+		to.setAlignment( Qt::AlignRight | Qt::AlignBottom );
+
+		QFont f = painter->font();
+
+		if( f.pixelSize() > 0 )
+			f.setPixelSize( f.pixelSize() * 0.75 );
+		else
+			f.setPointSize( f.pointSize() * 0.75 );
+
+		f.setItalic( true );
+
+		painter->setFont( f );
+
+		painter->drawText( opts.rect.adjusted( 0, 0, -opts.fontMetrics.averageCharWidth(), 0 ),
+			index.data( Qt::UserRole ).toString(), to );
 	}
 
 	QSize sizeHint( const QStyleOptionViewItem & option, const QModelIndex & index ) const override
