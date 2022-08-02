@@ -35,6 +35,7 @@
 #include <QLineEdit>
 #include <QAbstractListModel>
 #include <QStyleOptionViewItem>
+#include <QSplitter>
 
 
 namespace Prototyper {
@@ -263,6 +264,8 @@ CommentsPrivate::init( const QString & author )
 		q, &Comments::nameChanged );
 
 	m_ui.m_name->setText( author );
+	const auto h = q->sizeHint().height();
+	m_ui.splitter->setSizes( QList< int > () << h / 4 * 3 << h / 4 );
 }
 
 
