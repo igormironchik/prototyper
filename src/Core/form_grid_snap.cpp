@@ -151,7 +151,11 @@ GridSnap::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 {
 	Q_UNUSED( widget )
 
-	painter->setPen( Qt::gray );
+	QPen pen( Qt::gray, 1.0 );
+	pen.setCosmetic( true );
+
+	painter->setPen( pen );
+
 	painter->drawLine( option->rect.x(), option->rect.y(),
 		option->rect.x() + option->rect.width(),
 		option->rect.y() + option->rect.height() );

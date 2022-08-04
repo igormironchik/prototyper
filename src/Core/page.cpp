@@ -1398,11 +1398,12 @@ Page::draw( QPainter * painter, int width, int height, int gridStep, bool drawGr
 {
 	static const QColor gridColor = Qt::gray;
 
-	painter->setPen( gridColor );
+	QPen pen( gridColor, 1.0 );
+	pen.setCosmetic( true );
 
 	painter->setRenderHint( QPainter::Antialiasing, false );
 
-	painter->setPen( gridColor );
+	painter->setPen( pen );
 
 	painter->setBrush( Qt::white );
 
