@@ -10,12 +10,24 @@
     <height>600</height>
    </rect>
   </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
   <property name="windowTitle">
    <string>Comments</string>
   </property>
   <layout class="QVBoxLayout" name="verticalLayout_3">
    <item>
     <widget class="QSplitter" name="splitter">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="Preferred" vsizetype="Expanding">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
      <property name="orientation">
       <enum>Qt::Vertical</enum>
      </property>
@@ -79,7 +91,7 @@
        </item>
       </layout>
      </widget>
-     <widget class="QWidget" name="layoutWidget">
+     <widget class="QWidget" name="layoutWidget1">
       <layout class="QHBoxLayout" name="horizontalLayout">
        <item>
         <widget class="QTextEdit" name="m_text">
