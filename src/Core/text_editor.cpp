@@ -30,6 +30,8 @@
 #include <QTextDocumentFragment>
 #include <QTextDocument>
 #include <QTextBlockFormat>
+#include <QMouseEvent>
+#include <QDesktopServices>
 
 
 namespace Prototyper {
@@ -52,6 +54,8 @@ public:
 
 	//! Parent.
 	TextEditor * q;
+	//! Link pressed.
+	bool linkPressed = false;
 }; // class TextEditorPrivate;
 
 void
@@ -336,6 +340,37 @@ TextEditor::insertLink()
 		c.setCharFormat( fmt );
 
 		c.insertText( dlg.text() );
+	}
+}
+
+void
+TextEditor::mousePressEvent( QMouseEvent * e )
+{
+	QTextEdit::mousePressEvent( e );
+
+	if( e->button() == Qt::LeftButton )
+	{
+		if( !textCursor().charFormat().anchorHref().isEmpty() )
+			d->linkPressed = true;
+	}
+}
+
+void
+TextEditor::mouseReleaseEvent( QMouseEvent * e )
+{
+	QTextEdit::mouseReleaseEvent( e );
+
+	if( e->button() == Qt::LeftButton )
+	{
+		if( d->linkPressed )
+		{
+			d->linkPressed = false;
+
+			const auto f = textCursor().charFormat();
+
+			if( !f.anchorHref().isEmpty() && e->modifiers() == Qt::ControlModifier )
+				QDesktopServices::openUrl( QUrl( f.anchorHref() ) );
+		}
 	}
 }
 

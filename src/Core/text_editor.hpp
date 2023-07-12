@@ -92,6 +92,10 @@ private slots:
 	//! Cursor changed.
 	void slotCursorChanged();
 
+protected:
+	void mousePressEvent( QMouseEvent * e ) override;
+	void mouseReleaseEvent( QMouseEvent * e ) override;
+
 private:
 	friend class TextEditorPrivate;
 
