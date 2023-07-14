@@ -1019,8 +1019,6 @@ ProjectWindow::showHideGrid( bool show )
 
 	foreach( PageView * view, d->m_widget->pages() )
 		view->page()->setGridMode( mode );
-
-	setWindowModified( true );
 }
 
 void
@@ -1047,16 +1045,10 @@ ProjectWindow::setGridStep( int step, bool forAll )
 
 			foreach( PageView * view, d->m_widget->pages() )
 				view->page()->setGridStep( dlg.gridStep() );
-
-			setWindowModified( true );
 		}
 		else if( index > 0 )
-		{
 			d->m_widget->pages()[ index - 1 ]->page()->setGridStep(
 				dlg.gridStep() );
-
-			setWindowModified( true );
-		}
 	}
 }
 
