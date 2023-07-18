@@ -543,7 +543,7 @@ ProjectWindowPrivate::init()
 		QIcon( QStringLiteral( ":/Core/img/zoom-in.png" ) ),
 		ProjectWindow::tr( "Zoom In" ) );
 	m_zoomIn->setShortcutContext( Qt::ApplicationShortcut );
-	m_zoomIn->setShortcut( ProjectWindow::tr( "Ctrl++" ) );
+	m_zoomIn->setShortcut( ProjectWindow::tr( "Ctrl+=" ) );
 
 	m_zoomOriginal = m_zoomToolBar->addAction(
 		QIcon( QStringLiteral( ":/Core/img/zoom-original.png" ) ),
