@@ -67,8 +67,8 @@ private slots:
 	void contextMenuRequested( const QPoint & pos );
 	//! Section resized.
 	void sectionResized( int logicalIndex, int oldSize, int newSize );
-	//! Name changed.
-	void nameChanged( const QString & name );
+	//! Set buttons state.
+	void setButtonsState();
 
 private:
 	//! Add new comment.

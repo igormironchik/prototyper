@@ -260,8 +260,10 @@ CommentsPrivate::init( const QString & author )
 		q, &Comments::contextMenuRequested );
 	Comments::connect( m_ui.m_view->header(), &QHeaderView::sectionResized,
 		q, &Comments::sectionResized );
+	Comments::connect( m_ui.m_text, &QTextEdit::textChanged,
+		q, &Comments::setButtonsState );
 	Comments::connect( m_ui.m_name, &QLineEdit::textChanged,
-		q, &Comments::nameChanged );
+		q, &Comments::setButtonsState );
 
 	m_ui.m_name->setText( author );
 	const auto h = q->sizeHint().height();
@@ -384,9 +386,18 @@ Comments::sectionResized( int section, int, int )
 }
 
 void
-Comments::nameChanged( const QString & name )
+Comments::setButtonsState()
 {
-	d->m_ui.m_ok->setEnabled( !name.isEmpty() );
+	if( !d->m_ui.m_name->text().isEmpty() && !d->m_ui.m_text->toPlainText().isEmpty() )
+	{
+		d->m_ui.m_ok->setEnabled( true );
+		d->m_ui.m_cancel->setEnabled( true );
+	}
+	else
+	{
+		d->m_ui.m_ok->setEnabled( false );
+		d->m_ui.m_cancel->setEnabled( false );
+	}
 }
 
 } /* namespace Core */
