@@ -291,7 +291,7 @@ Comments::~Comments() = default;
 void
 Comments::addComment( const QPair< QString, QString > & c )
 {
-	if( !c.second.isEmpty() && !d->m_ui.m_name->text().isEmpty() )
+	if( !c.second.isEmpty() )
 	{
 		if( !d->m_currentIndex.isValid() )
 		{
