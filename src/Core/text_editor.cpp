@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "text_editor.hpp"
-#include "utils.hpp"
+#include "form/utils.hpp"
 #include "constants.hpp"
 #include "link_dlg.hpp"
 

@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "pdf_exporter.hpp"
-#include "utils.hpp"
+#include "form/utils.hpp"
 #include "exporter_private.hpp"
 #include "constants.hpp"
 

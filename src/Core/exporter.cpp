@@ -22,15 +22,15 @@
 
 // Prototyper include.
 #include "exporter.hpp"
-#include "utils.hpp"
-#include "form_checkbox.hpp"
-#include "form_radio_button.hpp"
-#include "form_combobox.hpp"
-#include "form_spinbox.hpp"
-#include "form_hslider.hpp"
-#include "form_vslider.hpp"
-#include "page.hpp"
-#include "form_polyline.hpp"
+#include "form/utils.hpp"
+#include "form/checkbox.hpp"
+#include "form/radio_button.hpp"
+#include "form/combobox.hpp"
+#include "form/spinbox.hpp"
+#include "form/hslider.hpp"
+#include "form/vslider.hpp"
+#include "form/page.hpp"
+#include "form/polyline.hpp"
 #include "exporter_private.hpp"
 
 // Qt include.

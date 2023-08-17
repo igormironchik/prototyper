@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "text_opts_bar.hpp"
-#include "utils.hpp"
+#include "form/utils.hpp"
 #include "constants.hpp"
 
 // Qt include.
