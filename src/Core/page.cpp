@@ -879,7 +879,10 @@ void
 Page::switchToSelectMode()
 {	
 	if( d->m_currentLine )
+	{
 		d->m_currentLine->setSelected( true );
+		d->m_currentLine->showHandles( true );
+	}
 
 	if( d->m_current )
 		d->m_current->setSelected( true );
@@ -887,7 +890,7 @@ Page::switchToSelectMode()
 	if( d->m_currentPoly )
 	{
 		d->m_currentPoly->setSelected( true );
-		d->m_currentPoly->showHandles( false );
+		d->m_currentPoly->showHandles( true );
 	}
 }
 
@@ -2114,6 +2117,19 @@ Page::mouseReleaseEvent( QGraphicsSceneMouseEvent * mouseEvent )
 	}
 
 	mouseEvent->ignore();
+}
+
+void
+Page::handleMouseReleaseFromScene()
+{
+	if( PageAction::instance()->mode() == PageAction::Select )
+	{
+		if( d->m_currentLine )
+			d->m_currentLine->showHandles( false );
+
+		if( d->m_currentPoly )
+			d->m_currentPoly->showHandles( false );
+	}
 }
 
 void

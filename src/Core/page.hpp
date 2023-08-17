@@ -203,6 +203,9 @@ public:
 	//! \return Min Z index on the page.
 	qreal bottomZ() const;
 
+	//! Mouse release handle from PageScene.
+	void handleMouseReleaseFromScene();
+
 public slots:
 	//! Rename form.
 	void renameForm( const QString & name );

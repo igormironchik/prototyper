@@ -246,7 +246,7 @@ FormLine::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
 			d->m_h2->unsetCursor();
 			d->m_move->hide();
 			d->m_move->clear();
-			d->m_h2->unsetCursor();
+			d->m_move->unsetCursor();
 		}
 	}
 

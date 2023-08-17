@@ -58,6 +58,7 @@ public:
 		,	m_cfg( cfg )
 		,	m_form( nullptr )
 		,	m_isPressed( false )
+		,	m_isPressedGlobal( false )
 		,	m_dist( 0.0 )
 		,	m_isSelectionEnabled( true )
 		,	m_isHandlePressed( false )
@@ -84,6 +85,8 @@ public:
 	Page * m_form;
 	//! Is left button pressed?
 	bool m_isPressed;
+	//! Is left button pressed (globally)?
+	bool m_isPressedGlobal;
 	//! Point.
 	QPointF m_pos;
 	//! Distance.
@@ -379,6 +382,9 @@ PageScene::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
 void
 PageScene::mousePressEvent( QGraphicsSceneMouseEvent * event )
 {
+	if( event->button() == Qt::LeftButton )
+		d->m_isPressedGlobal = true;
+
 	if( d->m_isSelectionEnabled && event->button() == Qt::LeftButton && d->isSomethingUnderMouse() )
 	{
 		d->m_isPressed = true;
@@ -401,6 +407,13 @@ PageScene::mousePressEvent( QGraphicsSceneMouseEvent * event )
 void
 PageScene::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
 {
+	if( event->button() == Qt::LeftButton && d->m_isPressedGlobal )
+	{
+		d->m_isPressedGlobal = false;
+
+		page()->handleMouseReleaseFromScene();
+	}
+
 	if( d->m_isSelectionEnabled && d->m_isPressed && event->button() == Qt::LeftButton )
 	{
 		d->m_isPressed = false;
