@@ -143,7 +143,7 @@ public:
 	//! Update cfg.
 	void updateCfg();
 	//! Prepare to draw with rect placer.
-	void prepareDrawingWithRectPlacer( bool editable = false );
+	void prepareForDrawing( bool editable = false );
 	//! Clear edit mode in texts.
 	void clearEditModeInTexts();
 
@@ -841,7 +841,7 @@ ProjectWindowPrivate::updateCfg()
 }
 
 void
-ProjectWindowPrivate::prepareDrawingWithRectPlacer( bool editable )
+ProjectWindowPrivate::prepareForDrawing( bool editable )
 {
 	m_widget->enableSelection( false );
 
@@ -849,7 +849,7 @@ ProjectWindowPrivate::prepareDrawingWithRectPlacer( bool editable )
 	{
 		v->page()->setCursor( Qt::CrossCursor );
 
-		v->page()->switchToLineDrawingMode();
+		v->page()->switchToDrawingMode();
 
 		setFlag( v, QGraphicsItem::ItemIsSelectable, false );
 
@@ -1211,7 +1211,7 @@ ProjectWindow::drawLine()
 
 	PageAction::instance()->setMode( PageAction::DrawLine );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1221,7 +1221,7 @@ ProjectWindow::drawRect()
 
 	PageAction::instance()->setMode( PageAction::DrawRect );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1235,7 +1235,7 @@ ProjectWindow::drawPolyline( bool on )
 
 		PageAction::instance()->setFlag( PageAction::Polyline );
 
-		d->prepareDrawingWithRectPlacer();
+		d->prepareForDrawing();
 	}
 	else
 		PageAction::instance()->clearFlag( PageAction::Polyline );
@@ -1248,7 +1248,7 @@ ProjectWindow::insertText()
 
 	PageAction::instance()->setMode( PageAction::InsertText );
 
-	d->prepareDrawingWithRectPlacer( true );
+	d->prepareForDrawing( true );
 }
 
 void
@@ -1795,7 +1795,7 @@ ProjectWindow::drawButton()
 
 	PageAction::instance()->setMode( PageAction::DrawButton );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1805,7 +1805,7 @@ ProjectWindow::drawComboBox()
 
 	PageAction::instance()->setMode( PageAction::DrawComboBox );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1815,7 +1815,7 @@ ProjectWindow::drawRadioButton()
 
 	PageAction::instance()->setMode( PageAction::DrawRadioButton );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1825,7 +1825,7 @@ ProjectWindow::drawCheckBox()
 
 	PageAction::instance()->setMode( PageAction::DrawCheckBox );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1835,7 +1835,7 @@ ProjectWindow::drawHSlider()
 
 	PageAction::instance()->setMode( PageAction::DrawHSlider );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1845,7 +1845,7 @@ ProjectWindow::drawVSlider()
 
 	PageAction::instance()->setMode( PageAction::DrawVSlider );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void
@@ -1855,7 +1855,7 @@ ProjectWindow::drawSpinbox()
 
 	PageAction::instance()->setMode( PageAction::DrawSpinBox );
 
-	d->prepareDrawingWithRectPlacer();
+	d->prepareForDrawing();
 }
 
 void

@@ -895,7 +895,7 @@ Page::switchToSelectMode()
 }
 
 void
-Page::switchToLineDrawingMode()
+Page::switchToDrawingMode()
 {
 	d->hideHandlesOfCurrent();
 

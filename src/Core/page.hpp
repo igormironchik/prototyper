@@ -124,7 +124,7 @@ public:
 	//! Switch to select mode.
 	void switchToSelectMode();
 	//! Switch to line drawing mode.
-	void switchToLineDrawingMode();
+	void switchToDrawingMode();
 
 	//! Enable/disable snap to grid.
 	void enableSnap( bool on = true );
