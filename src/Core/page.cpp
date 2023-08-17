@@ -606,7 +606,7 @@ PagePrivate::searchAlignPoint( const QList< QGraphicsItem* > & items,
 			case AlignVertBottomPoint :
 			{
 				if( dynamic_cast< FormObject* > ( item )->position().y() +
-					item->boundingRect().height() < pos )
+					item->boundingRect().height() > pos )
 						pos = dynamic_cast< FormObject* > ( item )->position().y() +
 							item->boundingRect().height();
 			}
@@ -1095,10 +1095,7 @@ Page::alignVerticalBottom()
 		{
 			dynamic_cast< FormObject* > ( item )->setPosition(
 				QPointF( dynamic_cast< FormObject* > ( item )->
-					position().x(), dynamic_cast< FormObject* > ( item )->
-						position().y() + y -
-					( dynamic_cast< FormObject* > ( item )->
-						position().y() + item->boundingRect().height() ) ) );
+					position().x(), y - item->boundingRect().height() ) );
 		}
 
 		emit changed();
