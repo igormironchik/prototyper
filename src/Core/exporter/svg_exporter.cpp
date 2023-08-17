@@ -22,9 +22,9 @@
 
 // Prototyper include.
 #include "svg_exporter.hpp"
-#include "form/utils.hpp"
+#include "../form/utils.hpp"
 #include "exporter_private.hpp"
-#include "constants.hpp"
+#include "../constants.hpp"
 
 // Qt include.
 #include <QSvgGenerator>
