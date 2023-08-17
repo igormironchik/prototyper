@@ -24,7 +24,7 @@
 #include "project_widget.hpp"
 #include "project_description_tab.hpp"
 #include "project_widget_tab_bar.hpp"
-#include "name_dlg.hpp"
+#include "dlg/name_dlg.hpp"
 #include "text_editor.hpp"
 #include "form/page_view.hpp"
 #include "project_cfg.hpp"

@@ -24,7 +24,7 @@
 #include "text_editor.hpp"
 #include "form/utils.hpp"
 #include "constants.hpp"
-#include "link_dlg.hpp"
+#include "dlg/link_dlg.hpp"
 
 #include <QTextCursor>
 #include <QTextDocumentFragment>

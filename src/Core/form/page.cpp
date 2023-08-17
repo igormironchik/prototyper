@@ -28,7 +28,7 @@
 #include "project_cfg.hpp"
 #include "actions.hpp"
 #include "rect_placer.hpp"
-#include "../name_dlg.hpp"
+#include "../dlg/name_dlg.hpp"
 #include "utils.hpp"
 #include "undo_commands.hpp"
 #include "../constants.hpp"

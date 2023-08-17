@@ -26,7 +26,7 @@
 #include "form/page.hpp"
 #include "form/page_view.hpp"
 #include "form/page_scene.hpp"
-#include "grid_step_dlg.hpp"
+#include "dlg/grid_step_dlg.hpp"
 #include "project_cfg.hpp"
 #include "session_cfg.hpp"
 #include "project_description_tab.hpp"

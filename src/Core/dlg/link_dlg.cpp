@@ -22,7 +22,7 @@
 
 // Prototyper include.
 #include "link_dlg.hpp"
-#include "ui_link.h"
+#include "ui_link_dlg.h"
 
 // Qt include.
 #include <QLineEdit>
