@@ -1529,6 +1529,7 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 				auto * c = new PageComment( this );
 				c->setId( d->m_comments.size() + 1 );
 				c->setPos( event->scenePos() );
+				c->setAuthor( TopGui::instance()->projectWindow()->author() );
 				d->m_comments.append( c );
 
 				connect( c, &PageComment::changed, this, &Page::changed );
