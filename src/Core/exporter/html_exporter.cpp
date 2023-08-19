@@ -80,10 +80,17 @@ static inline void printText( QTextStream & stream,
 					Cfg::c_underlineStyle ) != t.style().cend() ?
 						QStringLiteral( "<ins>" ) : QString() );
 
+		if( !t.link().isEmpty() )
+			stream << QStringLiteral( "<a href=\"" )
+				<< t.link() << QStringLiteral( "\">" ) << Qt::endl;
+
 		QStringList strings = t.text().split( QLatin1Char( '\n' ) );
 
 		foreach( const QString & str, strings )
 			stream << str << QStringLiteral( "<br>" ) << Qt::endl;
+
+		if( !t.link().isEmpty() )
+			stream << QStringLiteral( "</a>" ) << Qt::endl;
 
 		stream << ( std::find( t.style().cbegin(), t.style().cend(),
 					Cfg::c_underlineStyle ) != t.style().cend()  ?
