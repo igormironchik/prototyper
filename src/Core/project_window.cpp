@@ -146,6 +146,8 @@ public:
 	void prepareForDrawing( bool editable = false );
 	//! Clear edit mode in texts.
 	void clearEditModeInTexts();
+	//! Clean added/deleted pages.
+	void cleanPages();
 
 	//! Parent.
 	ProjectWindow * q;
@@ -857,6 +859,13 @@ ProjectWindowPrivate::prepareForDrawing( bool editable )
 	}
 }
 
+void
+ProjectWindowPrivate::cleanPages()
+{
+	m_addedForms.clear();
+	m_deletedForms.clear();
+}
+
 
 //
 // ProjectWindow
@@ -943,8 +952,6 @@ ProjectWindow::readProject( const QString & fileName )
 				.arg( QFileInfo( fileName ).baseName() ) );
 
 			switchToSelectMode();
-			d->m_addedForms.clear();
-			d->m_deletedForms.clear();
 			tabChanged( 0 );
 		}
 		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
@@ -1104,8 +1111,7 @@ ProjectWindow::newProject()
 	setWindowModified( false );
 
 	switchToSelectMode();
-	d->m_addedForms.clear();
-	d->m_deletedForms.clear();
+	d->cleanPages();
 	tabChanged( 0 );
 }
 
@@ -1164,9 +1170,7 @@ ProjectWindow::saveProjectImpl( const QString & fileName )
 
 		setWindowModified( false );
 
-		d->m_addedForms.clear();
-
-		d->m_deletedForms.clear();
+		d->cleanPages();
 
 		d->m_widget->clearCommentChanged();
 	}
