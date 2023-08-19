@@ -952,6 +952,7 @@ ProjectWindow::readProject( const QString & fileName )
 				.arg( QFileInfo( fileName ).baseName() ) );
 
 			switchToSelectMode();
+			d->cleanPages();
 			tabChanged( 0 );
 		}
 		catch( const cfgfile::exception_t< cfgfile::qstring_trait_t > & x )
