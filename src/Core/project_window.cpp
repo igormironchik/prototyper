@@ -1926,10 +1926,7 @@ ProjectWindow::canUndoChanged( bool canUndo )
 		}
 	}
 
-	if( can )
-		setWindowModified( true );
-	else
-		setWindowModified( false );
+	setWindowModified( can );
 }
 
 void
