@@ -702,9 +702,9 @@ FormPolyline::moveResizable( const QPointF & delta )
 void
 FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 {
-	const auto i = d->indexOfEditHandle( handle );
+	const auto i = static_cast< qsizetype > ( d->indexOfEditHandle( handle ) );
 
-	if( i < d->m_editHandles.size() )
+	if( i < static_cast< qsizetype > ( d->m_editHandles.size() ) )
 	{
 		auto & l1 = ( i < d->m_lines.size() ? d->m_lines[ i ] : d->m_lines.back() );
 		auto & l2 = ( i == 0 ? d->m_lines[ d->m_lines.size() - 1 ] : d->m_lines[ i - 1 ] );
@@ -730,9 +730,9 @@ FormPolyline::handleMoved( const QPointF & delta, FormMoveHandle * handle )
 void
 FormPolyline::handleReleased( FormMoveHandle * handle )
 {
-	const auto i = d->indexOfEditHandle( handle );
+	const auto i = static_cast< qsizetype > ( d->indexOfEditHandle( handle ) );
 
-	if( i < d->m_editHandles.size() )
+	if( i < static_cast< qsizetype > ( d->m_editHandles.size() ) )
 	{
 		auto & l1 = ( i < d->m_lines.size() ? d->m_lines[ i ] : d->m_lines.back() );
 		auto & l2 = ( i == 0 ? d->m_lines[ d->m_lines.size() - 1 ] : d->m_lines[ i - 1 ] );
