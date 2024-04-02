@@ -35,7 +35,7 @@ minMaxZ( const QList< QGraphicsItem* > & items )
 
 	bool first = true;
 
-	for( const auto & i : qAsConst( items ) )
+	for( const auto & i : std::as_const( items ) )
 	{
 		auto * obj = dynamic_cast< FormObject* > ( i );
 

@@ -440,7 +440,7 @@ ProjectWidget::setTabRenamed( bool on )
 bool
 ProjectWidget::isCommentChanged() const
 {
-	for( const auto & f : qAsConst( d->m_forms ) )
+	for( const auto & f : std::as_const( d->m_forms ) )
 		if( f->page()->isCommentChanged() )
 			return true;
 
@@ -450,7 +450,7 @@ ProjectWidget::isCommentChanged() const
 void
 ProjectWidget::clearCommentChanged()
 {
-	for( const auto & f : qAsConst( d->m_forms ) )
+	for( const auto & f : std::as_const( d->m_forms ) )
 		f->page()->clearCommentChanged();
 }
 

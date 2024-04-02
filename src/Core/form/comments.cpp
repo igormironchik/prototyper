@@ -266,7 +266,7 @@ Comments::Comments( const QString & author,
 {
 	d->init( author );
 
-	for( const auto & c : qAsConst( data ) )
+	for( const auto & c : std::as_const( data ) )
 		addComment( c );
 }
 

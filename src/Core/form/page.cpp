@@ -76,7 +76,7 @@ PagePrivate::init()
 bool
 PagePrivate::isCommentUnderMouse() const
 {
-	for( const auto & c : qAsConst( m_comments ) )
+	for( const auto & c : std::as_const( m_comments ) )
 		if( c->isUnderMouse() )
 			return true;
 
@@ -101,7 +101,7 @@ void
 findZBorder( const QList< QGraphicsItem* > & items,
 	qreal & z, bool initZ, U u )
 {
-	for( const auto & item : qAsConst( items ) )
+	for( const auto & item : std::as_const( items ) )
 	{
 		const QList< QGraphicsItem* > children = item->childItems();
 
@@ -710,7 +710,7 @@ Page::cfg() const
 	c.spinbox().clear();
 	c.comments().clear();
 
-	for( const auto & comment : qAsConst( d->m_comments ) )
+	for( const auto & comment : std::as_const( d->m_comments ) )
 		c.comments().push_back( comment->cfg() );
 
 	foreach( QGraphicsItem * item, childItems() )
@@ -1531,7 +1531,7 @@ Page::contextMenuEvent( QGraphicsSceneContextMenuEvent * event )
 			{
 				int id = 0;
 
-				for( const auto & c : qAsConst( d->m_comments ) )
+				for( const auto & c : std::as_const( d->m_comments ) )
 				{
 					if( c->isItYou( event->scenePos() ) )
 					{
@@ -2247,7 +2247,7 @@ Page::clone() const
 bool
 Page::isCommentChanged() const
 {
-	for( const auto & c : qAsConst( d->m_comments ) )
+	for( const auto & c : std::as_const( d->m_comments ) )
 		if( c->isChanged() )
 			return true;
 

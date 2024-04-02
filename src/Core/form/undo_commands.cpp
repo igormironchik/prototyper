@@ -539,7 +539,7 @@ UndoDuplicate::undo()
 
 	QList< QGraphicsItem* > items;
 
-	for( const auto & id : qAsConst( m_duplIds ) )
+	for( const auto & id : std::as_const( m_duplIds ) )
 		items.append( m_form->findItem( id ) );
 
 	m_form->deleteItems( items, false );
@@ -554,7 +554,7 @@ UndoDuplicate::redo()
 	{
 		m_duplIds.clear();
 
-		for( const auto & id : qAsConst( m_origIds ) )
+		for( const auto & id : std::as_const( m_origIds ) )
 		{
 			auto * o = dynamic_cast< FormObject* > ( m_form->findItem( id ) );
 
@@ -592,7 +592,7 @@ UndoChangeZ::undo()
 {
 	m_undone = true;
 
-	for( const auto & p : qAsConst( m_orig ) )
+	for( const auto & p : std::as_const( m_orig ) )
 	{
 		auto * i = m_form->findItem( p.first );
 
@@ -608,7 +608,7 @@ UndoChangeZ::redo()
 {
 	if( m_undone )
 	{
-		for( const auto & p : qAsConst( m_new ) )
+		for( const auto & p : std::as_const( m_new ) )
 		{
 			auto * i = m_form->findItem( p.first );
 

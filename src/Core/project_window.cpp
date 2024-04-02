@@ -764,7 +764,7 @@ ProjectWindowPrivate::init()
 void
 ProjectWindowPrivate::clearEditModeInTexts()
 {
-	for( const auto & p : qAsConst( m_widget->pages() ) )
+	for( const auto & p : std::as_const( m_widget->pages() ) )
 		p->page()->clearEditModeInTexts();
 }
 
@@ -822,7 +822,7 @@ ProjectWindowPrivate::updateCfg()
 
 	m_cfg.page().clear();
 
-	for( const auto & page : qAsConst( m_widget->pages() ) )
+	for( const auto & page : std::as_const( m_widget->pages() ) )
 		m_cfg.page().push_back( page->page()->cfg() );
 }
 

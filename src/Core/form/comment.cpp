@@ -91,7 +91,7 @@ PageComment::cfg() const
 
 	c.set_pos( p );
 
-	for( const auto & s : qAsConst( d->m_comments ) )
+	for( const auto & s : std::as_const( d->m_comments ) )
 	{
 		Cfg::Comment comment;
 		comment.set_author( s.first );

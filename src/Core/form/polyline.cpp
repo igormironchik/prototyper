@@ -400,7 +400,7 @@ FormPolyline::draw( QPainter * painter, const Cfg::Polyline & cfg, qreal dpi )
 	QVector< QPointF > points;
 	points.reserve( lines.size() * 2 );
 
-	for( const auto & line : qAsConst( lines ) )
+	for( const auto & line : std::as_const( lines ) )
 	{
 		points.append( line.p1() );
 		points.append( line.p2() );
