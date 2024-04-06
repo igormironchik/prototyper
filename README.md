@@ -1,3 +1,5 @@
+[![License: GPL](https://img.shields.io/badge/license-GPLv3-blue
+)](https://opensource.org/license/GPL-3.0)
 
 # About
 
