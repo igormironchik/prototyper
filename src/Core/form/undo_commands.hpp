@@ -71,24 +71,6 @@ public:
 
 		m_form->deleteItems( QList< QGraphicsItem* > () << elem, false );
 
-		switch( Elem::staticObjectType() )
-		{
-			case FormObject::LineType :
-			{
-				m_form->setCurrentLine( Q_NULLPTR );
-			}
-				break;
-
-			case FormObject::PolylineType :
-			{
-				m_form->setCurrentPolyLine( Q_NULLPTR );
-			}
-				break;
-
-			default :
-				break;
-		}
-
 		TopGui::instance()->projectWindow()->switchToSelectMode();
 	}
 
@@ -353,24 +335,6 @@ public:
 			QGraphicsItem * elem = m_form->findItem( m_cfg.objectId() );
 
 			m_form->deleteItems( QList< QGraphicsItem* > () << elem, false );
-
-			switch( Elem::staticObjectType() )
-			{
-				case FormObject::LineType :
-				{
-					m_form->setCurrentLine( Q_NULLPTR );
-				}
-					break;
-
-				case FormObject::PolylineType :
-				{
-					m_form->setCurrentPolyLine( Q_NULLPTR );
-				}
-					break;
-
-				default :
-					break;
-			}
 
 			TopGui::instance()->projectWindow()->switchToSelectMode();
 		}

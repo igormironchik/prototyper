@@ -1302,6 +1302,12 @@ Page::deleteItems( const QList< QGraphicsItem* > & items,
 		if( item == d->m_current )
 			d->m_current = nullptr;
 
+		if( item == d->m_currentLine )
+			d->m_currentLine = nullptr;
+
+		if( item == d->m_currentPoly )
+			d->m_currentPoly = nullptr;
+
 		auto * obj = dynamic_cast< FormObject* > ( item );
 
 		if( obj )
