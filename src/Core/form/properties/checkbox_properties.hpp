@@ -41,8 +41,8 @@ public:
 	void connectProperties( T * owner )
 	{
 		connect( m_ui.m_checked,
-			&QCheckBox::stateChanged, owner->q,
-			[this, owner]( int v ) {
+			&QCheckBox::checkStateChanged, owner->q,
+			[this, owner]( Qt::CheckState v ) {
 				owner->m_checked = ( v == Qt::Checked );
 
 				owner->q->page()->undoStack()->push( new UndoChangeCheckState( owner->q->page(),

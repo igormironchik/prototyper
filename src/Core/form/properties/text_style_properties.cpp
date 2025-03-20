@@ -43,13 +43,13 @@ TextStyleProperties::disconnectProperties()
 		QOverload< int >::of( &QSpinBox::valueChanged ), nullptr, nullptr );
 
 	FormCheckBox::disconnect( m_ui.m_bold,
-		&QCheckBox::stateChanged, nullptr, nullptr );
+		&QCheckBox::checkStateChanged, nullptr, nullptr );
 
 	FormCheckBox::disconnect( m_ui.m_italic,
-		&QCheckBox::stateChanged, nullptr, nullptr );
+		&QCheckBox::checkStateChanged, nullptr, nullptr );
 
 	FormCheckBox::disconnect( m_ui.m_underline,
-		&QCheckBox::stateChanged, nullptr, nullptr );
+		&QCheckBox::checkStateChanged, nullptr, nullptr );
 }
 
 } /* namespace Core */

@@ -40,7 +40,7 @@ void
 CheckBoxProperties::disconnectProperties()
 {
 	disconnect( m_ui.m_checked,
-		&QCheckBox::stateChanged, nullptr, nullptr );
+		&QCheckBox::checkStateChanged, nullptr, nullptr );
 }
 
 } /* namespace Core */

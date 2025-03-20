@@ -58,8 +58,8 @@ public:
 			} );
 
 		connect( m_ui.m_bold,
-			&QCheckBox::stateChanged, owner->q,
-			[this, owner]( int v ) {
+			&QCheckBox::checkStateChanged, owner->q,
+			[this, owner]( Qt::CheckState v ) {
 				const auto oldText = owner->q->text();
 				owner->m_font.setWeight( ( v == Qt::Checked ? QFont::Bold : QFont::Normal ) );
 				owner->q->page()->emitChanged();
@@ -71,8 +71,8 @@ public:
 			} );
 
 		connect( m_ui.m_italic,
-			&QCheckBox::stateChanged, owner->q,
-			[this, owner]( int v ) {
+			&QCheckBox::checkStateChanged, owner->q,
+			[this, owner]( Qt::CheckState v ) {
 				const auto oldText = owner->q->text();
 				owner->m_font.setItalic( ( v == Qt::Checked ) );
 				owner->q->page()->emitChanged();
@@ -84,8 +84,8 @@ public:
 			} );
 
 		connect( m_ui.m_underline,
-			&QCheckBox::stateChanged, owner->q,
-			[this, owner]( int v ) {
+			&QCheckBox::checkStateChanged, owner->q,
+			[this, owner]( Qt::CheckState v ) {
 				const auto oldText = owner->q->text();
 				owner->m_font.setUnderline( ( v == Qt::Checked ) );
 				owner->q->page()->emitChanged();
