@@ -1,0 +1,22 @@
+version = 1
+SPDX-PackageName = "prototyper"
+SPDX-PackageSupplier = "Igor Mironchik <igor.mironchik@gmail.com>"
+SPDX-PackageDownloadLocation = "https://github.com/igormironchik/prototyper"
+
+[[annotations]]
+path = [".github/**", ".gitignore", ".gitmodules", "README.md", "CMakeLists.txt", "**/**.txt", "**/**.ico", "**/**qrc", "**/**.rc", "**/**.ui", "**/**.md", "**/**.cfgfile", "**/**.ts", "**/**.qm", "**/**.xml", "doc/**", "example/**", "installer/**", "**/**.qtconf", "**/**.in", "REUSE.toml"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2016-2024 Igor Mironchik <igor.mironchik@gmail.com>"
+SPDX-License-Identifier = "GPL-3.0-or-later"
+
+[[annotations]]
+path = ["src/Prototyper/img/**", "src/Core/img/**"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2007 Nuno Pinheiro <nuno@oxygen-icons.org>, 2007 David Vignoni <david@icon-king.com>, 2007 David Miller <miller@oxygen-icons.org>, Johann Ollivier Lapeyre <johann@oxygen-icons.org>, Kenneth Wimer <kwwii@bootsplash.org>, 2007 Riccardo Iaconelli <riccardo@oxygen-icons.org>"
+SPDX-License-Identifier = "LGPL-3.0-or-later"
+
+[[annotations]]
+path = "src/Core/img/qt.png"
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2023 The Qt Company Ltd and other contributors"
+SPDX-License-Identifier = "LGPL-3.0-or-later"
