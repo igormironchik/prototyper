@@ -28,10 +28,6 @@ this application useless. But If you want to describe idea for designer, then
 this application can be usefull. And don't forget that this is absolutely free
 software.
 
-# Status
-
-Under construction. **Testers and designers wanted!** Just contact me for Windows/Linux installations.
-
 # Getting from Repository
 
 After clone update submodules with the next command:
