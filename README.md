@@ -1,12 +1,6 @@
 [![License: GPL](https://img.shields.io/badge/license-GPLv3-blue
 )](https://opensource.org/license/GPL-3.0)
 
-> [!IMPORTANT]
->
-> This project is not supported anymore. But can be reopened if interest will
-> be in it. Please, let me know if you need something. Just write me email to
-> `igor.mironchik at gmail.com`.
-
 # About
 
 Prototyper is a desktop application to make UI prototypes.
@@ -25,7 +19,7 @@ And Prototyper licensed under GNU GPL v3.0!!!
 
 I see this application as pre-design prototyping software. Designers will find
 this application useless. But If you want to describe idea for designer, then
-this application can be usefull. And don't forget that this is absolutely free
+this application can be useful. And don't forget that this is absolutely free
 software.
 
 # Getting from Repository
