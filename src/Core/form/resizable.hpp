@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_RESIZABLE_HPP__INCLUDED
@@ -17,37 +17,37 @@
 #include "move_handle.hpp"
 #include "with_resize_and_move_handles.hpp"
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormResizable
 //
 
 //! Base class for resizable objects.
-class FormResizable {
+class FormResizable
+{
 public:
-	FormResizable();
-	virtual ~FormResizable();
+    FormResizable();
+    virtual ~FormResizable();
 
 protected:
-	friend class FormResizableProxy;
+    friend class FormResizableProxy;
 
-	//! Resize.
-	virtual void resize( const QRectF & rect );
-	//! Move resizable.
-	virtual void moveResizable( const QPointF & delta );
+    //! Resize.
+    virtual void resize(const QRectF &rect);
+    //! Move resizable.
+    virtual void moveResizable(const QPointF &delta);
 
 private:
-	Q_DISABLE_COPY( FormResizable )
+    Q_DISABLE_COPY(FormResizable)
 }; // class FormResizable
-
 
 class FormResizableProxy;
 class FormResizableProxyPrivate;
-
 
 //
 // FormResizableProxy
@@ -56,44 +56,45 @@ class FormResizableProxyPrivate;
 //! Proxy for resizable object. This proxy has resize and move handles
 //! and on resize draw new rectangle but don't resize actual FormResizable.
 //! And only on release do actual resize.
-class FormResizableProxy
-	:	public QGraphicsObject
-	,	public FormWithHandle
+class FormResizableProxy : public QGraphicsObject, public FormWithHandle
 {
 public:
-	FormResizableProxy( FormResizable * resizable,
-		QGraphicsItem * parent, Page * form );
-	~FormResizableProxy() override;
+    FormResizableProxy(FormResizable *resizable,
+                       QGraphicsItem *parent,
+                       Page *form);
+    ~FormResizableProxy() override;
 
-	//! Set rect.
-	void setRect( const QRectF & rect );
+    //! Set rect.
+    void setRect(const QRectF &rect);
 
-	//! Set min size.
-	void setMinSize( const QSizeF & min );
+    //! Set min size.
+    void setMinSize(const QSizeF &min);
 
-	QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0) override;
 
-	//! \return Pointer to handles.
-	WithResizeAndMoveHandles * handles() const;
-
-protected:
-	FormResizableProxy( std::unique_ptr< FormResizableProxyPrivate > && dd,
-		QGraphicsItem * parent );
+    //! \return Pointer to handles.
+    WithResizeAndMoveHandles *handles() const;
 
 protected:
-	//! Handle moved.
-	void handleMoved( const QPointF & delta, FormMoveHandle * handle ) override;
-	//! Handle released.
-	void handleReleased( FormMoveHandle * handle ) override;
+    FormResizableProxy(std::unique_ptr<FormResizableProxyPrivate> &&dd,
+                       QGraphicsItem *parent);
 
 protected:
-	std::unique_ptr< FormResizableProxyPrivate > d;
+    //! Handle moved.
+    void handleMoved(const QPointF &delta,
+                     FormMoveHandle *handle) override;
+    //! Handle released.
+    void handleReleased(FormMoveHandle *handle) override;
+
+protected:
+    std::unique_ptr<FormResizableProxyPrivate> d;
 
 private:
-	Q_DISABLE_COPY( FormResizableProxy )
+    Q_DISABLE_COPY(FormResizableProxy)
 }; // class FormResizableProxy
 
 } /* namespace Core */

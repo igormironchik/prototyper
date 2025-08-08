@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__LINK_DLG_HPP__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // LinkDlg
@@ -25,24 +26,23 @@ namespace Core {
 class LinkDlgPrivate;
 
 //! Link dialog.
-class LinkDlg final
-	:	public QDialog
+class LinkDlg final : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	LinkDlg( QWidget * parent = nullptr );
-	~LinkDlg() override;
+    LinkDlg(QWidget *parent = nullptr);
+    ~LinkDlg() override;
 
-	//! \return Url.
-	QString url() const;
-	//! \return Text.
-	QString text() const;
+    //! \return Url.
+    QString url() const;
+    //! \return Text.
+    QString text() const;
 
 private:
-	Q_DISABLE_COPY( LinkDlg )
+    Q_DISABLE_COPY(LinkDlg)
 
-	std::unique_ptr< LinkDlgPrivate > d;
+    std::unique_ptr<LinkDlgPrivate> d;
 }; // class LinkDlg
 
 } /* namespace Core */

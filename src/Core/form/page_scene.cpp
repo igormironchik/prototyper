@@ -1,438 +1,402 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 // Prototyper include.
 #include "page_scene.hpp"
-#include "project_cfg.hpp"
-#include "actions.hpp"
-#include "../top_gui.hpp"
-#include "../project_window.hpp"
-#include "object.hpp"
-#include "actions.hpp"
-#include "page.hpp"
-#include "aspect_ratio_handle.hpp"
-#include "nodes_edit_resize_handle.hpp"
-#include "move_handle.hpp"
 #include "../constants.hpp"
+#include "../project_window.hpp"
+#include "../top_gui.hpp"
+#include "actions.hpp"
+#include "aspect_ratio_handle.hpp"
 #include "comment.hpp"
+#include "move_handle.hpp"
+#include "nodes_edit_resize_handle.hpp"
+#include "object.hpp"
+#include "page.hpp"
+#include "project_cfg.hpp"
 #include "utils.hpp"
 
 // Qt include.
-#include <QKeyEvent>
 #include <QGraphicsItem>
 #include <QGraphicsSceneMouseEvent>
 #include <QGraphicsView>
+#include <QKeyEvent>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormScenePrivate
 //
 
-class PageScenePrivate {
+class PageScenePrivate
+{
 public:
-	PageScenePrivate( const Cfg::Page & cfg, PageScene * parent )
-		:	q( parent )
-		,	m_cfg( cfg )
-		,	m_form( nullptr )
-		,	m_isPressed( false )
-		,	m_isPressedGlobal( false )
-		,	m_dist( 0.0 )
-		,	m_isSelectionEnabled( true )
-		,	m_isHandlePressed( false )
-		,	m_wasHandleHovered( false )
-	{
-	}
+    PageScenePrivate(const Cfg::Page &cfg,
+                     PageScene *parent)
+        : q(parent)
+        , m_cfg(cfg)
+        , m_form(nullptr)
+        , m_isPressed(false)
+        , m_isPressedGlobal(false)
+        , m_dist(0.0)
+        , m_isSelectionEnabled(true)
+        , m_isHandlePressed(false)
+        , m_wasHandleHovered(false)
+    {
+    }
 
-	//! Init.
-	void init();
-	//! Move by.
-	void moveBy( const QPointF & delta );
-	//! \return Is something under cursor?
-	bool isSomethingUnderMouse() const;
-	//! \return Item under mouse.
-	QGraphicsItem * itemUnderMouse() const;
-	//! \return Is handle under mouse?
-	bool isHandleUnderMouse( const QList< QGraphicsItem* > & children ) const;
+    //! Init.
+    void init();
+    //! Move by.
+    void moveBy(const QPointF &delta);
+    //! \return Is something under cursor?
+    bool isSomethingUnderMouse() const;
+    //! \return Item under mouse.
+    QGraphicsItem *itemUnderMouse() const;
+    //! \return Is handle under mouse?
+    bool isHandleUnderMouse(const QList<QGraphicsItem *> &children) const;
 
-	//! Parent.
-	PageScene * q;
-	//! Cfg.
-	const Cfg::Page & m_cfg;
-	//! Form.
-	Page * m_form;
-	//! Is left button pressed?
-	bool m_isPressed;
-	//! Is left button pressed (globally)?
-	bool m_isPressedGlobal;
-	//! Point.
-	QPointF m_pos;
-	//! Distance.
-	qreal m_dist;
-	//! Is selection enabled.
-	bool m_isSelectionEnabled;
-	//! Is handle pressed?
-	bool m_isHandlePressed;
-	//! Was handle hovered?
-	bool m_wasHandleHovered;
+    //! Parent.
+    PageScene *q;
+    //! Cfg.
+    const Cfg::Page &m_cfg;
+    //! Form.
+    Page *m_form;
+    //! Is left button pressed?
+    bool m_isPressed;
+    //! Is left button pressed (globally)?
+    bool m_isPressedGlobal;
+    //! Point.
+    QPointF m_pos;
+    //! Distance.
+    qreal m_dist;
+    //! Is selection enabled.
+    bool m_isSelectionEnabled;
+    //! Is handle pressed?
+    bool m_isHandlePressed;
+    //! Was handle hovered?
+    bool m_wasHandleHovered;
 }; // class FormScenePrivate;
 
-void
-PageScenePrivate::init()
+void PageScenePrivate::init()
 {
-	q->setItemIndexMethod( QGraphicsScene::NoIndex );
+    q->setItemIndexMethod(QGraphicsScene::NoIndex);
 }
 
-void
-PageScenePrivate::moveBy( const QPointF & delta )
+void PageScenePrivate::moveBy(const QPointF &delta)
 {
-	foreach( QGraphicsItem * item, q->selectedItems() )
-	{
-		auto * obj = dynamic_cast< FormObject* > ( item );
+    foreach (QGraphicsItem *item, q->selectedItems()) {
+        auto *obj = dynamic_cast<FormObject *>(item);
 
-		if( obj )
-			obj->setPosition( obj->position() + delta );
-	}
+        if (obj) {
+            obj->setPosition(obj->position() + delta);
+        }
+    }
 }
 
-bool
-PageScenePrivate::isSomethingUnderMouse() const
+bool PageScenePrivate::isSomethingUnderMouse() const
 {
-	const auto children = m_form->childItems();
+    const auto children = m_form->childItems();
 
-	for( const auto & item : children )
-	{
-		if( item->isUnderMouse() && item->isVisible() )
-			return true;
-	}
+    for (const auto &item : children) {
+        if (item->isUnderMouse() && item->isVisible()) {
+            return true;
+        }
+    }
 
-	return false;
+    return false;
 }
 
-QGraphicsItem *
-PageScenePrivate::itemUnderMouse() const
+QGraphicsItem *PageScenePrivate::itemUnderMouse() const
 {
-	const auto children = m_form->childItems();
-	QGraphicsItem * selected = nullptr;
+    const auto children = m_form->childItems();
+    QGraphicsItem *selected = nullptr;
 
-	for( const auto & item : children )
-	{
-		if( item->isUnderMouse() && item->isVisible() && dynamic_cast< FormObject* > ( item ) )
-		{
-			if( !selected )
-				selected = item;
-			else
-			{
-				const auto dz = item->zValue() - selected->zValue();
+    for (const auto &item : children) {
+        if (item->isUnderMouse() && item->isVisible() && dynamic_cast<FormObject *>(item)) {
+            if (!selected) {
+                selected = item;
+            } else {
+                const auto dz = item->zValue() - selected->zValue();
 
-				if( dz > c_zDelta )
-					selected = item;
-				else if( qAbs( dz ) < c_zDelta || qAbs( qAbs( dz ) - c_zDelta ) < c_maxZero )
-				{
-					auto br1 = selected->sceneBoundingRect();
-					auto br2 = item->sceneBoundingRect();
-					const auto r = br1.intersected( br2 ).normalized();
-					const auto s = r.width() * r.height();
+                if (dz > c_zDelta) {
+                    selected = item;
+                } else if (qAbs(dz) < c_zDelta || qAbs(qAbs(dz) - c_zDelta) < c_maxZero) {
+                    auto br1 = selected->sceneBoundingRect();
+                    auto br2 = item->sceneBoundingRect();
+                    const auto r = br1.intersected(br2).normalized();
+                    const auto s = r.width() * r.height();
 
-					const auto r1 = br1.normalized();
-					const auto r2 = br2.normalized();
-					const auto s1 = r1.width() * r1.height();
-					const auto s2 = r2.width() * r2.height();
+                    const auto r1 = br1.normalized();
+                    const auto r2 = br2.normalized();
+                    const auto s1 = r1.width() * r1.height();
+                    const auto s2 = r2.width() * r2.height();
 
-					if( s / s2 > s / s1 )
-						selected = item;
-				}
-			}
-		}
-	}
+                    if (s / s2 > s / s1) {
+                        selected = item;
+                    }
+                }
+            }
+        }
+    }
 
-	return selected;
+    return selected;
 }
 
-bool
-PageScenePrivate::isHandleUnderMouse( const QList< QGraphicsItem* > & children ) const
+bool PageScenePrivate::isHandleUnderMouse(const QList<QGraphicsItem *> &children) const
 {
-	for( const auto & item : children )
-	{
-		if( item->isUnderMouse() && item->isVisible() )
-		{
-			auto * h = dynamic_cast< FormMoveHandle* > ( item );
-			auto * a = dynamic_cast< AspectRatioHandle* > ( item );
-			auto * c = dynamic_cast< PageComment* > ( item );
-			auto * m = dynamic_cast< NodesEditResizeHandle* > ( item );
+    for (const auto &item : children) {
+        if (item->isUnderMouse() && item->isVisible()) {
+            auto *h = dynamic_cast<FormMoveHandle *>(item);
+            auto *a = dynamic_cast<AspectRatioHandle *>(item);
+            auto *c = dynamic_cast<PageComment *>(item);
+            auto *m = dynamic_cast<NodesEditResizeHandle *>(item);
 
-			if( h || a || c || m )
-				return true;
+            if (h || a || c || m) {
+                return true;
+            }
 
-			const auto sub = item->childItems();
+            const auto sub = item->childItems();
 
-			if( !sub.isEmpty() )
-			{
-				const auto subRet = isHandleUnderMouse( sub );
+            if (!sub.isEmpty()) {
+                const auto subRet = isHandleUnderMouse(sub);
 
-				if( subRet )
-					return true;
-			}
-		}
-	}
+                if (subRet) {
+                    return true;
+                }
+            }
+        }
+    }
 
-	return false;
+    return false;
 }
-
-
 
 //
 // FormScene
 //
 
-PageScene::PageScene( const Cfg::Page & cfg, QObject * parent )
-	:	QGraphicsScene( parent )
-	,	d( new PageScenePrivate( cfg, this ) )
+PageScene::PageScene(const Cfg::Page &cfg,
+                     QObject *parent)
+    : QGraphicsScene(parent)
+    , d(new PageScenePrivate(cfg,
+                             this))
 {
-	d->init();
+    d->init();
 }
 
 PageScene::~PageScene()
 {
-	if( d->m_form )
-		disconnect( this, nullptr, d->m_form, nullptr );
+    if (d->m_form)
+        disconnect(this, nullptr, d->m_form, nullptr);
 }
 
-Page *
-PageScene::page() const
+Page *PageScene::page() const
 {
-	return d->m_form;
+    return d->m_form;
 }
 
-void
-PageScene::setPage( Page * f )
+void PageScene::setPage(Page *f)
 {
-	if( d->m_form )
-	{
-		removeItem( d->m_form );
+    if (d->m_form) {
+        removeItem(d->m_form);
 
-		delete d->m_form;
-	}
+        delete d->m_form;
+    }
 
-	d->m_form = f;
+    d->m_form = f;
 
-	addItem( d->m_form );
+    addItem(d->m_form);
 }
 
-void
-PageScene::deleteSelected()
+void PageScene::deleteSelected()
 {
-	QList< QGraphicsItem* > toDelete;
+    QList<QGraphicsItem *> toDelete;
 
-	foreach( QGraphicsItem * item, selectedItems() )
-	{
-		if( item->parentItem() == d->m_form )
-			toDelete.append( item );
-	}
+    foreach (QGraphicsItem *item, selectedItems()) {
+        if (item->parentItem() == d->m_form) {
+            toDelete.append(item);
+        }
+    }
 
-	clearSelection();
+    clearSelection();
 
-	d->m_form->deleteItems( toDelete );
+    d->m_form->deleteItems(toDelete);
 
-	emit changed();
+    emit changed();
 }
 
-void
-PageScene::keyPressEvent( QKeyEvent * event )
+void PageScene::keyPressEvent(QKeyEvent *event)
 {
-	switch( PageAction::instance()->mode() )
-	{
-		case PageAction::Select :
-		{
-			qreal delta = 0;
+    switch (PageAction::instance()->mode()) {
+    case PageAction::Select: {
+        qreal delta = 0;
 
-			switch( event->modifiers() )
-			{
-				case Qt::ShiftModifier :
-					delta = MmPx::instance().fromMmX( d->m_cfg.gridStep() );
-					break;
+        switch (event->modifiers()) {
+        case Qt::ShiftModifier:
+            delta = MmPx::instance().fromMmX(d->m_cfg.gridStep());
+            break;
 
-				case Qt::AltModifier :
-					delta = 1.0;
-					break;
+        case Qt::AltModifier:
+            delta = 1.0;
+            break;
 
-				default :
-					delta = (qreal) MmPx::instance().fromMmX( d->m_cfg.gridStep() ) / c_halfDivider;
-					break;
-			}
+        default:
+            delta = (qreal)MmPx::instance().fromMmX(d->m_cfg.gridStep()) / c_halfDivider;
+            break;
+        }
 
-			switch( event->key() )
-			{
-				case Qt::Key_Escape :
-				{
-					clearSelection();
+        switch (event->key()) {
+        case Qt::Key_Escape: {
+            clearSelection();
 
-					event->accept();
-				}
-					break;
+            event->accept();
+        } break;
 
-				case Qt::Key_Up :
-				{
-					d->moveBy( QPointF( 0, -delta ) );
+        case Qt::Key_Up: {
+            d->moveBy(QPointF(0, -delta));
 
-					event->accept();
+            event->accept();
 
-					emit changed();
-				}
-					break;
+            emit changed();
+        } break;
 
-				case Qt::Key_Down :
-				{
-					d->moveBy( QPointF( 0, delta ) );
+        case Qt::Key_Down: {
+            d->moveBy(QPointF(0, delta));
 
-					event->accept();
+            event->accept();
 
-					emit changed();
-				}
-					break;
+            emit changed();
+        } break;
 
-				case Qt::Key_Left :
-				{
-					d->moveBy( QPointF( -delta, 0 ) );
+        case Qt::Key_Left: {
+            d->moveBy(QPointF(-delta, 0));
 
-					event->accept();
+            event->accept();
 
-					emit changed();
-				}
-					break;
+            emit changed();
+        } break;
 
-				case Qt::Key_Right :
-				{
-					d->moveBy( QPointF( delta, 0 ) );
+        case Qt::Key_Right: {
+            d->moveBy(QPointF(delta, 0));
 
-					event->accept();
+            event->accept();
 
-					emit changed();
-				}
-					break;
+            emit changed();
+        } break;
 
-				case Qt::Key_Delete :
-				{
-					deleteSelected();
+        case Qt::Key_Delete: {
+            deleteSelected();
 
-					event->accept();
-				}
-					break;
+            event->accept();
+        } break;
 
-				default :
-					event->ignore();
-			}
-		}
-			break;
+        default:
+            event->ignore();
+        }
+    } break;
 
-		default :
-			QGraphicsScene::keyPressEvent( event );
-	}
+    default:
+        QGraphicsScene::keyPressEvent(event);
+    }
 }
 
-void
-PageScene::enableSelection( bool on )
+void PageScene::enableSelection(bool on)
 {
-	d->m_isSelectionEnabled = on;
+    d->m_isSelectionEnabled = on;
 }
 
-void
-PageScene::mouseMoveEvent( QGraphicsSceneMouseEvent * event )
+void PageScene::mouseMoveEvent(QGraphicsSceneMouseEvent *event)
 {
-	if( d->m_isSelectionEnabled )
-	{
-		d->m_dist += qAbs( ( d->m_pos - event->scenePos() ).manhattanLength() );
-		d->m_pos = event->scenePos();
+    if (d->m_isSelectionEnabled) {
+        d->m_dist += qAbs((d->m_pos - event->scenePos()).manhattanLength());
+        d->m_pos = event->scenePos();
 
-		bool tmpWasHovered = d->m_wasHandleHovered;
+        bool tmpWasHovered = d->m_wasHandleHovered;
 
-		d->m_wasHandleHovered = d->isHandleUnderMouse( d->m_form->childItems() );
+        d->m_wasHandleHovered = d->isHandleUnderMouse(d->m_form->childItems());
 
-		if( !d->m_isHandlePressed && !d->m_wasHandleHovered && !tmpWasHovered )
-			event->accept();
-		else
-			QGraphicsScene::mouseMoveEvent( event );
-	}
-	else
-		QGraphicsScene::mouseMoveEvent( event );
+        if (!d->m_isHandlePressed && !d->m_wasHandleHovered && !tmpWasHovered) {
+            event->accept();
+        } else {
+            QGraphicsScene::mouseMoveEvent(event);
+        }
+    } else {
+        QGraphicsScene::mouseMoveEvent(event);
+    }
 }
 
-void
-PageScene::mousePressEvent( QGraphicsSceneMouseEvent * event )
+void PageScene::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	if( event->button() == Qt::LeftButton )
-		d->m_isPressedGlobal = true;
+    if (event->button() == Qt::LeftButton) {
+        d->m_isPressedGlobal = true;
+    }
 
-	if( d->m_isSelectionEnabled && event->button() == Qt::LeftButton && d->isSomethingUnderMouse() )
-	{
-		d->m_isPressed = true;
-		d->m_pos = event->scenePos();
-		d->m_dist = 0.0;
+    if (d->m_isSelectionEnabled && event->button() == Qt::LeftButton && d->isSomethingUnderMouse()) {
+        d->m_isPressed = true;
+        d->m_pos = event->scenePos();
+        d->m_dist = 0.0;
 
-		if( !d->isHandleUnderMouse( d->m_form->childItems() ) )
-			event->accept();
-		else
-		{
-			d->m_isHandlePressed = true;
+        if (!d->isHandleUnderMouse(d->m_form->childItems())) {
+            event->accept();
+        } else {
+            d->m_isHandlePressed = true;
 
-			QGraphicsScene::mousePressEvent( event );
-		}
-	}
-	else
-		QGraphicsScene::mousePressEvent( event );
+            QGraphicsScene::mousePressEvent(event);
+        }
+    } else {
+        QGraphicsScene::mousePressEvent(event);
+    }
 }
 
-void
-PageScene::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
+void PageScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	if( event->button() == Qt::LeftButton && d->m_isPressedGlobal )
-	{
-		d->m_isPressedGlobal = false;
+    if (event->button() == Qt::LeftButton && d->m_isPressedGlobal) {
+        d->m_isPressedGlobal = false;
 
-		page()->handleMouseReleaseFromScene();
-	}
+        page()->handleMouseReleaseFromScene();
+    }
 
-	if( d->m_isSelectionEnabled && d->m_isPressed && event->button() == Qt::LeftButton )
-	{
-		d->m_isPressed = false;
+    if (d->m_isSelectionEnabled && d->m_isPressed && event->button() == Qt::LeftButton) {
+        d->m_isPressed = false;
 
-		auto * item = d->itemUnderMouse();
+        auto *item = d->itemUnderMouse();
 
-		if( d->m_dist < c_maxDistNoMove && item && !d->m_isHandlePressed )
-		{
-			if( !( event->modifiers() & Qt::ShiftModifier ) &&
-				!( event->modifiers() & Qt::ControlModifier ) )
-					clearSelection();
+        if (d->m_dist < c_maxDistNoMove && item && !d->m_isHandlePressed) {
+            if (!(event->modifiers() & Qt::ShiftModifier) && !(event->modifiers() & Qt::ControlModifier)) {
+                clearSelection();
+            }
 
-			if( !( event->modifiers() & Qt::ControlModifier ) )
-				item->setSelected( true );
-			else
-				item->setSelected( false );
-		}
+            if (!(event->modifiers() & Qt::ControlModifier)) {
+                item->setSelected(true);
+            } else {
+                item->setSelected(false);
+            }
+        }
 
-		d->m_dist = 0.0;
+        d->m_dist = 0.0;
 
-		if( !d->m_isHandlePressed )
-			event->accept();
-		else
-			QGraphicsScene::mouseReleaseEvent( event );
+        if (!d->m_isHandlePressed) {
+            event->accept();
+        } else {
+            QGraphicsScene::mouseReleaseEvent(event);
+        }
 
-		d->m_isHandlePressed = false;
-	}
-	else
-		QGraphicsScene::mouseReleaseEvent( event );
+        d->m_isHandlePressed = false;
+    } else {
+        QGraphicsScene::mouseReleaseEvent(event);
+    }
 }
 
-void
-PageScene::mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event )
+void PageScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event)
 {
-	event->accept();
+    event->accept();
 }
 
 } /* namespace Core */

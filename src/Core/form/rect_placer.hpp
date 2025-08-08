@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_RECT_PLACER_HPP__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormRectPlacer
@@ -25,31 +26,31 @@ namespace Core {
 class FormRectPlacerPrivate;
 
 //! Helper for placing rectangle items.
-class FormRectPlacer final
-	:	public QGraphicsItem
+class FormRectPlacer final : public QGraphicsItem
 {
 public:
-	explicit FormRectPlacer( QGraphicsItem * parent );
-	~FormRectPlacer();
+    explicit FormRectPlacer(QGraphicsItem *parent);
+    ~FormRectPlacer();
 
-	//! Set start pos.
-	void setStartPos( const QPointF & pos );
+    //! Set start pos.
+    void setStartPos(const QPointF &pos);
 
-	//! \return Rect.
-	const QRectF & rect() const;
+    //! \return Rect.
+    const QRectF &rect() const;
 
-	//! Set end pos.
-	void setEndPos( const QPointF & pos );
+    //! Set end pos.
+    void setEndPos(const QPointF &pos);
 
-	QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0) override;
 
 private:
-	Q_DISABLE_COPY( FormRectPlacer )
+    Q_DISABLE_COPY(FormRectPlacer)
 
-	std::unique_ptr< FormRectPlacerPrivate > d;
+    std::unique_ptr<FormRectPlacerPrivate> d;
 }; // class FormRectPlacer
 
 } /* namespace Core */

@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_RESIZE_HANDLE_HPP__INCLUDED
@@ -10,10 +10,11 @@
 // Prototyper include.
 #include "move_handle.hpp"
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormResizeHandle
@@ -22,25 +23,33 @@ namespace Core {
 class FormResizeHandlePrivate;
 
 //! rESIZE handler on the form.
-class FormResizeHandle
-	:	public FormMoveHandle
+class FormResizeHandle : public FormMoveHandle
 {
 public:
-	FormResizeHandle( qreal halfSize, const QPointF & zero,
-		qreal angle, FormWithHandle * object, QGraphicsItem * parent,
-		Page * form, const QCursor & c = Qt::SizeAllCursor );
-	~FormResizeHandle() override;
+    FormResizeHandle(qreal halfSize,
+                     const QPointF &zero,
+                     qreal angle,
+                     FormWithHandle *object,
+                     QGraphicsItem *parent,
+                     Page *form,
+                     const QCursor &c = Qt::SizeAllCursor);
+    ~FormResizeHandle() override;
 
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0) override;
 
 private:
-	Q_DISABLE_COPY( FormResizeHandle )
+    Q_DISABLE_COPY(FormResizeHandle)
 
-	inline FormResizeHandlePrivate * d_func()
-		{ return reinterpret_cast< FormResizeHandlePrivate* > ( d.get() ); }
-	inline const FormResizeHandlePrivate * d_func() const
-		{ return reinterpret_cast< const FormResizeHandlePrivate* >( d.get() ); }
+    inline FormResizeHandlePrivate *d_func()
+    {
+        return reinterpret_cast<FormResizeHandlePrivate *>(d.get());
+    }
+    inline const FormResizeHandlePrivate *d_func() const
+    {
+        return reinterpret_cast<const FormResizeHandlePrivate *>(d.get());
+    }
 }; // class FormResizeHandler
 
 } /* namespace Core */

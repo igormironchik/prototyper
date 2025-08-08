@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__TOP_GUI_HPP__INCLUDED
@@ -16,13 +16,13 @@
 // Prototyper include.
 #include "export.hpp"
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 class ProjectWindow;
-
 
 //
 // TopGui
@@ -31,31 +31,30 @@ class ProjectWindow;
 class TopGuiPrivate;
 
 //! Singleton for top GUI components.
-class PROTOTYPER_CORE_EXPORT TopGui final
-	:	public QObject
+class PROTOTYPER_CORE_EXPORT TopGui final : public QObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 private:
-	TopGui();
-	~TopGui();
+    TopGui();
+    ~TopGui();
 
-	static void cleanup();
+    static void cleanup();
 
 public:
-	//! \return Instance of top GUI.
-	static TopGui * instance();
+    //! \return Instance of top GUI.
+    static TopGui *instance();
 
-	//! \return Project window.
-	ProjectWindow * projectWindow();
+    //! \return Project window.
+    ProjectWindow *projectWindow();
 
-	//! Save cfg.
-	void saveCfg( QWidget * parent = 0 );
+    //! Save cfg.
+    void saveCfg(QWidget *parent = 0);
 
 private:
-	Q_DISABLE_COPY( TopGui )
+    Q_DISABLE_COPY(TopGui)
 
-	std::unique_ptr< TopGuiPrivate > d;
+    std::unique_ptr<TopGuiPrivate> d;
 }; // class TopGui
 
 } /* namespace Core */

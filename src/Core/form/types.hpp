@@ -1,16 +1,17 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__TYPES_HPP__INCLUDED
 #define PROTOTYPER__CORE__TYPES_HPP__INCLUDED
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // GridMode
@@ -18,10 +19,10 @@ namespace Core {
 
 //! Grid mode.
 enum GridMode {
-	//! Show grid.
-	ShowGrid = 1,
-	//! No grid.
-	NoGrid = 2
+    //! Show grid.
+    ShowGrid = 1,
+    //! No grid.
+    NoGrid = 2
 }; // enum GridMode
 
 } /* namespace Core */

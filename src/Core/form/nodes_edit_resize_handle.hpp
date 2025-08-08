@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_NODES_EDIT_RESIZE_HANDLE_HPP__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // NodesEditResizeHandle
@@ -25,43 +26,43 @@ namespace Core {
 class NodesEditResizeHandlePrivate;
 
 //! Nodes edit / resize mode handle.
-class NodesEditResizeHandle final
-	:	public QGraphicsObject
+class NodesEditResizeHandle final : public QGraphicsObject
 {
-	Q_OBJECT
+    Q_OBJECT
 
 signals:
-	//! Current mode changed.
-	void currentModeChanged();
+    //! Current mode changed.
+    void currentModeChanged();
 
 public:
-	explicit NodesEditResizeHandle( QGraphicsItem * parent );
-	~NodesEditResizeHandle() override;
+    explicit NodesEditResizeHandle(QGraphicsItem *parent);
+    ~NodesEditResizeHandle() override;
 
-	//! Mode.
-	enum Mode {
-		NodesEditMode = 0,
-		ResizeMode = 1
-	}; // enum Mode
+    //! Mode.
+    enum Mode {
+        NodesEditMode = 0,
+        ResizeMode = 1
+    }; // enum Mode
 
-	//! \return Current mode.
-	Mode currentMode() const;
-	//! Set mode.
-	void setCurrentMode( Mode m );
+    //! \return Current mode.
+    Mode currentMode() const;
+    //! Set mode.
+    void setCurrentMode(Mode m);
 
-	QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0) override;
 
 protected:
-	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-	Q_DISABLE_COPY( NodesEditResizeHandle )
+    Q_DISABLE_COPY(NodesEditResizeHandle)
 
-	std::unique_ptr< NodesEditResizeHandlePrivate > d;
+    std::unique_ptr<NodesEditResizeHandlePrivate> d;
 }; // class NodesEditResizeHandle
 
 } /* namespace Core */

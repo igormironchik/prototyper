@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__PROJECT_DESCRIPTION_TAB_HPP__INCLUDED
@@ -17,10 +17,11 @@ QT_BEGIN_NAMESPACE
 class QToolBar;
 QT_END_NAMESPACE
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 class TextEditor;
 
@@ -31,24 +32,24 @@ class TextEditor;
 class ProjectDescTabPrivate;
 
 //! Tab with text description of the project.
-class ProjectDescTab final
-	:	public QWidget
+class ProjectDescTab final : public QWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	ProjectDescTab( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
-	~ProjectDescTab() override;
+    ProjectDescTab(QWidget *parent = 0,
+                   Qt::WindowFlags f = Qt::WindowFlags());
+    ~ProjectDescTab() override;
 
-	//! \return Tool bar.
-	QToolBar * toolBar() const;
-	//! \return Text editor.
-	TextEditor * editor() const;
+    //! \return Tool bar.
+    QToolBar *toolBar() const;
+    //! \return Text editor.
+    TextEditor *editor() const;
 
 private:
-	Q_DISABLE_COPY( ProjectDescTab )
+    Q_DISABLE_COPY(ProjectDescTab)
 
-	std::unique_ptr< ProjectDescTabPrivate > d;
+    std::unique_ptr<ProjectDescTabPrivate> d;
 }; // class ProjectDescTab
 
 } /* namespace Core */

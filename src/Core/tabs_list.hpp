@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__TABS_LIST_HPP__INCLUDED
@@ -18,10 +18,11 @@ QT_BEGIN_NAMESPACE
 class QStringListModel;
 QT_END_NAMESPACE
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // TabsView
@@ -30,43 +31,41 @@ namespace Core {
 class TabsViewPrivate;
 
 //! Tabs list view.
-class TabsView final
-	:	public QListView
+class TabsView final : public QListView
 {
-	Q_OBJECT
+    Q_OBJECT
 
 signals:
-	//! Enter button pressed.
-	void enterPressed( const QModelIndex & );
-	//! Activate tab.
-	void activateTab( const QModelIndex & );
+    //! Enter button pressed.
+    void enterPressed(const QModelIndex &);
+    //! Activate tab.
+    void activateTab(const QModelIndex &);
 
 public:
-	explicit TabsView( QWidget * parent );
-	~TabsView() override;
+    explicit TabsView(QWidget *parent);
+    ~TabsView() override;
 
 protected:
-	 void keyPressEvent( QKeyEvent * event ) override;
-	 void contextMenuEvent( QContextMenuEvent * event ) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private slots:
-	 //! Activate tab.
-	 void p_activateTab();
-	 //! Rename tab.
-	 void p_renameTab();
-	 //! Add form.
-	 void p_addForm();
-	 //! Delete form.
-	 void p_deleteForm();
+    //! Activate tab.
+    void p_activateTab();
+    //! Rename tab.
+    void p_renameTab();
+    //! Add form.
+    void p_addForm();
+    //! Delete form.
+    void p_deleteForm();
 
 private:
-	 friend class TabsViewPrivate;
+    friend class TabsViewPrivate;
 
-	 Q_DISABLE_COPY( TabsView )
+    Q_DISABLE_COPY(TabsView)
 
-	 std::unique_ptr< TabsViewPrivate > d;
+    std::unique_ptr<TabsViewPrivate> d;
 }; // class TabsView
-
 
 //
 // TabsList
@@ -75,27 +74,27 @@ private:
 class TabsListPrivate;
 
 //! Tabs list dock widget.
-class TabsList final
-	:	public QDockWidget
+class TabsList final : public QDockWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	TabsList( QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
-	~TabsList() override;
+    TabsList(QWidget *parent = 0,
+             Qt::WindowFlags f = Qt::WindowFlags());
+    ~TabsList() override;
 
-	//! \return Model.
-	QStringListModel * model() const;
+    //! \return Model.
+    QStringListModel *model() const;
 
 private slots:
-	void p_activateTab( const QModelIndex & index );
+    void p_activateTab(const QModelIndex &index);
 
 private:
-	friend class TabsListPrivate;
+    friend class TabsListPrivate;
 
-	Q_DISABLE_COPY( TabsList )
+    Q_DISABLE_COPY(TabsList)
 
-	std::unique_ptr< TabsListPrivate > d;
+    std::unique_ptr<TabsListPrivate> d;
 }; // class TabsList
 
 } /* namespace Core */

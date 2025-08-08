@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__SVG_EXPORTER_HPP__INCLUDED
@@ -10,10 +10,11 @@
 // Prototyper include.
 #include "exporter.hpp"
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // SvgExporter
@@ -22,26 +23,28 @@ namespace Core {
 class SvgExporterPrivate;
 
 //! Exporter to SVG.
-class SvgExporter final
-	:	public Exporter
+class SvgExporter final : public Exporter
 {
 public:
-	explicit SvgExporter( const Cfg::Project & project );
-	~SvgExporter();
+    explicit SvgExporter(const Cfg::Project &project);
+    ~SvgExporter();
 
-	//! Export documentation.
-	void exportToDoc( const QString & fileName ) override;
-
-private:
-	inline const SvgExporterPrivate * d_ptr() const
-		{ return reinterpret_cast< const SvgExporterPrivate* > ( d.get() ); }
-	inline SvgExporterPrivate * d_ptr()
-		{ return reinterpret_cast< SvgExporterPrivate* > ( d.get() ); }
+    //! Export documentation.
+    void exportToDoc(const QString &fileName) override;
 
 private:
-	Q_DISABLE_COPY( SvgExporter )
+    inline const SvgExporterPrivate *d_ptr() const
+    {
+        return reinterpret_cast<const SvgExporterPrivate *>(d.get());
+    }
+    inline SvgExporterPrivate *d_ptr()
+    {
+        return reinterpret_cast<SvgExporterPrivate *>(d.get());
+    }
+
+private:
+    Q_DISABLE_COPY(SvgExporter)
 }; // class SvgExporter
-
 
 //
 // SvgExporterException
@@ -50,12 +53,12 @@ private:
 class SvgExporterException final
 {
 public:
-	explicit SvgExporterException( const QString & w );
+    explicit SvgExporterException(const QString &w);
 
-	const QString & what() const noexcept;
+    const QString &what() const noexcept;
 
 private:
-	QString m_what;
+    QString m_what;
 }; // class SvgExporterException
 
 } /* namespace Core */

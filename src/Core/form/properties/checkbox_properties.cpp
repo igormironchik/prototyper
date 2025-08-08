@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 // Prototyper include.
@@ -9,38 +9,36 @@
 #include "../utils.hpp"
 
 // Qt include.
+#include <QCheckBox>
 #include <QLineEdit>
 #include <QSpinBox>
-#include <QCheckBox>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormCheckBoxProperties
 //
 
-CheckBoxProperties::CheckBoxProperties( QWidget * parent )
-	:	QWidget( parent )
+CheckBoxProperties::CheckBoxProperties(QWidget *parent)
+    : QWidget(parent)
 {
-	m_ui.setupUi( this );
+    m_ui.setupUi(this);
 }
 
 CheckBoxProperties::~CheckBoxProperties() = default;
 
-Ui::CheckBoxProperties *
-CheckBoxProperties::ui()
+Ui::CheckBoxProperties *CheckBoxProperties::ui()
 {
-	return &m_ui;
+    return &m_ui;
 }
 
-void
-CheckBoxProperties::disconnectProperties()
+void CheckBoxProperties::disconnectProperties()
 {
-	disconnect( m_ui.m_checked,
-		&QCheckBox::checkStateChanged, nullptr, nullptr );
+    disconnect(m_ui.m_checked, &QCheckBox::checkStateChanged, nullptr, nullptr);
 }
 
 } /* namespace Core */

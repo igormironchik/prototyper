@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 // Prototyper include.
@@ -9,199 +9,188 @@
 #include "../constants.hpp"
 
 // Qt include.
-#include <QPainter>
-#include <QStyleOptionGraphicsItem>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
+#include <QPainter>
+#include <QStyleOptionGraphicsItem>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // AspectRatioHandlePrivate
 //
 
-class AspectRatioHandlePrivate {
+class AspectRatioHandlePrivate
+{
 public:
-	explicit AspectRatioHandlePrivate( AspectRatioHandle * parent )
-		:	q( parent )
-		,	m_keepAspectRatio( true )
-		,	m_hovered( false )
-		,	m_pressed( false )
-	{
-	}
+    explicit AspectRatioHandlePrivate(AspectRatioHandle *parent)
+        : q(parent)
+        , m_keepAspectRatio(true)
+        , m_hovered(false)
+        , m_pressed(false)
+    {
+    }
 
-	//! Init.
-	void init();
-	//! Set tool tip.
-	void setToolTip();
+    //! Init.
+    void init();
+    //! Set tool tip.
+    void setToolTip();
 
-	//! Parent.
-	AspectRatioHandle * q;
-	//! Keep aspect ratio?
-	bool m_keepAspectRatio;
-	//! Hovered?
-	bool m_hovered;
-	//! Pressed?
-	bool m_pressed;
+    //! Parent.
+    AspectRatioHandle *q;
+    //! Keep aspect ratio?
+    bool m_keepAspectRatio;
+    //! Hovered?
+    bool m_hovered;
+    //! Pressed?
+    bool m_pressed;
 }; // class AspectRatioHandlePrivate
 
-void
-AspectRatioHandlePrivate::init()
+void AspectRatioHandlePrivate::init()
 {
-	q->setCursor( Qt::ArrowCursor );
+    q->setCursor(Qt::ArrowCursor);
 
-	q->setAcceptHoverEvents( true );
+    q->setAcceptHoverEvents(true);
 
-	setToolTip();
+    setToolTip();
 }
 
-void
-AspectRatioHandlePrivate::setToolTip()
+void AspectRatioHandlePrivate::setToolTip()
 {
-	if( m_keepAspectRatio )
-		q->setToolTip( QObject::tr( "Switch to free resize mode" ) );
-	else
-		q->setToolTip( QObject::tr( "Switch to keep aspect ratio resize mode" ) );
+    if (m_keepAspectRatio) {
+        q->setToolTip(QObject::tr("Switch to free resize mode"));
+    } else {
+        q->setToolTip(QObject::tr("Switch to keep aspect ratio resize mode"));
+    }
 }
-
 
 //
 // AspectRatioHandle
 //
 
-AspectRatioHandle::AspectRatioHandle( QGraphicsItem * parent )
-	:	QGraphicsItem( parent )
-	,	d( new AspectRatioHandlePrivate( this ) )
+AspectRatioHandle::AspectRatioHandle(QGraphicsItem *parent)
+    : QGraphicsItem(parent)
+    , d(new AspectRatioHandlePrivate(this))
 {
-	d->init();
+    d->init();
 }
 
 AspectRatioHandle::~AspectRatioHandle() = default;
 
-bool
-AspectRatioHandle::isKeepAspectRatio() const
+bool AspectRatioHandle::isKeepAspectRatio() const
 {
-	return d->m_keepAspectRatio;
+    return d->m_keepAspectRatio;
 }
 
-void
-AspectRatioHandle::setKeepAspectRatio( bool on )
+void AspectRatioHandle::setKeepAspectRatio(bool on)
 {
-	d->m_keepAspectRatio = on;
+    d->m_keepAspectRatio = on;
 
-	update();
+    update();
 }
 
 static const qreal c_halfSize = 6.0;
 
-QRectF
-AspectRatioHandle::boundingRect() const
+QRectF AspectRatioHandle::boundingRect() const
 {
-	return { 0.0, 0.0, c_halfSize * c_halfDivider, c_halfSize * c_halfDivider };
+    return {0.0, 0.0, c_halfSize * c_halfDivider, c_halfSize * c_halfDivider};
 }
 
-void
-AspectRatioHandle::paint( QPainter * painter,
-	const QStyleOptionGraphicsItem * option, QWidget * widget )
+void AspectRatioHandle::paint(QPainter *painter,
+                              const QStyleOptionGraphicsItem *option,
+                              QWidget *widget)
 {
-	Q_UNUSED( widget )
+    Q_UNUSED(widget)
 
-	const QRectF r = option->rect;
+    const QRectF r = option->rect;
 
-	if( d->m_keepAspectRatio )
-	{
-		painter->setPen( QPen( Qt::black, 1.0, Qt::DashLine ) );
+    if (d->m_keepAspectRatio) {
+        painter->setPen(QPen(Qt::black, 1.0, Qt::DashLine));
 
-		painter->setBrush( Qt::NoBrush );
+        painter->setBrush(Qt::NoBrush);
 
-		painter->drawRect( r );
+        painter->drawRect(r);
 
-		painter->setPen( Qt::black );
+        painter->setPen(Qt::black);
 
-		if( d->m_hovered )
-			painter->setBrush( Qt::red );
-		else
-			painter->setBrush( Qt::white );
+        if (d->m_hovered) {
+            painter->setBrush(Qt::red);
+        } else {
+            painter->setBrush(Qt::white);
+        }
 
-		painter->drawRect( r.adjusted( 0.0, 0.0, -c_halfSize, -c_halfSize ) );
-	}
-	else
-	{
-		painter->setPen( QPen( Qt::black, 1.0, Qt::DashLine ) );
+        painter->drawRect(r.adjusted(0.0, 0.0, -c_halfSize, -c_halfSize));
+    } else {
+        painter->setPen(QPen(Qt::black, 1.0, Qt::DashLine));
 
-		painter->setBrush( Qt::NoBrush );
+        painter->setBrush(Qt::NoBrush);
 
-		painter->drawRect( r.adjusted( 0.0, 0.0, 0.0, -c_halfSize ) );
+        painter->drawRect(r.adjusted(0.0, 0.0, 0.0, -c_halfSize));
 
-		painter->setPen( Qt::black );
+        painter->setPen(Qt::black);
 
-		if( d->m_hovered )
-			painter->setBrush( Qt::red );
-		else
-			painter->setBrush( Qt::white );
+        if (d->m_hovered) {
+            painter->setBrush(Qt::red);
+        } else {
+            painter->setBrush(Qt::white);
+        }
 
-		painter->drawRect( r.adjusted( 0.0, 0.0, -c_halfSize, 0.0 ) );
-	}
+        painter->drawRect(r.adjusted(0.0, 0.0, -c_halfSize, 0.0));
+    }
 }
 
-void
-AspectRatioHandle::hoverEnterEvent( QGraphicsSceneHoverEvent * event )
+void AspectRatioHandle::hoverEnterEvent(QGraphicsSceneHoverEvent *event)
 {
-	d->m_hovered = true;
+    d->m_hovered = true;
 
-	update();
+    update();
 
-	event->accept();
+    event->accept();
 }
 
-void
-AspectRatioHandle::hoverLeaveEvent( QGraphicsSceneHoverEvent * event )
+void AspectRatioHandle::hoverLeaveEvent(QGraphicsSceneHoverEvent *event)
 {
-	d->m_hovered = false;
+    d->m_hovered = false;
 
-	update();
+    update();
 
-	event->accept();
+    event->accept();
 }
 
-void
-AspectRatioHandle::mousePressEvent( QGraphicsSceneMouseEvent * event )
+void AspectRatioHandle::mousePressEvent(QGraphicsSceneMouseEvent *event)
 {
-	if( event->button() == Qt::LeftButton )
-	{
-		d->m_pressed = true;
+    if (event->button() == Qt::LeftButton) {
+        d->m_pressed = true;
 
-		event->accept();
-	}
-	else
-		event->ignore();
+        event->accept();
+    } else {
+        event->ignore();
+    }
 }
 
-void
-AspectRatioHandle::mouseReleaseEvent( QGraphicsSceneMouseEvent * event )
+void AspectRatioHandle::mouseReleaseEvent(QGraphicsSceneMouseEvent *event)
 {
-	if( event->button() == Qt::LeftButton && d->m_pressed )
-	{
-		d->m_pressed = false;
+    if (event->button() == Qt::LeftButton && d->m_pressed) {
+        d->m_pressed = false;
 
-		if( boundingRect().contains( event->pos() ) )
-		{
-			d->m_keepAspectRatio = !d->m_keepAspectRatio;
+        if (boundingRect().contains(event->pos())) {
+            d->m_keepAspectRatio = !d->m_keepAspectRatio;
 
-			d->setToolTip();
+            d->setToolTip();
 
-			update();
+            update();
 
-			event->accept();
+            event->accept();
 
-			return;
-		}
-	}
+            return;
+        }
+    }
 
-	event->ignore();
+    event->ignore();
 }
 
 } /* namespace Core */

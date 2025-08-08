@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_TEXT_OPTS_HPP__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormTextOpts
@@ -25,43 +26,42 @@ namespace Core {
 class FormTextOptsPrivate;
 
 //! Toolbar with text options on the form.
-class FormTextOpts final
-	:	public QGraphicsProxyWidget
+class FormTextOpts final : public QGraphicsProxyWidget
 {
-	Q_OBJECT
+    Q_OBJECT
 
 signals:
-	//! Set font size.
-	void setFontSize( int s );
-	//! Bold.
-	void bold( bool on );
-	//! Italic.
-	void italic( bool on );
-	//! Underline.
-	void underline( bool on );
-	//! Text color.
-	void textColor();
-	//! Clear format.
-	void clearFormat();
-	//! Align left.
-	void alignLeft();
-	//! Align center.
-	void alignCenter();
-	//! Align right.
-	void alignRight();
+    //! Set font size.
+    void setFontSize(int s);
+    //! Bold.
+    void bold(bool on);
+    //! Italic.
+    void italic(bool on);
+    //! Underline.
+    void underline(bool on);
+    //! Text color.
+    void textColor();
+    //! Clear format.
+    void clearFormat();
+    //! Align left.
+    void alignLeft();
+    //! Align center.
+    void alignCenter();
+    //! Align right.
+    void alignRight();
 
 public:
-	explicit FormTextOpts( QGraphicsItem * parent );
-	~FormTextOpts() override;
+    explicit FormTextOpts(QGraphicsItem *parent);
+    ~FormTextOpts() override;
 
 public slots:
-	//! Update state of the buttons.
-	void updateState( const QTextCursor & cursor );
+    //! Update state of the buttons.
+    void updateState(const QTextCursor &cursor);
 
 private:
-	Q_DISABLE_COPY( FormTextOpts )
+    Q_DISABLE_COPY(FormTextOpts)
 
-	std::unique_ptr< FormTextOptsPrivate > d;
+    std::unique_ptr<FormTextOptsPrivate> d;
 }; // class FormTextOpts
 
 } /* namespace Core */

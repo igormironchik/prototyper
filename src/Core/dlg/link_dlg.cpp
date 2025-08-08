@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 // Prototyper include.
@@ -11,52 +11,51 @@
 // Qt include.
 #include <QLineEdit>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // LinkDlgPrivate
 //
 
-class LinkDlgPrivate {
+class LinkDlgPrivate
+{
 public:
-	LinkDlgPrivate( LinkDlg * parent )
-		:	q( parent )
-	{
-	}
+    LinkDlgPrivate(LinkDlg *parent)
+        : q(parent)
+    {
+    }
 
-	//! Parent.
-	LinkDlg * q;
-	//! Ui.
-	Ui::LinkDlg m_ui;
+    //! Parent.
+    LinkDlg *q;
+    //! Ui.
+    Ui::LinkDlg m_ui;
 }; // class LinkDlgPrivate
-
 
 //
 // LinkDlg
 //
 
-LinkDlg::LinkDlg( QWidget * parent )
-	:	QDialog( parent )
-	,	d( new LinkDlgPrivate( this ) )
+LinkDlg::LinkDlg(QWidget *parent)
+    : QDialog(parent)
+    , d(new LinkDlgPrivate(this))
 {
-	d->m_ui.setupUi( this );
+    d->m_ui.setupUi(this);
 }
 
 LinkDlg::~LinkDlg() = default;
 
-QString
-LinkDlg::url() const
+QString LinkDlg::url() const
 {
-	return d->m_ui.m_url->text();
+    return d->m_ui.m_url->text();
 }
 
-QString
-LinkDlg::text() const
+QString LinkDlg::text() const
 {
-	return d->m_ui.m_text->text();
+    return d->m_ui.m_text->text();
 }
 
 } /* namespace Core */

@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__PROJECT_WIDGET_TAB_BAR_HPP__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // ProjectTabBar
@@ -25,38 +26,37 @@ namespace Core {
 class ProjectTabBarPrivate;
 
 //! Project's tab bar.
-class ProjectTabBar final
-	:	public QTabBar
+class ProjectTabBar final : public QTabBar
 {
-	Q_OBJECT
+    Q_OBJECT
 
 signals:
-	//! Form rename request.
-	void formRenameRequest( const QString & name );
-	//! Form delete request.
-	void formDeleteRequest( const QString & name );
-	//! Add form request.
-	void formAddRequest();
+    //! Form rename request.
+    void formRenameRequest(const QString &name);
+    //! Form delete request.
+    void formDeleteRequest(const QString &name);
+    //! Add form request.
+    void formAddRequest();
 
 public:
-	explicit ProjectTabBar( QWidget * parent = 0 );
-	~ProjectTabBar() override;
+    explicit ProjectTabBar(QWidget *parent = 0);
+    ~ProjectTabBar() override;
 
 private slots:
-	//! Rename tab.
-	void renameTab();
-	//! Add form.
-	void addPage();
-	//! Delete form.
-	void deleteForm();
+    //! Rename tab.
+    void renameTab();
+    //! Add form.
+    void addPage();
+    //! Delete form.
+    void deleteForm();
 
 protected:
-	void contextMenuEvent( QContextMenuEvent * event ) override;
+    void contextMenuEvent(QContextMenuEvent *event) override;
 
 private:
-	Q_DISABLE_COPY( ProjectTabBar )
+    Q_DISABLE_COPY(ProjectTabBar)
 
-	std::unique_ptr< ProjectTabBarPrivate > d;
+    std::unique_ptr<ProjectTabBarPrivate> d;
 }; // class ProjectTabBar
 
 } /* namespace Core */

@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_SPINBOX_HPP__INCLUDED
@@ -15,16 +15,16 @@
 
 // Prototyper include.
 #include "object.hpp"
-#include "resizable.hpp"
 #include "project_cfg.hpp"
+#include "resizable.hpp"
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 class TextWithOpts;
-
 
 //
 // FormSpinBox
@@ -33,79 +33,89 @@ class TextWithOpts;
 class FormSpinBoxPrivate;
 
 //! Spinbox on the form.
-class FormSpinBox final
-	:	public QGraphicsObject
-	,	public FormObject
-	,	public FormResizable
+class FormSpinBox final : public QGraphicsObject, public FormObject, public FormResizable
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	FormSpinBox( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
-	~FormSpinBox() override;
+    FormSpinBox(const QRectF &rect,
+                Page *page,
+                QGraphicsItem *parent = 0);
+    ~FormSpinBox() override;
 
-	//! \return Type.
-	static ObjectType staticObjectType()
-		{ return SpinBoxType; }
+    //! \return Type.
+    static ObjectType staticObjectType()
+    {
+        return SpinBoxType;
+    }
 
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0) override;
 
-	static void draw( QPainter * painter, const QRectF & rect,
-		const QPen & pen, const QBrush & brush, const QFont & font, const QString & text,
-		int dpi = 0 );
+    static void draw(QPainter *painter,
+                     const QRectF &rect,
+                     const QPen &pen,
+                     const QBrush &brush,
+                     const QFont &font,
+                     const QString &text,
+                     int dpi = 0);
 
-	static qreal boxHeight( int dpi = 0 );
+    static qreal boxHeight(int dpi = 0);
 
-	//! Set pen.
-	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
-	//! Set brush.
-	void setObjectBrush( const QBrush & b, bool pushUndoCommand = true ) override;
+    //! Set pen.
+    void setObjectPen(const QPen &p,
+                      bool pushUndoCommand = true) override;
+    //! Set brush.
+    void setObjectBrush(const QBrush &b,
+                        bool pushUndoCommand = true) override;
 
-	//! \return Cfg.
-	Cfg::SpinBox cfg() const;
-	//! Set cfg.
-	void setCfg( const Cfg::SpinBox & c );
+    //! \return Cfg.
+    Cfg::SpinBox cfg() const;
+    //! Set cfg.
+    void setCfg(const Cfg::SpinBox &c);
 
-	//! \return Text.
-	Cfg::TextStyle text() const;
-	//! Set text.
-	void setText( const Cfg::TextStyle & c );
+    //! \return Text.
+    Cfg::TextStyle text() const;
+    //! Set text.
+    void setText(const Cfg::TextStyle &c);
 
-	QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
-	//! Position elements.
-	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
-	//! \return Position of the element.
-	QPointF position() const override;
+    //! Position elements.
+    void setPosition(const QPointF &pos,
+                     bool pushUndoCommand = true) override;
+    //! \return Position of the element.
+    QPointF position() const override;
 
-	//! \return Rectangle of the element.
-	QRectF rectangle() const override;
-	//! Set rectangle.
-	void setRectangle( const QRectF & rect, bool pushUndoCommand ) override;
+    //! \return Rectangle of the element.
+    QRectF rectangle() const override;
+    //! Set rectangle.
+    void setRectangle(const QRectF &rect,
+                      bool pushUndoCommand) override;
 
-	//! \return Default size.
-	virtual QSizeF defaultSize() const override;
+    //! \return Default size.
+    virtual QSizeF defaultSize() const override;
 
-	QWidget * properties( QWidget * parent ) override;
+    QWidget *properties(QWidget *parent) override;
 
-	void updatePropertiesValues() override;
+    void updatePropertiesValues() override;
 
-	//! Clone object.
-	FormObject * clone() const override;
+    //! Clone object.
+    FormObject *clone() const override;
 
 protected:
-	//! Resize.
-	void resize( const QRectF & rect ) override;
-	//! Move resizable.
-	void moveResizable( const QPointF & delta ) override;
+    //! Resize.
+    void resize(const QRectF &rect) override;
+    //! Move resizable.
+    void moveResizable(const QPointF &delta) override;
 
 private:
-	friend class FormSpinBoxPrivate;
+    friend class FormSpinBoxPrivate;
 
-	Q_DISABLE_COPY( FormSpinBox )
+    Q_DISABLE_COPY(FormSpinBox)
 
-	std::unique_ptr< FormSpinBoxPrivate > d;
+    std::unique_ptr<FormSpinBoxPrivate> d;
 }; // class FormSpinBox
 
 } /* namespace Core */

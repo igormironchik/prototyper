@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__GRID_STEP_DLG_HPP__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // GridStepDlg
@@ -25,26 +26,27 @@ namespace Core {
 class GridStepDlgPrivate;
 
 //! Grid step dialog.
-class GridStepDlg final
-	:	public QDialog
+class GridStepDlg final : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	GridStepDlg( int step, bool forAll,
-		QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
-	~GridStepDlg() override;
+    GridStepDlg(int step,
+                bool forAll,
+                QWidget *parent = 0,
+                Qt::WindowFlags f = Qt::WindowFlags());
+    ~GridStepDlg() override;
 
-	//! \return Grid step.
-	int gridStep() const;
+    //! \return Grid step.
+    int gridStep() const;
 
-	//! \return Apply for all forms?
-	bool applyForAllForms() const;
+    //! \return Apply for all forms?
+    bool applyForAllForms() const;
 
 private:
-	Q_DISABLE_COPY( GridStepDlg )
+    Q_DISABLE_COPY(GridStepDlg)
 
-	std::unique_ptr< GridStepDlgPrivate > d;
+    std::unique_ptr<GridStepDlgPrivate> d;
 }; // class GridStepDlg
 
 } /* namespace Core */

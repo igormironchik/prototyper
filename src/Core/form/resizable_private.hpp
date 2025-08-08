@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_RESIZABLE_PRIVATE_HPP__INCLUDED
@@ -14,10 +14,11 @@
 #include "move_handle.hpp"
 #include "with_resize_and_move_handles.hpp"
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 class FormResizable;
 
@@ -27,32 +28,34 @@ class FormResizable;
 
 class FormResizableProxy;
 
-class FormResizableProxyPrivate {
+class FormResizableProxyPrivate
+{
 public:
-	FormResizableProxyPrivate( FormResizable * resizable,
-		FormResizableProxy * parent, Page * form );
+    FormResizableProxyPrivate(FormResizable *resizable,
+                              FormResizableProxy *parent,
+                              Page *form);
 
-	virtual ~FormResizableProxyPrivate();
+    virtual ~FormResizableProxyPrivate();
 
-	//! Init.
-	virtual void init();
-	//! Place handles.
-	virtual void place( const QRectF & rect );
+    //! Init.
+    virtual void init();
+    //! Place handles.
+    virtual void place(const QRectF &rect);
 
-	//! Parent.
-	FormResizableProxy * q;
-	//! Object.
-	FormResizable * m_object;
-	//! Rect.
-	QRectF m_rect;
-	//! Handles.
-	std::unique_ptr< WithResizeAndMoveHandles > m_handles;
-	//! Form.
-	Page * m_form;
-	//! Subsidiary rect.
-	QRectF m_subsidiaryRect;
-	//! Is hadnle moved.
-	bool m_handleMoved;
+    //! Parent.
+    FormResizableProxy *q;
+    //! Object.
+    FormResizable *m_object;
+    //! Rect.
+    QRectF m_rect;
+    //! Handles.
+    std::unique_ptr<WithResizeAndMoveHandles> m_handles;
+    //! Form.
+    Page *m_form;
+    //! Subsidiary rect.
+    QRectF m_subsidiaryRect;
+    //! Is hadnle moved.
+    bool m_handleMoved;
 }; // class FormResizableProxyPrivate;
 
 } /* namespace Core */

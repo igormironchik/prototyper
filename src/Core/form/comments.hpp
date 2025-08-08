@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER_COMMENTS_HPP_INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // Comments
@@ -25,45 +26,50 @@ namespace Core {
 class CommentsPrivate;
 
 //! Widget with comments.
-class Comments final
-	:	public QDialog
+class Comments final : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	explicit Comments( const QString & author,
-		const QVector< QPair< QString, QString > > & data,
-		QWidget * parent = nullptr );
-	~Comments() override;
+    explicit Comments(const QString &author,
+                      const QVector<QPair<QString,
+                                          QString>> &data,
+                      QWidget *parent = nullptr);
+    ~Comments() override;
 
-	//! \return List of comments.
-	QVector< QPair< QString, QString > > comments() const;
+    //! \return List of comments.
+    QVector<QPair<QString,
+                  QString>>
+    comments() const;
 
-	//! \return Author.
-	QString author() const;
+    //! \return Author.
+    QString author() const;
 
 private slots:
-	//! Write comment.
-	void commit();
-	//! Cancel comment.
-	void cancel();
-	//! Context menu.
-	void contextMenuRequested( const QPoint & pos );
-	//! Section resized.
-	void sectionResized( int logicalIndex, int oldSize, int newSize );
-	//! Set buttons state.
-	void setButtonsState();
+    //! Write comment.
+    void commit();
+    //! Cancel comment.
+    void cancel();
+    //! Context menu.
+    void contextMenuRequested(const QPoint &pos);
+    //! Section resized.
+    void sectionResized(int logicalIndex,
+                        int oldSize,
+                        int newSize);
+    //! Set buttons state.
+    void setButtonsState();
 
 private:
-	//! Add new comment.
-	void addComment( const QPair< QString, QString > & c );
+    //! Add new comment.
+    void addComment(const QPair<QString,
+                                QString> &c);
 
 private:
-	friend class CommentsPrivate;
+    friend class CommentsPrivate;
 
-	Q_DISABLE_COPY( Comments )
+    Q_DISABLE_COPY(Comments)
 
-	std::unique_ptr< CommentsPrivate > d;
+    std::unique_ptr<CommentsPrivate> d;
 }; // class Comments
 
 } /* namespace Core */

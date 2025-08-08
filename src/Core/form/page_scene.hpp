@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_SCENE_HPP__INCLUDED
@@ -13,19 +13,20 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
+namespace Core
+{
 
-namespace Core {
-
-namespace Cfg {
+namespace Cfg
+{
 
 class Page;
 
 } /* namespace Cfg */
 
 class Page;
-
 
 //
 // PageScene
@@ -34,41 +35,41 @@ class Page;
 class PageScenePrivate;
 
 //! Page scene.
-class PageScene final
-	:	public QGraphicsScene
+class PageScene final : public QGraphicsScene
 {
-	Q_OBJECT
+    Q_OBJECT
 
 signals:
-	//! Scene changed.
-	void changed();
+    //! Scene changed.
+    void changed();
 
 public:
-	PageScene( const Cfg::Page & c, QObject * parent = 0 );
-	~PageScene() override;
+    PageScene(const Cfg::Page &c,
+              QObject *parent = 0);
+    ~PageScene() override;
 
-	//! \return Page.
-	Page * page() const;
-	//! Set page.
-	void setPage( Page * f );
+    //! \return Page.
+    Page *page() const;
+    //! Set page.
+    void setPage(Page *f);
 
 public slots:
-	//! Delete selected items.
-	void deleteSelected();
-	//! Enable selection.
-	void enableSelection( bool on = true );
+    //! Delete selected items.
+    void deleteSelected();
+    //! Enable selection.
+    void enableSelection(bool on = true);
 
 protected:
-	void keyPressEvent( QKeyEvent * event ) override;
-	void mouseMoveEvent( QGraphicsSceneMouseEvent * event ) override;
-	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
-	void mouseDoubleClickEvent( QGraphicsSceneMouseEvent * event ) override;
+    void keyPressEvent(QKeyEvent *event) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseDoubleClickEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-	Q_DISABLE_COPY( PageScene )
+    Q_DISABLE_COPY(PageScene)
 
-	std::unique_ptr< PageScenePrivate > d;
+    std::unique_ptr<PageScenePrivate> d;
 }; // class PageScene
 
 } /* namespace Core */

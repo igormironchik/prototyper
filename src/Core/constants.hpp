@@ -1,20 +1,21 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__CONSTANTS_HPP__INCLUDED
 #define PROTOTYPER__CORE__CONSTANTS_HPP__INCLUDED
 
 // Qt include.
-#include <QtGlobal>
 #include <QColor>
+#include <QtGlobal>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 static const qreal c_defaultFontSize = 10.0;
 static const qreal c_halfDivider = 2.0;
@@ -39,7 +40,7 @@ static const qreal c_linePenWidth = 2.0;
 static const qreal c_headerFontSize = 20.0;
 
 static const QColor c_textColor = Qt::black;
-static const QColor c_linkColor = QColor( 33, 122, 255 );
+static const QColor c_linkColor = QColor(33, 122, 255);
 
 } /* namespace Core */
 

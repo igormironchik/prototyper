@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__NAME_DLG_HPP__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // NameDlg
@@ -25,31 +26,31 @@ namespace Core {
 class NameDlgPrivate;
 
 //! Name dialog.
-class NameDlg final
-	:	public QDialog
+class NameDlg final : public QDialog
 {
-	Q_OBJECT
+    Q_OBJECT
 
 public:
-	NameDlg( const QStringList & names,
-		const QString & title,
-		const QString & oldName,
-		QWidget * parent = 0, Qt::WindowFlags f = Qt::WindowFlags() );
-	~NameDlg() override;
+    NameDlg(const QStringList &names,
+            const QString &title,
+            const QString &oldName,
+            QWidget *parent = 0,
+            Qt::WindowFlags f = Qt::WindowFlags());
+    ~NameDlg() override;
 
-	//! \return Intered name.
-	QString name() const;
+    //! \return Intered name.
+    QString name() const;
 
 private slots:
-	//! Text changed.
-	void textChanged( const QString & text );
+    //! Text changed.
+    void textChanged(const QString &text);
 
 private:
-	friend class NameDlgPrivate;
+    friend class NameDlgPrivate;
 
-	Q_DISABLE_COPY( NameDlg )
+    Q_DISABLE_COPY(NameDlg)
 
-	std::unique_ptr< NameDlgPrivate > d;
+    std::unique_ptr<NameDlgPrivate> d;
 }; // class NameDlg
 
 } /* namespace Core */

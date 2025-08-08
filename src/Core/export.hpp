@@ -1,14 +1,14 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 // Qt include.
 #include <QtCore/QtGlobal>
 
 #if defined(PROTOTYPER_CORE)
-#  define PROTOTYPER_CORE_EXPORT Q_DECL_EXPORT
+#define PROTOTYPER_CORE_EXPORT Q_DECL_EXPORT
 #else
-#  define PROTOTYPER_CORE_EXPORT Q_DECL_IMPORT
+#define PROTOTYPER_CORE_EXPORT Q_DECL_IMPORT
 #endif

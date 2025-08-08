@@ -1,275 +1,268 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 // Prototyper include.
 #include "hslider.hpp"
-#include "utils.hpp"
+#include "../constants.hpp"
+#include "actions.hpp"
 #include "page.hpp"
 #include "undo_commands.hpp"
-#include "actions.hpp"
-#include "../constants.hpp"
+#include "utils.hpp"
 
 // Qt include.
+#include <QGraphicsScene>
 #include <QPainter>
 #include <QUndoStack>
-#include <QGraphicsScene>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormHSliderPrivate
 //
 
-class FormHSliderPrivate {
+class FormHSliderPrivate
+{
 public:
-	FormHSliderPrivate( FormHSlider * parent, const QRectF & rect )
-		:	q( parent )
-		,	m_rect( rect )
-		,	m_proxy( nullptr )
-	{
-	}
+    FormHSliderPrivate(FormHSlider *parent,
+                       const QRectF &rect)
+        : q(parent)
+        , m_rect(rect)
+        , m_proxy(nullptr)
+    {
+    }
 
-	//! Init.
-	void init();
-	//! Set rect.
-	void setRect( const QRectF & rect );
+    //! Init.
+    void init();
+    //! Set rect.
+    void setRect(const QRectF &rect);
 
-	//! Parent.
-	FormHSlider * q;
-	//! Rect.
-	QRectF m_rect;
-	//! Resizable proxy.
-	std::unique_ptr< FormResizableProxy > m_proxy;
+    //! Parent.
+    FormHSlider *q;
+    //! Rect.
+    QRectF m_rect;
+    //! Resizable proxy.
+    std::unique_ptr<FormResizableProxy> m_proxy;
 }; // class FormHSliderPrivate
 
-void
-FormHSliderPrivate::init()
+void FormHSliderPrivate::init()
 {
-	m_proxy.reset( new FormResizableProxy( q, q->parentItem(), q->page() ) );
+    m_proxy.reset(new FormResizableProxy(q, q->parentItem(), q->page()));
 
-	setRect( m_rect );
+    setRect(m_rect);
 
-	m_proxy->setMinSize( q->defaultSize() );
+    m_proxy->setMinSize(q->defaultSize());
 
-	q->setObjectPen( QPen( PageAction::instance()->strokeColor() ),
-		false );
+    q->setObjectPen(QPen(PageAction::instance()->strokeColor()), false);
 
-	q->setObjectBrush( Qt::transparent, false );
+    q->setObjectBrush(Qt::transparent, false);
 }
 
-void
-FormHSliderPrivate::setRect( const QRectF & rect )
+void FormHSliderPrivate::setRect(const QRectF &rect)
 {
-	m_rect = rect;
+    m_rect = rect;
 
-	q->setPos( m_rect.topLeft() );
+    q->setPos(m_rect.topLeft());
 
-	m_proxy->setRect( m_rect );
+    m_proxy->setRect(m_rect);
 
-	m_rect.moveTopLeft( QPointF( 0.0, 0.0 ) );
+    m_rect.moveTopLeft(QPointF(0.0, 0.0));
 }
-
 
 //
 // FormHSlider
 //
 
-FormHSlider::FormHSlider( const QRectF & rect, Page * page,
-	QGraphicsItem * parent )
-	:	QGraphicsItem( parent )
-	,	FormObject( FormObject::HSliderType, page )
-	,	d( new FormHSliderPrivate( this, rect ) )
+FormHSlider::FormHSlider(const QRectF &rect,
+                         Page *page,
+                         QGraphicsItem *parent)
+    : QGraphicsItem(parent)
+    , FormObject(FormObject::HSliderType,
+                 page)
+    , d(new FormHSliderPrivate(this,
+                               rect))
 {
-	d->init();
+    d->init();
 }
 
 FormHSlider::~FormHSlider() = default;
 
-void
-FormHSlider::paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-	QWidget * widget )
+void FormHSlider::paint(QPainter *painter,
+                        const QStyleOptionGraphicsItem *option,
+                        QWidget *widget)
 {
-	Q_UNUSED( widget )
-	Q_UNUSED( option )
+    Q_UNUSED(widget)
+    Q_UNUSED(option)
 
-	draw( painter, d->m_rect, objectPen() );
+    draw(painter, d->m_rect, objectPen());
 
-	if( isSelected() && !group() )
-		d->m_proxy->show();
-	else
-		d->m_proxy->hide();
+    if (isSelected() && !group()) {
+        d->m_proxy->show();
+    } else {
+        d->m_proxy->hide();
+    }
 }
 
-void
-FormHSlider::draw( QPainter * painter, const QRectF & rect,
-	const QPen & pen, int dpi )
+void FormHSlider::draw(QPainter *painter,
+                       const QRectF &rect,
+                       const QPen &pen,
+                       int dpi)
 {
-	painter->setPen( pen );
-	painter->setBrush( QBrush( pen.color() ) );
+    painter->setPen(pen);
+    painter->setBrush(QBrush(pen.color()));
 
-	QRectF r = rect;
+    QRectF r = rect;
 
-	if( r.height() > boxHeight( dpi ) )
-	{
-		r.setHeight( boxHeight( dpi ) );
-		r.moveTopLeft( QPointF( rect.topLeft().x(), rect.topLeft().y() +
-			( rect.height() - boxHeight( dpi ) ) / c_halfDivider ) );
-	}
+    if (r.height() > boxHeight(dpi)) {
+        r.setHeight(boxHeight(dpi));
+        r.moveTopLeft(
+            QPointF(rect.topLeft().x(), rect.topLeft().y() + (rect.height() - boxHeight(dpi)) / c_halfDivider));
+    }
 
-	const qreal gh = r.height() * 0.15;
-	const qreal hw = r.height() * 0.5;
-	const qreal sx = r.width() * 0.2 + rect.x();
+    const qreal gh = r.height() * 0.15;
+    const qreal hw = r.height() * 0.5;
+    const qreal sx = r.width() * 0.2 + rect.x();
 
-	const QRectF groove( r.x(), r.y() + r.height() / c_halfDivider - gh / c_halfDivider,
-		r.width(), gh );
+    const QRectF groove(r.x(), r.y() + r.height() / c_halfDivider - gh / c_halfDivider, r.width(), gh);
 
-	const qreal ro = r.height() / 10.0;
+    const qreal ro = r.height() / 10.0;
 
-	const QRectF handle( sx, r.y(), hw, r.height() );
+    const QRectF handle(sx, r.y(), hw, r.height());
 
-	painter->drawRoundedRect( groove, ro, ro );
+    painter->drawRoundedRect(groove, ro, ro);
 
-	painter->setBrush( Qt::white );
+    painter->setBrush(Qt::white);
 
-	painter->drawRoundedRect( handle, ro, ro );
+    painter->drawRoundedRect(handle, ro, ro);
 }
 
-qreal
-FormHSlider::boxHeight( int dpi )
+qreal FormHSlider::boxHeight(int dpi)
 {
-	if( !dpi )
-		return MmPx::instance().fromMmY( 4.0 );
+    if (!dpi) {
+        return MmPx::instance().fromMmY(4.0);
+    }
 
-	return MmPx::instance().fromMm( 4.0, dpi );
+    return MmPx::instance().fromMm(4.0, dpi);
 }
 
-void
-FormHSlider::setObjectPen( const QPen & p, bool pushUndoCommand )
+void FormHSlider::setObjectPen(const QPen &p,
+                               bool pushUndoCommand)
 {
-	FormObject::setObjectPen( p, pushUndoCommand );
+    FormObject::setObjectPen(p, pushUndoCommand);
 
-	update();
+    update();
 }
 
-Cfg::HSlider
-FormHSlider::cfg() const
+Cfg::HSlider FormHSlider::cfg() const
 {
-	Cfg::HSlider c;
+    Cfg::HSlider c;
 
-	c.set_objectId( objectId() );
+    c.set_objectId(objectId());
 
-	Cfg::Point p;
-	p.set_x( MmPx::instance().toMmX( pos().x() ) );
-	p.set_y( MmPx::instance().toMmY( pos().y() ) );
+    Cfg::Point p;
+    p.set_x(MmPx::instance().toMmX(pos().x()));
+    p.set_y(MmPx::instance().toMmY(pos().y()));
 
-	c.set_pos( p );
+    c.set_pos(p);
 
-	Cfg::Size s;
-	s.set_width( MmPx::instance().toMmX( d->m_rect.width() ) );
-	s.set_height( MmPx::instance().toMmY( d->m_rect.height() ) );
+    Cfg::Size s;
+    s.set_width(MmPx::instance().toMmX(d->m_rect.width()));
+    s.set_height(MmPx::instance().toMmY(d->m_rect.height()));
 
-	c.set_size( s );
+    c.set_size(s);
 
-	c.set_pen( Cfg::pen( objectPen() ) );
+    c.set_pen(Cfg::pen(objectPen()));
 
-	c.set_z( zValue() );
+    c.set_z(zValue());
 
-	return c;
+    return c;
 }
 
-void
-FormHSlider::setCfg( const Cfg::HSlider & c )
+void FormHSlider::setCfg(const Cfg::HSlider &c)
 {
-	setObjectId( c.objectId() );
-	setObjectPen( Cfg::fromPen( c.pen() ), false );
-	d->setRect( QRectF( MmPx::instance().fromMmX( c.pos().x() ),
-		MmPx::instance().fromMmY( c.pos().y() ),
-		MmPx::instance().fromMmX( c.size().width() ),
-		MmPx::instance().fromMmY( c.size().height() ) ) );
+    setObjectId(c.objectId());
+    setObjectPen(Cfg::fromPen(c.pen()), false);
+    d->setRect(QRectF(MmPx::instance().fromMmX(c.pos().x()),
+                      MmPx::instance().fromMmY(c.pos().y()),
+                      MmPx::instance().fromMmX(c.size().width()),
+                      MmPx::instance().fromMmY(c.size().height())));
 
-	setZValue( c.z() );
+    setZValue(c.z());
 
-	update();
+    update();
 }
 
-QRectF
-FormHSlider::boundingRect() const
+QRectF FormHSlider::boundingRect() const
 {
-	return d->m_rect;
+    return d->m_rect;
 }
 
-void
-FormHSlider::setPosition( const QPointF & pos, bool pushUndoCommand )
+void FormHSlider::setPosition(const QPointF &pos,
+                              bool pushUndoCommand)
 {
-	FormObject::setPosition( pos, pushUndoCommand );
+    FormObject::setPosition(pos, pushUndoCommand);
 
-	QRectF r = boundingRect();
-	r.moveTopLeft( pos );
+    QRectF r = boundingRect();
+    r.moveTopLeft(pos);
 
-	d->setRect( r );
+    d->setRect(r);
 }
 
-QPointF
-FormHSlider::position() const
+QPointF FormHSlider::position() const
 {
-	return pos();
+    return pos();
 }
 
-QRectF
-FormHSlider::rectangle() const
+QRectF FormHSlider::rectangle() const
 {
-	QRectF r = boundingRect();
-	r.moveTopLeft( position() );
+    QRectF r = boundingRect();
+    r.moveTopLeft(position());
 
-	return r;
+    return r;
 }
 
-void
-FormHSlider::setRectangle( const QRectF & rect, bool pushUndoCommand )
+void FormHSlider::setRectangle(const QRectF &rect,
+                               bool pushUndoCommand)
 {
-	FormObject::setRectangle( rect, pushUndoCommand );
+    FormObject::setRectangle(rect, pushUndoCommand);
 
-	resize( rect );
+    resize(rect);
 
-	scene()->update();
+    scene()->update();
 }
 
-void
-FormHSlider::resize( const QRectF & rect )
+void FormHSlider::resize(const QRectF &rect)
 {
-	d->setRect( rect );
+    d->setRect(rect);
 
-	page()->update();
+    page()->update();
 }
 
-void
-FormHSlider::moveResizable( const QPointF & delta )
+void FormHSlider::moveResizable(const QPointF &delta)
 {
-	moveBy( delta.x(), delta.y() );
+    moveBy(delta.x(), delta.y());
 }
 
-QSizeF
-FormHSlider::defaultSize() const
+QSizeF FormHSlider::defaultSize() const
 {
-	return { MmPx::instance().fromMmX( 10.0 ), boxHeight() };
+    return {MmPx::instance().fromMmX(10.0), boxHeight()};
 }
 
-FormObject *
-FormHSlider::clone() const
+FormObject *FormHSlider::clone() const
 {
-	auto * o = new FormHSlider( rectangle(), page(), parentItem() );
+    auto *o = new FormHSlider(rectangle(), page(), parentItem());
 
-	o->setCfg( cfg() );
+    o->setCfg(cfg());
 
-	o->setObjectId( page()->nextId() );
+    o->setObjectId(page()->nextId());
 
-	return o;
+    return o;
 }
 
 } /* namespace Core */

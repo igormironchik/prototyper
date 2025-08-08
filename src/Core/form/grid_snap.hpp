@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_GRID_SNAP_H__INCLUDED
@@ -13,10 +13,11 @@
 // C++ include.
 #include <memory>
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // GridSnap
@@ -25,38 +26,38 @@ namespace Core {
 class GridSnapPrivate;
 
 //! Grid snap.
-class GridSnap final
-	:	public QGraphicsItem
+class GridSnap final : public QGraphicsItem
 {
 public:
-	explicit GridSnap( QGraphicsItem * parent );
-	~GridSnap() override;
+    explicit GridSnap(QGraphicsItem *parent);
+    ~GridSnap() override;
 
-	//! \return Current position.
-	const QPointF & snapPos() const;
-	//! Set position, it will calculate snap position.
-	void setSnapPos( const QPointF & p );
+    //! \return Current position.
+    const QPointF &snapPos() const;
+    //! Set position, it will calculate snap position.
+    void setSnapPos(const QPointF &p);
 
-	//! Set grid step.
-	void setGridStep( int step );
+    //! Set grid step.
+    void setGridStep(int step);
 
-	//! \return Point snapped to grid.
-	QPointF snapped( const QPointF & p ) const;
+    //! \return Point snapped to grid.
+    QPointF snapped(const QPointF &p) const;
 
-	QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget ) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget) override;
 
 protected:
-	void mouseMoveEvent( QGraphicsSceneMouseEvent * event ) override;
-	void mousePressEvent( QGraphicsSceneMouseEvent * event ) override;
-	void mouseReleaseEvent( QGraphicsSceneMouseEvent * event ) override;
+    void mouseMoveEvent(QGraphicsSceneMouseEvent *event) override;
+    void mousePressEvent(QGraphicsSceneMouseEvent *event) override;
+    void mouseReleaseEvent(QGraphicsSceneMouseEvent *event) override;
 
 private:
-	Q_DISABLE_COPY( GridSnap )
+    Q_DISABLE_COPY(GridSnap)
 
-	std::unique_ptr< GridSnapPrivate > d;
+    std::unique_ptr<GridSnapPrivate> d;
 }; // class GridSnap
 
 } /* namespace Core */

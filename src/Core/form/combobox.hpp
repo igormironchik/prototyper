@@ -1,7 +1,7 @@
 
 /*
-	SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
-	SPDX-License-Identifier: GPL-3.0-or-later
+    SPDX-FileCopyrightText: 2016-2024 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
 */
 
 #ifndef PROTOTYPER__CORE__FORM_COMBOBOX_HPP__INCLUDED
@@ -15,13 +15,14 @@
 
 // Prototyper include.
 #include "object.hpp"
-#include "resizable.hpp"
 #include "project_cfg.hpp"
+#include "resizable.hpp"
 
+namespace Prototyper
+{
 
-namespace Prototyper {
-
-namespace Core {
+namespace Core
+{
 
 //
 // FormComboBox
@@ -30,67 +31,76 @@ namespace Core {
 class FormComboBoxPrivate;
 
 //! Combobox on the form.
-class FormComboBox final
-	:	public QGraphicsItem
-	,	public FormObject
-	,	public FormResizable
+class FormComboBox final : public QGraphicsItem, public FormObject, public FormResizable
 {
 public:
-	FormComboBox( const QRectF & rect, Page * page, QGraphicsItem * parent = 0 );
-	~FormComboBox() override;
+    FormComboBox(const QRectF &rect,
+                 Page *page,
+                 QGraphicsItem *parent = 0);
+    ~FormComboBox() override;
 
-	//! \return Type.
-	static ObjectType staticObjectType()
-		{ return ComboBoxType; }
+    //! \return Type.
+    static ObjectType staticObjectType()
+    {
+        return ComboBoxType;
+    }
 
-	void paint( QPainter * painter, const QStyleOptionGraphicsItem * option,
-		QWidget * widget = 0 ) override;
+    void paint(QPainter *painter,
+               const QStyleOptionGraphicsItem *option,
+               QWidget *widget = 0) override;
 
-	static void draw( QPainter * painter, const QRectF & rect,
-		const QPen & pen, const QBrush & brush, int dpi = 0 );
+    static void draw(QPainter *painter,
+                     const QRectF &rect,
+                     const QPen &pen,
+                     const QBrush &brush,
+                     int dpi = 0);
 
-	static qreal boxHeight( int dpi = 0 );
+    static qreal boxHeight(int dpi = 0);
 
-	//! Set pen.
-	void setObjectPen( const QPen & p, bool pushUndoCommand = true ) override;
-	//! Set brush.
-	void setObjectBrush( const QBrush & b, bool pushUndoCommand = true ) override;
+    //! Set pen.
+    void setObjectPen(const QPen &p,
+                      bool pushUndoCommand = true) override;
+    //! Set brush.
+    void setObjectBrush(const QBrush &b,
+                        bool pushUndoCommand = true) override;
 
-	//! \return Cfg.
-	Cfg::ComboBox cfg() const;
-	//! Set cfg.
-	void setCfg( const Cfg::ComboBox & c );
+    //! \return Cfg.
+    Cfg::ComboBox cfg() const;
+    //! Set cfg.
+    void setCfg(const Cfg::ComboBox &c);
 
-	QRectF boundingRect() const override;
+    QRectF boundingRect() const override;
 
-	//! Position elements.
-	void setPosition( const QPointF & pos, bool pushUndoCommand = true ) override;
-	//! \return Position of the element.
-	QPointF position() const override;
+    //! Position elements.
+    void setPosition(const QPointF &pos,
+                     bool pushUndoCommand = true) override;
+    //! \return Position of the element.
+    QPointF position() const override;
 
-	//! \return Rectangle of the element.
-	QRectF rectangle() const override;
-	//! Set rectangle.
-	void setRectangle( const QRectF & rect, bool pushUndoCommand = true ) override;
+    //! \return Rectangle of the element.
+    QRectF rectangle() const override;
+    //! Set rectangle.
+    void setRectangle(const QRectF &rect,
+                      bool pushUndoCommand = true) override;
 
-	//! \return Default size.
-	virtual QSizeF defaultSize() const override;
+    //! \return Default size.
+    virtual QSizeF defaultSize() const override;
 
-	//! Clone object.
-	FormObject * clone() const override;
+    //! Clone object.
+    FormObject *clone() const override;
 
 protected:
-	//! Resize.
-	void resize( const QRectF & rect ) override;
-	//! Move resizable.
-	void moveResizable( const QPointF & delta ) override;
+    //! Resize.
+    void resize(const QRectF &rect) override;
+    //! Move resizable.
+    void moveResizable(const QPointF &delta) override;
 
 private:
-	friend class FormComboBoxPrivate;
+    friend class FormComboBoxPrivate;
 
-	Q_DISABLE_COPY( FormComboBox )
+    Q_DISABLE_COPY(FormComboBox)
 
-	std::unique_ptr< FormComboBoxPrivate > d;
+    std::unique_ptr<FormComboBoxPrivate> d;
 }; // class FormComboBox
 
 } /* namespace Core */
