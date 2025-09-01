@@ -29,19 +29,16 @@ set( SRC ${HSRC} ${CSRC} ${USRC} )
 qt6_add_resources( SRC resources.qrc )
 
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/windows_cfg.hpp
-	PRE_BUILD
 	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../3rdparty/cfgfile/generator/${CMAKE_CFG_INTDIR}/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i windows_cfg.qtconf -o ${CMAKE_CURRENT_BINARY_DIR}/windows_cfg.hpp
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/project_cfg.hpp
-	PRE_BUILD
 	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../3rdparty/cfgfile/generator/${CMAKE_CFG_INTDIR}/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i project_cfg.qtconf -o ${CMAKE_CURRENT_BINARY_DIR}/project_cfg.hpp
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
 
 add_custom_command( OUTPUT ${CMAKE_CURRENT_BINARY_DIR}/session_cfg.hpp
-	PRE_BUILD
 	COMMAND ${CMAKE_CURRENT_BINARY_DIR}/../../3rdparty/cfgfile/generator/${CMAKE_CFG_INTDIR}/cfgfile.generator${CMAKE_EXECUTABLE_SUFFIX} -i session_cfg.qtconf -o ${CMAKE_CURRENT_BINARY_DIR}/session_cfg.hpp
 	WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
 )
