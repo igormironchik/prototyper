@@ -79,6 +79,7 @@ private slots:
 protected:
     void mousePressEvent(QMouseEvent *e) override;
     void mouseReleaseEvent(QMouseEvent *e) override;
+    void keyPressEvent(QKeyEvent *e) override;
 
 private:
     friend class TextEditorPrivate;

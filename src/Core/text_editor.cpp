@@ -330,6 +330,16 @@ void TextEditor::mouseReleaseEvent(QMouseEvent *e)
     }
 }
 
+void TextEditor::keyPressEvent(QKeyEvent *e)
+{
+    if (e == QKeySequence::InsertParagraphSeparator) {
+        textCursor().insertBlock();
+        e->accept();
+    } else {
+        QTextEdit::keyPressEvent(e);
+    }
+}
+
 } /* namespace Core */
 
 } /* namespace Prototyper */
