@@ -1,6 +1,3 @@
-[![License: GPL](https://img.shields.io/badge/license-GPLv3-blue
-)](https://opensource.org/license/GPL-3.0)
-
 # About
 
 Prototyper is a desktop application to make UI prototypes.
@@ -32,5 +29,5 @@ git submodule update --init --recursive
 
 # Screenshots
 
-![](doc/img/Screenshot_20200814_183334.png)
-![](doc/img/Screenshot_20200922_100855.png)
+| ![](doc/img/Screenshot_20200814_183334.png) | ![](doc/img/Screenshot_20200922_100855.png) |
+| --- | --- |
