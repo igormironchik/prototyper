@@ -333,7 +333,18 @@ void TextEditor::mouseReleaseEvent(QMouseEvent *e)
 void TextEditor::keyPressEvent(QKeyEvent *e)
 {
     if (e == QKeySequence::InsertParagraphSeparator) {
-        textCursor().insertBlock();
+        auto c = textCursor();
+        c.beginEditBlock();
+        c.insertBlock();
+        QTextCharFormat fmt = c.charFormat();
+        fmt.setAnchor(false);
+        fmt.setAnchorHref(QString());
+        fmt.setForeground(QBrush(QColor(Qt::black)));
+        c.setCharFormat(fmt);
+        c.endEditBlock();
+
+        setTextCursor(c);
+
         e->accept();
     } else {
         QTextEdit::keyPressEvent(e);
