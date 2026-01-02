@@ -6,7 +6,7 @@ SPDX-PackageDownloadLocation = "https://github.com/igormironchik/prototyper"
 [[annotations]]
 path = [".github/**", ".gitignore", ".gitmodules", "README.md", "CMakeLists.txt", "**/**.txt", "**/**.ico", "**/**qrc", "**/**.rc", "**/**.ui", "**/**.md", "**/**.cfgfile", "**/**.ts", "**/**.qm", "**/**.xml", "doc/**", "example/**", "installer/**", "**/**.qtconf", "**/**.in", "REUSE.toml"]
 precedence = "aggregate"
-SPDX-FileCopyrightText = "2016-2024 Igor Mironchik <igor.mironchik@gmail.com>"
+SPDX-FileCopyrightText = "2026 Igor Mironchik <igor.mironchik@gmail.com>"
 SPDX-License-Identifier = "GPL-3.0-or-later"
 
 [[annotations]]
