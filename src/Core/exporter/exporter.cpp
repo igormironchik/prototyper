@@ -271,7 +271,8 @@ template<typename CFG>
 void draw(QPainter &p,
           QSvgGenerator &svg,
           const CFG &form,
-          qreal dpi)
+          qreal dpi,
+          const ImagesHash &images)
 {
     static const qreal c_minZDiff = 0.5;
 
@@ -338,7 +339,7 @@ void draw(QPainter &p,
 
         for (const Cfg::Group &group : form.group()) {
             if (qAbs(zv - group.z()) < c_minZDiff) {
-                drawGroup(group, p, dpi, svg);
+                drawGroup(group, p, dpi, svg, images);
             }
         }
 
@@ -377,7 +378,7 @@ void draw(QPainter &p,
                 const QSize s(MmPx::instance().fromMm(image.size().width(), dpi),
                               MmPx::instance().fromMm(image.size().height(), dpi));
 
-                const QByteArray data = QByteArray::fromBase64(image.data().toLatin1());
+                const QByteArray data = QByteArray::fromBase64(images[image.sha256()].data().toLatin1());
 
                 QImage img = QImage::fromData(data, "PNG");
 
@@ -444,13 +445,14 @@ void draw(QPainter &p,
 void drawGroup(const Cfg::Group &group,
                QPainter &p,
                qreal dpi,
-               QSvgGenerator &svg)
+               QSvgGenerator &svg,
+               const ImagesHash &images)
 {
     p.save();
 
     p.translate(MmPx::instance().fromMm(group.pos().x(), dpi), MmPx::instance().fromMm(group.pos().y(), dpi));
 
-    draw(p, svg, group, dpi);
+    draw(p, svg, group, dpi, images);
 
     p.restore();
 }
@@ -459,7 +461,8 @@ void drawGroup(const Cfg::Group &group,
 
 void ExporterPrivate::drawForm(QSvgGenerator &svg,
                                const Cfg::Page &form,
-                               qreal dpi)
+                               qreal dpi,
+                               const ImagesHash &images)
 {
     svg.setViewBox(QRect(-1,
                          0,
@@ -478,7 +481,7 @@ void ExporterPrivate::drawForm(QSvgGenerator &svg,
                0,
                false);
 
-    impl::draw(p, svg, form, dpi);
+    impl::draw(p, svg, form, dpi, images);
 
     p.end();
 }
@@ -504,6 +507,17 @@ Exporter::Exporter(std::unique_ptr<ExporterPrivate> &&dd)
     tmp->init();
 
     d.swap(tmp);
+}
+
+ImagesHash Exporter::images() const
+{
+    ImagesHash images;
+
+    for (const Cfg::ImageData &i : std::as_const(d->m_cfg.images())) {
+        images.insert(i.sha256(), i);
+    }
+
+    return images;
 }
 
 } /* namespace Core */

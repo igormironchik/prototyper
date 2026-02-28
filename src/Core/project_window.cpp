@@ -720,6 +720,14 @@ void ProjectWindowPrivate::updateCfg()
     for (const auto &page : std::as_const(m_widget->pages())) {
         m_cfg.page().push_back(page->page()->cfg());
     }
+
+    m_cfg.images().clear();
+
+    for (const auto &page : std::as_const(m_widget->pages())) {
+        for (const auto &image : std::as_const(page->page()->imagesHash())) {
+            m_cfg.images().push_back(image);
+        }
+    }
 }
 
 void ProjectWindowPrivate::prepareForDrawing(bool editable)

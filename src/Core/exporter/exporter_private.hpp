@@ -9,6 +9,7 @@
 
 // Prototyper include.
 #include "project_cfg.hpp"
+#include "../types.hpp"
 
 QT_BEGIN_NAMESPACE
 class QSvgGenerator;
@@ -38,7 +39,8 @@ public:
     //! Draw form.
     void drawForm(QSvgGenerator &svg,
                   const Cfg::Page &form,
-                  qreal dpi);
+                  qreal dpi,
+                  const ImagesHash &images);
 
     //! Parent.
     Exporter *q;

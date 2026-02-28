@@ -39,7 +39,7 @@ public:
     }
 
     //! Init.
-    void init();
+    void init(const ImagesHash &imagesHash);
 
     //! Parent.
     PageView *q;
@@ -53,7 +53,7 @@ public:
     qreal m_scale;
 }; // class FormViewPrivate
 
-void PageViewPrivate::init()
+void PageViewPrivate::init(const ImagesHash &imagesHash)
 {
     q->setFrameStyle(QFrame::NoFrame);
 
@@ -61,7 +61,7 @@ void PageViewPrivate::init()
 
     q->setScene(m_scene);
 
-    m_form = new Page(m_cfg);
+    m_form = new Page(m_cfg, imagesHash);
 
     m_form->setCfg(m_cfg);
 
@@ -81,12 +81,13 @@ void PageViewPrivate::init()
 //
 
 PageView::PageView(const Cfg::Page &cfg,
+                   const ImagesHash &imagesHash,
                    QWidget *parent)
     : QGraphicsView(parent)
     , d(new PageViewPrivate(cfg,
                             this))
 {
-    d->init();
+    d->init(imagesHash);
 }
 
 PageView::~PageView() = default;

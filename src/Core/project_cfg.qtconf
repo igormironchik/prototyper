@@ -1,4 +1,4 @@
-
+		
 {forGeneration PROTOTYPER__CORE__PROJECT_CFG_HPP
 
 	{namespace Prototyper
@@ -308,8 +308,12 @@
 				{class Image
 					{tagScalar
 						{valueType QString}
+						{name sha256}
+					}
+					
+					{tagScalar
+						{valueType QString}
 						{name data}
-						{required}
 					}
 
 					{tagScalar
@@ -666,6 +670,23 @@
 						{name z}
 					}
 				} || class VSlider
+				
+				|#
+					Image data.
+				#|
+				{class ImageData
+					{tagScalar
+						{valueType QString}
+						{name data}
+						{required}
+					}
+					
+					{tagScalar
+						{valueType QString}
+						{name sha256}
+						{required}
+					}
+				} || class ImageData
 
 
 				|#
@@ -865,6 +886,11 @@
 					{tagVectorOfTags
 						{valueType Prototyper::Core::Cfg::Page}
 						{name page}
+					}
+					
+					{tagVectorOfTags
+						{valueType Prototyper::Core::Cfg::ImageData}
+						{name images}
 					}
 
 					{tagScalar

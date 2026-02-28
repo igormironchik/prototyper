@@ -106,6 +106,8 @@ void HtmlExporterPrivate::printDocument(QTextStream &stream)
 
     stream << QStringLiteral("<br><br>") << Qt::endl;
 
+    const auto imagesHash = q->images();
+
     for (const Cfg::Page &form : m_cfg.page()) {
         std::vector<Cfg::TextStyle> headList;
         Cfg::TextStyle head;
@@ -127,7 +129,7 @@ void HtmlExporterPrivate::printDocument(QTextStream &stream)
         svg.setResolution(c_resolution);
         svg.setOutputDevice(&buff);
 
-        drawForm(svg, form, c_resolution);
+        drawForm(svg, form, c_resolution, imagesHash);
 
         const int i = data.indexOf(QStringLiteral("\n").toLatin1());
 

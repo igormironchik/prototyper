@@ -1,4 +1,3 @@
-
 /*
     SPDX-FileCopyrightText: 2026 Igor Mironchik <igor.mironchik@gmail.com>
     SPDX-License-Identifier: GPL-3.0-or-later
@@ -7,11 +6,21 @@
 #ifndef PROTOTYPER__CORE__TYPES_HPP__INCLUDED
 #define PROTOTYPER__CORE__TYPES_HPP__INCLUDED
 
+// Prototyper include.
+#include "project_cfg.hpp"
+
+// Qt include.
+#include <QHash>
+#include <QString>
+
 namespace Prototyper
 {
 
 namespace Core
 {
+
+//! Type of hash of images.
+using ImagesHash = QHash<QString, Cfg::ImageData>;
 
 //
 // GridMode

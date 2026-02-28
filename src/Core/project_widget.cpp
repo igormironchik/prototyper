@@ -90,6 +90,8 @@ public:
     ProjectWindow *m_window;
     //! Cfg.
     Cfg::Project &m_cfg;
+    //! Hash of images.
+    ImagesHash m_imagesHash;
     //! Tabs.
     TabWidget *m_tabs;
     //! Desc tab.
@@ -173,7 +175,7 @@ void ProjectWidgetPrivate::newProject()
 void ProjectWidgetPrivate::addPage(const Cfg::Page &cfg,
                                    bool showGrid)
 {
-    auto *form = new PageView(cfg, m_tabs);
+    auto *form = new PageView(cfg, m_imagesHash, m_tabs);
 
     ProjectWidget::connect(form, &PageView::zoomChanged, m_window, &ProjectWindow::zoomChanged);
     ProjectWidget::connect(form->pageScene(), &PageScene::selectionChanged, m_window, &ProjectWindow::selectionChanged);
@@ -251,6 +253,12 @@ void ProjectWidget::setProject(const Cfg::Project &cfg)
     QApplication::processEvents();
 
     d->m_cfg = cfg;
+
+    d->m_imagesHash.clear();
+
+    for (const auto &image : std::as_const(d->m_cfg.images())) {
+        d->m_imagesHash.insert(image.sha256(), image);
+    }
 
     d->m_desc->editor()->setText(d->m_cfg.description().text());
 

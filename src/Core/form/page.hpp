@@ -29,7 +29,7 @@
 #include "rectangle.hpp"
 #include "spinbox.hpp"
 #include "text.hpp"
-#include "types.hpp"
+#include "../types.hpp"
 #include "vslider.hpp"
 
 QT_BEGIN_NAMESPACE
@@ -73,8 +73,9 @@ signals:
     void changed();
 
 public:
-    explicit Page(Cfg::Page &c,
-                  QGraphicsItem *parent = 0);
+    Page(Cfg::Page &c,
+         const ImagesHash &imagesHash,
+         QGraphicsItem *parent = 0);
     ~Page() override;
 
     //! \return Type.
@@ -82,6 +83,11 @@ public:
     {
         return PageType;
     }
+
+    //! \return Hash of images.
+    ImagesHash &imagesHash();
+    //! \return Hash of images.
+    const ImagesHash &imagesHash() const;
 
     //! \return Undo stack.
     QUndoStack *undoStack() const;

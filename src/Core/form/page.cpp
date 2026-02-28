@@ -578,13 +578,14 @@ qreal PagePrivate::searchAlignPoint(const QList<QGraphicsItem *> &items,
 //
 
 Page::Page(Cfg::Page &c,
+           const ImagesHash &imagesHash,
            QGraphicsItem *parent)
     : QGraphicsObject(parent)
     , FormObject(FormObject::PageType,
                  this)
     , d(nullptr)
 {
-    auto tmp = std::make_unique<PagePrivate>(c, this);
+    auto tmp = std::make_unique<PagePrivate>(c, imagesHash, this);
 
     tmp->init();
 
@@ -592,6 +593,16 @@ Page::Page(Cfg::Page &c,
 }
 
 Page::~Page() = default;
+
+ImagesHash &Page::imagesHash()
+{
+    return d->m_imagesHash;
+}
+
+const ImagesHash &Page::imagesHash() const
+{
+    return d->m_imagesHash;
+}
 
 QUndoStack *Page::undoStack() const
 {
@@ -639,6 +650,8 @@ void Page::setGridStep(int s)
 Cfg::Page Page::cfg() const
 {
     Cfg::Page c = d->m_cfg;
+
+    d->m_imagesHash.clear();
 
     Cfg::Size size;
     size.set_width(MmPx::instance().toMmX(d->m_cfg.size().width()));

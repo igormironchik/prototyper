@@ -42,6 +42,8 @@ public:
 
 void SvgExporterPrivate::createImages(const QString &dir)
 {
+    const auto imagesHash = q->images();
+
     int i = 1;
 
     for (const Cfg::Page &form : m_cfg.page()) {
@@ -62,7 +64,7 @@ void SvgExporterPrivate::createImages(const QString &dir)
             svg.setFileName(fileName);
             svg.setResolution(c_resolution);
 
-            drawForm(svg, form, c_resolution);
+            drawForm(svg, form, c_resolution, imagesHash);
 
             ++i;
         } else {

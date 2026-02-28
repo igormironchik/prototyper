@@ -13,6 +13,9 @@
 // C++ include.
 #include <memory>
 
+// Prototyper include.
+#include "../types.hpp"
+
 namespace Prototyper
 {
 
@@ -46,6 +49,7 @@ signals:
 
 public:
     PageView(const Cfg::Page &cfg,
+             const ImagesHash &imagesHash,
              QWidget *parent = 0);
     ~PageView() override;
 

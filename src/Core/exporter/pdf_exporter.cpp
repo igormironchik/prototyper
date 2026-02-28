@@ -65,6 +65,8 @@ public:
 
 void PdfExporterPrivate::createImages()
 {
+    const auto imagesHash = q->images();
+
     for (const Cfg::Page &form : m_cfg.page()) {
         m_images.append(QSharedPointer<QTemporaryFile>(new QTemporaryFile));
 
@@ -74,7 +76,7 @@ void PdfExporterPrivate::createImages()
         svg.setFileName(m_images.last()->fileName());
         svg.setResolution(c_resolution);
 
-        drawForm(svg, form, c_resolution);
+        drawForm(svg, form, c_resolution, imagesHash);
 
         m_images.last()->close();
     }

@@ -21,6 +21,7 @@
 #include <QGraphicsSceneMouseEvent>
 #include <QUndoStack>
 #include <QVBoxLayout>
+#include <QCryptographicHash>
 
 namespace Prototyper
 {
@@ -183,7 +184,15 @@ Cfg::Image FormImage::cfg() const
     QBuffer buffer(&byteArray);
     d->m_image.save(&buffer, "PNG");
 
-    c.set_data(QString::fromLatin1(byteArray.toBase64().data()));
+    const auto sha256 = QCryptographicHash::hash(byteArray, QCryptographicHash::Sha256).toBase64();
+
+    Cfg::ImageData data;
+    data.set_sha256(sha256);
+    data.set_data(QString::fromLatin1(byteArray.toBase64().data()));
+
+    page()->imagesHash().insert(sha256, data);
+
+    c.set_sha256(sha256);
 
     c.set_z(zValue());
 
@@ -196,11 +205,20 @@ void FormImage::setCfg(const Cfg::Image &c)
 
     const QSize s(MmPx::instance().fromMmX(c.size().width()), MmPx::instance().fromMmY(c.size().height()));
 
-    const QByteArray data = QByteArray::fromBase64(c.data().toLatin1());
+    d->m_handles->setKeepAspectRatio(c.keepAspectRatio());
+
+    QByteArray data;
+
+    if (!c.sha256().isEmpty() && page()->imagesHash().contains(c.sha256())) {
+        data = QByteArray::fromBase64(page()->imagesHash().value(c.sha256()).data().toLatin1());
+    } else if (!c.data().isEmpty()) {
+        data = QByteArray::fromBase64(c.data().toLatin1());
+    } else {
+        QBuffer buffer(&data);
+        QImage(QStringLiteral(":/Core/img/broken.png")).save(&buffer, "PNG");
+    }
 
     d->m_image = QImage::fromData(data, "PNG");
-
-    d->m_handles->setKeepAspectRatio(c.keepAspectRatio());
 
     setPixmap(QPixmap::fromImage(d->m_image.scaled(s,
                                                    (c.keepAspectRatio() ? Qt::KeepAspectRatio : Qt::IgnoreAspectRatio),

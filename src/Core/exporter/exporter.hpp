@@ -12,6 +12,7 @@
 
 // Prototyper include.
 #include "project_cfg.hpp"
+#include "../types.hpp"
 
 QT_BEGIN_NAMESPACE
 class QSvgGenerator;
@@ -40,6 +41,9 @@ public:
     //! Export documentation.
     virtual void exportToDoc(const QString &fileName) = 0;
 
+    //! \return Hash of images.
+    ImagesHash images() const;
+
 protected:
     explicit Exporter(std::unique_ptr<ExporterPrivate> &&dd);
 
@@ -56,7 +60,8 @@ namespace impl
 void drawGroup(const Cfg::Group &group,
                QPainter &p,
                qreal dpi,
-               QSvgGenerator &svg);
+               QSvgGenerator &svg,
+               const ImagesHash &images);
 
 } /* namespace impl */
 

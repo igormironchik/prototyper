@@ -17,7 +17,7 @@
 #include <vector>
 
 // Prototyper include.
-#include "types.hpp"
+#include "../types.hpp"
 
 QT_BEGIN_NAMESPACE
 class QUndoStack;
@@ -64,11 +64,13 @@ class PagePrivate final
 {
 public:
     PagePrivate(Cfg::Page &cfg,
+                const ImagesHash &imagesHash,
                 Page *parent)
         : q(parent)
         , m_gridMode(ShowGrid)
         , m_gridStepAction(0)
         , m_cfg(cfg)
+        , m_imagesHash(imagesHash)
         , m_pressed(false)
         , m_current(0)
         , m_id(0)
@@ -161,6 +163,8 @@ public:
     QAction *m_gridStepAction;
     //! Cfg.
     Cfg::Page &m_cfg;
+    //! Hash of images.
+    ImagesHash m_imagesHash;
     //! Pressed.
     bool m_pressed;
     //! Current item.
