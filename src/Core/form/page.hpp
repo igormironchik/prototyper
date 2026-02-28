@@ -15,6 +15,7 @@
 #include <memory>
 
 // Prototyper include.
+#include "../types.hpp"
 #include "button.hpp"
 #include "checkbox.hpp"
 #include "combobox.hpp"
@@ -29,7 +30,6 @@
 #include "rectangle.hpp"
 #include "spinbox.hpp"
 #include "text.hpp"
-#include "../types.hpp"
 #include "vslider.hpp"
 
 QT_BEGIN_NAMESPACE

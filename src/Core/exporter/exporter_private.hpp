@@ -8,8 +8,8 @@
 #define PROTOTYPER__CORE__EXPORTER_PRIVATE_HPP__INCLUDED
 
 // Prototyper include.
-#include "project_cfg.hpp"
 #include "../types.hpp"
+#include "project_cfg.hpp"
 
 QT_BEGIN_NAMESPACE
 class QSvgGenerator;

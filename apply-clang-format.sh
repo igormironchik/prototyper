@@ -1,0 +1,11 @@
+clang-format --style=file -i --sort-includes src/Core/dlg/*.cpp
+clang-format --style=file -i --sort-includes src/Core/dlg/*.hpp
+clang-format --style=file -i --sort-includes src/Core/exporter/*.cpp
+clang-format --style=file -i --sort-includes src/Core/exporter/*.hpp
+clang-format --style=file -i --sort-includes src/Core/form/*.cpp
+clang-format --style=file -i --sort-includes src/Core/form/*.hpp
+clang-format --style=file -i --sort-includes src/Core/form/properties/*.cpp
+clang-format --style=file -i --sort-includes src/Core/form/properties/*.hpp
+clang-format --style=file -i --sort-includes src/Core/*.cpp
+clang-format --style=file -i --sort-includes src/Core/*.hpp
+clang-format --style=file -i --sort-includes src/Prototyper/*.cpp

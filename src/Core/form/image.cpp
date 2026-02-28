@@ -16,12 +16,12 @@
 // Qt include.
 #include <QBuffer>
 #include <QByteArray>
+#include <QCryptographicHash>
 #include <QGraphicsScene>
 #include <QGraphicsSceneHoverEvent>
 #include <QGraphicsSceneMouseEvent>
 #include <QUndoStack>
 #include <QVBoxLayout>
-#include <QCryptographicHash>
 
 namespace Prototyper
 {
