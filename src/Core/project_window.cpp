@@ -512,90 +512,90 @@ void ProjectWindowPrivate::init()
 
     m_zoomToolBar->hide();
 
-    QMenu *form = q->menuBar()->addMenu(ProjectWindow::tr("D&rawing"));
+    auto viewMenu = q->menuBar()->addMenu(ProjectWindow::tr("&View"));
+    auto toolsMenu = q->menuBar()->addMenu(ProjectWindow::tr("&Tools"));
+    auto editMenu = q->menuBar()->addMenu(ProjectWindow::tr("&Edit"));
 
-    form->addAction(newForm);
+    viewMenu->addAction(newForm);
 
-    form->addSeparator();
+    viewMenu->addSeparator();
 
-    m_grid = form->addAction(QIcon(QStringLiteral(":/Core/img/view-grid.png")), ProjectWindow::tr("Show Grid"));
+    m_grid = viewMenu->addAction(QIcon(QStringLiteral(":/Core/img/view-grid.png")), ProjectWindow::tr("Show Grid"));
     m_grid->setShortcutContext(Qt::ApplicationShortcut);
     m_grid->setShortcut(ProjectWindow::tr("Ctrl+Alt+G"));
     m_grid->setCheckable(true);
     m_grid->setChecked(true);
 
-    m_gridStep = form->addAction(QIcon(QStringLiteral(":/Core/img/measure.png")), ProjectWindow::tr("Grid Step"));
+    m_gridStep = viewMenu->addAction(QIcon(QStringLiteral(":/Core/img/measure.png")), ProjectWindow::tr("Grid Step"));
 
     QAction *snapGrid =
-        form->addAction(QIcon(QStringLiteral(":/Core/img/snap-intersection.png")), ProjectWindow::tr("Snap Grid"));
+        viewMenu->addAction(QIcon(QStringLiteral(":/Core/img/snap-intersection.png")), ProjectWindow::tr("Snap Grid"));
     snapGrid->setShortcutContext(Qt::ApplicationShortcut);
     snapGrid->setShortcut(ProjectWindow::tr("Alt+G"));
     snapGrid->setCheckable(true);
     snapGrid->setChecked(true);
 
-    form->addSeparator();
+    viewMenu->addSeparator();
 
-    m_duplicate = form->addAction(QIcon(QStringLiteral(":/Core/img/edit-copy.png")), ProjectWindow::tr("Duplicate"));
+    m_duplicate = editMenu->addAction(QIcon(QStringLiteral(":/Core/img/edit-copy.png")), ProjectWindow::tr("Duplicate"));
     m_duplicate->setShortcutContext(Qt::ApplicationShortcut);
     m_duplicate->setShortcut(ProjectWindow::tr("Ctrl+D"));
     m_duplicate->setEnabled(false);
 
-    form->addSeparator();
+    editMenu->addSeparator();
 
-    form->addAction(m_zoomIn);
-    form->addAction(m_zoomOriginal);
-    form->addAction(m_zoomOut);
+    viewMenu->addAction(m_zoomIn);
+    viewMenu->addAction(m_zoomOriginal);
+    viewMenu->addAction(m_zoomOut);
 
-    form->addSeparator();
+    viewMenu->addSeparator();
 
-    form->addAction(m_select);
-    form->addAction(m_drawLine);
-    form->addAction(m_drawPolyLine);
-    form->addAction(m_drawRect);
-    form->addAction(m_insertText);
-    form->addAction(m_insertImage);
-    form->addAction(m_drawButton);
-    form->addAction(m_drawComboBox);
-    form->addAction(m_drawRadioButton);
-    form->addAction(m_drawCheckBox);
-    form->addAction(m_drawHSlider);
-    form->addAction(m_drawVSlider);
-    form->addAction(m_drawSpinbox);
+    editMenu->addAction(m_alignHorizLeft);
+    editMenu->addAction(m_alignHorizCenter);
+    editMenu->addAction(m_alignHorizRight);
+    editMenu->addAction(m_alignVertTop);
+    editMenu->addAction(m_alignVertCenter);
+    editMenu->addAction(m_alignVertBottom);
 
-    form->addSeparator();
+    editMenu->addSeparator();
 
-    form->addAction(m_alignHorizLeft);
-    form->addAction(m_alignHorizCenter);
-    form->addAction(m_alignHorizRight);
-    form->addAction(m_alignVertTop);
-    form->addAction(m_alignVertCenter);
-    form->addAction(m_alignVertBottom);
+    editMenu->addAction(m_group);
+    editMenu->addAction(m_ungroup);
 
-    form->addSeparator();
+    editMenu->addSeparator();
 
-    form->addAction(m_group);
-    form->addAction(m_ungroup);
+    editMenu->addAction(m_toTop);
+    editMenu->addAction(m_up);
+    editMenu->addAction(m_down);
+    editMenu->addAction(m_toBottom);
 
-    form->addSeparator();
-
-    form->addAction(m_toTop);
-    form->addAction(m_up);
-    form->addAction(m_down);
-    form->addAction(m_toBottom);
-
-    form->addSeparator();
+    editMenu->addSeparator();
 
     QAction *undoAction = m_widget->undoGroup()->createUndoAction(q);
     undoAction->setShortcutContext(Qt::ApplicationShortcut);
     undoAction->setShortcut(ProjectWindow::tr("Ctrl+Z"));
     undoAction->setIcon(QIcon(QStringLiteral(":/Core/img/edit-undo.png")));
-    form->addAction(undoAction);
+    editMenu->addAction(undoAction);
 
     QAction *redoAction = m_widget->undoGroup()->createRedoAction(q);
     redoAction->setShortcutContext(Qt::ApplicationShortcut);
     redoAction->setShortcut(ProjectWindow::tr("Ctrl+Y"));
     redoAction->setIcon(QIcon(QStringLiteral(":/Core/img/edit-redo.png")));
-    form->addAction(redoAction);
+    editMenu->addAction(redoAction);
+
+    toolsMenu->addAction(m_select);
+    toolsMenu->addAction(m_drawLine);
+    toolsMenu->addAction(m_drawPolyLine);
+    toolsMenu->addAction(m_drawRect);
+    toolsMenu->addAction(m_insertText);
+    toolsMenu->addAction(m_insertImage);
+    toolsMenu->addAction(m_drawButton);
+    toolsMenu->addAction(m_drawComboBox);
+    toolsMenu->addAction(m_drawRadioButton);
+    toolsMenu->addAction(m_drawCheckBox);
+    toolsMenu->addAction(m_drawHSlider);
+    toolsMenu->addAction(m_drawVSlider);
+    toolsMenu->addAction(m_drawSpinbox);
 
     QMenu *help = q->menuBar()->addMenu(ProjectWindow::tr("&Help"));
     QAction *about = help->addAction(QIcon(QStringLiteral(":/Core/img/prototyper.png")), ProjectWindow::tr("About"));
