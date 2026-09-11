@@ -19,12 +19,13 @@ this application useless. But If you want to describe idea for designer, then
 this application can be useful. And don't forget that this is absolutely free
 software.
 
-# Getting from Repository
-
-After clone update submodules with the next command:
+# License
 
 ```
-git submodule update --init --recursive
+/*
+    SPDX-FileCopyrightText: 2026 Igor Mironchik <igor.mironchik@gmail.com>
+    SPDX-License-Identifier: GPL-3.0-or-later
+*/
 ```
 
 # Screenshots
