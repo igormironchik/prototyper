@@ -1,3 +1,9 @@
+> [!IMPORTANT]
+>
+> This project is not supported anymore. But can be reopened if interest will
+> be in it. Please, let me know if you need something. Just write me email to
+> `igor.mironchik at gmail.com`.
+
 # About
 
 Prototyper is a desktop application to make UI prototypes.
